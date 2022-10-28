@@ -1,3 +1,5 @@
+static/catoff_vt/
+static/assets/databases/*SQLite.db
 node_modules/
 dist/
 storybook-static/

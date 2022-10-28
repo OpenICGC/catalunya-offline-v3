@@ -82,8 +82,11 @@
     "webpack-dev-server": "^4.3.1"
   },
   "dependencies": {
+    "@capacitor-community/sqlite": "^4.2.2",
     "@capacitor/android": "^4.4.0",
     "@capacitor/core": "^4.4.0",
-    "@capacitor/ios": "^4.4.0"
+    "@capacitor/ios": "^4.4.0",
+    "jeep-sqlite": "^1.6.7",
+    "pako": "^2.0.4"
   }
 }

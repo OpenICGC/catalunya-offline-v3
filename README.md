@@ -38,6 +38,13 @@ Some relevant dependencies are:
 [TBD]
 
 
+## Download Offline dataset
+
+1. Get data file from `http://betaserver.icgc.cat/mapicc/catoff_vt.zip`.
+2. Uncompress it into `static/catoff_vt/`.
+3. Move the `static/catoff_vt/0.mbtiles` file to `satic/assets/databases/0SQLite.db`.
+
+
 ## Running on dev mode
 
 ### Web
@@ -56,6 +63,7 @@ Note: To be able to run on a real device,
 ### iOS
 
 [TBD]
+
 
 ## Multilanguage
 
