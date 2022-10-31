@@ -38,7 +38,14 @@ Some relevant dependencies are:
 [TBD]
 
 
-## Running on dev mode
+## Download Offline dataset
+
+1. Get data file from `http://betaserver.icgc.cat/mapicc/catoff_vt.zip`.
+2. Uncompress it into `static/catoff_vt/`.
+3. Move the `static/catoff_vt/0.mbtiles` file to `satic/assets/databases/0SQLite.db`.
+
+
+## Run in develompment mode
 
 ### Web
 
@@ -47,15 +54,57 @@ Some relevant dependencies are:
 
 ### Android
 
-* Android Studio project: `npm run build` + `npx cap sync` + `npx cap open android`
-* Android on emulator or real device: `npm run build` + `npx cap sync` + `npx cap run android`
-
 Note: To be able to run on a real device,
 [enable USB Debugging Mode](https://developer.android.com/studio/debug/dev-options) and use a cable.
+
+#### Debugging the web code
+
+To run in "auto-reload" mode, first run:
+
+```javascript
+npm start
+```
+
+And, once the web is loaded in your browser:
+
+```javascript
+npm run start:android
+```
+
+to load it into a device or emulator. Web contents will be served remotely from the 
+laptop and auto-reloaded as in the web version.
+
+To open a remote Javascript debugging console, go to `chrome://inspect#devices` in
+your laptop's Chrome browser.
+
+#### Debugging the native parts
+
+If something wrong happens at native level (not javascript), use logcat to inspect device's logs: 
+
+* Logs can be seen via `adb logcat`.
+* If more than one device attached, specify via `-s` option. The attached devices can be listed with `adb devices`.
+* Logs can be very verbose, but logcat can filter them at warning `*:W` or error `*:E` level.
+
+A complete logcat command could be: `adb -s emulator-5554 logcat *:E` (show the error messages for a specific emulator).
+
 
 ### iOS
 
 [TBD]
+
+
+## Building and deploying for production
+
+### Android Studio
+
+Use the command `npm run build:android`, to build for production and open the project in
+Android Studio.
+
+
+### Xcode
+
+[TBD]
+
 
 ## Multilanguage
 

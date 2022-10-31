@@ -19,12 +19,7 @@ const AppRoutes = () =>
       <Route path=":lang" element={<LangSetter/>}>
         <Route exact path="" element={<Navigate to="map"/>}/>
         <Route exact path="map" element={<MapView/>}/>
-        <Route exact path="detail" element={<Layout
-          sidePanelContent={<>Sample Sidepanel Content</>}
-          mainContent={<>Sample Main Content</>}
-          miniSidePanelSelectedActionId='detailView'/>
-        }/>
-        <Route path="*" element={<Layout sidePanelContent={<></>} mainContent={<>404 - Not Found</>} miniSidePanelSelectedActionId='detailView'/>}/>
+        <Route path="*" element={<Layout sidePanelContent={<></>} mainContent={<>404 - Not Found</>}/>}/>
       </Route>
       <Route path="*" element={<Navigate to={i18n.resolvedLanguage}/>}/>
     </Routes>
