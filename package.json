@@ -6,9 +6,11 @@
   "scripts": {
     "test": "npm run lint && karma start karma.config.js",
     "start": "webpack serve --env dev --host=0.0.0.0",
+    "start:android": "LIVE_RELOAD_IP=`ip route get 1 | awk '{print $(NF-2);exit}'` capacitor run android",
     "build": "npm test && webpack --env prod",
+    "build:android": "npm run build && capacitor sync && capacitor open android",
     "storybook": "start-storybook -s ./static -p 6006",
-    "build-storybook": "build-storybook",
+    "storybook:build": "build-storybook",
     "deploy": "npm run build && gh-pages -d dist",
     "lint": "npm run lint:js && npm run lint:i18n",
     "lint:js": "eslint src",
