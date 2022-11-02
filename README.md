@@ -25,12 +25,12 @@ Some relevant dependencies are:
   * Start Android-Studio and install API 24, which corresponds to Android 7.0 Nougat, the lowest version to be compatible with.
 * Install a virtual device (emulator) with a Nougat (API 24) image to test against following Android Studio documentation:
    https://developer.android.com/studio/run/managing-avds
-* Add the following env vars to `~/.bashrc`:
+* Add the following env vars to `~/.profile`:
 
   ```
-  export CAPACITOR_ANDROID_STUDIO_PATH=$HOME/bin/android-studio/bin/studio.sh # ...or wherever android studio was installed
+  export CAPACITOR_ANDROID_STUDIO_PATH=$HOME/.local/share/JetBrains/Toolbox/scripts/studio # ...or wherever android studio was installed
   export ANDROID_SDK_ROOT=$HOME/Android/Sdk
-  export PATH=$PATH:~/Android/Sdk/platform-tools
+  export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
   ```
 
 ### iOS
@@ -61,13 +61,13 @@ Note: To be able to run on a real device,
 
 To run in "auto-reload" mode, first run:
 
-```javascript
+```bash
 npm start
 ```
 
 And, once the web is loaded in your browser:
 
-```javascript
+```bash
 npm run start:android
 ```
 
@@ -115,7 +115,7 @@ We use **i18next** framework to localize our components:
 
 Usage example on functional component:
 
-```js
+```jsx
 import { useTranslation } from 'react-i18next';
 
 const FunctionalComponent = () => {
