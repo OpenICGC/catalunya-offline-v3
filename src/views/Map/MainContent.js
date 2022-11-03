@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import maplibregl from 'maplibre-gl';
 
@@ -9,6 +9,16 @@ import addMbtilesProtocol from '../../utils/addMbtilesProtocol';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
 
 addMbtilesProtocol(maplibregl);
+
+const sources = {
+  'geolocation': {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    }
+  }
+};
 
 const layers = [{
   id: 'geolocation',
@@ -26,46 +36,36 @@ const layers = [{
 }];
 
 const MainContent = ({mapStyle}) => {
+  const mapRef = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
-  //const geolocation = useGeolocation();
   const {geolocation} = useBackgroundGeolocation();
   const {latitude, longitude} = geolocation;
 
   useEffect(() => {
-    if (latitude && longitude && (latitude !== viewport.latitude || longitude !== viewport.longitude)) {
+    if (latitude && longitude && mapRef.current) {
+      mapRef.current.getSource('geolocation').setData({
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [longitude, latitude]
+          }
+        }]
+      });
       setViewport({
         ...viewport,
         latitude,
         longitude,
-        zoom: 14
+        zoom: MAP_PROPS.maxZoom
       });
     }
   }, [latitude, longitude]);
 
-  const sources = useMemo(() => ({
-    'geolocation': {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: latitude && longitude ? [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Point',
-              coordinates: [
-                longitude,
-                latitude
-              ]
-            }
-          }
-        ] : []
-      }
-    }
-  }), [latitude, longitude]);
-
   return <Map
     {...MAP_PROPS}
+    ref={mapRef}
     mapStyle={mapStyle}
     sources={sources}
     layers={layers}

@@ -32,14 +32,14 @@ const Main = styled(Box, {
 
 const Layout = ({mainContent, sidePanelContent}) => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
 
   const handleClose = () => setIsSidePanelOpen(!isSidePanelOpen);
 
   return (
     <>
       <ResponsiveHeader
-        title='Catalunya Offline v2'
+        title='Catalunya Offline'
         logo={<img src={'images/cat_offline.png'} style={{maxHeight: '100%'}}/>}
         onStartIconClick={widescreen ? undefined : handleClose}
         isStartIconCloseable={isSidePanelOpen}
