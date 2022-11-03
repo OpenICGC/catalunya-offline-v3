@@ -40,10 +40,12 @@ const Layout = ({mainContent, sidePanelContent}) => {
     <>
       <ResponsiveHeader
         title='Catalunya Offline'
-        logo={<img src={'images/cat_offline.png'} style={{maxHeight: '100%'}}/>}
+        logo={<img src={'images/logo.svg'} style={{maxHeight: '90%', backgroundColor: '#FFF', boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'}}/>}
         onStartIconClick={widescreen ? undefined : handleClose}
         isStartIconCloseable={isSidePanelOpen}
-        sx={{'&.MuiAppBar-root': {zIndex: 1500}}}
+        sx={{
+          '&.MuiAppBar-root': {zIndex: 1500}
+        }}
       >
       </ResponsiveHeader>
       {
