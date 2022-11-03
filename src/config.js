@@ -17,17 +17,14 @@ export const MAP_PROPS = {
   hash: false
 };
 
-export const MAPSTYLES = [
-  {
-    'label': 'VT Online',
-    'thumbnail': '',
-    'id': 'mapstyles/VT-online.json'
-  },
-  {
-    'label': 'VT Offline',
-    'thumbnail': '',
-    'id': 'mapstyles/VT-offline.json'
-  }
-];
+export const MAPSTYLES = [{
+  'label': 'VT Offline',
+  'thumbnail': 'images/mtc25m.png',
+  'id': 'mapstyles/VT-offline.json'
+}, {
+  'label': 'VT Online',
+  'thumbnail': 'images/mtc25m.png',
+  'id': 'mapstyles/VT-online.json'
+}];
 
 export const INITIAL_MAPSTYLE_URL = MAPSTYLES[0].id;

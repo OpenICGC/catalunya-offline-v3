@@ -3,14 +3,12 @@ import {useEffect, useState} from 'react';
 const BackgroundGeolocation = registerPlugin('BackgroundGeolocation');
 
 const config = {
-  // Message & title are required to guarantee a background location
-  backgroundMessage: 'Mentre l\'App Catalunya Offline roman en segon pla, és recomanable mantenir actiu el servei de geolocalització' +
-    'per tal de no interrompre la gravació de traces, i per obtenir un posicionament ràpid en tornar a l\'aplicació.' +
-    'Voleu mantenir la geolocalizació activa en segon plà?',
-  backgroundTitle: 'Geolocalització en segon pla',
+  // backgroundMessage is required to guarantee a background location
+  backgroundMessage: 'Actualitza la posició i permet gravar traces',
+  backgroundTitle: 'Geolocalització activa en segon pla',
   requestPermissions: true,
   stale: false,
-  distanceFilter: 2
+  distanceFilter: 1
 };
 
 const webConfig = {
@@ -21,7 +19,13 @@ const webConfig = {
 
 const handlePermission = error => {
   if (error.code === 'NOT_AUTHORIZED') {
-    if (window.confirm(
+    if (error.message === 'Location services disabled.') {
+      window.alert(
+        'El servei de localització del dispositiu està deactivat.' +
+        'Activeu-lo i torneu a entrar a l\'app.'
+      );
+    // The other possible "NOT_AUTHORIZED" messages are: "Permission denied." and "User denied location permission".
+    } else if (window.confirm(
       'Catalunya Offline necessita accedir a la geolocalització, ' +
       'però aquest permís ha estat denegat.\n\n' +
       'Voleu accedir a la configuració?'
@@ -78,13 +82,13 @@ const useBackgroundGeolocation = () => {
       BackgroundGeolocation.addWatcher(config, (location, error) => {
         if (error) {
           console.log('[BackgroundGeolocation] Got error', error);
+          setError(error);
           handlePermission(error);
-        }
-        if (location) {
+        } else if (location) {
           console.log('[BackgroundGeolocation] Got location', location);
+          setError();
+          setGeolocation(location);
         }
-        setError(error);
-        setGeolocation(location);
       }).then(id => {
         console.log('[BackgroundGeolocation] Watcher set', id);
         setWatcherId(id);

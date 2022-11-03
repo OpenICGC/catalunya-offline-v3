@@ -13,7 +13,7 @@ const SectionTitle = ({titleKey}) => {
     <Box mb={1} >
       <Typography
         variant='subtitle1'
-        sx={{fontWeight: 'bold'}}
+        sx={{fontWeight: 'bold', color: 'text.primary'}}
       >
         {t(titleKey)}
       </Typography>
