@@ -19,11 +19,11 @@ export const MAP_PROPS = {
 
 export const MAPSTYLES = [{
   'label': 'VT Offline',
-  'thumbnail': '',
+  'thumbnail': 'images/mtc25m.png',
   'id': 'mapstyles/VT-offline.json'
 }, {
   'label': 'VT Online',
-  'thumbnail': '',
+  'thumbnail': 'images/mtc25m.png',
   'id': 'mapstyles/VT-online.json'
 }];
 

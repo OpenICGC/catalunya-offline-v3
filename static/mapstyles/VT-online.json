@@ -8,6 +8,14 @@
       ],
       "maxzoom": 13,
       "attribution": "Mapa CC-BY <a href='https://www.icgc.cat'>Institut Cartogràfic i Geològic de Catalunya</a>"
+    },
+    "dem2m": {
+      "type": "raster-dem",
+      "tiles": [
+        "https://tilemaps.icgc.cat/tileserver/tileserver.php/terreny_icgc_2m_rgb/{z}/{x}/{y}.png"
+      ],
+      "tileSize": 256,
+      "maxzoom": 15
     }
   },
   "light": {
@@ -28,6 +36,11 @@
       "paint": {
         "background-color": "#ffffff"
       }
+    },
+    {
+      "id": "hillshading",
+      "source": "dem2m",
+      "type": "hillshade"
     },
     {
       "interactive": true,
