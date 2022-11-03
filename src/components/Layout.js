@@ -32,7 +32,7 @@ const Main = styled(Box, {
 
 const Layout = ({mainContent, sidePanelContent}) => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(widescreen);
 
   const handleClose = () => setIsSidePanelOpen(!isSidePanelOpen);
 

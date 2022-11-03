@@ -39,9 +39,9 @@ const MainContent = ({mapStyle}) => {
   const mapRef = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const {geolocation} = useBackgroundGeolocation();
-  const {latitude, longitude} = geolocation;
 
   useEffect(() => {
+    const {latitude, longitude} = geolocation;
     if (latitude && longitude && mapRef.current) {
       mapRef.current.getSource('geolocation').setData({
         type: 'FeatureCollection',
@@ -61,7 +61,7 @@ const MainContent = ({mapStyle}) => {
         zoom: MAP_PROPS.maxZoom
       });
     }
-  }, [latitude, longitude]);
+  }, [geolocation, mapRef.current]);
 
   return <Map
     {...MAP_PROPS}
