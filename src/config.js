@@ -12,19 +12,25 @@ export const INITIAL_VIEWPORT = {
 export const MAP_PROPS = {
   minZoom: 7,
   maxZoom: 14.99,
-  maxPitch: 70,
+  maxPitch: 65,
   maxBounds: [0.055047, 40.434881, 3.420395, 42.956628],
   hash: false
 };
 
+export const MBTILES = {
+  downloadMbtilesUrl: 'https://cdn.geomatico.es/datasets/mtc25mcatoff_7a13SQLite.db',
+  dbName: 'mtc25mcatoff_7a13'
+};
+
 export const MAPSTYLES = [{
-  'label': 'VT Offline',
-  'thumbnail': 'images/mtc25m.png',
-  'id': 'mapstyles/VT-offline.json'
+  label: 'mtc25m Offline',
+  thumbnail: 'images/mtc25m.png',
+  id: 'mapstyles/mtc25m-offline.json',
 }, {
-  'label': 'VT Online',
-  'thumbnail': 'images/mtc25m.png',
-  'id': 'mapstyles/VT-online.json'
+  label: 'mtc25m Online',
+  thumbnail: 'images/mtc25m.png',
+  id: 'mapstyles/mtc25m-online.json'
 }];
+
 
 export const INITIAL_MAPSTYLE_URL = MAPSTYLES[0].id;
