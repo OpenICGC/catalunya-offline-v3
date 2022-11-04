@@ -41,9 +41,9 @@ Some relevant dependencies are:
 ## Download Offline dataset
 
 1. Get data file from `http://betaserver.icgc.cat/mapicc/catoff_vt.zip`.
-2. Uncompress it into `static/catoff_vt/`.
-3. Move the `static/catoff_vt/0.mbtiles` file to `satic/assets/databases/0SQLite.db`.
-
+2. Uncompress it into `static/catoff_vt/`. We'll keep the glyphs.
+3. Move the `static/catoff_vt/0.mbtiles` file to the http server for downloading.
+   File name should end with "SQLite.db". For instance, `https://cdn.geomatico.es/datasets/mtc25mcatoff_7a13SQLite.db`.
 
 ## Run in develompment mode
 

@@ -18,16 +18,6 @@
       "maxzoom": 15
     }
   },
-  "light": {
-    "anchor": "viewport",
-    "color": "white",
-    "intensity": 0.4,
-    "position": [
-      1.15,
-      45,
-      30
-    ]
-  },
   "glyphs": "https://betaserver.icgc.cat/glyphs/{fontstack}/{range}.pbf",
   "layers": [
     {
@@ -40,7 +30,15 @@
     {
       "id": "hillshading",
       "source": "dem2m",
-      "type": "hillshade"
+      "type": "hillshade",
+      "paint": {
+        "hillshade-illumination-anchor": "map",
+        "hillshade-exaggeration": 1,
+        "hillshade-highlight-color": "rgba(250, 250, 250, 1)",
+        "hillshade-shadow-color": "rgba(200, 200, 200, 1)",
+        "hillshade-accent-color": "rgba(250, 250, 250, 1)",
+        "hillshade-illumination-direction": 345
+      }
     },
     {
       "interactive": true,
