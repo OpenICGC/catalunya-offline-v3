@@ -4,7 +4,7 @@ import React from 'react';
 import Routes from './routes/routes';
 
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
-import {StyledEngineProvider} from '@mui/material/styles';
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';

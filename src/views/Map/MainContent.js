@@ -4,11 +4,11 @@ import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
 
-import {INITIAL_VIEWPORT, MAP_PROPS} from '../../config';
-import addMbtilesProtocol from '../../utils/addMbtilesProtocol';
+import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES} from '../../config';
+import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
 
-addMbtilesProtocol(maplibregl);
+mbtiles(maplibregl);
 
 const sources = {
   'geolocation': {
@@ -35,10 +35,43 @@ const layers = [{
   }
 }];
 
+const CHECKING = 0,
+  DOWNLOADING = 1,
+  AVAILABLE = 2,
+  OPENING = 3,
+  READY = 4;
+
+const mbtilesStatusMessages = [
+  'Checking mbtiles availability...',
+  'Downloading mbtiles...',
+  'Mbtiles downloaded',
+  'Opening mbtiles...',
+  'mbtiles ready'
+];
+
 const MainContent = ({mapStyle}) => {
   const mapRef = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
+  const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
   const {geolocation} = useBackgroundGeolocation();
+
+  useEffect(() => {
+    isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
+      if (isDownloaded) {
+        setMbtilesStatus(AVAILABLE);
+      } else {
+        downloadMbtiles(MBTILES.downloadMbtilesUrl).then(() => setMbtilesStatus(AVAILABLE));
+        setMbtilesStatus(DOWNLOADING);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (mbtilesStatus === AVAILABLE) {
+      getDatabase(MBTILES.dbName).then(() => setMbtilesStatus(READY));
+      setMbtilesStatus(OPENING);
+    }
+  }, [mbtilesStatus]);
 
   useEffect(() => {
     const {latitude, longitude} = geolocation;
@@ -63,15 +96,18 @@ const MainContent = ({mapStyle}) => {
     }
   }, [geolocation, mapRef.current]);
 
-  return <Map
-    {...MAP_PROPS}
-    ref={mapRef}
-    mapStyle={mapStyle}
-    sources={sources}
-    layers={layers}
-    viewport={viewport}
-    onViewportChange={setViewport}
-  />;
+  return mbtilesStatus === READY ?
+    <Map
+      {...MAP_PROPS}
+      ref={mapRef}
+      mapStyle={mapStyle}
+      sources={sources}
+      layers={layers}
+      viewport={viewport}
+      onViewportChange={setViewport}
+    /> : <div>
+      {mbtilesStatusMessages[mbtilesStatus]}
+    </div>;
 };
 
 MainContent.propTypes = {

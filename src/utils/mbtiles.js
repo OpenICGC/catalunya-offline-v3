@@ -26,22 +26,6 @@ const init = (async () => {
       console.error('[mbtiles] Error initializing Offline Web Storage', err);
     }
   }
-  let dbList = {values: []};
-  try {
-    dbList = await sqlite.getDatabaseList();
-  } catch {
-    console.log('[mbtiles] No databases found');
-  }
-
-  if (!dbList?.values.length) {
-    console.log('[mbtiles] Copying databases from assets');
-    try {
-      await sqlite.copyFromAssets();
-      console.log('[mbtiles] Databases copied from assets');
-    } catch (error) {
-      console.error('[mbtiles] Could not copy databases from assets');
-    }
-  }
 })();
 
 const sourceDatabases = new Map();
@@ -96,7 +80,7 @@ const getDatabase = async (dbName) => {
   return sourceDatabases.get(dbName);
 };
 
-const addMbtilesProtocol = maplibregl => {
+const mbtiles = maplibregl => {
   maplibregl.addProtocol('mbtiles', (params, callback) => {
     getTile(params.url).then(tileBuffer => {
       if (tileBuffer) {
@@ -113,4 +97,21 @@ const addMbtilesProtocol = maplibregl => {
   });
 };
 
-export default addMbtilesProtocol;
+const isMbtilesDownloaded = async dbName => {
+  await init;
+  const {result} = await sqlite.isDatabase(dbName);
+  console.log(`[mbtiles] Database ${dbName} is ${result ? '' : 'not '}downloaded`);
+  return result;
+};
+const downloadMbtiles = async url => {
+  await init;
+  // TODO COF-5 Create a better download manager for Web (indexedDB) and Android/iOS, with progress
+  await sqlite.getFromHTTPRequest(url, true).catch(err => console.error(err));
+};
+
+export {
+  mbtiles,
+  isMbtilesDownloaded,
+  downloadMbtiles,
+  getDatabase
+};

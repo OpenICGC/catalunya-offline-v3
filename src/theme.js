@@ -1,5 +1,5 @@
 import createTheme from '@mui/material/styles/createTheme';
-import {lighten} from '@mui/material';
+import {lighten} from '@mui/system/colorManipulator';
 
 const primaryColor = '#f59d21';
 
