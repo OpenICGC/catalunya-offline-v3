@@ -8,11 +8,14 @@ import IconButton from '@mui/material/IconButton';
 
 //MUI-ICONS
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import ExploreIcon from '@mui/icons-material/Explore';
 import FolderIcon from '@mui/icons-material/Folder';
 import LayersIcon from '@mui/icons-material/Layers';
+import LocationDisabledIcon from '@mui/icons-material/LocationDisabled';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import MapIcon from '@mui/icons-material/Map';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
 
 //STYLES
 import { red } from '@mui/material/colors';
@@ -24,17 +27,15 @@ const buttonRadio = buttonDiameter/2;
 const globalDiameter = 180;
 const globalRadio = globalDiameter/2;
 const container = {
-/*
-  top: '50vh',
+  /*top: '50%',
   right: 8,*/
   position: 'absolute',
   height: globalDiameter,
   width: globalDiameter,
   borderRadius: '100%',
-  margin: 5,
 };
 
-const FabButton = ({leftHanded, onExploreClick, onLocationClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
+const FabButton = ({leftHanded, bearing, isCompassOn, isLocationAvailable, isLocationOn,  onCompassClick, onLocationClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   //STYLES
   const fabStyle = {
@@ -99,14 +100,27 @@ const FabButton = ({leftHanded, onExploreClick, onLocationClick, onLayersClick, 
     top: globalDiameter-buttonDiameter,
   };
   return <>
-    <Box sx={container} onMouseLeave={() => setMenuOpen(false)}>
-      <IconButton sx={exploreButton} onClick={() => onExploreClick()}><ExploreIcon sx={{color: 'common.white'}}/></IconButton>
-      <IconButton sx={locationButton} onClick={() => onLocationClick()}><LocationSearchingIcon sx={{color: 'common.white'}}/></IconButton>
+    <Box sx={container}>
+      <IconButton sx={exploreButton} onClick={() => onCompassClick()}>
+        <ExploreIcon sx={{color: isCompassOn ? 'primary.main' : 'common.white', transform: `rotate(${-45+bearing}deg)`}}/>
+      </IconButton>
+      <IconButton sx={locationButton} onClick={() => onLocationClick()}>
+        {
+          isLocationAvailable ?
+            isLocationOn ? <MyLocationIcon sx={{color: 'primary.main'}}/> : <LocationSearchingIcon sx={{color: 'common.white'}}/>
+            : <LocationDisabledIcon sx={{color: 'common.white'}}/>
+        }
+
+      </IconButton>
       <IconButton sx={layersButton} onClick={() => onLayersClick()}><LayersIcon sx={{color: 'grey.800'}}/></IconButton>
       <IconButton sx={baseMapsButton} onClick={() => onBaseMapsClick()}><MapIcon sx={{color: 'grey.800'}}/></IconButton>
       <IconButton sx={folderButton} onClick={() => onFoldersClick()}><FolderIcon sx={{color: 'grey.800'}}/></IconButton>
-      <Fab color='primary' sx={fabStyle} onMouseEnter={() => setMenuOpen(true)} onClick={() => setMenuOpen(true)}>
-        <AddIcon sx={{color: 'grey.800', fontSize: fabWidth/2}}/>
+      <Fab color='primary' sx={fabStyle} onClick={() => setMenuOpen(!isMenuOpen)}>
+        {
+          isMenuOpen ?
+            <CloseIcon sx={{color: 'grey.800', fontSize: fabWidth / 2}}/> :
+            <AddIcon sx={{color: 'grey.800', fontSize: fabWidth / 2}}/>
+        }
       </Fab>
     </Box>
   </>;
@@ -114,7 +128,11 @@ const FabButton = ({leftHanded, onExploreClick, onLocationClick, onLayersClick, 
 
 FabButton.propTypes = {
   leftHanded: PropTypes.bool,
-  onExploreClick: PropTypes.func,
+  bearing: PropTypes.number,
+  isCompassOn: PropTypes.bool,
+  isLocationAvailable: PropTypes.bool.isRequired,
+  isLocationOn: PropTypes.bool,
+  onCompassClick: PropTypes.func,
   onLocationClick: PropTypes.func,
   onLayersClick: PropTypes.func,
   onBaseMapsClick: PropTypes.func,
@@ -123,6 +141,7 @@ FabButton.propTypes = {
 
 FabButton.defaultProps = {
   leftHanded: false,
+  bearing: 0
 };
 
 export default FabButton;
