@@ -43,9 +43,6 @@ const FabButton = ({leftHanded, onExploreClick, onLocationClick, onLayersClick, 
     position: 'absolute',
     left: globalRadio-(fabWidth/2),
     top: globalRadio-(fabWidth/2),
-    '&:active': {
-      border: 5,
-    },
   };
   const commonButtonStyle = {
     visibility: isMenuOpen ? 'visible' : 'hidden',
