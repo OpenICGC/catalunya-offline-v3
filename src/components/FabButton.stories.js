@@ -20,11 +20,12 @@ const Template = args => <FabButton {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  isLocationAvailable: true,
-  leftHanded: false,
   bearing: 0,
+  isLocationAvailable: true,
   isCompassOn: false,
-  isLocationOn: false
+  isTrackingOn: false,
+  isLeftHanded: false,
+  isAccessibleSize: false,
 };
 
 export const Bearing30 = Template.bind({});
@@ -43,11 +44,17 @@ LocationUnavailable.args = {
 export const LocationOn = Template.bind({});
 LocationOn.args = {
   ...Default.args,
-  isLocationOn: true
+  isTrackingOn: true
 };
 
 export const LeftHanded = Template.bind({});
 LeftHanded.args = {
   ...Default.args,
-  leftHanded: true
+  isLeftHanded: true
+};
+
+export const Accessible = Template.bind({});
+Accessible.args = {
+  ...Default.args,
+  isAccessibleSize: true
 };

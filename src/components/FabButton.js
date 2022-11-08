@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton';
 
 //MUI-ICONS
 import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
 import ExploreIcon from '@mui/icons-material/Explore';
 import FolderIcon from '@mui/icons-material/Folder';
 import LayersIcon from '@mui/icons-material/Layers';
@@ -18,129 +17,202 @@ import MapIcon from '@mui/icons-material/Map';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 
 //STYLES
-import { red } from '@mui/material/colors';
-import {darken } from '@mui/material';
+import red from '@mui/material/colors/red';
+import {darken} from '@mui/system/colorManipulator';
 
-const fabWidth = 72;
-const buttonDiameter = 40;
-const buttonRadio = buttonDiameter/2;
-const globalDiameter = 180;
-const globalRadio = globalDiameter/2;
-const container = {
-  /*top: '50%',
-  right: 8,*/
-  position: 'absolute',
-  height: globalDiameter,
-  width: globalDiameter,
-  borderRadius: '100%',
-};
+const transitionOpen = 'translate 0.3s linear, opacity 0.5s linear';
+const transitionClose = 'translate 0.1s linear, opacity 0.1s linear';
+const delay = '100';
 
-const FabButton = ({leftHanded, bearing, isCompassOn, isLocationAvailable, isLocationOn,  onCompassClick, onLocationClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
+const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn,  onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
+
   //STYLES
-  const fabStyle = {
+  const fabWidth = isAccessibleSize ? 72 : 56;
+  const buttonWidth = isAccessibleSize ? 56 : 40;
+  const radio = isAccessibleSize ? 80 : 60;
+  
+  const container = {
+    height: '100%',
     width: fabWidth,
-    height: fabWidth,
     position: 'absolute',
-    left: globalRadio-(fabWidth/2),
-    top: globalRadio-(fabWidth/2),
+    right: isLeftHanded ? undefined : 8,
+    left: isLeftHanded ? 8 : undefined,
+    padding: 0
   };
-  const commonButtonStyle = {
-    visibility: isMenuOpen ? 'visible' : 'hidden',
-    width: buttonDiameter,
-    height: buttonDiameter,
-    position: 'absolute',
-    boxShadow: 5,
-  };
-  const greyButtonsStyle = {
+  const greyButton = {
     bgcolor: 'grey.800',
     '&:hover': {
       bgcolor: 'grey.900',
     },
   };
-  const exploreButton = {
-    ...commonButtonStyle,
-    ...greyButtonsStyle,
-    left: globalRadio-buttonRadio,
-    top: 0
+  const common = {
+    right: 0,
+    left: 0,
+    margin: 'auto',
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+    width: buttonWidth,
+    height: buttonWidth,
+    boxShadow: 5,
+    opacity: 0
   };
-  const locationButton = {
-    ...commonButtonStyle,
-    ...greyButtonsStyle,
-    top: (globalRadio*(Math.sqrt(2)-1))/Math.sqrt(2)-(buttonRadio*(Math.sqrt(2)-1))/Math.sqrt(2),
-    left: leftHanded ? 'none' : (globalRadio*(Math.sqrt(2)-1))/Math.sqrt(2)-(buttonRadio*(Math.sqrt(2)-1))/Math.sqrt(2),
-    right: leftHanded ? (globalRadio*(Math.sqrt(2)-1))/Math.sqrt(2)-(buttonRadio*(Math.sqrt(2)-1))/Math.sqrt(2) : 'none',
+  
+  const compass = {
+    ...common,
+    ...greyButton,
+    transition: transitionClose,
   };
-  const layersButton = {
-    ...commonButtonStyle,
+  const compassOpen = {
+    ...common,
+    ...greyButton,
+    translate: `0px -${radio}px`,
+    transition: transitionOpen,
+    opacity: 1,
+
+  };
+
+  const location = {
+    ...common,
+    ...greyButton,
+    transition: transitionClose,
+  };
+  const locationOpen = {
+    ...common,
+    ...greyButton,
+    translate: isLeftHanded ? `${radio*0.707}px -${radio*0.707}px` : `-${radio*0.707}px -${radio*0.707}px` ,
+    transition: transitionOpen,
+    opacity: 1,
+    transitionDelay: `${1*delay}ms`
+  };
+
+  const layers = {
+    ...common,
     bgcolor: red[500],
     '&:hover': {
       bgcolor: darken(red[500], 0.2),
     },
-    top: globalRadio-buttonRadio,
-    left: leftHanded ? globalDiameter-buttonDiameter : 0
+    transition: transitionClose,
   };
-  const baseMapsButton = {
-    ...commonButtonStyle,
+  const layersOpen = {
+    ...common,
+    bgcolor: red[500],
+    '&:hover': {
+      bgcolor: darken(red[500], 0.2),
+    },
+    translate: isLeftHanded ? `${radio}px 0px` : `-${radio}px 0px` ,
+    transition: transitionOpen,
+    opacity: 1,
+    transitionDelay: `${2*delay}ms`
+  };
+
+  const baseMaps = {
+    ...common,
     bgcolor: 'tertiary.main',
     '&:hover': {
       bgcolor: 'tertiary.dark',
     },
-    left: leftHanded ? 'none' : (globalRadio*(Math.sqrt(2)-1))/Math.sqrt(2)-(buttonRadio*(Math.sqrt(2)-1))/Math.sqrt(2),
-    right: leftHanded ? (globalRadio*(Math.sqrt(2)-1))/Math.sqrt(2)-(buttonRadio*(Math.sqrt(2)-1))/Math.sqrt(2) : 'none',
-    bottom: (globalRadio*(Math.sqrt(2)-1))/Math.sqrt(2)-(buttonRadio*(Math.sqrt(2)-1))/Math.sqrt(2),
+    transition: transitionClose,
+    opacity: 1,
   };
-  const folderButton = {
-    ...commonButtonStyle,
+  const baseMapsOpen = {
+    ...common,
+    bgcolor: 'tertiary.main',
+    '&:hover': {
+      bgcolor: 'tertiary.dark',
+    },
+    translate: isLeftHanded ? `${radio*0.707}px ${radio*0.707}px` : `-${radio*0.707}px ${radio*0.707}px`,
+    transition: transitionOpen,
+    opacity: 1,
+    transitionDelay: `${3*delay}ms`
+  };
+
+  const folder = {
+    ...common,
     bgcolor: 'secondary.main',
     '&:hover': {
       bgcolor: 'secondary.dark',
     },
-    left: globalRadio-buttonRadio,
-    top: globalDiameter-buttonDiameter,
+    transition: transitionClose,
+    opacity: 1,
   };
-  return <>
-    <Box sx={container}>
-      <IconButton sx={exploreButton} onClick={() => onCompassClick()}>
-        <ExploreIcon sx={{color: isCompassOn ? 'primary.main' : 'common.white', transform: `rotate(${-45+bearing}deg)`}}/>
-      </IconButton>
-      <IconButton sx={locationButton} onClick={() => onLocationClick()}>
-        {
-          isLocationAvailable ?
-            isLocationOn ? <MyLocationIcon sx={{color: 'primary.main'}}/> : <LocationSearchingIcon sx={{color: 'common.white'}}/>
-            : <LocationDisabledIcon sx={{color: 'common.white'}}/>
-        }
+  const folderOpen = {
+    ...common,
+    bgcolor: 'secondary.main',
+    '&:hover': {
+      bgcolor: 'secondary.dark',
+    },
+    translate: `0px ${radio}px`,
+    transition: transitionOpen,
+    opacity: 1,
+    transitionDelay: `${4*delay}ms`
+  };
 
-      </IconButton>
-      <IconButton sx={layersButton} onClick={() => onLayersClick()}><LayersIcon sx={{color: 'grey.800'}}/></IconButton>
-      <IconButton sx={baseMapsButton} onClick={() => onBaseMapsClick()}><MapIcon sx={{color: 'grey.800'}}/></IconButton>
-      <IconButton sx={folderButton} onClick={() => onFoldersClick()}><FolderIcon sx={{color: 'grey.800'}}/></IconButton>
-      <Fab color='primary' sx={fabStyle} onClick={() => setMenuOpen(!isMenuOpen)}>
-        {
-          isMenuOpen ?
-            <CloseIcon sx={{color: 'grey.800', fontSize: fabWidth / 2}}/> :
-            <AddIcon sx={{color: 'grey.800', fontSize: fabWidth / 2}}/>
-        }
-      </Fab>
-    </Box>
-  </>;
+  const fabCommon = {
+    width: fabWidth,
+    height: fabWidth,
+    right: 0,
+    left: 0,
+    margin: 'auto',
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+    zIndex: 5000,
+    transition: 'transform 0.3s linear',
+  };
+
+  const fab = {
+    ...fabCommon,
+  };
+  const fabOpen = {
+    ...fabCommon,
+    transform: 'rotate(45deg)'
+  };
+
+  return <Box sx={container}>
+    <Fab color='primary' sx={isMenuOpen ? fabOpen : fab} onClick={() => setMenuOpen(!isMenuOpen)}>
+      <AddIcon sx={{color: 'grey.800', fontSize: fabWidth / 2}}/>
+    </Fab>
+    <IconButton sx={isMenuOpen ? compassOpen : compass} onClick={() => onCompassClick()}>
+      <ExploreIcon sx={{color: isCompassOn ? 'primary.main' : 'common.white', transform: `rotate(${-45+bearing}deg)`}}/>
+    </IconButton>
+    <IconButton sx={isMenuOpen ? layersOpen : layers} onClick={() => onLayersClick()}>
+      <LayersIcon sx={{color: 'grey.800'}}/>
+    </IconButton>
+    <IconButton sx={isMenuOpen ? folderOpen : folder} onClick={() => onFoldersClick()}>
+      <FolderIcon sx={{color: 'grey.800'}}/>
+    </IconButton>
+    <IconButton sx={isMenuOpen ? baseMapsOpen : baseMaps} onClick={() => onBaseMapsClick()}>
+      <MapIcon sx={{color: 'grey.800'}}/>
+    </IconButton>
+    <IconButton sx={isMenuOpen ? locationOpen : location} onClick={() => onTrackingClick()}>
+      {
+        isLocationAvailable ?
+          isTrackingOn ? <MyLocationIcon sx={{color: 'primary.main'}}/> : <LocationSearchingIcon sx={{color: 'common.white'}}/>
+          : <LocationDisabledIcon sx={{color: 'common.white'}}/>
+      }
+    </IconButton>
+  </Box>;
 };
 
 FabButton.propTypes = {
-  leftHanded: PropTypes.bool,
+  isLeftHanded: PropTypes.bool,
+  isAccessibleSize: PropTypes.bool,
   bearing: PropTypes.number,
   isCompassOn: PropTypes.bool,
   isLocationAvailable: PropTypes.bool.isRequired,
-  isLocationOn: PropTypes.bool,
+  isTrackingOn: PropTypes.bool,
   onCompassClick: PropTypes.func,
-  onLocationClick: PropTypes.func,
+  onTrackingClick: PropTypes.func,
   onLayersClick: PropTypes.func,
   onBaseMapsClick: PropTypes.func,
   onFoldersClick: PropTypes.func
 };
 
 FabButton.defaultProps = {
-  leftHanded: false,
+  isLeftHanded: false,
+  isAccessibleSize: false,
   bearing: 0
 };
 
