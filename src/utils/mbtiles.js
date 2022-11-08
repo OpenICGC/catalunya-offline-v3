@@ -1,7 +1,8 @@
 import { Capacitor } from '@capacitor/core';
 import {CapacitorSQLite, SQLiteConnection} from '@capacitor-community/sqlite';
 import { defineCustomElements as jeepSqlite, applyPolyfills} from 'jeep-sqlite/loader';
-import * as pako from 'pako';
+import {inflate} from 'pako';
+
 
 import hex2dec from './hex2dec';
 
@@ -32,7 +33,7 @@ const sourceDatabases = new Map();
 
 const getTile = url => {
   let splitUrl = url.split('/');
-  let dbName = getSourceNameFromUrl(url);
+  let dbName = splitUrl[2];
   let z = +splitUrl[splitUrl.length - 3];
   let x = +splitUrl[splitUrl.length - 2];
   let y = +(splitUrl[splitUrl.length - 1].split('.')[0]);
@@ -40,19 +41,14 @@ const getTile = url => {
   return getTileFromDatabase(dbName, z, x, y);
 };
 
-const getSourceNameFromUrl = url => {
-  return url.replace('mbtiles://', '').split('/')[0];
-};
-
 const getTileFromDatabase = async (dbName, z, x, y) => {
   let db = await getDatabase(dbName);
   let params = [z, x, Math.pow(2, z) - y - 1];
   let queryresults = await db.query(query, params);
   if (queryresults.values.length === 1) { // Tile found
-    let binData = hex2dec(queryresults.values[0].tile_data_hex);
-    let isGzipped = binData[0] === 0x1f && binData[1] === 0x8b;
-    if (isGzipped) {
-      binData = pako.inflate(binData);
+    let binData = await hex2dec(queryresults.values[0].tile_data_hex);
+    if (binData[0] === 0x1f && binData[1] === 0x8b) { // is GZipped
+      binData = inflate(binData);
     }
     return binData.buffer;
   }
@@ -84,15 +80,14 @@ const mbtiles = maplibregl => {
   maplibregl.addProtocol('mbtiles', (params, callback) => {
     getTile(params.url).then(tileBuffer => {
       if (tileBuffer) {
-        callback(null, tileBuffer, null, null);
+        callback(null, tileBuffer);
       } else {
         let message = `[mbtiles] Tile not found: ${params.url}`;
         callback(new Error(message));
       }
     });
     return {
-      cancel: () => {
-      }
+      cancel: () => {}
     };
   });
 };
