@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 
 //MUI-ICONS
 import AddIcon from '@mui/icons-material/Add';
-import CompassIcon from './icons/Compass';
+import CompassIcon from '../icons/Compass';
 import FolderIcon from '@mui/icons-material/Folder';
 import LayersIcon from '@mui/icons-material/Layers';
 import LocationDisabledIcon from '@mui/icons-material/LocationDisabled';

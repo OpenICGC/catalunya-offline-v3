@@ -7,7 +7,7 @@ import Map from '@geomatico/geocomponents/Map';
 import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM} from '../../config';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
-import FabButton from '../../components/FabButton';
+import FabButton from '../../components/buttons/FabButton';
 
 mbtiles(maplibregl);
 
