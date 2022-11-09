@@ -8,7 +8,7 @@ const theme = mode => createTheme({
     mode: mode ? mode : 'light',
     primary: {
       main: primaryColor,
-      contrastText: '#FFF',
+      contrastText: '#fff',
     },
     secondary: {
       main: '#ffd300',
