@@ -4,7 +4,7 @@ import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
 
-import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES} from '../../config';
+import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM} from '../../config';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
 import FabButton from '../../components/FabButton';
@@ -50,11 +50,14 @@ const mbtilesStatusMessages = [
   'mbtiles ready'
 ];
 
-const MainContent = ({mapStyle}) => {
+const MainContent = ({mapStyle, onManagerChanged}) => {
   const mapRef = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
-  const {geolocation} = useBackgroundGeolocation();
+  const [isTrackingMode, setTrackingMode] = useState(true);
+  const {geolocation, error: geolocationError} = useBackgroundGeolocation();
+
+  const orientation = -45; // TODO provide an orientation service
 
   useEffect(() => {
     isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
@@ -76,26 +79,64 @@ const MainContent = ({mapStyle}) => {
 
   useEffect(() => {
     const {latitude, longitude} = geolocation;
-    if (latitude && longitude && mapRef.current) {
+    if (mapRef.current) {
       mapRef.current.getSource('geolocation').setData({
         type: 'FeatureCollection',
-        features: [{
+        features: latitude && longitude ? [{
           type: 'Feature',
           properties: {},
           geometry: {
             type: 'Point',
             coordinates: [longitude, latitude]
           }
-        }]
-      });
-      setViewport({
-        ...viewport,
-        latitude,
-        longitude,
-        zoom: MAP_PROPS.maxZoom
+        }] : []
       });
     }
   }, [geolocation, mapRef.current]);
+
+  // Navigation
+  const [isNavigationMode, setNavigationMode] = useState(false);
+  const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
+  useEffect(() => {
+    mapRef.current?.easeTo({
+      pitch: isNavigationMode ? 60 : 0,
+      bearing: isNavigationMode && isTrackingMode ? orientation : 0,
+    });
+  }, [isNavigationMode]);
+  useEffect(() => {
+    if (isNavigationMode && isTrackingMode) {
+      mapRef.current?.easeTo({
+        pitch: isNavigationMode ? 60 : 0,
+        bearing: orientation
+      });
+    }
+  }, [isNavigationMode, isTrackingMode, orientation]);
+
+  // Tracking
+  const enableTracking = () => setTrackingMode(true);
+  const disableTracking = () => {
+    setTrackingMode(false);
+  };
+  useEffect(() => {
+    const {latitude, longitude} = geolocation;
+    isTrackingMode && latitude && longitude &&
+    (mapRef.current ? mapRef.current.easeTo({
+      latitude,
+      longitude,
+      zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom),
+      bearing: isNavigationMode ? orientation : 0
+    }) : setViewport({
+      ...viewport,
+      latitude,
+      longitude,
+      zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom),
+      bearing: isNavigationMode ? orientation : 0
+    }));
+  }, [geolocation, isTrackingMode]);
+
+  const setLayersManager = () => onManagerChanged('LAYERS');
+  const setBaseMapsManager = () => onManagerChanged('BASEMAPS');
+  const setFoldersManager = () => onManagerChanged('SCOPES');
 
   return mbtilesStatus === READY ?
     <Map
@@ -106,15 +147,27 @@ const MainContent = ({mapStyle}) => {
       layers={layers}
       viewport={viewport}
       onViewportChange={setViewport}
+      onDrag={disableTracking}
+      onTouchMove={disableTracking}
+      onWheel={disableTracking}
     >
-      <FabButton isLocationAvailable={true}/>
+      <FabButton
+        isLeftHanded={false} isAccessibleSize={false}
+        bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
+        isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}
+        onLayersClick={setLayersManager}
+        onBaseMapsClick={setBaseMapsManager}
+        onFoldersClick={setFoldersManager}
+      />
     </Map> : <div>
       {mbtilesStatusMessages[mbtilesStatus]}
     </div>;
 };
 
 MainContent.propTypes = {
-  mapStyle: PropTypes.string.isRequired
+  mapStyle: PropTypes.string.isRequired,
+  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES']),
+  onManagerChanged: PropTypes.func.isRequired
 };
 
 export default MainContent;
