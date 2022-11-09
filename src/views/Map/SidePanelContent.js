@@ -26,6 +26,7 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged}) => {
         styles={MAPSTYLES}
         selectedStyleId={mapStyle}
         onStyleChange={onMapStyleChanged}
+        variant='list'
       />
     </ScrollableContent>
     <Geomatico/>

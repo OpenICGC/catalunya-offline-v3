@@ -30,13 +30,13 @@ const HEX2DEC = (() => {
   return hex2dec;
 })();
 
-const hex2dec = (data) => {
+const hex2dec = data => new Promise(resolve => {
   const length = data.length / 2;
   const u8 = new Uint8Array(length);
   for (let i = 0; i < length; i++) {
     u8[i] = HEX2DEC[data.slice(i * 2, (i * 2) + 2)];
   }
-  return u8;
-};
+  resolve(u8);
+});
 
 export default hex2dec;
