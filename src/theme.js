@@ -13,11 +13,6 @@ const theme = mode => createTheme({
     secondary: {
       main: '#ffd300',
     },
-    tertiary: {
-      main: '#23A649',
-      light: '#4FB76D',
-      dark: '#187433'
-    },
     text: {
       primary: '#311f06',
       secondary: '#623e0d',

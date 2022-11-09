@@ -17,9 +17,6 @@ import MapIcon from '@mui/icons-material/Map';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 
 //STYLES
-import red from '@mui/material/colors/red';
-import {darken} from '@mui/system/colorManipulator';
-
 const fabTransition = 'transform 360ms linear';
 const buttonTransition = 'translate 360ms cubic-bezier(0.16, 1, 0.3, 1)';
 const delay = 40; // ms
@@ -73,6 +70,10 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
 
   const compassOpen = {
     ...compass,
+    bgcolor: isCompassOn ? 'primary.main' : 'grey.800',
+    '&:hover': {
+      bgcolor: isCompassOn ? 'primary.dark' :'grey.900',
+    },
     translate: `0px -${radius}px`,
     transitionDelay: `${4*delay}ms`
   };
@@ -85,56 +86,58 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
 
   const locationOpen = {
     ...location,
+    bgcolor: isLocationAvailable? isTrackingOn ? 'primary.main' : 'grey.800' : 'action.disabled',
+    '&:hover': {
+      bgcolor: isTrackingOn ? 'primary.dark' :'grey.900',
+    },
     translate: isLeftHanded ? `${radius*0.707}px -${radius*0.707}px` : `-${radius*0.707}px -${radius*0.707}px`,
     transitionDelay: `${3*delay}ms`
   };
 
   const layers = {
     ...common,
-    bgcolor: red[500],
-    '&:hover': {
-      bgcolor: darken(red[500], 0.2),
-    },
+    ...greyButton,
     transitionDelay: `${2*delay}ms`
   };
 
   const layersOpen = {
     ...layers,
+    ...greyButton,
     translate: isLeftHanded ? `${radius}px 0px` : `-${radius}px 0px`,
     transitionDelay: `${2*delay}ms`
   };
 
   const baseMaps = {
     ...common,
-    bgcolor: 'tertiary.main',
-    '&:hover': {
-      bgcolor: 'tertiary.dark',
-    },
+    ...greyButton,
     transitionDelay: `${3*delay}ms`
   };
 
   const baseMapsOpen = {
     ...baseMaps,
+    ...greyButton,
     translate: isLeftHanded ? `${radius*0.707}px ${radius*0.707}px` : `-${radius*0.707}px ${radius*0.707}px`,
     transitionDelay: `${1*delay}ms`
   };
 
   const folder = {
     ...common,
-    bgcolor: 'secondary.main',
-    '&:hover': {
-      bgcolor: 'secondary.dark',
-    },
+    ...greyButton,
     transitionDelay: `${4*delay}ms`
   };
 
   const folderOpen = {
     ...folder,
+    ...greyButton,
     translate: `0px ${radius}px`,
     transitionDelay: `${0*delay}ms`
   };
 
   const fab = {
+    bgcolor: isMenuOpen ? 'primary.main' : 'grey.800',
+    '&:hover': {
+      bgcolor: isMenuOpen ? 'secondary.dark' : 'grey.900',
+    },
     width: fabSize,
     height: fabSize,
     top: 0,
@@ -153,24 +156,24 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
 
   return <Box sx={container}>
     <Fab color='primary' sx={isMenuOpen ? fabOpen : fab} onClick={() => setMenuOpen(!isMenuOpen)}>
-      <AddIcon sx={{color: 'grey.800', fontSize: fabSize / 2}}/>
+      <AddIcon sx={{color: isMenuOpen ? 'grey.800' : 'common.white', fontSize: fabSize / 2}}/>
     </Fab>
     <IconButton sx={isMenuOpen ? compassOpen : compass} onClick={onCompassClick}>
-      <CompassIcon sx={{color: isCompassOn ? 'primary.main' : 'common.white', transform: `rotate(${-45+bearing}deg)`, fontSize: iconSize}}/>
+      <CompassIcon sx={{color: 'common.white', transform: `rotate(${-45+bearing}deg)`, fontSize: iconSize}}/>
     </IconButton>
     <IconButton sx={isMenuOpen ? layersOpen : layers} onClick={onLayersClick}>
-      <LayersIcon sx={{color: 'grey.800'}}/>
+      <LayersIcon sx={{color: 'common.white'}}/>
     </IconButton>
     <IconButton sx={isMenuOpen ? folderOpen : folder} onClick={onFoldersClick}>
-      <FolderIcon sx={{color: 'grey.800'}}/>
+      <FolderIcon sx={{color: 'common.white'}}/>
     </IconButton>
     <IconButton sx={isMenuOpen ? baseMapsOpen : baseMaps} onClick={onBaseMapsClick}>
-      <MapIcon sx={{color: 'grey.800'}}/>
+      <MapIcon sx={{color: 'common.white'}}/>
     </IconButton>
     <IconButton sx={isMenuOpen ? locationOpen : location} onClick={onTrackingClick}>
       {
         isLocationAvailable ?
-          isTrackingOn ? <MyLocationIcon sx={{color: 'primary.main'}}/>
+          isTrackingOn ? <MyLocationIcon sx={{color: 'grey.800'}}/>
             : <LocationSearchingIcon sx={{color: 'common.white'}}/>
           : <LocationDisabledIcon sx={{color: 'common.white'}}/>
       }

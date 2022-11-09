@@ -3,7 +3,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 // Derived from MUI's "Explore" icon, find SVG source in resources/icons/compass.svg
 const northColor = '#F00';
-const southColor = '#999';
+const southColor = '#424242';
 
 const Compass = (props) => <SvgIcon {...props}>
   <path d="M 14.19,14.19 9.81,9.81 18,6 Z" fill={northColor}/>
