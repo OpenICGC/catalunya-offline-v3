@@ -1,5 +1,5 @@
 export const DRAWER_WIDTH = 240;
-export const SM_BREAKPOINT = 600;
+export const SM_BREAKPOINT = 850;
 
 export const INITIAL_VIEWPORT = {
   latitude: 42.1094,
