@@ -22,17 +22,38 @@ const sources = {
 };
 
 const layers = [{
+  id: 'geolocation-precision',
+  source: 'geolocation',
+  type: 'circle',
+  paint: {
+    'circle-color': '#4286f5',
+    'circle-opacity': 0.33,
+    'circle-radius':  [
+      'interpolate',
+      ['exponential', 2],
+      ['zoom'],
+      7, // Beware: this formula works only for latitudes around initial viewport's latitude
+      ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI/180))],
+      15,
+      ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI/180))]
+    ],
+    'circle-stroke-color': '#4286f5',
+    'circle-stroke-opacity': 0.67,
+    'circle-stroke-width': 1,
+    'circle-pitch-alignment': 'map'
+  }
+},{
   id: 'geolocation',
   source: 'geolocation',
   type: 'circle',
   paint: {
-    'circle-color': '#FF00FF',
-    'circle-opacity': 1,
-    'circle-radius': 6,
+    'circle-color': '#4285f4',
+    'circle-opacity': 0.8,
+    'circle-radius': 10,
     'circle-stroke-color': '#FFF',
-    'circle-stroke-opacity': 1,
+    'circle-stroke-opacity': 0.8,
     'circle-stroke-width': 2,
-
+    'circle-pitch-alignment': 'map'
   }
 }];
 
@@ -54,11 +75,19 @@ const MainContent = ({mapStyle, onManagerChanged}) => {
   const mapRef = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
-  const [isTrackingMode, setTrackingMode] = useState(true);
-  const {geolocation, error: geolocationError} = useBackgroundGeolocation();
 
+  const {geolocation, error: geolocationError} = useBackgroundGeolocation();
   const orientation = -45; // TODO provide an orientation service
 
+  const [isNavigationMode, setNavigationMode] = useState(false);
+  const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
+
+  const [isTrackingMode, setTrackingMode] = useState(true);
+  const enableTracking = () => setTrackingMode(true);
+  const disableTracking = () => setTrackingMode(false);
+
+
+  // Effects on offline tileset downloading
   useEffect(() => {
     isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
       if (isDownloaded) {
@@ -77,62 +106,56 @@ const MainContent = ({mapStyle, onManagerChanged}) => {
     }
   }, [mbtilesStatus]);
 
+  // Set blue dot location on geolocation updates
   useEffect(() => {
     const {latitude, longitude} = geolocation;
     if (mapRef.current) {
-      mapRef.current.getSource('geolocation').setData({
-        type: 'FeatureCollection',
-        features: latitude && longitude ? [{
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [longitude, latitude]
-          }
-        }] : []
+      mapRef.current.once('idle', () => {
+        mapRef.current.getSource('geolocation').setData({
+          type: 'FeatureCollection',
+          features: latitude && longitude ? [{
+            type: 'Feature',
+            properties: {...geolocation},
+            geometry: {
+              type: 'Point',
+              coordinates: [longitude, latitude]
+            }
+          }] : []
+        });
       });
     }
-  }, [geolocation, mapRef.current]);
+  }, [geolocation, mapRef.current, mapStyle]);
 
-  // Navigation
-  const [isNavigationMode, setNavigationMode] = useState(false);
-  const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
+  // Pitch & rotate map when switching navigation mode on/off
   useEffect(() => {
     mapRef.current?.easeTo({
       pitch: isNavigationMode ? 60 : 0,
       bearing: isNavigationMode && isTrackingMode ? orientation : 0,
     });
   }, [isNavigationMode]);
-  useEffect(() => {
-    if (isNavigationMode && isTrackingMode) {
-      mapRef.current?.easeTo({
-        pitch: isNavigationMode ? 60 : 0,
-        bearing: orientation
-      });
-    }
-  }, [isNavigationMode, isTrackingMode, orientation]);
 
-  // Tracking
-  const enableTracking = () => setTrackingMode(true);
-  const disableTracking = () => {
-    setTrackingMode(false);
-  };
+  // On tracking mode on, update viewport on location and orientation updates:
+  // center, minimal zoom, and bearing if navigation mode is also on
   useEffect(() => {
     const {latitude, longitude} = geolocation;
-    isTrackingMode && latitude && longitude &&
-    (mapRef.current ? mapRef.current.easeTo({
-      latitude,
-      longitude,
-      zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom),
-      bearing: isNavigationMode ? orientation : 0
-    }) : setViewport({
-      ...viewport,
-      latitude,
-      longitude,
-      zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom),
-      bearing: isNavigationMode ? orientation : 0
-    }));
-  }, [geolocation, isTrackingMode]);
+    if (isTrackingMode && latitude && longitude) {
+      const bearingZoom = {
+        bearing: isNavigationMode && isTrackingMode ? orientation : 0,
+        zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
+      };
+      mapRef.current ?
+        mapRef.current.easeTo({
+          center: [longitude, latitude],
+          ...bearingZoom
+        }) :
+        setViewport({
+          ...viewport,
+          latitude,
+          longitude,
+          ...bearingZoom
+        });
+    }
+  }, [isTrackingMode, geolocation, orientation]);
 
   const setLayersManager = () => onManagerChanged('LAYERS');
   const setBaseMapsManager = () => onManagerChanged('BASEMAPS');
@@ -141,6 +164,7 @@ const MainContent = ({mapStyle, onManagerChanged}) => {
   return mbtilesStatus === READY ?
     <Map
       {...MAP_PROPS}
+      reuseMaps
       ref={mapRef}
       mapStyle={mapStyle}
       sources={sources}
