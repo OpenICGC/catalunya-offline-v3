@@ -60,6 +60,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
     '& .MuiSvgIcon-root': {
       fontSize: iconSize
     },
+    zIndex: 4000
   };
   
   const compass = {
@@ -86,7 +87,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
 
   const locationOpen = {
     ...location,
-    bgcolor: isLocationAvailable? isTrackingOn ? 'primary.main' : 'grey.800' : 'action.disabled',
+    bgcolor: isLocationAvailable? isTrackingOn ? 'primary.main' : 'grey.800' : 'grey.400',
     '&:hover': {
       bgcolor: isTrackingOn ? 'primary.dark' :'grey.900',
     },
