@@ -76,6 +76,8 @@ const MainContent = ({mapStyle, onManagerChanged}) => {
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
 
+  const [isFabVisible, setFabVisible] = useState(false);
+
   const {geolocation, error: geolocationError} = useBackgroundGeolocation();
   const orientation = -45; // TODO provide an orientation service
 
@@ -85,7 +87,6 @@ const MainContent = ({mapStyle, onManagerChanged}) => {
   const [isTrackingMode, setTrackingMode] = useState(true);
   const enableTracking = () => setTrackingMode(true);
   const disableTracking = () => setTrackingMode(false);
-
 
   // Effects on offline tileset downloading
   useEffect(() => {
@@ -174,8 +175,10 @@ const MainContent = ({mapStyle, onManagerChanged}) => {
       onDrag={disableTracking}
       onTouchMove={disableTracking}
       onWheel={disableTracking}
+      onClick={() => setFabVisible(!isFabVisible)}
     >
       <FabButton
+        isFabVisible={isFabVisible}
         isLeftHanded={false} isAccessibleSize={false}
         bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
         isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}

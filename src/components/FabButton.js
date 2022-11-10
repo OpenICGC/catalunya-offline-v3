@@ -21,7 +21,7 @@ const fabTransition = 'transform 360ms linear';
 const buttonTransition = 'transform 360ms cubic-bezier(0.16, 1, 0.3, 1)';
 const delay = 40; // ms
 
-const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn,  onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
+const FabButton = ({isFabVisible, isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn,  onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   //STYLES
@@ -36,7 +36,15 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
     padding: 0,
     position: 'absolute',
     right: isLeftHanded ? undefined : 8 + fabSize,
-    left: isLeftHanded ? 8 : undefined
+    left: isLeftHanded ? 8 : undefined,
+    opacity: 0,
+    transition: 'opacity 360ms linear'
+  };
+
+  const containerOpen = {
+    ...container,
+    opacity: 1,
+    transition: 'opacity 360ms linear'
   };
 
   const greyButton = {
@@ -154,7 +162,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
     transform: 'rotate(45deg)'
   };
 
-  return <Box sx={container}>
+  return <Box sx={isFabVisible ? containerOpen : container}>
     <Fab color='primary' sx={isMenuOpen ? fabOpen : fab} onClick={() => setMenuOpen(!isMenuOpen)}>
       <AddIcon sx={{color: isMenuOpen ? 'grey.800' : 'common.white', fontSize: fabSize / 2}}/>
     </Fab>
@@ -182,6 +190,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
 };
 
 FabButton.propTypes = {
+  isFabVisible: PropTypes.bool,
   isLeftHanded: PropTypes.bool,
   isAccessibleSize: PropTypes.bool,
   bearing: PropTypes.number,
