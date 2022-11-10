@@ -14,7 +14,6 @@ import SectionTitle from '../../components/SectionTitle';
 
 const ScrollableContent = styled(Box)({
   overflow: 'auto',
-  padding: '8px',
 });
 
 const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
@@ -52,7 +51,7 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
 SidePanelContent.propTypes = {
   mapStyle: PropTypes.string.isRequired,
   onMapStyleChanged: PropTypes.func.isRequired,
-  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES'])
+  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES', false])
 };
 
 export default SidePanelContent;

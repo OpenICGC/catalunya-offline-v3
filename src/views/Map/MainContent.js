@@ -71,7 +71,7 @@ const mbtilesStatusMessages = [
   'mbtiles ready'
 ];
 
-const MainContent = ({mapStyle, onManagerChanged}) => {
+const MainContent = ({manager, mapStyle, onManagerChanged}) => {
   const mapRef = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
@@ -157,9 +157,9 @@ const MainContent = ({mapStyle, onManagerChanged}) => {
     }
   }, [isTrackingMode, geolocation, orientation]);
 
-  const setLayersManager = () => onManagerChanged('LAYERS');
-  const setBaseMapsManager = () => onManagerChanged('BASEMAPS');
-  const setFoldersManager = () => onManagerChanged('SCOPES');
+  const setLayersManager = () => manager === 'LAYERS' ? onManagerChanged(false) : onManagerChanged('LAYERS');
+  const setBaseMapsManager = () => manager === 'BASEMAPS' ? onManagerChanged(false) : onManagerChanged('BASEMAPS');
+  const setFoldersManager = () => manager === 'SCOPES' ? onManagerChanged(false) : onManagerChanged('SCOPES');
 
   return mbtilesStatus === READY ?
     <Map
@@ -190,7 +190,7 @@ const MainContent = ({mapStyle, onManagerChanged}) => {
 
 MainContent.propTypes = {
   mapStyle: PropTypes.string.isRequired,
-  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES']),
+  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES', false]),
   onManagerChanged: PropTypes.func.isRequired
 };
 
