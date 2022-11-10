@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import styled from '@mui/styles/styled';
@@ -30,18 +30,15 @@ const Main = styled(Box, {
   left: widescreen ? (isleftdraweropen && DRAWER_WIDTH) : 0
 }));
 
-const Layout = ({mainContent, sidePanelContent}) => {
+const Layout = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(widescreen);
-
-  const handleClose = () => setIsSidePanelOpen(!isSidePanelOpen);
 
   return (
     <>
       <ResponsiveHeader
         title='Catalunya Offline'
         logo={widescreen ? <></> : null}
-        onStartIconClick={widescreen ? undefined : handleClose}
+        onStartIconClick={widescreen ? undefined : onToggleSidePanel}
         isStartIconCloseable={isSidePanelOpen}
         sx={{
           '&.MuiAppBar-root': {zIndex: 1500}
@@ -53,7 +50,7 @@ const Layout = ({mainContent, sidePanelContent}) => {
           drawerWidth={DRAWER_WIDTH + 'px'}
           anchor="left"
           isOpen={isSidePanelOpen}
-          onClose={handleClose}
+          onClose={onToggleSidePanel}
           widescreen={widescreen}
         >
           {sidePanelContent}
@@ -68,7 +65,9 @@ const Layout = ({mainContent, sidePanelContent}) => {
 
 Layout.propTypes = {
   sidePanelContent: PropTypes.element.isRequired,
-  mainContent: PropTypes.element.isRequired
+  mainContent: PropTypes.element.isRequired,
+  isSidePanelOpen: PropTypes.bool.isRequired,
+  onToggleSidePanel: PropTypes.func.isRequired
 };
 
 export default Layout;

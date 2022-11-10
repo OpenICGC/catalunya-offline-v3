@@ -1,4 +1,4 @@
-export const DRAWER_WIDTH = 300;
+export const DRAWER_WIDTH = 240;
 export const SM_BREAKPOINT = 600;
 
 export const INITIAL_VIEWPORT = {
@@ -34,3 +34,5 @@ export const MAPSTYLES = [{
 
 
 export const INITIAL_MAPSTYLE_URL = MAPSTYLES[0].id;
+
+export const MIN_TRACKING_ZOOM = 14;

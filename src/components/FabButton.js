@@ -18,7 +18,7 @@ import MyLocationIcon from '@mui/icons-material/MyLocation';
 
 //STYLES
 const fabTransition = 'transform 360ms linear';
-const buttonTransition = 'translate 360ms cubic-bezier(0.16, 1, 0.3, 1)';
+const buttonTransition = 'transform 360ms cubic-bezier(0.16, 1, 0.3, 1)';
 const delay = 40; // ms
 
 const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn,  onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
@@ -26,17 +26,17 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
 
   //STYLES
   const fabSize = isAccessibleSize ? 72 : 56;
-  const buttonSize = isAccessibleSize ? 56 : 40;
-  const iconSize = isAccessibleSize ? 36 : undefined;
-  const radius = isAccessibleSize ? 90 : 60;
+  const buttonSize = isAccessibleSize ? 50 : 40;
+  const iconSize = isAccessibleSize ? 32 : undefined;
+  const radius = isAccessibleSize ? 80 : 60;
 
   const container = {
     height: '100%',
-    width: fabSize,
+    width: 0,
+    padding: 0,
     position: 'absolute',
-    right: isLeftHanded ? undefined : 8,
-    left: isLeftHanded ? 8 : undefined,
-    padding: 0
+    right: isLeftHanded ? undefined : 8 + fabSize,
+    left: isLeftHanded ? 8 : undefined
   };
 
   const greyButton = {
@@ -49,8 +49,8 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
   const common = {
     top: 0,
     bottom: 0,
-    left: 0,
-    right: 0,
+    left: (fabSize - buttonSize) / 2,
+    right: 'auto',
     margin: 'auto',
     position: 'absolute',
     width: buttonSize,
@@ -59,7 +59,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
     transition: buttonTransition,
     '& .MuiSvgIcon-root': {
       fontSize: iconSize
-    }
+    },
   };
   
   const compass = {
@@ -74,7 +74,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
     '&:hover': {
       bgcolor: isCompassOn ? 'primary.dark' :'grey.900',
     },
-    translate: `0px -${radius}px`,
+    transform: `translate(0px, -${radius}px)`,
     transitionDelay: `${4*delay}ms`
   };
 
@@ -90,7 +90,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
     '&:hover': {
       bgcolor: isTrackingOn ? 'primary.dark' :'grey.900',
     },
-    translate: isLeftHanded ? `${radius*0.707}px -${radius*0.707}px` : `-${radius*0.707}px -${radius*0.707}px`,
+    transform: isLeftHanded ? `translate(${radius*0.707}px, -${radius*0.707}px)` : `translate(-${radius*0.707}px, -${radius*0.707}px)`,
     transitionDelay: `${3*delay}ms`
   };
 
@@ -103,7 +103,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
   const layersOpen = {
     ...layers,
     ...greyButton,
-    translate: isLeftHanded ? `${radius}px 0px` : `-${radius}px 0px`,
+    transform: isLeftHanded ? `translate(${radius}px, 0px)` : `translate(-${radius}px, 0px)`,
     transitionDelay: `${2*delay}ms`
   };
 
@@ -116,7 +116,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
   const baseMapsOpen = {
     ...baseMaps,
     ...greyButton,
-    translate: isLeftHanded ? `${radius*0.707}px ${radius*0.707}px` : `-${radius*0.707}px ${radius*0.707}px`,
+    transform: isLeftHanded ? `translate(${radius*0.707}px, ${radius*0.707}px)` : `translate(-${radius*0.707}px, ${radius*0.707}px)`,
     transitionDelay: `${1*delay}ms`
   };
 
@@ -129,7 +129,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
   const folderOpen = {
     ...folder,
     ...greyButton,
-    translate: `0px ${radius}px`,
+    transform: `translate(0px, ${radius}px)`,
     transitionDelay: `${0*delay}ms`
   };
 
@@ -159,7 +159,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
       <AddIcon sx={{color: isMenuOpen ? 'grey.800' : 'common.white', fontSize: fabSize / 2}}/>
     </Fab>
     <IconButton sx={isMenuOpen ? compassOpen : compass} onClick={onCompassClick}>
-      <CompassIcon sx={{color: 'common.white', transform: `rotate(${-45+bearing}deg)`, fontSize: iconSize}}/>
+      <CompassIcon sx={{color: 'common.white', transform: `rotate(${-45-bearing}deg)`, fontSize: iconSize}}/>
     </IconButton>
     <IconButton sx={isMenuOpen ? layersOpen : layers} onClick={onLayersClick}>
       <LayersIcon sx={{color: 'common.white'}}/>
