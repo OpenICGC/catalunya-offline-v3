@@ -10,22 +10,29 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 const Index = () => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
   const [isSidePanelOpen, setSidePanelOpen] = useState(widescreen);
-  const toggleSidePanel = () => setSidePanelOpen(!isSidePanelOpen);
 
   const [mapStyle, setMapStyle] = useState(INITIAL_MAPSTYLE_URL);
   const [manager, setManager] = useState(widescreen && 'BASEMAPS');
+
+  const toggleSidePanel = () => {
+    setSidePanelOpen(!isSidePanelOpen);
+    setManager(undefined);
+  };
+
   useEffect(() => {
     setSidePanelOpen(widescreen || !!manager);
   }, [manager]);
 
-  const sidePanelContent = <SidePanelContent
-    mapStyle={mapStyle}
-    onMapStyleChanged={setMapStyle}
-    manager={manager}
-  />;
+  const sidePanelContent = manager &&
+    <SidePanelContent
+      mapStyle={mapStyle}
+      onMapStyleChanged={setMapStyle}
+      manager={manager}
+    />;
 
   const mainContent = <MainContent
     mapStyle={mapStyle}
+    manager={manager}
     onManagerChanged={setManager}
   />;
 

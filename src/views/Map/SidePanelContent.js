@@ -7,19 +7,22 @@ import BaseMapList from '@geomatico/geocomponents/BaseMapList';
 import Box from '@mui/material/Box';
 import styled from '@mui/styles/styled';
 
-import Geomatico from '../../components/Geomatico';
+import GeomaticoLink from '../../components/GeomaticoLink';
 
 import {MAPSTYLES} from '../../config';
 import SectionTitle from '../../components/SectionTitle';
 
 const ScrollableContent = styled(Box)({
   overflow: 'auto',
-  padding: '8px',
 });
 
-const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
+const stackSx = {
+  height: '100%',
+  overflow: 'hidden'
+};
 
-  return <Stack sx={{height: '100%', overflow: 'hidden'}}>
+const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) =>
+  <Stack sx={stackSx}>
     <ScrollableContent>
       {manager === 'LAYERS' &&
         <>
@@ -45,14 +48,13 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
         </>
       }
     </ScrollableContent>
-    <Geomatico/>
+    <GeomaticoLink/>
   </Stack>;
-};
 
 SidePanelContent.propTypes = {
   mapStyle: PropTypes.string.isRequired,
   onMapStyleChanged: PropTypes.func.isRequired,
-  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES'])
+  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES']).isRequired
 };
 
 export default SidePanelContent;
