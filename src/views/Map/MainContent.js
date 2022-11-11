@@ -8,6 +8,7 @@ import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM} from '../../con
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
 import FabButton from '../../components/buttons/FabButton';
+import useCompass from '../../hooks/useCompass';
 
 mbtiles(maplibregl);
 
@@ -42,18 +43,25 @@ const layers = [{
     'circle-stroke-width': 1,
     'circle-pitch-alignment': 'map'
   }
-},{
+}, {
+  id: 'geolocation-shadow',
+  source: 'geolocation',
+  type: 'circle',
+  paint: {
+    'circle-radius': 17,
+    'circle-blur': 0.7,
+    'circle-translate': [1, 1],
+    'circle-translate-anchor': 'viewport'
+  }
+}, {
   id: 'geolocation',
   source: 'geolocation',
   type: 'circle',
   paint: {
     'circle-color': '#4285f4',
-    'circle-opacity': 0.8,
     'circle-radius': 10,
     'circle-stroke-color': '#FFF',
-    'circle-stroke-opacity': 0.8,
-    'circle-stroke-width': 2,
-    'circle-pitch-alignment': 'map'
+    'circle-stroke-width': 2
   }
 }];
 
@@ -77,9 +85,9 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
 
   const {geolocation, error: geolocationError} = useBackgroundGeolocation();
-  const orientation = -45; // TODO provide an orientation service
+  const orientation = useCompass();
 
-  const [isNavigationMode, setNavigationMode] = useState();
+  const [isNavigationMode, setNavigationMode] = useState(false);
   const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
 
   const [isTrackingMode, setTrackingMode] = useState(true);
@@ -107,24 +115,28 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
   }, [mbtilesStatus]);
 
   // Set blue dot location on geolocation updates
-  useEffect(() => {
+  const setMapGeolocation = (map, geolocation) => {
     const {latitude, longitude} = geolocation;
-    if (mapRef.current) {
-      mapRef.current.once('idle', () => {
-        mapRef.current.getSource('geolocation').setData({
-          type: 'FeatureCollection',
-          features: latitude && longitude ? [{
-            type: 'Feature',
-            properties: {...geolocation},
-            geometry: {
-              type: 'Point',
-              coordinates: [longitude, latitude]
-            }
-          }] : []
-        });
-      });
-    }
-  }, [geolocation, mapRef.current, mapStyle]);
+    map?.getSource('geolocation').setData({
+      type: 'FeatureCollection',
+      features: latitude && longitude ? [{
+        type: 'Feature',
+        properties: {...geolocation},
+        geometry: {
+          type: 'Point',
+          coordinates: [longitude, latitude]
+        }
+      }] : []
+    });
+  };
+
+  useEffect(() => {
+    setMapGeolocation(mapRef.current, geolocation);
+  }, [geolocation, mapRef.current]);
+
+  useEffect(() => {
+    mapRef.current?.once('styledata', () => setMapGeolocation(mapRef.current, geolocation));
+  }, [mapStyle]);
 
   // Pitch & rotate map when switching navigation mode on/off
   useEffect(() => {
@@ -143,17 +155,17 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
         bearing: isNavigationMode && isTrackingMode ? orientation : 0,
         zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
       };
-      mapRef.current ?
+      /*mapRef.current ?
         mapRef.current.easeTo({
           center: [longitude, latitude],
           ...bearingZoom
-        }) :
-        setViewport({
-          ...viewport,
-          latitude,
-          longitude,
-          ...bearingZoom
-        });
+        }) :*/
+      setViewport({
+        ...viewport,
+        latitude,
+        longitude,
+        ...bearingZoom
+      });
     }
   }, [isTrackingMode, geolocation, orientation]);
 
