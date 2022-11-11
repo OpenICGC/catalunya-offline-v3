@@ -27,13 +27,13 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) =>
     <ScrollableContent>
       {manager === 'LAYERS' &&
         <>
-          <SectionTitle titleKey={'Gestor Capes'}/>
+          <SectionTitle titleKey='layerManager'/>
           <div>TODO</div>
         </>
       }
       {manager === 'BASEMAPS' &&
         <>
-          <SectionTitle titleKey='BaseMapManager'/>
+          <SectionTitle titleKey='baseMapManager'/>
           <BaseMapList
             styles={MAPSTYLES}
             selectedStyleId={mapStyle}
@@ -44,7 +44,7 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) =>
       }
       {manager === 'SCOPES' &&
         <>
-          <SectionTitle titleKey={'Gestor Àmbits'}/>
+          <SectionTitle titleKey='scopeManager'/>
           <div>TODO</div>
         </>
       }
