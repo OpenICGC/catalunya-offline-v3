@@ -20,7 +20,7 @@
       30
     ]
   },
-  "glyphs": "catoff_vt/glyphs/{fontstack}/{range}.pbf",
+  "glyphs": "glyphs/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
