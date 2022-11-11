@@ -2,7 +2,7 @@ import React from 'react';
 import FabButton from './FabButton';
 
 export default {
-  title: 'Common/FabButton',
+  title: 'Buttons/FabButton',
   component: FabButton,
   argTypes: {
     bearing: {

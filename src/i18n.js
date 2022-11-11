@@ -31,7 +31,6 @@ i18n
     whitelist: ['ca', 'en', 'es'],
     fallbackLng: 'ca',
     debug: false,
-    keySeparator: false,
     interpolation: {
       escapeValue: false,
       formatSeparator: ','
