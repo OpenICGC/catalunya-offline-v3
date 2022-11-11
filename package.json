@@ -91,6 +91,7 @@
     "@capacitor/assets": "^1.0.14",
     "@capacitor/core": "^4.4.0",
     "@capacitor/ios": "^4.4.0",
+    "@capacitor/motion": "^4.0.1",
     "jeep-sqlite": "^1.6.7",
     "pako": "^2.0.4"
   }

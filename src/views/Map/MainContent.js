@@ -8,6 +8,7 @@ import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM} from '../../con
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
 import FabButton from '../../components/buttons/FabButton';
+import useCompass from '../../hooks/useCompass';
 
 mbtiles(maplibregl);
 
@@ -77,9 +78,9 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
 
   const {geolocation, error: geolocationError} = useBackgroundGeolocation();
-  const orientation = -45; // TODO provide an orientation service
+  const orientation = useCompass();
 
-  const [isNavigationMode, setNavigationMode] = useState();
+  const [isNavigationMode, setNavigationMode] = useState(false);
   const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
 
   const [isTrackingMode, setTrackingMode] = useState(true);
@@ -143,17 +144,17 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
         bearing: isNavigationMode && isTrackingMode ? orientation : 0,
         zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
       };
-      mapRef.current ?
+      /*      mapRef.current ?
         mapRef.current.easeTo({
           center: [longitude, latitude],
           ...bearingZoom
-        }) :
-        setViewport({
-          ...viewport,
-          latitude,
-          longitude,
-          ...bearingZoom
-        });
+        }) :*/
+      setViewport({
+        ...viewport,
+        latitude,
+        longitude,
+        ...bearingZoom
+      });
     }
   }, [isTrackingMode, geolocation, orientation]);
 

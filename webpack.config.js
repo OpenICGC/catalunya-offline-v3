@@ -8,7 +8,7 @@ module.exports = (env) => ({
   devtool: env.prod ? 'source-map' : 'inline-source-map',
   devServer: {
     open: true,
-    port: 'auto'
+    port: 8080
   },
   resolve: {
     alias: {
