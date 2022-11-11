@@ -13,26 +13,27 @@ const Index = () => {
 
   const [mapStyle, setMapStyle] = useState(INITIAL_MAPSTYLE_URL);
   const [manager, setManager] = useState(widescreen && 'BASEMAPS');
-  console.log('manager-----------------------------------', manager);
+
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);
-    setManager(false);
+    setManager(undefined);
   };
 
   useEffect(() => {
     setSidePanelOpen(widescreen || !!manager);
   }, [manager]);
 
-  const sidePanelContent = manager && <SidePanelContent
-    mapStyle={mapStyle}
-    onMapStyleChanged={setMapStyle}
-    manager={manager}
-  />;
+  const sidePanelContent = manager &&
+    <SidePanelContent
+      mapStyle={mapStyle}
+      onMapStyleChanged={setMapStyle}
+      manager={manager}
+    />;
 
   const mainContent = <MainContent
     mapStyle={mapStyle}
-    onManagerChanged={setManager}
     manager={manager}
+    onManagerChanged={setManager}
   />;
 
   return <Layout

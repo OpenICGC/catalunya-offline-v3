@@ -71,7 +71,7 @@ const mbtilesStatusMessages = [
   'mbtiles ready'
 ];
 
-const MainContent = ({manager, mapStyle, onManagerChanged}) => {
+const MainContent = ({mapStyle, manager, onManagerChanged}) => {
   const mapRef = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
@@ -79,7 +79,7 @@ const MainContent = ({manager, mapStyle, onManagerChanged}) => {
   const {geolocation, error: geolocationError} = useBackgroundGeolocation();
   const orientation = -45; // TODO provide an orientation service
 
-  const [isNavigationMode, setNavigationMode] = useState(false);
+  const [isNavigationMode, setNavigationMode] = useState();
   const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
 
   const [isTrackingMode, setTrackingMode] = useState(true);
@@ -157,9 +157,7 @@ const MainContent = ({manager, mapStyle, onManagerChanged}) => {
     }
   }, [isTrackingMode, geolocation, orientation]);
 
-  const setLayersManager = () => manager === 'LAYERS' ? onManagerChanged(false) : onManagerChanged('LAYERS');
-  const setBaseMapsManager = () => manager === 'BASEMAPS' ? onManagerChanged(false) : onManagerChanged('BASEMAPS');
-  const setFoldersManager = () => manager === 'SCOPES' ? onManagerChanged(false) : onManagerChanged('SCOPES');
+  const changeManager = clicked => onManagerChanged(clicked === manager ? undefined : clicked);
 
   return mbtilesStatus === READY ?
     <Map
@@ -179,9 +177,9 @@ const MainContent = ({manager, mapStyle, onManagerChanged}) => {
         isLeftHanded={false} isAccessibleSize={false}
         bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
         isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}
-        onLayersClick={setLayersManager}
-        onBaseMapsClick={setBaseMapsManager}
-        onFoldersClick={setFoldersManager}
+        onLayersClick={() => changeManager('LAYERS')}
+        onBaseMapsClick={() => changeManager('BASEMAPS')}
+        onFoldersClick={() => changeManager('SCOPES')}
       />
     </Map> : <div>
       {mbtilesStatusMessages[mbtilesStatus]}
@@ -190,7 +188,7 @@ const MainContent = ({manager, mapStyle, onManagerChanged}) => {
 
 MainContent.propTypes = {
   mapStyle: PropTypes.string.isRequired,
-  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES', false]),
+  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES']),
   onManagerChanged: PropTypes.func.isRequired
 };
 

@@ -21,37 +21,37 @@ const Main = styled(Box)({
   left: 0
 });
 
+const sidePanelSx = {
+  '& .MuiDrawer-paper': {
+    top: 0,
+    height: '100%',
+  },
+  '@media (min-width: 0px)': {
+    top: 0,
+    height: '100%',
+  }
+};
+
 const Layout = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
 
-  return (
-    <>
-      {
-        sidePanelContent && isSidePanelOpen && <SidePanel
-          sx={{
-            '& .MuiDrawer-paper': {
-              top: 0,
-              height: '100%',
-            },
-            '@media (min-width: 0px)': {
-              top: 0,
-              height: '100%',
-            }
-          }}
-          drawerWidth={DRAWER_WIDTH + 'px'}
-          anchor="left"
-          isOpen={isSidePanelOpen}
-          onClose={onToggleSidePanel}
-          widescreen={widescreen}
-        >
-          {sidePanelContent}
-        </SidePanel>
-      }
-      <Main widescreen={widescreen} isleftdraweropen={sidePanelContent && isSidePanelOpen}>
-        {mainContent}
-      </Main>
-    </>
-  );
+  return <>
+    {sidePanelContent && isSidePanelOpen &&
+      <SidePanel
+        sx={sidePanelSx}
+        drawerWidth={DRAWER_WIDTH + 'px'}
+        anchor="left"
+        isOpen={isSidePanelOpen}
+        onClose={onToggleSidePanel}
+        widescreen={widescreen}
+      >
+        {sidePanelContent}
+      </SidePanel>
+    }
+    <Main widescreen={widescreen} isleftdraweropen={sidePanelContent && isSidePanelOpen}>
+      {mainContent}
+    </Main>
+  </>;
 };
 
 Layout.propTypes = {
