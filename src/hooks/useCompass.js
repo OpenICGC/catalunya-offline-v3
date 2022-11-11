@@ -1,37 +1,31 @@
 import {useEffect, useState} from 'react';
-import {Motion} from '@capacitor/motion';
+/// Using also "cordova-plugin-device-orientation"
 
 const useCompass = () => {
-  const [orientation, setOrientation] = useState(0);
+  const [heading, setHeading] = useState(0);
 
   useEffect(() => {
-    console.log('[compass] Set Orientation: ', orientation);
-  }, [orientation]);
+    const onSuccess = ({magneticHeading}) => {
+      const newValue = Math.round(magneticHeading);
+      if (heading !== newValue) {
+        setHeading(newValue);
+      }
+    };
 
-  const handleOrientation = (newOrientation) => {
-    if (Math.round(newOrientation) !== orientation) {
-      setOrientation(Math.round(newOrientation));
-    }
-  };
+    const onError = error => console.error(error);
 
-  useEffect(async () => {
-    const orientationHandler = await Motion.addListener('orientation', e => {
-      //if (e.webkitCompassHeading) {
-      //  handleOrientation(e.webkitCompassHeading);
-      //} else {
-      // TODO e.alpha needs holding phone horizontal and portrait mode. Take into consideration other scenarios
-      handleOrientation(360-e.alpha);
-      //}
-    });
+    var watchID = navigator.compass?.watchHeading(onSuccess, onError);
 
     return () => {
-      if (orientationHandler) {
-        orientationHandler.remove();
-      }
+      watchID && navigator.compass?.clearWatch(watchID);
     };
   }, []);
 
-  return orientation;
+  useEffect(() => {
+    console.log('[compass] Set Heading: ', heading);
+  }, [heading]);
+
+  return heading;
 };
 
 export default useCompass;

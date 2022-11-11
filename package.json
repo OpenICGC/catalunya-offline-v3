@@ -85,13 +85,14 @@
     "webpack-dev-server": "^4.3.1"
   },
   "dependencies": {
+    "@awesome-cordova-plugins/device-orientation": "^6.2.0",
     "@capacitor-community/background-geolocation": "^1.2.6",
     "@capacitor-community/sqlite": "^4.2.2",
     "@capacitor/android": "^4.4.0",
     "@capacitor/assets": "^1.0.14",
     "@capacitor/core": "^4.4.0",
     "@capacitor/ios": "^4.4.0",
-    "@capacitor/motion": "^4.0.1",
+    "cordova-plugin-device-orientation": "^2.0.1",
     "jeep-sqlite": "^1.6.7",
     "pako": "^2.0.4"
   }
