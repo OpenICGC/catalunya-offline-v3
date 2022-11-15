@@ -15,5 +15,8 @@
   },
   "layerManager": "Gestor de capas",
   "scopeManager": "Gestor de ámbitos",
-  "topographicMap": "Mapa topográfico de Catalunya 1:25 000"
+  "topographicMap": "Mapa topográfico de Catalunya 1:25 000",
+  "scopeListItem": {
+    "name": "Nombre"
+  }
 }
