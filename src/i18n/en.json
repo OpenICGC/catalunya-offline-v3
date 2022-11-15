@@ -14,9 +14,9 @@
     "title": "Offline data download"
   },
   "layerManager": "Layer Manager",
-  "scopeManager": "Scope Manager",
-  "topographicMap": "Topographic Map of Catalonia 1:25 000",
   "scopeListItem": {
     "name": "Name"
-  }
+  },
+  "scopeManager": "Scope Manager",
+  "topographicMap": "Topographic Map of Catalonia 1:25 000"
 }

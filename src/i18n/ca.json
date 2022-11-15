@@ -14,9 +14,9 @@
     "title": "Descàrrega de dades offline"
   },
   "layerManager": "Gestor de capes",
-  "scopeManager": "Gestor d'àmbits",
-  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
   "scopeListItem": {
     "name": "Nom"
-  }
+  },
+  "scopeManager": "Gestor d'àmbits",
+  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000"
 }
