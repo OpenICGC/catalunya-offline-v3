@@ -18,6 +18,11 @@ const theme = mode => createTheme({
       secondary: 'rgba(0,0,0,0.65)',
     }
   },
+  typography: {
+    h2: {
+      fontSize: '1.5rem'
+    }
+  },
   components: {
     MuiCssBaseline: {
       styleOverrides: {

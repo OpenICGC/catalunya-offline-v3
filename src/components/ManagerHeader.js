@@ -21,7 +21,7 @@ const ManagerHeader = ({name, color, startIcon}) => {
   return <AppBar varinat='dense' position="static" sx={appBarSx}>
     {startIcon}
     <Toolbar>
-      <Typography variant="h5" sx={{color: theme => theme.palette.getContrastText(color), mt: 0.5}}>{name}</Typography>
+      <Typography variant='h2' component='h2' sx={{color: theme => theme.palette.getContrastText(color), mt: 0.5}}>{name}</Typography>
     </Toolbar>
   </AppBar>;
 };
