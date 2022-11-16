@@ -47,7 +47,7 @@ const EntityListItem = ({
   const open = Boolean(anchorEl);
   const handleContextualMenu = (e) => setAnchorEl(e.currentTarget);
   const handleClose = () => setAnchorEl(null);
-  const handleAction = (actionId) => actionId === 'edit' ?
+  const handleAction = (actionId) => actionId === 'rename' ?
     setIsEditing(true) :
     onContextualMenuClick(actionId, id);
 
@@ -65,8 +65,8 @@ const EntityListItem = ({
     }
   };
   
-  return <ListItem sx={{py: 1, pr: 0}}>
-    <ListItemIcon sx={{minWidth: '32px'}}>
+  return <ListItem sx={{py: 1, pr: 0, height: '48px'}}>
+    <ListItemIcon sx={{minWidth: '32px' }}>
       <MuiColorInput
         value={color}
         onChange={handleColorChange}
@@ -82,6 +82,7 @@ const EntityListItem = ({
           onChange={handleNameChange} 
           onBlur={handleBlur} 
           onKeyDown={handleInputOut}
+          defaultValue={name}
         />
         : <ListItemText primary={name} sx={{mt: 1, ml: isEditing && 1, cursor: 'pointer'}} onClick={() => onClick(id)}/>
     }

@@ -22,8 +22,8 @@ Default.args = {
   id: 12525,
   contextualMenu: [
     {
-      id: 'edit',
-      label: 'Editar',
+      id: 'rename',
+      label: 'Renombrar',
       icon: <EditIcon/>
     },
     {
