@@ -17,10 +17,17 @@ const ManagerHeader = ({name, color, startIcon}) => {
     bgcolor: color || 'secondary.main',
     pl: 2
   };
+
+  const toolbarSx = {
+    pl: 1,
+    '@media (min-width: 600px)': {
+      pl: 1,
+    },
+  };
   
   return <AppBar varinat='dense' position="static" sx={appBarSx}>
     {startIcon}
-    <Toolbar>
+    <Toolbar sx={toolbarSx}>
       <Typography variant='h2' component='h2' sx={{color: theme => theme.palette.getContrastText(color), mt: 0.5}}>{name}</Typography>
     </Toolbar>
   </AppBar>;
