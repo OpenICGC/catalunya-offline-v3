@@ -1,14 +1,16 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
 
 import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM} from '../../config';
-import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
-import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
-import FabButton from '../../components/buttons/FabButton';
-import useCompass from '../../hooks/useCompass';
+
+import {Geolocation, Manager} from '../../types/commonTypes';
+import useCompass from "../../hooks/useCompass";
+import FabButton from "../../components/buttons/FabButton";
+import useBackgroundGeolocation from "../../hooks/useBackgroundGeolocation";
+import {downloadMbtiles, getDatabase, isMbtilesDownloaded, mbtiles} from "../../utils/mbtiles";
 
 mbtiles(maplibregl);
 
@@ -29,14 +31,14 @@ const layers = [{
   paint: {
     'circle-color': '#4286f5',
     'circle-opacity': 0.33,
-    'circle-radius':  [
+    'circle-radius': [
       'interpolate',
       ['exponential', 2],
       ['zoom'],
       7, // Beware: this formula works only for latitudes around initial viewport's latitude
-      ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI/180))],
+      ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI / 180))],
       15,
-      ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI/180))]
+      ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI / 180))]
     ],
     'circle-stroke-color': '#4286f5',
     'circle-stroke-opacity': 0.67,
@@ -79,8 +81,14 @@ const mbtilesStatusMessages = [
   'mbtiles ready'
 ];
 
-const MainContent = ({mapStyle, manager, onManagerChanged}) => {
-  const mapRef = useRef();
+type Props = {
+  mapStyle: string,
+  manager: Manager,
+  onManagerChanged: Dispatch<SetStateAction<Manager>>,
+};
+
+const MainContent: FC<Props> = ({mapStyle, manager, onManagerChanged}) => {
+  const mapRef: any = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
 
@@ -97,7 +105,7 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
 
   // Effects on offline tileset downloading
   useEffect(() => {
-    isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
+    isMbtilesDownloaded(MBTILES.dbName).then((isDownloaded: boolean | undefined) => {
       if (isDownloaded) {
         setMbtilesStatus(AVAILABLE);
       } else {
@@ -115,7 +123,7 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
   }, [mbtilesStatus]);
 
   // Set blue dot location on geolocation updates
-  const setMapGeolocation = (map, geolocation) => {
+  const setMapGeolocation = (map: any, geolocation: Geolocation) => {
     const {latitude, longitude} = geolocation;
     map?.getSource('geolocation').setData({
       type: 'FeatureCollection',
@@ -169,7 +177,10 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
     }
   }, [isTrackingMode, geolocation, orientation]);
 
-  const changeManager = clicked => onManagerChanged(clicked === manager ? undefined : clicked);
+  const changeManager = (clicked: any) => {
+    console.log(555, clicked)
+    onManagerChanged(clicked === manager ? undefined : clicked);
+  }
 
   return mbtilesStatus === READY ?
     <Map
@@ -204,4 +215,5 @@ MainContent.propTypes = {
   onManagerChanged: PropTypes.func.isRequired
 };
 
+// @ts-ignore
 export default MainContent;

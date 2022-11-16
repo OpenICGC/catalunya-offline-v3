@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {FC} from 'react';
 import PropTypes from 'prop-types';
 
 import styled from '@mui/styles/styled';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
+
 import SidePanel from '@geomatico/geocomponents/SidePanel';
 
 import {
@@ -19,7 +20,7 @@ const Main = styled(Box)({
   bottom: 0,
   right: 0,
   left: 0
-});
+}) as React.ElementType;
 
 const sidePanelSx = {
   '& .MuiDrawer-paper': {
@@ -32,7 +33,14 @@ const sidePanelSx = {
   }
 };
 
-const Layout = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
+type Props = {
+  mainContent: React.ReactElement,
+  sidePanelContent: React.ReactElement,
+  isSidePanelOpen: boolean,
+  onToggleSidePanel: ()=> void
+};
+
+const Layout: FC<Props> = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
 
   return <>
@@ -48,7 +56,7 @@ const Layout = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePan
         {sidePanelContent}
       </SidePanel>
     }
-    <Main widescreen={widescreen} isleftdraweropen={sidePanelContent && isSidePanelOpen}>
+    <Main widescreen={widescreen.toString()} isleftdraweropen={(sidePanelContent && isSidePanelOpen).toString()}>
       {mainContent}
     </Main>
   </>;

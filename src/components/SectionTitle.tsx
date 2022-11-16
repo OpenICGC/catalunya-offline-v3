@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -8,21 +8,26 @@ import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
 
 const typographySx = {
-  fontWeight: 'bold',
-  color: 'text.primary'
+  fontWeight: 'bold'
 };
 
-const SectionTitle = ({titleKey}) => {
+type Props = {
+  titleKey: string,
+};
+
+const SectionTitle: FC<Props> = ({titleKey}) => {
   const {t} = useTranslation();
-  return <Box mb={1}>
-    <Typography
-      variant='subtitle1'
-      sx={typographySx}
-    >
-      {t(titleKey)}
-    </Typography>
-    <Divider/>
-  </Box>;
+  return (
+    <Box mt={2} mb={1} >
+      <Typography
+        variant='subtitle1'
+        sx={typographySx}
+      >
+        {t(titleKey)}
+      </Typography>
+      <Divider/>
+    </Box>
+  );
 };
 
 SectionTitle.propTypes = {

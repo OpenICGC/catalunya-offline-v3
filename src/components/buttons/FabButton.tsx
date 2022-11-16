@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import PropTypes from 'prop-types';
 
 //MUI
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
+import {SxProps} from '@mui/system';
+
 
 //MUI-ICONS
 import AddIcon from '@mui/icons-material/Add';
@@ -21,7 +23,21 @@ const fabTransition = 'transform 360ms linear';
 const buttonTransition = 'transform 360ms cubic-bezier(0.16, 1, 0.3, 1)';
 const delay = 40; // ms
 
-const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn,  onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
+type Props = {
+  isLeftHanded: boolean,
+  isAccessibleSize: boolean,
+  bearing: number,
+  isCompassOn: boolean,
+  isLocationAvailable: boolean,
+  isTrackingOn: boolean,
+  onCompassClick: ()=> void,
+  onTrackingClick: ()=> void,
+  onLayersClick: ()=> void,
+  onBaseMapsClick: ()=> void,
+  onFoldersClick: ()=> void,
+};
+
+const FabButton: FC<Props> = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn, onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   //STYLES
@@ -30,7 +46,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
   const iconSize = isAccessibleSize ? 32 : undefined;
   const radius = isAccessibleSize ? 80 : 60;
 
-  const container = {
+  const container: SxProps = {
     height: '100%',
     width: 0,
     padding: 0,
@@ -62,76 +78,76 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
     },
     zIndex: 4000
   };
-  
+
   const compass = {
     ...common,
     ...greyButton,
-    transitionDelay: `${0*delay}ms`
+    transitionDelay: `${0 * delay}ms`
   };
 
   const compassOpen = {
     ...compass,
     bgcolor: isCompassOn ? 'primary.main' : 'grey.800',
     '&:hover': {
-      bgcolor: isCompassOn ? 'primary.dark' :'grey.900',
+      bgcolor: isCompassOn ? 'primary.dark' : 'grey.900',
     },
     transform: `translate(0px, -${radius}px)`,
-    transitionDelay: `${4*delay}ms`
+    transitionDelay: `${4 * delay}ms`
   };
 
   const location = {
     ...common,
     ...greyButton,
-    transitionDelay: `${1*delay}ms`
+    transitionDelay: `${1 * delay}ms`
   };
 
   const locationOpen = {
     ...location,
-    bgcolor: isLocationAvailable? isTrackingOn ? 'primary.main' : 'grey.800' : 'grey.400',
+    bgcolor: isLocationAvailable ? isTrackingOn ? 'primary.main' : 'grey.800' : 'grey.400',
     '&:hover': {
-      bgcolor: isTrackingOn ? 'primary.dark' :'grey.900',
+      bgcolor: isTrackingOn ? 'primary.dark' : 'grey.900',
     },
-    transform: isLeftHanded ? `translate(${radius*0.707}px, -${radius*0.707}px)` : `translate(-${radius*0.707}px, -${radius*0.707}px)`,
-    transitionDelay: `${3*delay}ms`
+    transform: isLeftHanded ? `translate(${radius * 0.707}px, -${radius * 0.707}px)` : `translate(-${radius * 0.707}px, -${radius * 0.707}px)`,
+    transitionDelay: `${3 * delay}ms`
   };
 
   const layers = {
     ...common,
     ...greyButton,
-    transitionDelay: `${2*delay}ms`
+    transitionDelay: `${2 * delay}ms`
   };
 
   const layersOpen = {
     ...layers,
     ...greyButton,
     transform: isLeftHanded ? `translate(${radius}px, 0px)` : `translate(-${radius}px, 0px)`,
-    transitionDelay: `${2*delay}ms`
+    transitionDelay: `${2 * delay}ms`
   };
 
   const baseMaps = {
     ...common,
     ...greyButton,
-    transitionDelay: `${3*delay}ms`
+    transitionDelay: `${3 * delay}ms`
   };
 
   const baseMapsOpen = {
     ...baseMaps,
     ...greyButton,
-    transform: isLeftHanded ? `translate(${radius*0.707}px, ${radius*0.707}px)` : `translate(-${radius*0.707}px, ${radius*0.707}px)`,
-    transitionDelay: `${1*delay}ms`
+    transform: isLeftHanded ? `translate(${radius * 0.707}px, ${radius * 0.707}px)` : `translate(-${radius * 0.707}px, ${radius * 0.707}px)`,
+    transitionDelay: `${1 * delay}ms`
   };
 
   const folder = {
     ...common,
     ...greyButton,
-    transitionDelay: `${4*delay}ms`
+    transitionDelay: `${4 * delay}ms`
   };
 
   const folderOpen = {
     ...folder,
     ...greyButton,
     transform: `translate(0px, ${radius}px)`,
-    transitionDelay: `${0*delay}ms`
+    transitionDelay: `${0 * delay}ms`
   };
 
   const fab = {
@@ -160,7 +176,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
       <AddIcon sx={{color: isMenuOpen ? 'grey.800' : 'common.white', fontSize: fabSize / 2}}/>
     </Fab>
     <IconButton sx={isMenuOpen ? compassOpen : compass} onClick={onCompassClick}>
-      <CompassIcon sx={{color: 'common.white', transform: `rotate(${-45-bearing}deg)`, fontSize: iconSize}}/>
+      <CompassIcon sx={{color: 'common.white', transform: `rotate(${-45 - bearing}deg)`, fontSize: iconSize}}/>
     </IconButton>
     <IconButton sx={isMenuOpen ? layersOpen : layers} onClick={onLayersClick}>
       <LayersIcon sx={{color: 'common.white'}}/>
@@ -183,17 +199,17 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
 };
 
 FabButton.propTypes = {
-  isLeftHanded: PropTypes.bool,
-  isAccessibleSize: PropTypes.bool,
-  bearing: PropTypes.number,
-  isCompassOn: PropTypes.bool,
+  isLeftHanded: PropTypes.bool.isRequired,
+  isAccessibleSize: PropTypes.bool.isRequired,
+  bearing: PropTypes.number.isRequired,
+  isCompassOn: PropTypes.bool.isRequired,
   isLocationAvailable: PropTypes.bool.isRequired,
-  isTrackingOn: PropTypes.bool,
-  onCompassClick: PropTypes.func,
-  onTrackingClick: PropTypes.func,
-  onLayersClick: PropTypes.func,
-  onBaseMapsClick: PropTypes.func,
-  onFoldersClick: PropTypes.func
+  isTrackingOn: PropTypes.bool.isRequired,
+  onCompassClick: PropTypes.func.isRequired,
+  onTrackingClick: PropTypes.func.isRequired,
+  onLayersClick: PropTypes.func.isRequired,
+  onBaseMapsClick: PropTypes.func.isRequired,
+  onFoldersClick: PropTypes.func.isRequired,
 };
 
 FabButton.defaultProps = {

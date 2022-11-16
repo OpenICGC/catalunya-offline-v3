@@ -1,6 +1,8 @@
 import {Capacitor, registerPlugin} from '@capacitor/core';
 import {useEffect, useState} from 'react';
-const BackgroundGeolocation = registerPlugin('BackgroundGeolocation');
+import {GenericError, Geolocation} from "../types/commonTypes";
+
+const BackgroundGeolocation: any = registerPlugin('BackgroundGeolocation');
 
 const config = {
   // backgroundMessage is required to guarantee a background location
@@ -17,14 +19,14 @@ const webConfig = {
   maximumAge: 5000, // Maximum age of cached position in ms
 };
 
-const handlePermission = error => {
+const handlePermission = (error: GenericError) => {
   if (error.code === 'NOT_AUTHORIZED') {
     if (error.message === 'Location services disabled.') {
       window.alert(
         'El servei de localització del dispositiu està deactivat.' +
         'Activeu-lo i torneu a entrar a l\'app.'
       );
-    // The other possible "NOT_AUTHORIZED" messages are: "Permission denied." and "User denied location permission".
+      // The other possible "NOT_AUTHORIZED" messages are: "Permission denied." and "User denied location permission".
     } else if (window.confirm(
       'Catalunya Offline necessita accedir a la geolocalització, ' +
       'però aquest permís ha estat denegat.\n\n' +
@@ -36,9 +38,9 @@ const handlePermission = error => {
 };
 
 const useBackgroundGeolocation = () => {
-  const [watcherId, setWatcherId] = useState();
-  const [error, setError] = useState();
-  const [geolocation, setGeolocation] = useState({
+  const [watcherId, setWatcherId] = useState<string>();
+  const [error, setError] = useState<GenericError>();
+  const [geolocation, setGeolocation] = useState<Geolocation>({
     accuracy: null,
     altitude: null,
     altitudeAccuracy: null,
@@ -46,10 +48,10 @@ const useBackgroundGeolocation = () => {
     latitude: null,
     longitude: null,
     speed: null,
-    time:  Date.now()
+    time: Date.now()
   });
 
-  const handleWebLocation = event => {
+  const handleWebLocation = (event: {coords: Geolocation, timestamp: number}) => {
     const location = {
       accuracy: event.coords.accuracy,
       altitude: event.coords.altitude,
@@ -61,11 +63,11 @@ const useBackgroundGeolocation = () => {
       time: event.timestamp
     };
     console.log('[WebGeolocation] Got location', location);
-    setError();
+    setError(undefined);
     setGeolocation(location);
   };
 
-  const handleWebError = error => {
+  const handleWebError = (error: GenericError) => {
     console.log('[WebGeolocation] Got error', error);
     setError(error);
   };
@@ -74,23 +76,25 @@ const useBackgroundGeolocation = () => {
     const platform = Capacitor.getPlatform();
     if (platform === 'web') {
       // Web will use geolocation API
+      // @ts-ignore
       navigator.geolocation.getCurrentPosition(handleWebLocation, handleWebError, webConfig);
+      // @ts-ignore
       const id = navigator.geolocation.watchPosition(handleWebLocation, handleWebError, webConfig);
       return () => {
         navigator.geolocation.clearWatch(id);
       };
     } else {
-      BackgroundGeolocation.addWatcher(config, (location, error) => {
+      BackgroundGeolocation.addWatcher(config, (location: Geolocation, error: GenericError) => {
         if (error) {
           console.log('[BackgroundGeolocation] Got error', error);
           setError(error);
           handlePermission(error);
         } else if (location) {
           console.log('[BackgroundGeolocation] Got location', location);
-          setError();
+          setError(undefined);
           setGeolocation(location);
         }
-      }).then(id => {
+      }).then((id: string) => {
         console.log('[BackgroundGeolocation] Watcher set', id);
         setWatcherId(id);
       });

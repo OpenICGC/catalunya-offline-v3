@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import PropTypes from 'prop-types';
 
 //MUI
@@ -29,7 +29,14 @@ const sx = {
   }
 };
 
-const Notification = ({message, isPersistent, isOpen, onClose}) => {
+type Props = {
+  message: string,
+  isPersistent?: boolean,
+  isOpen?: boolean,
+  onClose: () => void,
+};
+
+const Notification: FC<Props> = ({message, isPersistent, isOpen, onClose}) => {
   const {t} = useTranslation();
   return <Snackbar
     open={isOpen}
@@ -54,7 +61,7 @@ Notification.propTypes = {
   message: PropTypes.string.isRequired,
   isPersistent: PropTypes.bool,
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func.isRequired
 };
 
 Notification.defaultProps = {

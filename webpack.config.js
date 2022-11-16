@@ -11,6 +11,7 @@ module.exports = (env) => ({
     port: 8080
   },
   resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
     alias: {
       react: path.resolve('./node_modules/react'),
       '@mui/material': path.resolve('./node_modules/@mui/material'),
@@ -20,6 +21,11 @@ module.exports = (env) => ({
   },
   module: {
     rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,

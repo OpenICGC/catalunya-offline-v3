@@ -12,7 +12,7 @@ const DEC2HEX = (() => {
 })();
 
 const HEX2DEC = (() => {
-  const hex2dec = {};
+  const hex2dec: any = {};
 
   for ( let i = 0; i < 256; i++ ) {
     const hex = DEC2HEX[i];
@@ -30,7 +30,7 @@ const HEX2DEC = (() => {
   return hex2dec;
 })();
 
-const hex2dec = data => new Promise(resolve => {
+const hex2dec = (data: any) => new Promise(resolve => {
   const length = data.length / 2;
   const u8 = new Uint8Array(length);
   for (let i = 0; i < length; i++) {

@@ -5,18 +5,20 @@ const useCompass = () => {
   const [heading, setHeading] = useState(0);
 
   useEffect(() => {
-    const onSuccess = ({magneticHeading}) => {
+    const onSuccess = ({magneticHeading}: any) => {
       const newValue = Math.round(magneticHeading);
       if (heading !== newValue) {
         setHeading(newValue);
       }
     };
 
-    const onError = error => console.error(error);
+    const onError = (error: Error) => console.error(error);
 
+    // @ts-ignore
     var watchID = navigator.compass?.watchHeading(onSuccess, onError);
 
     return () => {
+      // @ts-ignore
       watchID && navigator.compass?.clearWatch(watchID);
     };
   }, []);

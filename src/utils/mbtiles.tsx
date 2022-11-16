@@ -3,7 +3,6 @@ import {CapacitorSQLite, SQLiteConnection} from '@capacitor-community/sqlite';
 import { defineCustomElements as jeepSqlite, applyPolyfills} from 'jeep-sqlite/loader';
 import {inflate} from 'pako';
 
-
 import hex2dec from './hex2dec';
 
 applyPolyfills().then(() => {
@@ -31,7 +30,7 @@ const init = (async () => {
 
 const sourceDatabases = new Map();
 
-const getTile = url => {
+const getTile = (url: string) => {
   let splitUrl = url.split('/');
   let dbName = splitUrl[2];
   let z = +splitUrl[splitUrl.length - 3];
@@ -41,12 +40,12 @@ const getTile = url => {
   return getTileFromDatabase(dbName, z, x, y);
 };
 
-const getTileFromDatabase = async (dbName, z, x, y) => {
+const getTileFromDatabase = async (dbName: string, z: number, x: number, y: number) => {
   let db = await getDatabase(dbName);
   let params = [z, x, Math.pow(2, z) - y - 1];
   let queryresults = await db.query(query, params);
   if (queryresults.values.length === 1) { // Tile found
-    let binData = await hex2dec(queryresults.values[0].tile_data_hex);
+    let binData: any = await hex2dec(queryresults.values[0].tile_data_hex);
     if (binData[0] === 0x1f && binData[1] === 0x8b) { // is GZipped
       binData = inflate(binData);
     }
@@ -54,7 +53,7 @@ const getTileFromDatabase = async (dbName, z, x, y) => {
   }
 };
 
-const getDatabase = async (dbName) => {
+const getDatabase = async (dbName: string) => {
   await init;
   if (!sourceDatabases.has(dbName)) {
     try {
@@ -76,8 +75,8 @@ const getDatabase = async (dbName) => {
   return sourceDatabases.get(dbName);
 };
 
-const mbtiles = maplibregl => {
-  maplibregl.addProtocol('mbtiles', (params, callback) => {
+const mbtiles = (maplibregl: any) => {
+  maplibregl.addProtocol('mbtiles', (params: any, callback: any) => {
     getTile(params.url).then(tileBuffer => {
       if (tileBuffer) {
         callback(null, tileBuffer);
@@ -92,13 +91,13 @@ const mbtiles = maplibregl => {
   });
 };
 
-const isMbtilesDownloaded = async dbName => {
+const isMbtilesDownloaded = async (dbName: string) => {
   await init;
   const {result} = await sqlite.isDatabase(dbName);
   console.log(`[mbtiles] Database ${dbName} is ${result ? '' : 'not '}downloaded`);
   return result;
 };
-const downloadMbtiles = async url => {
+const downloadMbtiles = async (url: string) => {
   await init;
   // TODO COF-5 Create a better download manager for Web (indexedDB) and Android/iOS, with progress
   await sqlite.getFromHTTPRequest(url, true).catch(err => console.error(err));

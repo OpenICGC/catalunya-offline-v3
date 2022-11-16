@@ -1,3 +1,5 @@
+import {MapStyles} from "./types/commonTypes";
+
 export const DRAWER_WIDTH = 240;
 export const SM_BREAKPOINT = 850;
 
@@ -22,7 +24,7 @@ export const MBTILES = {
   dbName: 'mtc25mcatoff_7a13'
 };
 
-export const MAPSTYLES = [{
+export const MAPSTYLES: MapStyles = [{
   label: 'mtc25m Offline',
   thumbnail: 'images/mtc25m.png',
   id: 'mapstyles/mtc25m-offline.json',
@@ -33,6 +35,6 @@ export const MAPSTYLES = [{
 }];
 
 
-export const INITIAL_MAPSTYLE_URL = MAPSTYLES[0].id;
+export const INITIAL_MAPSTYLE_URL = MAPSTYLES[1].id;
 
 export const MIN_TRACKING_ZOOM = 14;

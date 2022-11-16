@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC, SyntheticEvent} from 'react';
 import PropTypes from 'prop-types';
 
 //MUI
@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';*/
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import Snackbar from '@mui/material/Snackbar';
+import Snackbar, {SnackbarCloseReason, SnackbarOrigin} from '@mui/material/Snackbar';
 import SnackbarContent from '@mui/material/SnackbarContent';
 
 //MUI-ICONS
@@ -46,9 +46,15 @@ const sx = {
   }
 };
 
-const anchorOrigin = {vertical: 'bottom', horizontal: 'right'};
+const anchorOrigin: SnackbarOrigin = {vertical: 'bottom', horizontal: 'right'};
 
-const DownloadProgress = ({progress, isOpen, onClose}) => {
+type Props = {
+  progress: number,
+  isOpen?: boolean,
+  onClose: (event: SyntheticEvent<any, Event>, reason: SnackbarCloseReason) => void,
+};
+
+const DownloadProgress: FC<Props>  = ({progress, isOpen, onClose}) => {
   const {t} = useTranslation();
   return <Snackbar
     open={isOpen}
@@ -82,7 +88,7 @@ const DownloadProgress = ({progress, isOpen, onClose}) => {
 DownloadProgress.propTypes = {
   progress: PropTypes.number.isRequired,
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func.isRequired,
 };
 
 DownloadProgress.defaultProps = {

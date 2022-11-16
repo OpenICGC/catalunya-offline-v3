@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import PropTypes from 'prop-types';
 
 //MUI
@@ -18,7 +18,13 @@ import MapIcon from '@mui/icons-material/Map';
 //UTILS
 import {useTranslation} from 'react-i18next';
 
-const DownloadRequest = ({isOpen, onClose, onDownload}) => {
+type Props = {
+  isOpen: boolean,
+  onClose: ()=> void,
+  onDownload: ()=> void,
+};
+
+const DownloadRequest: FC<Props> = ({isOpen, onClose, onDownload}) => {
   const {t} = useTranslation();
   return <Dialog open={isOpen} onClose={onClose} fullWidth>
     <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.35}}>
@@ -45,9 +51,9 @@ const DownloadRequest = ({isOpen, onClose, onDownload}) => {
 };
 
 DownloadRequest.propTypes = {
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
-  onDownload: PropTypes.func
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onDownload: PropTypes.func.isRequired,
 };
 
 DownloadRequest.defaultProps = {

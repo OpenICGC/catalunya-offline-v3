@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Dispatch, FC, SetStateAction} from 'react';
 import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
@@ -11,6 +11,7 @@ import SectionTitle from '../../components/SectionTitle';
 import GeomaticoLink from '../../components/GeomaticoLink';
 
 import {MAPSTYLES} from '../../config';
+import {Manager} from '../../types/commonTypes';
 
 const ScrollableContent = styled(Box)({
   overflow: 'auto',
@@ -22,7 +23,13 @@ const stackSx = {
   overflow: 'hidden'
 };
 
-const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) =>
+type Props = {
+  mapStyle: string,
+  onMapStyleChanged: Dispatch<SetStateAction<string>>,
+  manager: Manager,
+};
+
+const SidePanelContent: FC<Props> = ({mapStyle, onMapStyleChanged, manager}) =>
   <Stack sx={stackSx}>
     <ScrollableContent>
       {manager === 'LAYERS' &&
@@ -55,7 +62,7 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) =>
 SidePanelContent.propTypes = {
   mapStyle: PropTypes.string.isRequired,
   onMapStyleChanged: PropTypes.func.isRequired,
-  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES']).isRequired
+  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES'])
 };
 
 export default SidePanelContent;

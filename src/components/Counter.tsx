@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, {FC, useState} from 'react';
 import PropTypes from 'prop-types';
 
-export const Counter = ({ value = 10 }) => {
+type Props = {
+  value: number
+}
+
+export const Counter: FC<Props> = ({ value = 10 }) => {
   const [counter, setCounter] = useState(value);
 
   const handleUp = () => setCounter((counterPref) => counterPref + 1);
@@ -22,5 +26,5 @@ export const Counter = ({ value = 10 }) => {
 };
 
 Counter.propTypes = {
-  value: PropTypes.number
+  value: PropTypes.number.isRequired
 };
