@@ -29,7 +29,7 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
     display: 'flex',
     alignItems: 'center',
     ml: 'auto',
-    mr: 1
+    mr: 2
   };
 
   const detailTextSx = {
@@ -46,7 +46,7 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
   const scopeNameSx = {
     color: theme => theme.palette.getContrastText(color),
     mt: 0.5,
-    width: '250px',
+    width: '220px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
