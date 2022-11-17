@@ -4,7 +4,7 @@ import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
 
-import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM} from '../../config';
+import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../../config';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
 import FabButton from '../../components/buttons/FabButton';
@@ -97,6 +97,10 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
 
   // Effects on offline tileset downloading
   useEffect(() => {
+    if (OFF_CAT) {
+      setMbtilesStatus(READY);
+      return;
+    }
     isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
       if (isDownloaded) {
         setMbtilesStatus(AVAILABLE);
@@ -171,7 +175,7 @@ const MainContent = ({mapStyle, manager, onManagerChanged}) => {
 
   const changeManager = clicked => onManagerChanged(clicked === manager ? undefined : clicked);
 
-  return mbtilesStatus === READY ?
+  return (mbtilesStatus === READY || OFF_CAT) ?
     <Map
       {...MAP_PROPS}
       reuseMaps
