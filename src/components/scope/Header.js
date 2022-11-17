@@ -26,12 +26,9 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
   };
 
   const toolbarSx = {
-    px: 0,
+    px: 1,
     display: 'flex',
     justifyContent: 'baseline',
-    '@media (min-width: 600px)': {
-      px: 0,
-    },
   };
 
   const detailsContainerSx = {
@@ -43,7 +40,8 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
 
   const detailTextSx = {
     color: theme => theme.palette.getContrastText(color),
-    ml: 0.5
+    ml: 0.5,
+    fontWeight: 'bold'
   };
 
   const detailIconSx = {
@@ -53,16 +51,17 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
 
   const scopeNameSx = {
     color: theme => theme.palette.getContrastText(color),
-    width: '140px',
+    width: '120px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    fontWeight: 'bold'
   };
   
   return <AppBar variant='dense' position="static" sx={appBarSx}>
-    <DoubleArrowIcon fontSize='small' sx={{transform: 'rotate(180deg)', color: theme => theme.palette.getContrastText(color), m: 0, p: 0}} onClick={onBackButtonClick}/>
+    <DoubleArrowIcon sx={{transform: 'rotate(180deg)', color: theme => theme.palette.getContrastText(color), m: 0, p: 0}} onClick={onBackButtonClick}/>
     <Toolbar sx={toolbarSx}>
-      <Typography variant="body2" component='h3' sx={scopeNameSx}>{name.toUpperCase()}</Typography>
+      <Typography variant="h2" component='h3' sx={scopeNameSx}>{name.toUpperCase()}</Typography>
     </Toolbar>
     <Box sx={detailsContainerSx}>
       <Typography variant='caption' sx={detailTextSx}>{numPoints || 0}</Typography>
