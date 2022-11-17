@@ -13,7 +13,8 @@
     "content_03": "Voleu descarregar ara el Mapa topogràfic de Catalunya? (350 MB)",
     "title": "Descàrrega de dades offline"
   },
-  "layerManager": "Gestor de capes",
-  "scopeManager": "Gestor d'àmbits",
+  "layerManager": "Capes",
+  "scopeManager": "Àmbits",
+  "baseMapsManager": "Mapes Base",
   "topographicMap": "Mapa topogràfic de Catalunya 1:25 000"
 }

@@ -6,8 +6,11 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
+//UTILS
+import {useTranslation} from 'react-i18next';
+
 const ManagerHeader = ({name, color, startIcon}) => {
-  
+  const {t} = useTranslation();
   //STYLES
   const appBarSx = {
     display: 'flex',
@@ -15,20 +18,32 @@ const ManagerHeader = ({name, color, startIcon}) => {
     justifyContent: 'flex-start',
     alignItems: 'center',
     bgcolor: color || 'secondary.main',
-    pl: 2
+    pl: 1,
+    height: '54px',
   };
 
   const toolbarSx = {
-    pl: 1,
+    px: 1,
+    display: 'flex',
+    justifyContent: 'baseline',
     '@media (min-width: 600px)': {
       pl: 1,
     },
   };
-  
-  return <AppBar varinat='dense' position="static" sx={appBarSx}>
+
+  const scopeNameSx = {
+    color: theme => theme.palette.getContrastText(color),
+    width: '120px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    fontWeight: 'bold'
+  };
+
+  return <AppBar variant='dense' position="static" sx={appBarSx}>
     {startIcon}
     <Toolbar sx={toolbarSx}>
-      <Typography variant='h2' component='h2' sx={{color: theme => theme.palette.getContrastText(color), mt: 0.5}}>{name}</Typography>
+      <Typography variant='h2' component='h3' sx={scopeNameSx}>{t(name).toUpperCase()}</Typography>
     </Toolbar>
   </AppBar>;
 };
