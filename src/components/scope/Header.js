@@ -21,46 +21,53 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
     justifyContent: 'flex-start',
     alignItems: 'center',
     bgcolor: color || 'secondary.main',
-    pl: 2,
-    height: '54px'
+    pl: 0.5,
+    height: '54px',
+  };
+
+  const toolbarSx = {
+    px: 0,
+    display: 'flex',
+    justifyContent: 'baseline',
+    '@media (min-width: 600px)': {
+      px: 0,
+    },
   };
 
   const detailsContainerSx = {
     display: 'flex',
     alignItems: 'center',
     ml: 'auto',
-    mr: 2
+    mr: 1,
   };
 
   const detailTextSx = {
     color: theme => theme.palette.getContrastText(color),
-    fontWeight: 'bold',
-    ml: 1
+    ml: 0.5
   };
 
   const detailIconSx = {
     color: theme => theme.palette.getContrastText(color),
-    fontSize: '20px',
+    fontSize: '16px',
   };
 
   const scopeNameSx = {
     color: theme => theme.palette.getContrastText(color),
-    mt: 0.5,
-    width: '220px',
+    width: '140px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
   };
   
   return <AppBar variant='dense' position="static" sx={appBarSx}>
-    <DoubleArrowIcon sx={{transform: 'rotate(180deg)', color: theme => theme.palette.getContrastText(color)}} onClick={onBackButtonClick}/>
-    <Toolbar sx={{display: 'flex', justifyContent: 'baseline'}}>
-      <Typography variant="h5" sx={scopeNameSx}>{name}</Typography>
+    <DoubleArrowIcon fontSize='small' sx={{transform: 'rotate(180deg)', color: theme => theme.palette.getContrastText(color), m: 0, p: 0}} onClick={onBackButtonClick}/>
+    <Toolbar sx={toolbarSx}>
+      <Typography variant="body2" component='h3' sx={scopeNameSx}>{name.toUpperCase()}</Typography>
     </Toolbar>
     <Box sx={detailsContainerSx}>
-      <Typography variant='body1' sx={detailTextSx}>{numPoints || 0}</Typography>
-      <LocationOnIcon  sx={detailIconSx}/>
-      <Typography variant='body1' sx={detailTextSx}>{numPaths || 0}</Typography>
+      <Typography variant='caption' sx={detailTextSx}>{numPoints || 0}</Typography>
+      <LocationOnIcon  fontSize='small' sx={detailIconSx}/>
+      <Typography variant='caption' sx={detailTextSx}>{numPaths || 0}</Typography>
       <RouteIcon fontSize='small' sx={detailIconSx}/>
     </Box>
   </AppBar>;

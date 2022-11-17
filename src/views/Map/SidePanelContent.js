@@ -14,12 +14,14 @@ import {MAPSTYLES} from '../../config';
 
 const ScrollableContent = styled(Box)({
   overflow: 'auto',
-  padding: '8px'
+  padding: '0px'
 });
 
 const stackSx = {
   height: '100%',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  m: 0,
+  p: 0
 };
 
 const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) =>
