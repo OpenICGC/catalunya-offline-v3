@@ -52,7 +52,7 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
       {manager === 'BASEMAPS' &&
         <>
           <ManagerHeader
-            name='baseMapsManager'
+            name='baseMapManager'
             color={theme.palette.secondary.main}
             startIcon={<MapIcon sx={{color: theme => theme.palette.getContrastText(theme.palette.secondary.main)}}/>}
           />

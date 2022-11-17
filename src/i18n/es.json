@@ -6,7 +6,7 @@
     "download": "Descargar",
     "downloading": "Descargando..."
   },
-  "baseMapManager": "Gestor de cartografía base",
+  "baseMapManager": "Mapas Base",
   "downloadingAlert": {
     "content_01": "Para poder trabajar en zonas con mala cobertura, es necesario descargarse los datos del Mapa topográfico de Catalunya 1:25.000.",
     "content_02": "Si no quieres descargarlos ahora, puedes continuar navegando con una versión online, y se te ofrecerá descargarlos más adelante.",
@@ -15,6 +15,5 @@
   },
   "layerManager": "Capas",
   "scopeManager": "Ámbitos",
-  "baseMapsManager": "Mapas Base",
   "topographicMap": "Mapa topográfico de Catalunya 1:25 000"
 }
