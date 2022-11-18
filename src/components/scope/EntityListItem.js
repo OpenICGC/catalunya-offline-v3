@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
-
 //MUI
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -11,21 +10,13 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import {MuiColorInput} from 'mui-color-input';
 
 //MUI-ICONS
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-
-//STYLES
-const colorPickerSx = {
-  width: '16px',
-  '& .MuiInputAdornment-root': {},
-  '& .MuiButton-root': {borderRadius: '0px', width: '12px', height: '36px'},
-  '& .MuiInput-input': {visibility: 'hidden'}
-};
+import {ColorPicker} from 'material-ui-color';
 
 const EntityListItem = ({
   actionIcon, 
@@ -53,7 +44,7 @@ const EntityListItem = ({
 
   //EDIT
   const handleNameChange = (e) => onNameChange(e.target.value);
-  const handleColorChange = (color, format) => onColorChange(format.hex);
+  const handleColorChange = (color) => onColorChange(`#${color.hex}`);
   const handleBlur = () => {
     setAnchorEl(null);
     setIsEditing(false);
@@ -65,15 +56,16 @@ const EntityListItem = ({
     }
   };
   
-  return <ListItem sx={{py: 1, pr: 0, height: '48px'}}>
-    <ListItemIcon sx={{minWidth: '32px' }}>
-      <MuiColorInput
+  return <ListItem sx={{p: 1, height: '48px'}}>
+    <ListItemIcon sx={{minWidth: '24px', mr: 1}}>
+      <ColorPicker
+        hideTextfield={true}
+        disableAlpha={true}
         value={color}
+        deferred
         onChange={handleColorChange}
-        isAlphaHidden
-        variant='standard'
-        InputProps={{disableUnderline: true}}
-        sx={colorPickerSx}/>
+        sx={{'& .ColorPicker-MuiButtonBase-root': {border: '2px solid red'}}}
+      />
     </ListItemIcon>
     {
       isEditing ?
@@ -113,7 +105,7 @@ const EntityListItem = ({
             {
               contextualMenu.map(({id, label, icon}) => <MenuItem key={id} onClick={() => handleAction(id)}>
                 <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText>{label}</ListItemText>
+                <ListItemText>{t(label)}</ListItemText>
               </MenuItem>
               )
             }
