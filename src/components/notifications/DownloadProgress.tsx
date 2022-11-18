@@ -48,13 +48,14 @@ const sx = {
 
 const anchorOrigin: SnackbarOrigin = {vertical: 'bottom', horizontal: 'right'};
 
-type Props = {
+//FIXME averiguar si es la mejor manera, exportar el tipo para que la story lo pueda consumir y no repetir codigo
+export type DownloadProgressProps = {
   progress: number,
   isOpen?: boolean,
-  onClose: (event: SyntheticEvent<any, Event>, reason: SnackbarCloseReason) => void,
+  onClose: (_event: SyntheticEvent<any, Event>, _reason: SnackbarCloseReason) => void,
 };
 
-const DownloadProgress: FC<Props>  = ({progress, isOpen, onClose}) => {
+const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen, onClose}) => {
   const {t} = useTranslation();
   return <Snackbar
     open={isOpen}

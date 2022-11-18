@@ -1,5 +1,6 @@
 import React from 'react';
-import FabButton from './FabButton';
+import FabButton, {FabButtonProps} from './FabButton';
+import {Meta, Story} from '@storybook/react';
 
 export default {
   title: 'Buttons/FabButton',
@@ -14,9 +15,9 @@ export default {
       }
     }
   }
-};
+} as Meta;
 
-const Template = args => <FabButton {...args}/>;
+const Template: Story<FabButtonProps> = args => <FabButton {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {

@@ -23,6 +23,6 @@ export type Geolocation = {
 }
 
 export type GenericError = {
-  code: string,
+  code: number,
   message: string
 }

@@ -13,7 +13,7 @@ const Index: FC = () => {
   const [isSidePanelOpen, setSidePanelOpen] = useState(widescreen);
 
   const [mapStyle, setMapStyle] = useState(INITIAL_MAPSTYLE_URL);
-  const [manager, setManager] = useState<Manager>(widescreen ? 'BASEMAPS' : undefined);
+  const [manager, setManager] = useState<Manager | undefined>(widescreen ? 'BASEMAPS' : undefined);
 
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);

@@ -23,7 +23,7 @@ const fabTransition = 'transform 360ms linear';
 const buttonTransition = 'transform 360ms cubic-bezier(0.16, 1, 0.3, 1)';
 const delay = 40; // ms
 
-type Props = {
+export type FabButtonProps = {
   isLeftHanded: boolean,
   isAccessibleSize: boolean,
   bearing: number,
@@ -37,7 +37,7 @@ type Props = {
   onFoldersClick: ()=> void,
 };
 
-const FabButton: FC<Props> = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn, onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
+const FabButton: FC<FabButtonProps> = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn, onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   //STYLES

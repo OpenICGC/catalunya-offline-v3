@@ -1,5 +1,6 @@
 import React from 'react';
-import DownloadProgress from './DownloadProgress';
+import DownloadProgress, {DownloadProgressProps} from './DownloadProgress';
+import {Meta, Story} from '@storybook/react';
 
 export default {
   title: 'Notifications/DownloadProgress',
@@ -14,9 +15,9 @@ export default {
       }
     }
   }
-};
+} as Meta;
 
-const Template = args => <DownloadProgress {...args}/>;
+const Template: Story<DownloadProgressProps> = (args) => <DownloadProgress{...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {

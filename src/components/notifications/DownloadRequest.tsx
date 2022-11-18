@@ -18,13 +18,13 @@ import MapIcon from '@mui/icons-material/Map';
 //UTILS
 import {useTranslation} from 'react-i18next';
 
-type Props = {
+export type DownloadRequestProps = {
   isOpen: boolean,
   onClose: ()=> void,
   onDownload: ()=> void,
 };
 
-const DownloadRequest: FC<Props> = ({isOpen, onClose, onDownload}) => {
+const DownloadRequest: FC<DownloadRequestProps> = ({isOpen, onClose, onDownload}) => {
   const {t} = useTranslation();
   return <Dialog open={isOpen} onClose={onClose} fullWidth>
     <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.35}}>
