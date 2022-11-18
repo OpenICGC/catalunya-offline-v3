@@ -29,14 +29,14 @@ const sx = {
   }
 };
 
-type Props = {
+export type NotificationProps = {
   message: string,
   isPersistent?: boolean,
   isOpen?: boolean,
   onClose: () => void,
 };
 
-const Notification: FC<Props> = ({message, isPersistent, isOpen, onClose}) => {
+const Notification: FC<NotificationProps> = ({message, isPersistent, isOpen, onClose}) => {
   const {t} = useTranslation();
   return <Snackbar
     open={isOpen}

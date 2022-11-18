@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import Notification from './Notification';
+import Notification, {NotificationProps} from './Notification';
+import {Meta, Story} from '@storybook/react';
 
 export default {
   title: 'Notifications/Notification',
   component: Notification
-};
+} as Meta;
 
-const Template = args => <Notification {...args}/>;
+const Template: Story<NotificationProps> = args => <Notification {...args}/>;
 
 export const Persistent = Template.bind({});
 Persistent.args = {
@@ -16,9 +17,9 @@ Persistent.args = {
 };
 
 // eslint-disable-next-line react/prop-types,no-unused-vars
-const TemporaryTemplate = ({value, onClose, ...args}) => {
+const TemporaryTemplate: Story = ({ ...args}) => {
   const [isNotificationOpen, setNotificationOpen] = useState(true);
-  return <Notification onClose={() => setNotificationOpen(false)} isOpen={isNotificationOpen} {...args} />;
+  return <Notification message={args.message} onClose={() => setNotificationOpen(false)} isOpen={isNotificationOpen} {...args} />;
 };
 
 export const Temporary = TemporaryTemplate.bind({});
