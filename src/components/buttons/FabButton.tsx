@@ -1,5 +1,4 @@
 import React, {FC, useState} from 'react';
-import PropTypes from 'prop-types';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -37,7 +36,7 @@ export type FabButtonProps = {
   onFoldersClick: ()=> void,
 };
 
-const FabButton: FC<FabButtonProps> = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLocationAvailable, isTrackingOn, onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
+const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=false, bearing=0, isCompassOn=false, isLocationAvailable, isTrackingOn=false, onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   //STYLES
@@ -196,28 +195,6 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded, isAccessibleSize, bearing,
       }
     </IconButton>
   </Box>;
-};
-
-FabButton.propTypes = {
-  isLeftHanded: PropTypes.bool.isRequired,
-  isAccessibleSize: PropTypes.bool.isRequired,
-  bearing: PropTypes.number.isRequired,
-  isCompassOn: PropTypes.bool.isRequired,
-  isLocationAvailable: PropTypes.bool.isRequired,
-  isTrackingOn: PropTypes.bool.isRequired,
-  onCompassClick: PropTypes.func.isRequired,
-  onTrackingClick: PropTypes.func.isRequired,
-  onLayersClick: PropTypes.func.isRequired,
-  onBaseMapsClick: PropTypes.func.isRequired,
-  onFoldersClick: PropTypes.func.isRequired,
-};
-
-FabButton.defaultProps = {
-  isLeftHanded: false,
-  isAccessibleSize: false,
-  bearing: 0,
-  isCompassOn: false,
-  isTrackingOn: false
 };
 
 export default FabButton;

@@ -99,6 +99,7 @@
     "@capacitor/assets": "^1.0.14",
     "@capacitor/core": "^4.4.0",
     "@capacitor/ios": "^4.4.0",
+    "babel-plugin-typescript-to-proptypes": "^2.0.0",
     "cordova-plugin-device-orientation": "^2.0.1",
     "jeep-sqlite": "^1.6.7",
     "pako": "^2.0.4"

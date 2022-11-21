@@ -1,5 +1,4 @@
 import React, {Dispatch, FC, SetStateAction} from 'react';
-import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
 
@@ -23,13 +22,13 @@ const stackSx = {
   overflow: 'hidden'
 };
 
-type Props = {
+type SidePanelContentProps = {
   mapStyle: string,
   onMapStyleChanged: Dispatch<SetStateAction<string>>,
   manager: Manager,
 };
 
-const SidePanelContent: FC<Props> = ({mapStyle, onMapStyleChanged, manager}) =>
+const SidePanelContent: FC<SidePanelContentProps> = ({mapStyle, onMapStyleChanged, manager}) =>
   <Stack sx={stackSx}>
     <ScrollableContent>
       {manager === 'LAYERS' &&
@@ -58,12 +57,6 @@ const SidePanelContent: FC<Props> = ({mapStyle, onMapStyleChanged, manager}) =>
     </ScrollableContent>
     <GeomaticoLink/>
   </Stack>;
-
-SidePanelContent.propTypes = {
-  mapStyle: PropTypes.string.isRequired,
-  onMapStyleChanged: PropTypes.func.isRequired,
-  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES'])
-};
 
 export default SidePanelContent;
 

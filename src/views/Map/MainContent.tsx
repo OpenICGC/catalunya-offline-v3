@@ -1,5 +1,4 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
-import PropTypes from 'prop-types';
 import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
@@ -7,10 +6,10 @@ import Map from '@geomatico/geocomponents/Map';
 import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM} from '../../config';
 
 import {Geolocation, Manager} from '../../types/commonTypes';
-import useCompass from "../../hooks/useCompass";
-import FabButton from "../../components/buttons/FabButton";
-import useBackgroundGeolocation from "../../hooks/useBackgroundGeolocation";
-import {downloadMbtiles, getDatabase, isMbtilesDownloaded, mbtiles} from "../../utils/mbtiles";
+import useCompass from '../../hooks/useCompass';
+import FabButton from '../../components/buttons/FabButton';
+import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
+import {downloadMbtiles, getDatabase, isMbtilesDownloaded, mbtiles} from '../../utils/mbtiles';
 
 mbtiles(maplibregl);
 
@@ -81,13 +80,13 @@ const mbtilesStatusMessages = [
   'mbtiles ready'
 ];
 
-type Props = {
+type MainContentProps = {
   mapStyle: string,
   manager: Manager,
   onManagerChanged: Dispatch<SetStateAction<Manager>>,
 };
 
-const MainContent: FC<Props> = ({mapStyle, manager, onManagerChanged}) => {
+const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
   const mapRef: any = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
@@ -178,9 +177,8 @@ const MainContent: FC<Props> = ({mapStyle, manager, onManagerChanged}) => {
   }, [isTrackingMode, geolocation, orientation]);
 
   const changeManager = (clicked: any) => {
-    console.log(555, clicked)
     onManagerChanged(clicked === manager ? undefined : clicked);
-  }
+  };
 
   return mbtilesStatus === READY ?
     <Map
@@ -209,11 +207,4 @@ const MainContent: FC<Props> = ({mapStyle, manager, onManagerChanged}) => {
     </div>;
 };
 
-MainContent.propTypes = {
-  mapStyle: PropTypes.string.isRequired,
-  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES']),
-  onManagerChanged: PropTypes.func.isRequired
-};
-
-// @ts-ignore
 export default MainContent;

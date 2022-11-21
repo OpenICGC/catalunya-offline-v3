@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import PropTypes from 'prop-types';
 
 //MUI
 import Snackbar from '@mui/material/Snackbar';
@@ -36,7 +35,7 @@ export type NotificationProps = {
   onClose: () => void,
 };
 
-const Notification: FC<NotificationProps> = ({message, isPersistent, isOpen, onClose}) => {
+const Notification: FC<NotificationProps> = ({message, isPersistent=false, isOpen=false, onClose}) => {
   const {t} = useTranslation();
   return <Snackbar
     open={isOpen}
@@ -55,18 +54,6 @@ const Notification: FC<NotificationProps> = ({message, isPersistent, isOpen, onC
     anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
     sx={sx}
   />;
-};
-
-Notification.propTypes = {
-  message: PropTypes.string.isRequired,
-  isPersistent: PropTypes.bool,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func.isRequired
-};
-
-Notification.defaultProps = {
-  isPersistent: false,
-  isOpen: false
 };
 
 export default Notification;

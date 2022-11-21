@@ -1,10 +1,10 @@
 import createTheme from '@mui/material/styles/createTheme';
 import {lighten} from '@mui/system/colorManipulator';
-import {PaletteMode} from "@mui/material";
+import {PaletteMode} from '@mui/material';
 
 const primaryColor = '#f59d21';
 
-const theme = (mode: PaletteMode | undefined) => createTheme({
+const theme = (mode: PaletteMode ) => createTheme({
   palette: {
     mode: mode ? mode : 'light',
     primary: {

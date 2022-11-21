@@ -1,6 +1,6 @@
 import {Capacitor, registerPlugin} from '@capacitor/core';
 import {useEffect, useState} from 'react';
-import {GenericError, Geolocation} from "../types/commonTypes";
+import {GenericError, Geolocation} from '../types/commonTypes';
 
 const BackgroundGeolocation: any = registerPlugin('BackgroundGeolocation');
 

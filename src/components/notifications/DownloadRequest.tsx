@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import PropTypes from 'prop-types';
 
 //MUI
 import Button from '@mui/material/Button';
@@ -24,7 +23,7 @@ export type DownloadRequestProps = {
   onDownload: ()=> void,
 };
 
-const DownloadRequest: FC<DownloadRequestProps> = ({isOpen, onClose, onDownload}) => {
+const DownloadRequest: FC<DownloadRequestProps> = ({isOpen=false, onClose, onDownload}) => {
   const {t} = useTranslation();
   return <Dialog open={isOpen} onClose={onClose} fullWidth>
     <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.35}}>
@@ -48,16 +47,6 @@ const DownloadRequest: FC<DownloadRequestProps> = ({isOpen, onClose, onDownload}
       <Button startIcon={<CheckCircleIcon/>} onClick={onDownload}>{t('actions.accept')}</Button>
     </DialogActions>
   </Dialog>;
-};
-
-DownloadRequest.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onDownload: PropTypes.func.isRequired,
-};
-
-DownloadRequest.defaultProps = {
-  isOpen: false
 };
 
 export default DownloadRequest;

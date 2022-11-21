@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import PropTypes from 'prop-types';
 
 import styled from '@mui/styles/styled';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -33,14 +32,14 @@ const sidePanelSx = {
   }
 };
 
-type Props = {
+type LayoutProps = {
   mainContent: React.ReactElement,
   sidePanelContent: React.ReactElement,
   isSidePanelOpen: boolean,
   onToggleSidePanel: ()=> void
 };
 
-const Layout: FC<Props> = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
+const Layout: FC<LayoutProps> = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
 
   return <>
@@ -60,13 +59,6 @@ const Layout: FC<Props> = ({mainContent, sidePanelContent, isSidePanelOpen, onTo
       {mainContent}
     </Main>
   </>;
-};
-
-Layout.propTypes = {
-  sidePanelContent: PropTypes.element.isRequired,
-  mainContent: PropTypes.element.isRequired,
-  isSidePanelOpen: PropTypes.bool.isRequired,
-  onToggleSidePanel: PropTypes.func.isRequired
 };
 
 export default Layout;

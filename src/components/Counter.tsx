@@ -1,11 +1,10 @@
 import React, {FC, useState} from 'react';
-import PropTypes from 'prop-types';
 
-type Props = {
+type CounterProps = {
   value: number
 }
 
-export const Counter: FC<Props> = ({ value = 10 }) => {
+export const Counter: FC<CounterProps> = ({ value = 10 }) => {
   const [counter, setCounter] = useState(value);
 
   const handleUp = () => setCounter((counterPref) => counterPref + 1);
@@ -23,8 +22,4 @@ export const Counter: FC<Props> = ({ value = 10 }) => {
       </div>
     </div>
   </>;
-};
-
-Counter.propTypes = {
-  value: PropTypes.number.isRequired
 };

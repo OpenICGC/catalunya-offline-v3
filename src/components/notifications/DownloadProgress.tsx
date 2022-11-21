@@ -1,5 +1,4 @@
 import React, {FC, SyntheticEvent} from 'react';
-import PropTypes from 'prop-types';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -55,7 +54,7 @@ export type DownloadProgressProps = {
   onClose: (_event: SyntheticEvent<any, Event>, _reason: SnackbarCloseReason) => void,
 };
 
-const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen, onClose}) => {
+const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, onClose}) => {
   const {t} = useTranslation();
   return <Snackbar
     open={isOpen}
@@ -84,16 +83,6 @@ const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen, onClose
       </>}
     />
   </Snackbar>;
-};
-
-DownloadProgress.propTypes = {
-  progress: PropTypes.number.isRequired,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-};
-
-DownloadProgress.defaultProps = {
-  isOpen: false
 };
 
 export default DownloadProgress;

@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
 
-type Props = {
+type SvgLogoHorizontalColorProps = {
   width: number,
 }
 
-const SvgLogoHorizontalColor: FC<Props>  = (props) => (
+const SvgLogoHorizontalColor: FC<SvgLogoHorizontalColorProps>  = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="173.805 98.079 3394.423 923.077"
