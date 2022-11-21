@@ -3,13 +3,12 @@ import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
 
-import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM} from '../../config';
-
 import {Geolocation, Manager} from '../../types/commonTypes';
-import useCompass from '../../hooks/useCompass';
-import FabButton from '../../components/buttons/FabButton';
+import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
-import {downloadMbtiles, getDatabase, isMbtilesDownloaded, mbtiles} from '../../utils/mbtiles';
+import FabButton from '../../components/buttons/FabButton';
+import useCompass from '../../hooks/useCompass';
+import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../../config';
 
 mbtiles(maplibregl);
 
@@ -104,7 +103,11 @@ const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}
 
   // Effects on offline tileset downloading
   useEffect(() => {
-    isMbtilesDownloaded(MBTILES.dbName).then((isDownloaded: boolean | undefined) => {
+    if (OFF_CAT) {
+      setMbtilesStatus(READY);
+      return;
+    }
+    isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
       if (isDownloaded) {
         setMbtilesStatus(AVAILABLE);
       } else {
@@ -180,7 +183,7 @@ const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}
     onManagerChanged(clicked === manager ? undefined : clicked);
   };
 
-  return mbtilesStatus === READY ?
+  return (mbtilesStatus === READY || OFF_CAT) ?
     <Map
       {...MAP_PROPS}
       reuseMaps
