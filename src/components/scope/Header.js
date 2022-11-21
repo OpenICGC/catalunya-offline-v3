@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 
 //MUI
 import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
-import Box from '@mui/material/Box';
+
 
 const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
   
@@ -33,6 +34,7 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
 
   const detailsContainerSx = {
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
     ml: 'auto',
     mr: 1,
@@ -51,17 +53,17 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
 
   const scopeNameSx = {
     color: theme => theme.palette.getContrastText(color),
-    width: '120px',
+    width: '125px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    fontWeight: 'bold'
+    fontWeight: 500
   };
   
-  return <AppBar variant='dense' position="static" sx={appBarSx}>
-    <DoubleArrowIcon sx={{transform: 'rotate(180deg)', color: theme => theme.palette.getContrastText(color), m: 0, p: 0}} onClick={onBackButtonClick}/>
+  return <AppBar position="static" sx={appBarSx}>
+    <ArrowBackIcon sx={{color: theme => theme.palette.getContrastText(color), m: 0, px: 0}} onClick={onBackButtonClick}/>
     <Toolbar sx={toolbarSx}>
-      <Typography variant="h2" component='h3' sx={scopeNameSx}>{name.toUpperCase()}</Typography>
+      <Typography variant="subtitle1" component='h3' sx={scopeNameSx}>{name}</Typography>
     </Toolbar>
     <Box sx={detailsContainerSx}>
       <Typography variant='caption' sx={detailTextSx}>{numPoints || 0}</Typography>
