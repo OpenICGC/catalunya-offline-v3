@@ -33,17 +33,18 @@ const ManagerHeader = ({name, color, startIcon}) => {
 
   const scopeNameSx = {
     color: theme => theme.palette.getContrastText(color),
-    width: '120px',
+    width: '180px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    fontWeight: 'bold'
+    letterSpacing: '0.0075em',
+    fontWeight: 500
   };
 
   return <AppBar variant='dense' position="static" sx={appBarSx}>
     {startIcon}
     <Toolbar sx={toolbarSx}>
-      <Typography variant='h2' component='h3' sx={scopeNameSx}>{t(name).toUpperCase()}</Typography>
+      <Typography variant='h2' component='h3' sx={scopeNameSx}>{t(name)}</Typography>
     </Toolbar>
   </AppBar>;
 };
