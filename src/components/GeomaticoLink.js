@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import LogoHorizontalColor from '../logos/LogoHorizontalColor';
 
 const stackSx = {display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', flexGrow: 2, minHeight: 25, mt: 1, mb: 0};
-const linkSx = {display: 'flex', alignItems: 'flex-end'};
+const linkSx = {display: 'flex', alignItems: 'flex-end', mr: 1, mb: 1};
 
 const GeomaticoLink = () => <Stack sx={stackSx}>
   <Link sx={linkSx} href="https://geomatico.es" target="_blank">
