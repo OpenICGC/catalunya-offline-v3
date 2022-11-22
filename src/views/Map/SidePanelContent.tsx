@@ -1,25 +1,38 @@
 import React, {Dispatch, FC, SetStateAction} from 'react';
 
+//MUI
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
-import BaseMapList from '@geomatico/geocomponents/BaseMapList';
-import Box from '@mui/material/Box';
-import styled from '@mui/styles/styled';
+//MUI-ICONS
+import FolderIcon from '@mui/icons-material/Folder';
+import LayersIcon from '@mui/icons-material/Layers';
+import MapIcon from '@mui/icons-material/Map';
 
-import SectionTitle from '../../components/SectionTitle';
+//CATOFFLINE
 import GeomaticoLink from '../../components/GeomaticoLink';
 
+//GEOCOMPONENTS
+import BaseMapList from '@geomatico/geocomponents/BaseMapList';
+
+//UTILS
 import {MAPSTYLES} from '../../config';
 import {Manager} from '../../types/commonTypes';
+import {useTheme} from '@mui/material';
+import styled from '@mui/styles/styled';
+import ManagerHeader from '../../components/ManagerHeader';
 
+//STYLES
 const ScrollableContent = styled(Box)({
   overflow: 'auto',
-  padding: '8px'
+  padding: '0px'
 });
 
 const stackSx = {
   height: '100%',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  m: 0,
+  p: 0
 };
 
 export type SidePanelContentProps = {
@@ -28,18 +41,27 @@ export type SidePanelContentProps = {
   manager: Manager,
 };
 
-const SidePanelContent: FC<SidePanelContentProps> = ({mapStyle, onMapStyleChanged, manager}) =>
-  <Stack sx={stackSx}>
+const SidePanelContent: FC<SidePanelContentProps> = ({mapStyle, onMapStyleChanged, manager}) => {
+  const theme = useTheme();
+  return <Stack sx={stackSx}>
     <ScrollableContent>
       {manager === 'LAYERS' &&
         <>
-          <SectionTitle titleKey='layerManager'/>
+          <ManagerHeader
+            name='layerManager'
+            color={theme.palette.secondary.main}
+            startIcon={<LayersIcon/>}
+          />
           <div>TODO</div>
         </>
       }
       {manager === 'BASEMAPS' &&
         <>
-          <SectionTitle titleKey='baseMapManager'/>
+          <ManagerHeader
+            name='baseMapManager'
+            color={theme.palette.secondary.main}
+            startIcon={<MapIcon/>}
+          />
           <BaseMapList
             styles={MAPSTYLES}
             selectedStyleId={mapStyle}
@@ -50,13 +72,17 @@ const SidePanelContent: FC<SidePanelContentProps> = ({mapStyle, onMapStyleChange
       }
       {manager === 'SCOPES' &&
         <>
-          <SectionTitle titleKey='scopeManager'/>
+          <ManagerHeader
+            name='scopeManager'
+            color={theme.palette.secondary.main}
+            startIcon={<FolderIcon/>}
+          />
           <div>TODO</div>
         </>
       }
     </ScrollableContent>
     <GeomaticoLink/>
   </Stack>;
+};
 
 export default SidePanelContent;
-

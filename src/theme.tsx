@@ -19,6 +19,11 @@ const theme = (mode: PaletteMode ) => createTheme({
       secondary: 'rgba(0,0,0,0.65)',
     }
   },
+  typography: {
+    h2: {
+      fontSize: '1.25rem'
+    }
+  },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
