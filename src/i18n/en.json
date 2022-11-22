@@ -6,14 +6,14 @@
     "download": "Download",
     "downloading": "Downloading..."
   },
-  "baseMapManager": "Base Map Manager",
+  "baseMapManager": "Base Maps",
   "downloadingAlert": {
     "content_01": "Data downloading of the Topographic Map of Catalonia is needed to be able to work in areas with poor coverage.",
     "content_02": "If you don't want to download the data now, you can continue navigating with an online version, and you will be prompted to download them afterwards.",
     "content_03": "Download now the Topographic Map of Catalonia? (350 MB)",
     "title": "Offline data download"
   },
-  "layerManager": "Layer Manager",
-  "scopeManager": "Scope Manager",
+  "layerManager": "Layers",
+  "scopeManager": "Scopes",
   "topographicMap": "Topographic Map of Catalonia 1:25 000"
 }
