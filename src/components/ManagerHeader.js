@@ -20,6 +20,9 @@ const ManagerHeader = ({name, color, startIcon}) => {
     bgcolor: color || 'secondary.main',
     pl: 1,
     height: '54px',
+    '& .MuiSvgIcon-root': {
+      color: theme => theme.palette.getContrastText(color)
+    }
   };
 
   const toolbarSx = {

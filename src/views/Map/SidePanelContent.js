@@ -44,7 +44,7 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
           <ManagerHeader
             name='layerManager'
             color={theme.palette.secondary.main}
-            startIcon={<LayersIcon sx={{color: theme => theme.palette.getContrastText(theme.palette.secondary.main)}}/>}
+            startIcon={<LayersIcon/>}
           />
           <div>TODO</div>
         </>
@@ -54,7 +54,7 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
           <ManagerHeader
             name='baseMapManager'
             color={theme.palette.secondary.main}
-            startIcon={<MapIcon sx={{color: theme => theme.palette.getContrastText(theme.palette.secondary.main)}}/>}
+            startIcon={<MapIcon/>}
           />
           <BaseMapList
             styles={MAPSTYLES}
@@ -69,7 +69,7 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
           <ManagerHeader
             name='scopeManager'
             color={theme.palette.secondary.main}
-            startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText(theme.palette.secondary.main)}}/>}
+            startIcon={<FolderIcon/>}
           />
           <div>TODO</div>
         </>
@@ -86,4 +86,3 @@ SidePanelContent.propTypes = {
 };
 
 export default SidePanelContent;
-
