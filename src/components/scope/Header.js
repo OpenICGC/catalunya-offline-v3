@@ -16,28 +16,11 @@ import RouteIcon from '@mui/icons-material/Route';
 const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
   
   //STYLES
-  const appBarSx = {
-    display: 'flex',
-    flexFlow: 'row noWrap',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    bgcolor: color || 'secondary.main',
-    pl: 0.5,
-    height: '54px',
-  };
-
-  const toolbarSx = {
-    px: 1,
-    display: 'flex',
-    justifyContent: 'baseline',
-  };
-
   const detailsContainerSx = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    ml: 'auto',
-    mr: 1,
+    ml: 'auto'
   };
 
   const detailTextSx = {
@@ -57,21 +40,25 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    fontWeight: 500
+    fontWeight: 500,
+    flexGrow: 1,
+    ml: 1
   };
   
-  return <AppBar position="static" sx={appBarSx}>
-    <ArrowBackIcon sx={{color: theme => theme.palette.getContrastText(color), m: 0, px: 0}} onClick={onBackButtonClick}/>
-    <Toolbar sx={toolbarSx}>
-      <Typography variant="subtitle1" component='h3' sx={scopeNameSx}>{name}</Typography>
-    </Toolbar>
-    <Box sx={detailsContainerSx}>
-      <Typography variant='caption' sx={detailTextSx}>{numPoints || 0}</Typography>
-      <LocationOnIcon  fontSize='small' sx={detailIconSx}/>
-      <Typography variant='caption' sx={detailTextSx}>{numPaths || 0}</Typography>
-      <RouteIcon fontSize='small' sx={detailIconSx}/>
-    </Box>
-  </AppBar>;
+  return <Box sx={{ flexGrow: 1}}>
+    <AppBar position="static" sx={{bgcolor: color || 'secondary.main'}}>
+      <Toolbar sx={{px: 1}} disableGutters>
+        <ArrowBackIcon sx={{color: theme => theme.palette.getContrastText(color), m: 0, px: 0}} onClick={onBackButtonClick}/>
+        <Typography variant="subtitle1" component="h3" sx={scopeNameSx}>{name}</Typography>
+        <Box sx={detailsContainerSx}>
+          <Typography variant='caption' sx={detailTextSx}>{numPoints || 0}</Typography>
+          <LocationOnIcon  fontSize='small' sx={detailIconSx}/>
+          <Typography variant='caption' sx={detailTextSx}>{numPaths || 0}</Typography>
+          <RouteIcon fontSize='small' sx={detailIconSx}/>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  </Box>;
 };
 
 Header.propTypes = {
