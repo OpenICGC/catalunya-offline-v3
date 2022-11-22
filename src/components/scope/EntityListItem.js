@@ -43,8 +43,8 @@ const EntityListItem = ({
     onContextualMenuClick(actionId, id);
 
   //EDIT
-  const handleNameChange = (e) => onNameChange(e.target.value);
-  const handleColorChange = (color) => onColorChange(`#${color.hex}`);
+  const handleNameChange = (e) => onNameChange(e.target.value, id);
+  const handleColorChange = (color) => onColorChange(`#${color.hex}`, id);
   const handleBlur = () => {
     setAnchorEl(null);
     setIsEditing(false);
@@ -56,13 +56,13 @@ const EntityListItem = ({
     }
   };
   
-  return <ListItem sx={{p: 1, height: '48px'}}>
-    <ListItemIcon sx={{minWidth: '24px', mr: 1}}>
+  return <ListItem sx={{height: '48px'}}>
+    <ListItemIcon sx={{minWidth: '24px'}}>
       <ColorPicker
         hideTextfield={true}
         disableAlpha={true}
         value={color}
-        deferred
+        inputFormats={[]}
         onChange={handleColorChange}
         sx={{'& .ColorPicker-MuiButtonBase-root': {border: '2px solid red'}}}
       />
@@ -124,7 +124,7 @@ EntityListItem.propTypes = {
     label: PropTypes.string.isRequired,
     icon: PropTypes.element,
   })),
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   isEditing: PropTypes.bool,
   name: PropTypes.string.isRequired,
   onActionClick: PropTypes.func,

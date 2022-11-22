@@ -5,6 +5,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import List from '@mui/material/List';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 export default {
@@ -13,13 +14,13 @@ export default {
 };
 
 const Template = args => <EntityListItem {...args}/>;
-const TemplateList = args => <><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/></>;
+const TemplateList = args => <List><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/></List>;
 
 export const Default = Template.bind({});
 Default.args = {
   actionIcon: <FileUploadIcon/>,
   color: '#247a44',
-  id: 12525,
+  id: 'bb7e8b18-6a37-11ed-a1eb-0242ac120002',
   contextualMenu: [
     {
       id: 'rename',
