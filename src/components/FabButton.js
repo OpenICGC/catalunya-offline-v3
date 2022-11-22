@@ -136,7 +136,7 @@ const FabButton = ({isLeftHanded, isAccessibleSize, bearing, isCompassOn, isLoca
   const fab = {
     bgcolor: isMenuOpen ? 'primary.main' : 'grey.800',
     '&:hover': {
-      bgcolor: isMenuOpen ? 'secondary.dark' : 'grey.900',
+      bgcolor: isMenuOpen ? 'primary.main' : 'grey.800',
     },
     width: fabSize,
     height: fabSize,
