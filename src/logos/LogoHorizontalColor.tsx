@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-type SvgLogoHorizontalColorProps = {
+export type SvgLogoHorizontalColorProps = {
   width: number,
 }
 

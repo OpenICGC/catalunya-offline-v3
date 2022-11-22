@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 
-type CounterProps = {
+export type CounterProps = {
   value: number
 }
 

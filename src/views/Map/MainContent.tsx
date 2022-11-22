@@ -79,7 +79,7 @@ const mbtilesStatusMessages = [
   'mbtiles ready'
 ];
 
-type MainContentProps = {
+export type MainContentProps = {
   mapStyle: string,
   manager: Manager,
   onManagerChanged: Dispatch<SetStateAction<Manager>>,

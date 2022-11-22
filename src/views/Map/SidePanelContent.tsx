@@ -22,7 +22,7 @@ const stackSx = {
   overflow: 'hidden'
 };
 
-type SidePanelContentProps = {
+export type SidePanelContentProps = {
   mapStyle: string,
   onMapStyleChanged: Dispatch<SetStateAction<string>>,
   manager: Manager,

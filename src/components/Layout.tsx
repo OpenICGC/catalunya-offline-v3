@@ -32,7 +32,7 @@ const sidePanelSx = {
   }
 };
 
-type LayoutProps = {
+export type LayoutProps = {
   mainContent: React.ReactElement,
   sidePanelContent: React.ReactElement,
   isSidePanelOpen: boolean,
