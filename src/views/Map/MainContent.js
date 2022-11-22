@@ -4,10 +4,13 @@ import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
 
-import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES} from '../../config';
+import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../../config';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
 import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
-import FabButton from '../../components/FabButton';
+
+import FabButton from '../../components/buttons/FabButton';
+import useCompass from '../../hooks/useCompass';
+
 
 mbtiles(maplibregl);
 
@@ -22,17 +25,45 @@ const sources = {
 };
 
 const layers = [{
+  id: 'geolocation-precision',
+  source: 'geolocation',
+  type: 'circle',
+  paint: {
+    'circle-color': '#4286f5',
+    'circle-opacity': 0.33,
+    'circle-radius':  [
+      'interpolate',
+      ['exponential', 2],
+      ['zoom'],
+      7, // Beware: this formula works only for latitudes around initial viewport's latitude
+      ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI/180))],
+      15,
+      ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI/180))]
+    ],
+    'circle-stroke-color': '#4286f5',
+    'circle-stroke-opacity': 0.67,
+    'circle-stroke-width': 1,
+    'circle-pitch-alignment': 'map'
+  }
+}, {
+  id: 'geolocation-shadow',
+  source: 'geolocation',
+  type: 'circle',
+  paint: {
+    'circle-radius': 17,
+    'circle-blur': 0.7,
+    'circle-translate': [1, 1],
+    'circle-translate-anchor': 'viewport'
+  }
+}, {
   id: 'geolocation',
   source: 'geolocation',
   type: 'circle',
   paint: {
-    'circle-color': '#FF00FF',
-    'circle-opacity': 1,
-    'circle-radius': 6,
+    'circle-color': '#4285f4',
+    'circle-radius': 10,
     'circle-stroke-color': '#FFF',
-    'circle-stroke-opacity': 1,
-    'circle-stroke-width': 2,
-
+    'circle-stroke-width': 2
   }
 }];
 
@@ -50,13 +81,28 @@ const mbtilesStatusMessages = [
   'mbtiles ready'
 ];
 
-const MainContent = ({mapStyle}) => {
+const MainContent = ({mapStyle, manager, onManagerChanged}) => {
   const mapRef = useRef();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
-  const {geolocation} = useBackgroundGeolocation();
 
+  const {geolocation, error: geolocationError} = useBackgroundGeolocation();
+  const orientation = useCompass();
+
+  const [isNavigationMode, setNavigationMode] = useState(false);
+  const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
+
+  const [isTrackingMode, setTrackingMode] = useState(true);
+  const enableTracking = () => setTrackingMode(true);
+  const disableTracking = () => setTrackingMode(false);
+
+
+  // Effects on offline tileset downloading
   useEffect(() => {
+    if (OFF_CAT) {
+      setMbtilesStatus(READY);
+      return;
+    }
     isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
       if (isDownloaded) {
         setMbtilesStatus(AVAILABLE);
@@ -74,47 +120,95 @@ const MainContent = ({mapStyle}) => {
     }
   }, [mbtilesStatus]);
 
+  // Set blue dot location on geolocation updates
+  const setMapGeolocation = (map, geolocation) => {
+    const {latitude, longitude} = geolocation;
+    map?.getSource('geolocation').setData({
+      type: 'FeatureCollection',
+      features: latitude && longitude ? [{
+        type: 'Feature',
+        properties: {...geolocation},
+        geometry: {
+          type: 'Point',
+          coordinates: [longitude, latitude]
+        }
+      }] : []
+    });
+  };
+
+  useEffect(() => {
+    setMapGeolocation(mapRef.current, geolocation);
+  }, [geolocation, mapRef.current]);
+
+  useEffect(() => {
+    mapRef.current?.once('styledata', () => setMapGeolocation(mapRef.current, geolocation));
+  }, [mapStyle]);
+
+  // Pitch & rotate map when switching navigation mode on/off
+  useEffect(() => {
+    mapRef.current?.easeTo({
+      pitch: isNavigationMode ? 60 : 0,
+      bearing: isNavigationMode && isTrackingMode ? orientation : 0,
+    });
+  }, [isNavigationMode]);
+
+  // On tracking mode on, update viewport on location and orientation updates:
+  // center, minimal zoom, and bearing if navigation mode is also on
   useEffect(() => {
     const {latitude, longitude} = geolocation;
-    if (latitude && longitude && mapRef.current) {
-      mapRef.current.getSource('geolocation').setData({
-        type: 'FeatureCollection',
-        features: [{
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [longitude, latitude]
-          }
-        }]
-      });
+    if (isTrackingMode && latitude && longitude) {
+      const bearingZoom = {
+        bearing: isNavigationMode && isTrackingMode ? orientation : 0,
+        zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
+      };
+      /*mapRef.current ?
+        mapRef.current.easeTo({
+          center: [longitude, latitude],
+          ...bearingZoom
+        }) :*/
       setViewport({
         ...viewport,
         latitude,
         longitude,
-        zoom: MAP_PROPS.maxZoom
+        ...bearingZoom
       });
     }
-  }, [geolocation, mapRef.current]);
+  }, [isTrackingMode, geolocation, orientation]);
 
-  return mbtilesStatus === READY ?
+  const changeManager = clicked => onManagerChanged(clicked === manager ? undefined : clicked);
+
+  return (mbtilesStatus === READY || OFF_CAT) ?
     <Map
       {...MAP_PROPS}
+      reuseMaps
       ref={mapRef}
       mapStyle={mapStyle}
       sources={sources}
       layers={layers}
       viewport={viewport}
       onViewportChange={setViewport}
+      onDrag={disableTracking}
+      onTouchMove={disableTracking}
+      onWheel={disableTracking}
     >
-      <FabButton isLocationAvailable={true}/>
+      <FabButton
+        isLeftHanded={false} isAccessibleSize={false}
+        bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
+        isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}
+        onLayersClick={() => changeManager('LAYERS')}
+        onBaseMapsClick={() => changeManager('BASEMAPS')}
+        onFoldersClick={() => changeManager('SCOPES')}
+      />
+      
     </Map> : <div>
       {mbtilesStatusMessages[mbtilesStatus]}
     </div>;
 };
 
 MainContent.propTypes = {
-  mapStyle: PropTypes.string.isRequired
+  mapStyle: PropTypes.string.isRequired,
+  manager: PropTypes.oneOf(['LAYERS', 'BASEMAPS', 'SCOPES']),
+  onManagerChanged: PropTypes.func.isRequired
 };
 
 export default MainContent;

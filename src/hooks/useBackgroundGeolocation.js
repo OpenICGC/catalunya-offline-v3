@@ -13,7 +13,7 @@ const config = {
 
 const webConfig = {
   enableHighAccuracy: true,
-  timeout: 5000, // Maximum time to wait for a position
+  //timeout: 5000, // Maximum time to wait for a position
   maximumAge: 5000, // Maximum age of cached position in ms
 };
 
@@ -61,6 +61,7 @@ const useBackgroundGeolocation = () => {
       time: event.timestamp
     };
     console.log('[WebGeolocation] Got location', location);
+    setError();
     setGeolocation(location);
   };
 

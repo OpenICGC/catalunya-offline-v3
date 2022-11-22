@@ -14,8 +14,13 @@ const theme = mode => createTheme({
       main: '#ffd300',
     },
     text: {
-      primary: '#311f06',
-      secondary: '#623e0d',
+      primary: '#000000',
+      secondary: 'rgba(0,0,0,0.65)',
+    }
+  },
+  typography: {
+    h2: {
+      fontSize: '1.25rem'
     }
   },
   components: {
@@ -38,9 +43,16 @@ const theme = mode => createTheme({
           backgroundColor: lighten(primaryColor, 0.5),
           opacity: 0.2,
           outline: '0px solid slategrey'
-        }
-      }
-    }
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        gutterBottom: {
+          marginBottom: 16,
+        },
+      },
+    },
   }
 });
 

@@ -8,14 +8,14 @@ module.exports = (env) => ({
   devtool: env.prod ? 'source-map' : 'inline-source-map',
   devServer: {
     open: true,
-    port: 'auto'
+    port: 8080
   },
   resolve: {
     alias: {
       react: path.resolve('./node_modules/react'),
       '@mui/material': path.resolve('./node_modules/@mui/material'),
       '@mui/styles': path.resolve('./node_modules/@mui/styles'),
-      '@mui/icons-material': path.resolve('./node_modules/@mui/icons-material'),
+      '@mui/icons-material': path.resolve('./node_modules/@mui/icons-material')
     }
   },
   module: {
@@ -23,19 +23,19 @@ module.exports = (env) => ({
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: ['babel-loader']
       },
       {
         test: /\.html$/,
         use: [
           {
-            loader: 'html-loader',
+            loader: 'html-loader'
           },
         ],
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.(svg|xml)$/i,
@@ -43,9 +43,9 @@ module.exports = (env) => ({
       },
       {
         test: /\.(png|jpe?g|gif|eot|ttf|woff|woff2)$/i,
-        loader: 'url-loader',
-      },
-    ],
+        loader: 'url-loader'
+      }
+    ]
   },
   plugins: env.test ? [
     new DotenvWebpackPlugin({
@@ -53,20 +53,20 @@ module.exports = (env) => ({
     })
   ] : [
     new HtmlWebPackPlugin({
-      favicon: './static/images/logo.svg',
+      favicon: './resources/logo.svg',
       template: './src/template.html',
       filename: './index.html',
-      chunks: ['main'],
+      chunks: ['main']
     }),
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'static',
-        },
-      ],
+          from: 'static'
+        }
+      ]
     }),
     new DotenvWebpackPlugin({
       safe: true
     })
-  ],
+  ]
 });

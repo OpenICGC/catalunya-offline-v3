@@ -7,19 +7,22 @@ import Typography from '@mui/material/Typography';
 
 import {useTranslation} from 'react-i18next';
 
+const typographySx = {
+  fontWeight: 'bold',
+  color: 'text.primary'
+};
+
 const SectionTitle = ({titleKey}) => {
   const {t} = useTranslation();
-  return (
-    <Box mb={1} >
-      <Typography
-        variant='subtitle1'
-        sx={{fontWeight: 'bold', color: 'text.primary'}}
-      >
-        {t(titleKey)}
-      </Typography>
-      <Divider/>
-    </Box>
-  );
+  return <Box mb={1}>
+    <Typography
+      variant='subtitle1'
+      sx={typographySx}
+    >
+      {t(titleKey)}
+    </Typography>
+    <Divider/>
+  </Box>;
 };
 
 SectionTitle.propTypes = {

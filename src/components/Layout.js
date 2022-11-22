@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import styled from '@mui/styles/styled';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
-import ResponsiveHeader from '@geomatico/geocomponents/ResponsiveHeader';
 import SidePanel from '@geomatico/geocomponents/SidePanel';
 
 import {
@@ -12,63 +11,56 @@ import {
   SM_BREAKPOINT,
 } from '../config';
 
-const Main = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'widescreen' && prop !== 'isleftdraweropen'
-})(({widescreen, isleftdraweropen}) => ({
+const Main = styled(Box)({
   flexGrow: 1,
   padding: 0,
   position: 'absolute',
-  top: 56,
-  '@media (min-width: 0px) and (orientation: landscape)': {
-    top: 48
-  },
-  ['@media (min-width: '+ SM_BREAKPOINT +'px)']: {
-    top: 64
-  },
+  top: 0,
   bottom: 0,
   right: 0,
-  left: widescreen ? (isleftdraweropen && DRAWER_WIDTH) : 0
-}));
+  left: 0
+});
 
-const Layout = ({mainContent, sidePanelContent}) => {
+const sidePanelSx = {
+  '& .MuiDrawer-paper': {
+    p: 0,
+    top: 0,
+    height: '100%',
+  },
+  '@media (min-width: 0px)': {
+    m: 0,
+    top: 0,
+    height: '100%',
+  }
+};
+
+const Layout = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(widescreen);
 
-  const handleClose = () => setIsSidePanelOpen(!isSidePanelOpen);
-
-  return (
-    <>
-      <ResponsiveHeader
-        title='Catalunya Offline'
-        logo={widescreen ? <></> : null}
-        onStartIconClick={widescreen ? undefined : handleClose}
-        isStartIconCloseable={isSidePanelOpen}
-        sx={{
-          '&.MuiAppBar-root': {zIndex: 1500}
-        }}
+  return <>
+    {sidePanelContent && isSidePanelOpen &&
+      <SidePanel
+        sx={sidePanelSx}
+        drawerWidth={DRAWER_WIDTH + 'px'}
+        anchor="left"
+        isOpen={isSidePanelOpen}
+        onClose={onToggleSidePanel}
+        widescreen={widescreen}
       >
-      </ResponsiveHeader>
-      {
-        sidePanelContent && isSidePanelOpen && <SidePanel
-          drawerWidth={DRAWER_WIDTH + 'px'}
-          anchor="left"
-          isOpen={isSidePanelOpen}
-          onClose={handleClose}
-          widescreen={widescreen}
-        >
-          {sidePanelContent}
-        </SidePanel>
-      }
-      <Main widescreen={widescreen} isleftdraweropen={sidePanelContent && isSidePanelOpen}>
-        {mainContent}
-      </Main>
-    </>
-  );
+        {sidePanelContent}
+      </SidePanel>
+    }
+    <Main widescreen={widescreen} isleftdraweropen={sidePanelContent && isSidePanelOpen}>
+      {mainContent}
+    </Main>
+  </>;
 };
 
 Layout.propTypes = {
   sidePanelContent: PropTypes.element.isRequired,
-  mainContent: PropTypes.element.isRequired
+  mainContent: PropTypes.element.isRequired,
+  isSidePanelOpen: PropTypes.bool.isRequired,
+  onToggleSidePanel: PropTypes.func.isRequired
 };
 
 export default Layout;

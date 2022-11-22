@@ -10,5 +10,5 @@ const Template = (args) => <SectionTitle {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  titleKey: 'baseMapStyle',
+  titleKey: 'baseMapManager',
 };
