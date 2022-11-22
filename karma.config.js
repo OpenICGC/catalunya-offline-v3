@@ -22,14 +22,14 @@ module.exports = (config) => {
     ],
 
     files: [
-      { pattern: 'test.js', watched: false }
+      { pattern: 'test.ts', watched: false }
     ],
 
     exclude: [],
 
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test.js': ['webpack', 'sourcemap'],
+      'test.ts': ['webpack', 'sourcemap'],
     },
     webpack: webpackConfig,
     webpackServer: {

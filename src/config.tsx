@@ -1,4 +1,4 @@
-import {MapStyles} from "./types/commonTypes";
+import {MapStyles} from './types/commonTypes';
 export const OFF_CAT = false;
 
 export const DRAWER_WIDTH = 240;
