@@ -1,4 +1,4 @@
-import React, {FC, SyntheticEvent} from 'react';
+import React, {FC} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';*/
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import Snackbar, {SnackbarCloseReason, SnackbarOrigin} from '@mui/material/Snackbar';
+import Snackbar, {SnackbarOrigin} from '@mui/material/Snackbar';
 import SnackbarContent from '@mui/material/SnackbarContent';
 
 //MUI-ICONS
@@ -47,11 +47,10 @@ const sx = {
 
 const anchorOrigin: SnackbarOrigin = {vertical: 'bottom', horizontal: 'right'};
 
-//FIXME averiguar si es la mejor manera, exportar el tipo para que la story lo pueda consumir y no repetir codigo
 export type DownloadProgressProps = {
   progress: number,
   isOpen?: boolean,
-  onClose: (_event: SyntheticEvent<any, Event>, _reason: SnackbarCloseReason) => void,
+  onClose: () => void,
 };
 
 const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, onClose}) => {
