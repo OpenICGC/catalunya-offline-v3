@@ -4,7 +4,7 @@ import {PaletteMode} from '@mui/material';
 
 const primaryColor = '#f59d21';
 
-const theme = (mode: PaletteMode ) => createTheme({
+const theme = (mode?: PaletteMode) => createTheme({
   palette: {
     mode: mode ? mode : 'light',
     primary: {

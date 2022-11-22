@@ -6,7 +6,6 @@ import ca from './i18n/ca.json';
 import en from './i18n/en.json';
 import es from './i18n/es.json';
 
-
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -14,7 +13,7 @@ i18n
     detection: {
       order: ['querystring', 'navigator'],
       lookupQuerystring: 'lang',
-      checkWhitelist: true
+      //checkWhitelist: true
     },
     resources: {
       ca: {
@@ -28,12 +27,12 @@ i18n
       },
     },
     load: 'languageOnly',
-    whitelist: ['ca', 'en', 'es'],
+    //whitelist: ['ca', 'en', 'es'],
     fallbackLng: 'ca',
     debug: false,
     interpolation: {
       escapeValue: false,
       formatSeparator: ','
     },
-    useSuspense: true,
+    //useSuspense: true,
   });
