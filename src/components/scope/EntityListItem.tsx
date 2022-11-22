@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+import React, {FC, ReactElement, useState} from 'react';
 
 //MUI
 import ListItem from '@mui/material/ListItem';
@@ -18,7 +17,20 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
 
-const EntityListItem = ({
+export type EntityListItemProps = {
+  actionIcon?: ReactElement,
+  color: string,
+  contextualMenu: Array<{ id: string, label: string, icon?: ReactElement }>,
+  id: string,
+  name: string,
+  onActionClick: (_id: string)=> void,
+  onClick: (_id: string)=> void,
+  onColorChange: (_value: string, _id: string)=> void,
+  onContextualMenuClick: (_actionId: string, _id: string)=> void,
+  onNameChange: (_value: string, _id: string)=> void,
+}
+
+const EntityListItem: FC<EntityListItemProps> = ({
   actionIcon, 
   color, 
   contextualMenu,
@@ -36,20 +48,20 @@ const EntityListItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleContextualMenu = (e) => setAnchorEl(e.currentTarget);
+  const handleContextualMenu = (e: any) => setAnchorEl(e.currentTarget);
   const handleClose = () => setAnchorEl(null);
-  const handleAction = (actionId) => actionId === 'rename' ?
+  const handleAction = (actionId: string) => actionId === 'rename' ?
     setIsEditing(true) :
     onContextualMenuClick(actionId, id);
 
   //EDIT
-  const handleNameChange = (e) => onNameChange(e.target.value, id);
-  const handleColorChange = (color) => onColorChange(`#${color.hex}`, id);
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, id);
+  const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, id);
   const handleBlur = () => {
     setAnchorEl(null);
     setIsEditing(false);
   };
-  const handleInputOut = (e) => {
+  const handleInputOut = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if(e.key === 'Enter') {
       setAnchorEl(null);
       setIsEditing(false);
@@ -64,7 +76,6 @@ const EntityListItem = ({
         value={color}
         inputFormats={[]}
         onChange={handleColorChange}
-        sx={{'& .ColorPicker-MuiButtonBase-root': {border: '2px solid red'}}}
       />
     </ListItemIcon>
     {
@@ -76,7 +87,7 @@ const EntityListItem = ({
           onKeyDown={handleInputOut}
           defaultValue={name}
         />
-        : <ListItemText primary={name} sx={{mt: 1, ml: isEditing && 1, cursor: 'pointer'}} onClick={() => onClick(id)}/>
+        : <ListItemText primary={name} sx={{mt: 1, ml: isEditing ? 1 : 'auto', cursor: 'pointer'}} onClick={() => onClick(id)}/>
     }
     {
       !isEditing && <>
@@ -87,7 +98,6 @@ const EntityListItem = ({
           <MoreVertIcon/>
         </IconButton>
         <Menu
-          dense='true'
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
@@ -114,24 +124,6 @@ const EntityListItem = ({
       </>
     }
   </ListItem>;
-};
-
-EntityListItem.propTypes = {
-  actionIcon: PropTypes.element,
-  color: PropTypes.string,
-  contextualMenu: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    icon: PropTypes.element,
-  })),
-  id: PropTypes.string.isRequired,
-  isEditing: PropTypes.bool,
-  name: PropTypes.string.isRequired,
-  onActionClick: PropTypes.func,
-  onClick: PropTypes.func,
-  onColorChange: PropTypes.func,
-  onContextualMenuClick: PropTypes.func,
-  onNameChange: PropTypes.func,
 };
 
 export default EntityListItem;

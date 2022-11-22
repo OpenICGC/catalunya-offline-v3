@@ -1,5 +1,4 @@
 import React, {FC, ReactNode} from 'react';
-import PropTypes from 'prop-types';
 
 //MUI
 import AppBar from '@mui/material/AppBar';
@@ -57,12 +56,6 @@ const ManagerHeader: FC<ManagerHeaderProps> = ({name, color = 'primary', startIc
       <Typography variant='h2' component='h3' sx={scopeNameSx}>{t(name)}</Typography>
     </Toolbar>
   </AppBar>;
-};
-
-ManagerHeader.propTypes = {
-  name: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
-  startIcon: PropTypes.node,
 };
 
 export default ManagerHeader;

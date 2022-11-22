@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {FC} from 'react';
 
 //MUI
 import AppBar from '@mui/material/AppBar';
@@ -11,9 +10,17 @@ import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
+import {Theme} from '@mui/material';
 
+export type HeaderProps = {
+  name: string,
+  color: string,
+  numPoints?: number,
+  numPaths?: number,
+  onBackButtonClick: ()=> void,
+};
 
-const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
+const Header: FC<HeaderProps> = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
   
   //STYLES
   const detailsContainerSx = {
@@ -24,18 +31,18 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
   };
 
   const detailTextSx = {
-    color: theme => theme.palette.getContrastText(color),
+    color: (theme: Theme) => theme.palette.getContrastText(color),
     ml: 0.5,
     fontWeight: 'bold'
   };
 
   const detailIconSx = {
-    color: theme => theme.palette.getContrastText(color),
+    color: (theme: Theme) => theme.palette.getContrastText(color),
     fontSize: '16px',
   };
 
   const scopeNameSx = {
-    color: theme => theme.palette.getContrastText(color),
+    color: (theme: Theme) => theme.palette.getContrastText(color),
     width: '125px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -59,14 +66,6 @@ const Header = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
       </Toolbar>
     </AppBar>
   </Box>;
-};
-
-Header.propTypes = {
-  color: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  numPoints: PropTypes.number,
-  numPaths: PropTypes.number,
-  onBackButtonClick: PropTypes.func
 };
 
 export default Header;

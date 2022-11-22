@@ -1,8 +1,9 @@
 import React from 'react';
-import Header from './Header';
+import Header, {HeaderProps} from './Header';
 
 import Box from '@mui/material/Box';
 import {DRAWER_WIDTH} from '../../config';
+import {Meta, Story} from '@storybook/react';
 
 export default {
   title: 'Scope/Header',
@@ -10,10 +11,10 @@ export default {
   argTypes: {
     color: { control: 'color' },
   },
-};
+} as Meta;
 
 /*const Template = args => <Header {...args}/>;*/
-const DeviceTemplate = args => <Box sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><Header {...args}/></Box>;
+const DeviceTemplate: Story<HeaderProps> = args => <Box sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><Header {...args}/></Box>;
 
 export const Default = DeviceTemplate.bind({});
 Default.args = {

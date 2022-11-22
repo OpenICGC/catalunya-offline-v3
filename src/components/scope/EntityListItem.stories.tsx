@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import EntityListItem from './EntityListItem';
+import EntityListItem, {EntityListItemProps} from './EntityListItem';
 
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import EditIcon from '@mui/icons-material/Edit';
@@ -7,14 +7,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import List from '@mui/material/List';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import {Meta, Story} from '@storybook/react';
 
 export default {
   title: 'Scope/EntityListItem',
   component: EntityListItem
-};
+} as Meta;
 
-const Template = args => <EntityListItem {...args}/>;
-const TemplateList = args => <List><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/></List>;
+const Template: Story<EntityListItemProps> = args => <EntityListItem {...args}/>;
+const TemplateList: Story<EntityListItemProps> = args => <List><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/></List>;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -47,7 +48,7 @@ Default.args = {
 };
 
 // eslint-disable-next-line react/prop-types,no-unused-vars
-const ManagedTemplate = ({color, onColorChange, name, onNameChange, ...args}) => {
+const ManagedTemplate: Story<EntityListItemProps> = ({color, onColorChange, name, onNameChange, ...args}) => {
   const [newColor, setNewColor] = useState(color);
   const [newName, setNewName] = useState(name);
   return <EntityListItem
