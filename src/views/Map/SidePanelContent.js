@@ -1,39 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+//MUI
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
+//MUI-ICONS
+import FolderIcon from '@mui/icons-material/Folder';
+import LayersIcon from '@mui/icons-material/Layers';
+import MapIcon from '@mui/icons-material/Map';
+
+//CATOFFLINE
+import GeomaticoLink from '../../components/GeomaticoLink';
+import ManagerHeader from '../../components/ManagerHeader';
+
+//GEOCOMPONENTS
 import BaseMapList from '@geomatico/geocomponents/BaseMapList';
-import Box from '@mui/material/Box';
+
+//UTILS
+import {MAPSTYLES} from '../../config';
+import {useTheme} from '@mui/material';
 import styled from '@mui/styles/styled';
 
-import SectionTitle from '../../components/SectionTitle';
-import GeomaticoLink from '../../components/GeomaticoLink';
-
-import {MAPSTYLES} from '../../config';
-
+//STYLES
 const ScrollableContent = styled(Box)({
   overflow: 'auto',
-  padding: '8px'
+  padding: '0px'
 });
 
 const stackSx = {
   height: '100%',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  m: 0,
+  p: 0
 };
 
-const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) =>
-  <Stack sx={stackSx}>
+const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) => {
+  const theme = useTheme();
+  return <Stack sx={stackSx}>
     <ScrollableContent>
       {manager === 'LAYERS' &&
         <>
-          <SectionTitle titleKey='layerManager'/>
+          <ManagerHeader
+            name='layerManager'
+            color={theme.palette.secondary.main}
+            startIcon={<LayersIcon/>}
+          />
           <div>TODO</div>
         </>
       }
       {manager === 'BASEMAPS' &&
         <>
-          <SectionTitle titleKey='baseMapManager'/>
+          <ManagerHeader
+            name='baseMapManager'
+            color={theme.palette.secondary.main}
+            startIcon={<MapIcon/>}
+          />
           <BaseMapList
             styles={MAPSTYLES}
             selectedStyleId={mapStyle}
@@ -44,13 +66,18 @@ const SidePanelContent = ({mapStyle, onMapStyleChanged, manager}) =>
       }
       {manager === 'SCOPES' &&
         <>
-          <SectionTitle titleKey='scopeManager'/>
+          <ManagerHeader
+            name='scopeManager'
+            color={theme.palette.secondary.main}
+            startIcon={<FolderIcon/>}
+          />
           <div>TODO</div>
         </>
       }
     </ScrollableContent>
     <GeomaticoLink/>
   </Stack>;
+};
 
 SidePanelContent.propTypes = {
   mapStyle: PropTypes.string.isRequired,
@@ -59,4 +86,3 @@ SidePanelContent.propTypes = {
 };
 
 export default SidePanelContent;
-

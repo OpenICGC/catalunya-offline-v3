@@ -1,3 +1,5 @@
+export const OFF_CAT = false;
+
 export const DRAWER_WIDTH = 240;
 export const SM_BREAKPOINT = 850;
 
@@ -12,8 +14,8 @@ export const INITIAL_VIEWPORT = {
 export const MAP_PROPS = {
   minZoom: 7,
   maxZoom: 14.99,
-  maxPitch: 65,
-  maxBounds: [0.055047, 40.434881, 3.420395, 42.956628],
+  maxPitch: 60,
+  ...(OFF_CAT ? {} : {maxBounds: [0.055047, 40.434881, 3.420395, 42.956628]}),
   hash: false
 };
 
@@ -30,9 +32,12 @@ export const MAPSTYLES = [{
   label: 'mtc25m Online',
   thumbnail: 'images/mtc25m.png',
   id: 'mapstyles/mtc25m-online.json'
+}, {
+  label: 'ContextMaps',
+  thumbnail: 'https://visors.icgc.cat/contextmaps/imatges_estil/icgc_mapa_estandard.png',
+  id: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json'
 }];
 
-
-export const INITIAL_MAPSTYLE_URL = MAPSTYLES[0].id;
+export const INITIAL_MAPSTYLE_URL = MAPSTYLES[OFF_CAT ? 2 : 0].id;
 
 export const MIN_TRACKING_ZOOM = 14;

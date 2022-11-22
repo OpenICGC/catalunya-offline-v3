@@ -23,10 +23,12 @@ const Main = styled(Box)({
 
 const sidePanelSx = {
   '& .MuiDrawer-paper': {
+    p: 0,
     top: 0,
     height: '100%',
   },
   '@media (min-width: 0px)': {
+    m: 0,
     top: 0,
     height: '100%',
   }

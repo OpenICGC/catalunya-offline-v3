@@ -6,17 +6,17 @@
     "download": "Descarrega",
     "downloading": "Descarregant..."
   },
-  "baseMapManager": "Gestor de cartografia base",
+  "baseMapManager": "Mapes Base",
   "downloadingAlert": {
     "content_01": "Per poder treballar en zones amb mala cobertura, és necessari descarregar-se les dades del Mapa topogràfic de Catalunya 1:25 000.",
     "content_02": "Si no voleu decarregar-les ara, podeu continuar navegant amb una versió online, i se us tornarà a oferir més endavant.",
     "content_03": "Voleu descarregar ara el Mapa topogràfic de Catalunya? (350 MB)",
     "title": "Descàrrega de dades offline"
   },
-  "layerManager": "Gestor de capes",
+  "layerManager": "Capes",
   "scopeListItem": {
     "name": "Nom"
   },
-  "scopeManager": "Gestor d'àmbits",
+  "scopeManager": "Àmbits",
   "topographicMap": "Mapa topogràfic de Catalunya 1:25 000"
 }
