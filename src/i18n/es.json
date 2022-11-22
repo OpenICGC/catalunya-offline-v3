@@ -14,6 +14,9 @@
     "title": "Descarga de datos offline"
   },
   "layerManager": "Capas",
+  "scopeListItem": {
+    "name": "Nombre"
+  },
   "scopeManager": "Ámbitos",
   "topographicMap": "Mapa topográfico de Catalunya 1:25 000"
 }
