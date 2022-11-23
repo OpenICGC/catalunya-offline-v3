@@ -12,7 +12,15 @@ const useCompass = () => {
   useEffect(() => {
     const platform = Capacitor.getPlatform();
     if (platform === 'web') { // Actually should test for cordova avail
-      console.error('[Compass] Not available on web platform');
+      if (!window.DeviceOrientationEvent) {
+        console.error('[Compass] Not available on this device');
+      } else {
+        window.addEventListener('deviceorientation', (event) => {
+          if (event.alpha && Math.round(360 - event.alpha) !== heading) {
+            setHeading(Math.round(360 - event.alpha));
+          }
+        });
+      }
     } else {
       const onSuccess = ({magneticHeading}: DeviceOrientationCompassHeading) => {
         const newValue = Math.round(magneticHeading);
