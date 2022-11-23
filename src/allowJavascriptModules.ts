@@ -3,4 +3,3 @@
 
 // Declare untyped modules, explicitly
 declare module '@geomatico/geocomponents/*';
-declare module 'pako';
