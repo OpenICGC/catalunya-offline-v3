@@ -11,13 +11,14 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
 import {Theme} from '@mui/material';
+import {RGBColor} from '../../types/commonTypes';
 
 export type HeaderProps = {
   name: string,
-  color: string,
+  color: RGBColor,
   numPoints?: number,
   numPaths?: number,
-  onBackButtonClick: ()=> void,
+  onBackButtonClick: () => void
 };
 
 const Header: FC<HeaderProps> = ({name, color, numPoints, numPaths, onBackButtonClick}) => {

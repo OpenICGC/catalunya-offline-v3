@@ -19,8 +19,8 @@ import {useTranslation} from 'react-i18next';
 
 export type DownloadRequestProps = {
   isOpen: boolean,
-  onClose: ()=> void,
-  onDownload: ()=> void,
+  onClose: () => void,
+  onDownload: () => void
 };
 
 const DownloadRequest: FC<DownloadRequestProps> = ({isOpen=false, onClose, onDownload}) => {

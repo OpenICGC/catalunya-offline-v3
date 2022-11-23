@@ -32,7 +32,7 @@ export type NotificationProps = {
   message: string,
   isPersistent?: boolean,
   isOpen?: boolean,
-  onClose: () => void,
+  onClose: () => void
 };
 
 const Notification: FC<NotificationProps> = ({message, isPersistent=false, isOpen=false, onClose}) => {

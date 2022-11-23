@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 
 import styled from '@mui/styles/styled';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -35,10 +35,10 @@ const sidePanelSx = {
 };
 
 export type LayoutProps = {
-  mainContent: React.ReactElement,
-  sidePanelContent: React.ReactElement,
+  mainContent: ReactNode,
+  sidePanelContent: ReactNode,
   isSidePanelOpen: boolean,
-  onToggleSidePanel: ()=> void
+  onToggleSidePanel: () => void
 };
 
 const Layout: FC<LayoutProps> = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
@@ -57,7 +57,7 @@ const Layout: FC<LayoutProps> = ({mainContent, sidePanelContent, isSidePanelOpen
         {sidePanelContent}
       </SidePanel>
     }
-    <Main widescreen={widescreen.toString()} isleftdraweropen={(sidePanelContent && isSidePanelOpen).toString()}>
+    <Main widescreen={widescreen.toString()} isleftdraweropen={(sidePanelContent && isSidePanelOpen)?.toString()}>
       {mainContent}
     </Main>
   </>;

@@ -1,4 +1,4 @@
-import React, {KeyboardEvent, FC, ChangeEvent, ReactElement, SyntheticEvent, useState} from 'react';
+import React, {KeyboardEvent, FC, ChangeEvent, SyntheticEvent, useState, ReactNode} from 'react';
 
 //MUI
 import ListItem from '@mui/material/ListItem';
@@ -16,18 +16,19 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
+import {RGBColor, UUID} from '../../types/commonTypes';
 
 export type EntityListItemProps = {
-  actionIcon?: ReactElement,
+  actionIcon?: ReactNode,
   color: string,
-  contextualMenu: Array<{ id: string, label: string, icon?: ReactElement }>,
+  contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
   id: string,
   name: string,
-  onActionClick: (_id: string)=> void,
-  onClick: (_id: string)=> void,
-  onColorChange: (_value: string, _id: string)=> void,
-  onContextualMenuClick: (_actionId: string, _id: string)=> void,
-  onNameChange: (_value: string, _id: string)=> void,
+  onActionClick: (entityId: UUID) => void,
+  onClick: (entityId: UUID) => void,
+  onColorChange: (color: RGBColor, entityId: UUID) => void,
+  onContextualMenuClick: (menuId: string, entityId: UUID) => void,
+  onNameChange: (name: string, entityId: UUID) => void
 }
 
 const EntityListItem: FC<EntityListItemProps> = ({

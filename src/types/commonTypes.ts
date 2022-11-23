@@ -12,3 +12,6 @@ export interface CatOfflineError {
   code?: string;
   message?: string;
 }
+
+export type UUID = string;
+export type RGBColor = string;

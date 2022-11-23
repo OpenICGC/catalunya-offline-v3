@@ -1,18 +1,18 @@
 import React, {FC, ReactNode} from 'react';
 
 //MUI
+import {Theme} from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {Theme} from '@mui/material';
 
 export type ManagerHeaderProps = {
   name: string,
   color: string,
-  startIcon: ReactNode,
+  startIcon: ReactNode
 }
 
 const ManagerHeader: FC<ManagerHeaderProps> = ({name, color = 'primary', startIcon}) => {

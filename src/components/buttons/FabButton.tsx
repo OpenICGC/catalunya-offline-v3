@@ -29,11 +29,11 @@ export type FabButtonProps = {
   isCompassOn: boolean,
   isLocationAvailable: boolean,
   isTrackingOn: boolean,
-  onCompassClick: ()=> void,
-  onTrackingClick: ()=> void,
-  onLayersClick: ()=> void,
-  onBaseMapsClick: ()=> void,
-  onFoldersClick: ()=> void,
+  onCompassClick: () => void,
+  onTrackingClick: () => void,
+  onLayersClick: () => void,
+  onBaseMapsClick: () => void,
+  onFoldersClick: () => void
 };
 
 const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=false, bearing=0, isCompassOn=false, isLocationAvailable, isTrackingOn=false, onCompassClick, onTrackingClick, onLayersClick, onBaseMapsClick, onFoldersClick}) => {
