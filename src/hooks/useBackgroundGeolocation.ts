@@ -1,10 +1,28 @@
 import {Capacitor, registerPlugin} from '@capacitor/core';
 import {useEffect, useState} from 'react';
-import {GenericError, Geolocation} from '../types/commonTypes';
+import {CatOfflineError} from '../types/commonTypes';
+import {BackgroundGeolocationPlugin, CallbackError, Location} from '@capacitor-community/background-geolocation';
 
-const BackgroundGeolocation: any = registerPlugin('BackgroundGeolocation');
+const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>('BackgroundGeolocation');
 
-const config = {
+export interface Geolocation {
+  accuracy: number | null;
+  altitude: number | null;
+  altitudeAccuracy: number | null;
+  heading: number | null;
+  latitude: number | null;
+  longitude: number | null;
+  speed: number | null;
+  timestamp: EpochTimeStamp | null; // AKA in SECONDS. Type grabbed from GeolocationPosition.timestamp
+}
+
+const webConfig = {
+  enableHighAccuracy: true,
+  //timeout: 5000, // Maximum time to wait for a position
+  maximumAge: 5000, // Maximum age of cached position in ms
+};
+
+const bgConfig = {
   // backgroundMessage is required to guarantee a background location
   backgroundMessage: 'Actualitza la posició i permet gravar traces',
   backgroundTitle: 'Geolocalització activa en segon pla',
@@ -13,13 +31,7 @@ const config = {
   distanceFilter: 1
 };
 
-const webConfig = {
-  enableHighAccuracy: true,
-  //timeout: 5000, // Maximum time to wait for a position
-  maximumAge: 5000, // Maximum age of cached position in ms
-};
-
-const handlePermission = (error: GenericError) => {
+const handleBgPermission = (error: CallbackError) => {
   if (error.code === 'NOT_AUTHORIZED') {
     if (error.message === 'Location services disabled.') {
       window.alert(
@@ -39,67 +51,90 @@ const handlePermission = (error: GenericError) => {
 
 const useBackgroundGeolocation = () => {
   const [watcherId, setWatcherId] = useState<string>();
-  const [error, setError] = useState<GenericError>();
+  const [error, setError] = useState<CatOfflineError | CallbackError>();
   const [geolocation, setGeolocation] = useState<Geolocation>({
     accuracy: null,
     altitude: null,
     altitudeAccuracy: null,
-    bearing: null,
+    heading: null,
     latitude: null,
     longitude: null,
     speed: null,
-    time: Date.now()
+    timestamp: Math.floor(Date.now() / 1000) // From ms to s
   });
 
-  const handleWebLocation = (event: {coords: Geolocation, timestamp: number}) => {
-    const location = {
-      accuracy: event.coords.accuracy,
-      altitude: event.coords.altitude,
-      altitudeAccuracy: event.coords.altitudeAccuracy,
-      bearing: event.coords.heading,
-      latitude: event.coords.latitude,
-      longitude: event.coords.longitude,
-      speed: event.coords.speed,
-      time: event.timestamp
+  const handleWebLocation = (position: GeolocationPosition) => {
+    const geolocation: Geolocation = {
+      accuracy: position.coords.accuracy,
+      altitude: position.coords.altitude,
+      altitudeAccuracy: position.coords.altitudeAccuracy,
+      heading: position.coords.heading,
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      speed: position.coords.speed,
+      timestamp: position.timestamp
     };
-    console.log('[WebGeolocation] Got location', location);
+    console.debug('[WebGeolocation] Got Geolocation', geolocation);
     setError(undefined);
-    setGeolocation(location);
+    setGeolocation(geolocation);
   };
 
-  const handleWebError = (error: GenericError) => {
-    console.log('[WebGeolocation] Got error', error);
+  const handleBgLocation = (location: Location) => {
+    const geolocation: Geolocation = {
+      accuracy: location.accuracy,
+      altitude: location.altitude,
+      altitudeAccuracy: location.altitudeAccuracy,
+      heading: location.bearing,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      speed: location.speed,
+      timestamp: location.time
+    };
+    console.debug('[BackgroundGeolocation] Got Geolocation', location);
+    setError(undefined);
+    setGeolocation(geolocation);
+  };
+
+  const handleWebError = (webError: GeolocationPositionError) => {
+    const errorCodes = [ // From https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError/code
+      {code: 'WEB_GEOLOCATION_ERROR', message: 'Web Geolocation Error'},
+      {code: 'WEB_GEOLOCATION_PERMISSION_DENIED', message: 'Web Geolocation Permission Denied'},
+      {code: 'WEB_GEOLOCATION_POSITION_UNAVAILABLE', message: 'Web Geolocation Position Unavailable'},
+      {code: 'WEB_GEOLOCATION_TIMEOUT', message: 'Web Geolocation Timeout'}
+    ];
+    const error: CatOfflineError = errorCodes[webError.code] || errorCodes[0];
+    console.error('[WebGeolocation] Got error', error);
+    setError(error);
+  };
+
+  const handleBgError = (bgError: CallbackError) => {
+    const error: CatOfflineError = {message: bgError.message, code: bgError.code};
+    console.error('[BackgroundGeolocation] Got error', error);
     setError(error);
   };
 
   useEffect(() => {
     const platform = Capacitor.getPlatform();
     if (platform === 'web') {
-      // Web will use geolocation API
-      // @ts-ignore
       navigator.geolocation.getCurrentPosition(handleWebLocation, handleWebError, webConfig);
-      // @ts-ignore
       const id = navigator.geolocation.watchPosition(handleWebLocation, handleWebError, webConfig);
       return () => {
         navigator.geolocation.clearWatch(id);
       };
     } else {
-      BackgroundGeolocation.addWatcher(config, (location: Geolocation, error: GenericError) => {
-        if (error) {
-          console.log('[BackgroundGeolocation] Got error', error);
-          setError(error);
-          handlePermission(error);
-        } else if (location) {
-          console.log('[BackgroundGeolocation] Got location', location);
-          setError(undefined);
-          setGeolocation(location);
+      BackgroundGeolocation.addWatcher(bgConfig, (bgLocation?: Location, bgError?: CallbackError) => {
+        if (bgError) {
+          handleBgError(bgError);
+          handleBgPermission(bgError);
+        } else if (bgLocation) {
+          handleBgLocation(bgLocation);
         }
       }).then((id: string) => {
-        console.log('[BackgroundGeolocation] Watcher set', id);
+        console.debug('[BackgroundGeolocation] Watcher set', id);
         setWatcherId(id);
       });
       return () => {
-        console.log('[BackgroundGeolocation] Removing watcher', watcherId);
+        console.debug('[BackgroundGeolocation] Removing watcher', watcherId);
         watcherId && BackgroundGeolocation.removeWatcher({id: watcherId});
       };
     }

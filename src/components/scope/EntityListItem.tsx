@@ -1,4 +1,4 @@
-import React, {FC, ReactElement, useState} from 'react';
+import React, {KeyboardEvent, FC, ChangeEvent, ReactElement, SyntheticEvent, useState} from 'react';
 
 //MUI
 import ListItem from '@mui/material/ListItem';
@@ -46,22 +46,24 @@ const EntityListItem: FC<EntityListItemProps> = ({
 
   //CONTEXTUAL MENU
   const [isEditing, setIsEditing] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleContextualMenu = (e: any) => setAnchorEl(e.currentTarget);
+  const handleContextualMenu = (e: SyntheticEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
+  };
   const handleClose = () => setAnchorEl(null);
   const handleAction = (actionId: string) => actionId === 'rename' ?
     setIsEditing(true) :
     onContextualMenuClick(actionId, id);
 
   //EDIT
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, id);
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, id);
   const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, id);
   const handleBlur = () => {
     setAnchorEl(null);
     setIsEditing(false);
   };
-  const handleInputOut = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInputOut = (e: KeyboardEvent<HTMLInputElement>) => {
     if(e.key === 'Enter') {
       setAnchorEl(null);
       setIsEditing(false);

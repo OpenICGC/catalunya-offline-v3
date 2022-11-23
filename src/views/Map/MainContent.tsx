@@ -3,9 +3,9 @@ import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
 
-import {Geolocation, Manager} from '../../types/commonTypes';
+import {Manager} from '../../types/commonTypes';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
-import useBackgroundGeolocation from '../../hooks/useBackgroundGeolocation';
+import useBackgroundGeolocation, { Geolocation } from '../../hooks/useBackgroundGeolocation';
 import FabButton from '../../components/buttons/FabButton';
 import useCompass from '../../hooks/useCompass';
 import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../../config';
@@ -86,7 +86,7 @@ export type MainContentProps = {
 };
 
 const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
-  const mapRef: any = useRef();
+  const mapRef = useRef<maplibregl.Map>();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
 
@@ -125,9 +125,10 @@ const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}
   }, [mbtilesStatus]);
 
   // Set blue dot location on geolocation updates
-  const setMapGeolocation = (map: any, geolocation: Geolocation) => {
+  const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
     const {latitude, longitude} = geolocation;
-    map?.getSource('geolocation').setData({
+    const source = (map?.getSource('geolocation') as maplibregl.GeoJSONSource | undefined);
+    source?.setData({
       type: 'FeatureCollection',
       features: latitude && longitude ? [{
         type: 'Feature',
@@ -141,7 +142,7 @@ const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}
   };
 
   useEffect(() => {
-    setMapGeolocation(mapRef.current, geolocation);
+    setMapGeolocation(mapRef?.current, geolocation);
   }, [geolocation, mapRef.current]);
 
   useEffect(() => {
@@ -179,7 +180,7 @@ const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}
     }
   }, [isTrackingMode, geolocation, orientation]);
 
-  const changeManager = (clicked: any) => {
+  const changeManager = (clicked: Manager) => {
     onManagerChanged(clicked === manager ? undefined : clicked);
   };
 

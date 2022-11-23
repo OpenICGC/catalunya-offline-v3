@@ -47,7 +47,7 @@ Default.args = {
   name: 'Montseny'
 };
 
-// eslint-disable-next-line react/prop-types,no-unused-vars
+// eslint-disable-next-line react/prop-types,no-unused-vars,@typescript-eslint/no-unused-vars
 const ManagedTemplate: Story<EntityListItemProps> = ({color, onColorChange, name, onNameChange, ...args}) => {
   const [newColor, setNewColor] = useState(color);
   const [newName, setNewName] = useState(name);

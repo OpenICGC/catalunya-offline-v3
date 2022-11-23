@@ -1,30 +1,41 @@
 import {useEffect, useState} from 'react';
-/// Using also "cordova-plugin-device-orientation"
+import {DeviceOrientation, DeviceOrientationCompassHeading} from '@awesome-cordova-plugins/device-orientation';
+import {Capacitor} from '@capacitor/core';
+
+declare interface CompassError {
+  code: 0 | 20;
+}
 
 const useCompass = () => {
   const [heading, setHeading] = useState(0);
 
   useEffect(() => {
-    const onSuccess = ({magneticHeading}: any) => {
-      const newValue = Math.round(magneticHeading);
-      if (heading !== newValue) {
-        setHeading(newValue);
-      }
-    };
+    const platform = Capacitor.getPlatform();
+    if (platform === 'web') { // Actually should test for cordova avail
+      console.error('[Compass] Not available on web platform');
+    } else {
+      const onSuccess = ({magneticHeading}: DeviceOrientationCompassHeading) => {
+        const newValue = Math.round(magneticHeading);
+        if (heading !== newValue) {
+          setHeading(newValue);
+        }
+      };
 
-    const onError = (error: Error) => console.error(error);
+      const onError = (error: CompassError) => console.error(error);
 
-    // @ts-ignore
-    var watchID = navigator.compass?.watchHeading(onSuccess, onError);
+      const subscription = DeviceOrientation.watchHeading().subscribe({
+        next: onSuccess,
+        error: onError
+      });
 
-    return () => {
-      // @ts-ignore
-      watchID && navigator.compass?.clearWatch(watchID);
-    };
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, []);
 
   useEffect(() => {
-    console.log('[compass] Set Heading: ', heading);
+    console.debug('[compass] Got Heading: ', heading);
   }, [heading]);
 
   return heading;
