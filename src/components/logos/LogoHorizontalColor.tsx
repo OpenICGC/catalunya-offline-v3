@@ -1,10 +1,6 @@
-import React, {FC} from 'react';
+import React, {FC, SVGProps} from 'react';
 
-export type SvgLogoHorizontalColorProps = {
-  width: number,
-}
-
-const SvgLogoHorizontalColor: FC<SvgLogoHorizontalColorProps>  = (props) => (
+const SvgLogoHorizontalColor: FC<SVGProps<SVGSVGElement>>  = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="173.805 98.079 3394.423 923.077"

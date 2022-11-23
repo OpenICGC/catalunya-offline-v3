@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction} from 'react';
+import React, {FC} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -10,7 +10,7 @@ import LayersIcon from '@mui/icons-material/Layers';
 import MapIcon from '@mui/icons-material/Map';
 
 //CATOFFLINE
-import GeomaticoLink from '../../components/GeomaticoLink';
+import GeomaticoLink from '../../components/logos/GeomaticoLink';
 
 //GEOCOMPONENTS
 import BaseMapList from '@geomatico/geocomponents/BaseMapList';
@@ -37,8 +37,8 @@ const stackSx = {
 
 export type SidePanelContentProps = {
   mapStyle: string,
-  onMapStyleChanged: Dispatch<SetStateAction<string>>,
-  manager: Manager,
+  onMapStyleChanged: (newStyle: string) => void,
+  manager: Manager
 };
 
 const SidePanelContent: FC<SidePanelContentProps> = ({mapStyle, onMapStyleChanged, manager}) => {

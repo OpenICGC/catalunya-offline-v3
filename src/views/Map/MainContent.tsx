@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 
 import Map from '@geomatico/geocomponents/Map';
@@ -82,7 +82,7 @@ const mbtilesStatusMessages = [
 export type MainContentProps = {
   mapStyle: string,
   manager: Manager,
-  onManagerChanged: Dispatch<SetStateAction<Manager>>,
+  onManagerChanged: (newManager: Manager) => void
 };
 
 const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {

@@ -33,7 +33,8 @@
     "i18n-json/sorted-keys": 2,
     "i18n-json/identical-keys": [2, {
       "filePath": "../../../../src/i18n/ca.json"
-    }]
+    }],
+    "react/prop-types": 0
   },
   "settings": {
     "react": {

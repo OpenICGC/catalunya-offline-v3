@@ -16,8 +16,8 @@ Persistent.args = {
   isPersistent: true
 };
 
-// eslint-disable-next-line react/prop-types,no-unused-vars
-const TemporaryTemplate: Story = ({ ...args}) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const TemporaryTemplate: Story = ({value, onClose, ...args}) => {
   const [isNotificationOpen, setNotificationOpen] = useState(true);
   return <Notification message={args.message} onClose={() => setNotificationOpen(false)} isOpen={isNotificationOpen} {...args} />;
 };
