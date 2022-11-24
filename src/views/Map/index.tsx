@@ -15,13 +15,16 @@ const Index: FC = () => {
   const [mapStyle, setMapStyle] = useState(INITIAL_MAPSTYLE_URL);
   const [manager, setManager] = useState<Manager | undefined>(widescreen ? 'BASEMAPS' : undefined);
 
+  console.log('manager', manager);
+  console.log('isSidePanelOpen', isSidePanelOpen);
+
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);
     setManager(undefined);
   };
 
   useEffect(() => {
-    setSidePanelOpen(widescreen || !!manager);
+    setSidePanelOpen(!!manager);
   }, [manager]);
 
   const sidePanelContent = manager

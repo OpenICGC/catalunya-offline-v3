@@ -24,8 +24,8 @@ const ManagerHeader: FC<ManagerHeaderProps> = ({name, color = 'primary', startIc
     justifyContent: 'flex-start',
     alignItems: 'center',
     bgcolor: color || 'secondary.main',
-    pl: 1,
-    height: '54px',
+    pl: 1.5,
+    height: '48px',
     '& .MuiSvgIcon-root': {
       color: (theme: Theme) => theme.palette.getContrastText(color)
     }
@@ -35,9 +35,12 @@ const ManagerHeader: FC<ManagerHeaderProps> = ({name, color = 'primary', startIc
     px: 1,
     display: 'flex',
     justifyContent: 'baseline',
+    pl: 0,
+    pr: 0,
     '@media (min-width: 600px)': {
-      pl: 1,
-    },
+      pl: 0,
+      pr: 0
+    }
   };
 
   const scopeNameSx = {
@@ -46,13 +49,13 @@ const ManagerHeader: FC<ManagerHeaderProps> = ({name, color = 'primary', startIc
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    letterSpacing: '0.0075em',
-    fontWeight: 500
+    fontWeight: 500,
+    pl: 1.5
   };
 
-  return <AppBar position="static" sx={appBarSx}>
-    {startIcon}
+  return <AppBar position="static" sx={appBarSx} elevation={0}>
     <Toolbar variant='dense' sx={toolbarSx}>
+      {startIcon}
       <Typography variant='h2' component='h3' sx={scopeNameSx}>{t(name)}</Typography>
     </Toolbar>
   </AppBar>;

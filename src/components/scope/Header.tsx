@@ -7,7 +7,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
 import {Theme} from '@mui/material';
@@ -24,6 +24,42 @@ export type HeaderProps = {
 const Header: FC<HeaderProps> = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
   
   //STYLES
+  const appBarSx = {
+    bgcolor: color || 'secondary.main',
+    height: '48px',
+    '& .MuiSvgIcon-root': {
+      color: (theme: Theme) => theme.palette.getContrastText(color)
+    }
+  };
+
+  const toolbarSx = {
+    px: 1,
+    display: 'flex',
+    justifyContent: 'baseline',
+    pl: 1.5,
+    pr: 1.5,
+    '@media (min-width: 600px)': {
+      pl: 1.5,
+      pr: 1.5
+    }
+  };
+
+  const backIconSx = {
+    transform: 'rotate(180deg)'
+  };
+
+  const scopeNameSx = {
+    color: (theme: Theme) => theme.palette.getContrastText(color),
+    width: '125px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    fontWeight: 500,
+    lineHeight: 1,
+    flexGrow: 1,
+    pl: 1.5
+  };
+
   const detailsContainerSx = {
     display: 'flex',
     flexDirection: 'row',
@@ -39,24 +75,12 @@ const Header: FC<HeaderProps> = ({name, color, numPoints, numPaths, onBackButton
 
   const detailIconSx = {
     color: (theme: Theme) => theme.palette.getContrastText(color),
-    fontSize: '16px',
-  };
-
-  const scopeNameSx = {
-    color: (theme: Theme) => theme.palette.getContrastText(color),
-    width: '125px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    fontWeight: 500,
-    flexGrow: 1,
-    ml: 1
   };
   
   return <Box sx={{ flexGrow: 1}}>
-    <AppBar position="static" sx={{bgcolor: color || 'secondary.main'}}>
-      <Toolbar sx={{px: 1}} disableGutters>
-        <ArrowBackIcon sx={{color: theme => theme.palette.getContrastText(color), m: 0, px: 0}} onClick={onBackButtonClick}/>
+    <AppBar position="static" sx={appBarSx} elevation={0}>
+      <Toolbar variant='dense' sx={toolbarSx}>
+        <ArrowBackIcon sx={backIconSx} onClick={onBackButtonClick}/>
         <Typography variant="subtitle1" component="h3" sx={scopeNameSx}>{name}</Typography>
         <Box sx={detailsContainerSx}>
           <Typography variant='caption' sx={detailTextSx}>{numPoints || 0}</Typography>
