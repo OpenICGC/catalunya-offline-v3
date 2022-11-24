@@ -11,11 +11,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
 import {Theme} from '@mui/material';
-import {RGBColor} from '../../types/commonTypes';
+import {HEXColor} from '../../types/commonTypes';
 
 export type HeaderProps = {
   name: string,
-  color: RGBColor,
+  color: HEXColor,
   numPoints?: number,
   numPaths?: number,
   onBackButtonClick: () => void

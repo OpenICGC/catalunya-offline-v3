@@ -16,28 +16,24 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
-import {RGBColor, UUID} from '../../types/commonTypes';
+import {HEXColor, ScopeEntity, UUID} from '../../types/commonTypes';
 
 export type EntityListItemProps = {
+  entity: ScopeEntity,
   actionIcon?: ReactNode,
-  color: string,
   contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
-  id: string,
-  name: string,
   onActionClick: (entityId: UUID) => void,
   onClick: (entityId: UUID) => void,
-  onColorChange: (color: RGBColor, entityId: UUID) => void,
+  onColorChange: (color: HEXColor, entityId: UUID) => void,
   onContextualMenuClick: (menuId: string, entityId: UUID) => void,
   onNameChange: (name: string, entityId: UUID) => void
 }
 
 const EntityListItem: FC<EntityListItemProps> = ({
+  entity,
   actionIcon, 
-  color, 
   contextualMenu,
-  id,
-  name, 
-  onActionClick, 
+  onActionClick,
   onClick, 
   onColorChange, 
   onContextualMenuClick,
@@ -55,11 +51,11 @@ const EntityListItem: FC<EntityListItemProps> = ({
   const handleClose = () => setAnchorEl(null);
   const handleAction = (actionId: string) => actionId === 'rename' ?
     setIsEditing(true) :
-    onContextualMenuClick(actionId, id);
+    onContextualMenuClick(actionId, entity.id);
 
   //EDIT
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, id);
-  const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, id);
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, entity.id);
+  const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, entity.id);
   const handleBlur = () => {
     setAnchorEl(null);
     setIsEditing(false);
@@ -76,7 +72,7 @@ const EntityListItem: FC<EntityListItemProps> = ({
       <ColorPicker
         hideTextfield={true}
         disableAlpha={true}
-        value={color}
+        value={entity.color}
         inputFormats={[]}
         onChange={handleColorChange}
       />
@@ -88,13 +84,13 @@ const EntityListItem: FC<EntityListItemProps> = ({
           onChange={handleNameChange} 
           onBlur={handleBlur} 
           onKeyDown={handleInputOut}
-          defaultValue={name}
+          defaultValue={entity.name}
         />
-        : <ListItemText primary={name} sx={{mt: 1, ml: isEditing ? 1 : 'auto', cursor: 'pointer'}} onClick={() => onClick(id)}/>
+        : <ListItemText primary={entity.name} sx={{mt: 1, ml: isEditing ? 1 : 'auto', cursor: 'pointer'}} onClick={() => onClick(entity.id)}/>
     }
     {
       !isEditing && <>
-        <IconButton sx={{m: 0, p: 0.5}} onClick={() => onActionClick(id)}>
+        <IconButton sx={{m: 0, p: 0.5}} onClick={() => onActionClick(entity.id)}>
           {actionIcon}
         </IconButton>
         <IconButton sx={{m: 0, p: 0.5}} onClick={handleContextualMenu}>
@@ -130,4 +126,3 @@ const EntityListItem: FC<EntityListItemProps> = ({
 };
 
 export default EntityListItem;
-
