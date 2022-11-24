@@ -21,9 +21,7 @@ export type HEXColor = `#${string}`;
 export type Scope = {
   id: UUID,
   name: string,
-  color: HEXColor,
-  points: Array<ScopePoint>,
-  paths: Array<ScopePath>
+  color: HEXColor
 }
 
 export type ScopeEntity = {
