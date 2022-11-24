@@ -2,6 +2,9 @@ import React from 'react';
 import ListPanel, {ListPanelProps} from './ListPanel';
 import {Meta, Story} from '@storybook/react';
 
+import Box from '@mui/material/Box';
+import {DRAWER_WIDTH} from '../../config';
+
 export default {
   title: 'Scope/ListPanel',
   component: ListPanel,
@@ -11,6 +14,7 @@ export default {
 } as Meta;
 
 const Template: Story<ListPanelProps> = args => <ListPanel {...args}/>;
+const DeviceTemplate: Story<ManagerHeaderProps> = args => <Box sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><ListPanel {...args}/></Box>;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -19,26 +23,41 @@ Default.args = {
       id: '123e4567-e89b-12d3-a456-426614174000',
       name: 'Ámbito 01',
       color: '#27AE60',
+      points: {},
+      paths: {}
     },
     {
       id: '123e4567-e89b-12d3-a456-426614174200',
       name: 'Ámbito 02',
       color: '#CB4335',
+      points: {},
+      paths: {}
     },
     {
       id: '123e4567-e89b-1223-a456-426614174000',
       name: 'Ámbito 03',
       color: '#A2D9CE',
+      points: {},
+      paths: {}
     },
     {
       id: '123e4567-e89b-22d3-a456-426614174000',
       name: 'Ámbito 04',
       color: '#85929E',
+      points: {},
+      paths: {}
     },
     {
       id: '223e4567-e89b-12d3-a456-426614174000',
       name: 'Ámbito 05',
       color: '#F7DC6F',
+      points: {},
+      paths: {}
     }
   ]
+};
+
+export const Device = DeviceTemplate.bind({});
+Device.args = {
+  ...Default.args
 };
