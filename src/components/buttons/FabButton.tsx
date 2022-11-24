@@ -57,7 +57,7 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
   const greyButton = {
     bgcolor: 'grey.800',
     '&:hover': {
-      bgcolor: 'grey.900',
+      bgcolor: 'grey.800',
     },
   };
 
@@ -88,7 +88,7 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
     ...compass,
     bgcolor: isCompassOn ? 'primary.main' : 'grey.800',
     '&:hover': {
-      bgcolor: isCompassOn ? 'primary.dark' : 'grey.900',
+      bgcolor: isCompassOn ? 'primary.main' : 'grey.800',
     },
     transform: `translate(0px, -${radius}px)`,
     transitionDelay: `${4 * delay}ms`
@@ -104,7 +104,7 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
     ...location,
     bgcolor: isLocationAvailable ? isTrackingOn ? 'primary.main' : 'grey.800' : 'grey.400',
     '&:hover': {
-      bgcolor: isTrackingOn ? 'primary.dark' : 'grey.900',
+      bgcolor: isTrackingOn ? 'primary.main' : 'grey.800',
     },
     transform: isLeftHanded ? `translate(${radius * 0.707}px, -${radius * 0.707}px)` : `translate(-${radius * 0.707}px, -${radius * 0.707}px)`,
     transitionDelay: `${3 * delay}ms`
@@ -152,7 +152,7 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
   const fab = {
     bgcolor: isMenuOpen ? 'primary.main' : 'grey.800',
     '&:hover': {
-      bgcolor: isMenuOpen ? 'secondary.dark' : 'grey.900',
+      bgcolor: isMenuOpen ? 'primary.main' : 'grey.800',
     },
     width: fabSize,
     height: fabSize,
