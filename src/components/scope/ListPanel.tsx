@@ -50,7 +50,7 @@ const ListPanel: FC<ListPanelProps> = ({scopes}) => {
   
   return <>
     <ManagerHeader name='Ámbitos' color='#1b718c' startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText('#1b718c')}}/>}/>
-    <List>
+    <List dense>
       {
         scopes.map(scope => <EntityListItem
           key={scope.id}

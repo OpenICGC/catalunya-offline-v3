@@ -67,7 +67,7 @@ const EntityListItem: FC<EntityListItemProps> = ({
     }
   };
   
-  return <ListItem sx={{height: '48px'}}>
+  return <ListItem sx={{height: '48px', pl: 1, pr: 0}}>
     <ListItemIcon sx={{minWidth: '24px'}}>
       <ColorPicker
         hideTextfield={true}
