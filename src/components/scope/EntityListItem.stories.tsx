@@ -8,6 +8,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import List from '@mui/material/List';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {Meta, Story} from '@storybook/react';
+import {v4 as uuidv4} from 'uuid';
 
 export default {
   title: 'Scope/EntityListItem',
@@ -19,9 +20,16 @@ const TemplateList: Story<EntityListItemProps> = args => <List><EntityListItem {
 
 export const Default = Template.bind({});
 Default.args = {
+  entity: {
+    id: uuidv4(),
+    name: 'Mi Punto o Traza',
+    color: '#247a44',
+    timestamp: Date.now(),
+    description: '',
+    images: [],
+    isVisible: true
+  },
   actionIcon: <FileUploadIcon/>,
-  color: '#247a44',
-  id: 'bb7e8b18-6a37-11ed-a1eb-0242ac120002',
   contextualMenu: [
     {
       id: 'rename',
@@ -43,17 +51,18 @@ Default.args = {
       label: 'Esquema de datos',
       icon: <DashboardIcon/>
     }
-  ],
-  name: 'Montseny'
+  ]
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ManagedTemplate: Story<EntityListItemProps> = ({color, onColorChange, name, onNameChange, ...args}) => {
-  const [newColor, setNewColor] = useState(color);
-  const [newName, setNewName] = useState(name);
+const ManagedTemplate: Story<EntityListItemProps> = ({entity, onColorChange, onNameChange, ...args}) => {
+  const [newColor, setNewColor] = useState(entity.color);
+  const [newName, setNewName] = useState(entity.name);
+  const computedEntity = {...entity, color: newColor, name: newName};
   return <EntityListItem
-    onColorChange={setNewColor} color={newColor}
-    onNameChange={setNewName} name={newName}
+    entity={computedEntity}
+    onColorChange={setNewColor}
+    onNameChange={setNewName}
     {...args} />;
 };
 
@@ -64,5 +73,5 @@ Managed.args = {
 
 export const ListDefault = TemplateList.bind({});
 ListDefault.args = {
-  ...Default.args,
+  ...Default.args
 };

@@ -13,7 +13,7 @@ export interface Geolocation {
   latitude: number | null;
   longitude: number | null;
   speed: number | null;
-  timestamp: EpochTimeStamp | null; // AKA in SECONDS. Type grabbed from GeolocationPosition.timestamp
+  timestamp: EpochTimeStamp | null; // In milliseconds https://w3c.github.io/hr-time/#the-epochtimestamp-typedef
 }
 
 const webConfig = {
@@ -60,7 +60,7 @@ const useBackgroundGeolocation = () => {
     latitude: null,
     longitude: null,
     speed: null,
-    timestamp: Math.floor(Date.now() / 1000) // From ms to s
+    timestamp: Date.now()
   });
 
   const handleWebLocation = (position: GeolocationPosition) => {
@@ -72,7 +72,7 @@ const useBackgroundGeolocation = () => {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
       speed: position.coords.speed,
-      timestamp: position.timestamp
+      timestamp: position.timestamp // milliseconds
     };
     console.debug('[WebGeolocation] Got Geolocation', geolocation);
     setError(undefined);
@@ -88,7 +88,7 @@ const useBackgroundGeolocation = () => {
       latitude: location.latitude,
       longitude: location.longitude,
       speed: location.speed,
-      timestamp: location.time
+      timestamp: location.time // milliseconds
     };
     console.debug('[BackgroundGeolocation] Got Geolocation', location);
     setError(undefined);
