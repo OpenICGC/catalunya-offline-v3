@@ -4,7 +4,7 @@ import React, {FC} from 'react';
 import List from '@mui/material/List';
 
 //MUI-ICONS
-import FolderIcon from '@mui/icons-material/FolderIcon';
+import FolderIcon from '@mui/icons-material/Folder';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -49,12 +49,12 @@ const ListPanel: FC<ListPanelProps> = ({scopes}) => {
   //STYLES
   
   return <>
-    <ManagerHeader name='Ámbitos' startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText('#1b718c')}}/>}/>
+    <ManagerHeader name='Ámbitos' color='#1b718c' startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText('#1b718c')}}/>}/>
     <List>
       {
         scopes.map(scope => <EntityListItem
-          key={scope.entity.id}
-          entity={scope.entity}
+          key={scope.id}
+          entity={scope}
           actionIcon={<FileUploadIcon/>}
           contextualMenu={contextualMenu}
         />)
