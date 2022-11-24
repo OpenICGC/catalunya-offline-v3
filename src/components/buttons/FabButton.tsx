@@ -104,7 +104,7 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
     ...location,
     bgcolor: isLocationAvailable ? isTrackingOn ? 'primary.main' : 'grey.800' : 'grey.400',
     '&:hover': {
-      bgcolor: isTrackingOn ? 'primary.dark' : 'grey.900',
+      bgcolor: isTrackingOn ? 'primary.main' : 'grey.800',
     },
     transform: isLeftHanded ? `translate(${radius * 0.707}px, -${radius * 0.707}px)` : `translate(-${radius * 0.707}px, -${radius * 0.707}px)`,
     transitionDelay: `${3 * delay}ms`
