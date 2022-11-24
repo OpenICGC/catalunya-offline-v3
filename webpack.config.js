@@ -16,7 +16,8 @@ module.exports = (env) => ({
       '@mui/material': path.resolve('./node_modules/@mui/material'),
       '@mui/styles': path.resolve('./node_modules/@mui/styles'),
       '@mui/icons-material': path.resolve('./node_modules/@mui/icons-material')
-    }
+    },
+    extensions: ['.ts', '.tsx', '.js', '.json']
   },
   module: {
     rules: [
@@ -24,6 +25,11 @@ module.exports = (env) => ({
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
+      },
+      {
+        test: /\.(ts|tsx)$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.html$/,
