@@ -23,36 +23,26 @@ Default.args = {
       id: '123e4567-e89b-12d3-a456-426614174000',
       name: 'Ámbito 01',
       color: '#27AE60',
-      points: {},
-      paths: {}
     },
     {
       id: '123e4567-e89b-12d3-a456-426614174200',
       name: 'Ámbito 02',
       color: '#CB4335',
-      points: {},
-      paths: {}
     },
     {
       id: '123e4567-e89b-1223-a456-426614174000',
       name: 'Ámbito 03',
       color: '#A2D9CE',
-      points: {},
-      paths: {}
     },
     {
       id: '123e4567-e89b-22d3-a456-426614174000',
       name: 'Ámbito 04',
       color: '#85929E',
-      points: {},
-      paths: {}
     },
     {
       id: '223e4567-e89b-12d3-a456-426614174000',
       name: 'Ámbito 05',
       color: '#F7DC6F',
-      points: {},
-      paths: {}
     }
   ]
 };
