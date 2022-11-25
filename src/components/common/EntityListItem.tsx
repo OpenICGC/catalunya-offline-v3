@@ -1,14 +1,14 @@
 import React, {KeyboardEvent, FC, ChangeEvent, SyntheticEvent, useState, ReactNode} from 'react';
 
 //MUI
+import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import TextField from '@mui/material/TextField';
 
 //MUI-ICONS
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -16,22 +16,24 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
-import {HEXColor, Scope, UUID} from '../../types/commonTypes';
+import {HEXColor, Entity, UUID} from '../../types/commonTypes';
 
 export type EntityListItemProps = {
-  entity: Scope,
-  actionIcon?: ReactNode,
-  contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
-  onActionClick: (entityId: UUID) => void,
-  onClick: (entityId: UUID) => void,
-  onColorChange: (color: HEXColor, entityId: UUID) => void,
-  onContextualMenuClick: (menuId: string, entityId: UUID) => void,
-  onNameChange: (name: string, entityId: UUID) => void
+    entity: Entity,
+    activeActionIcon?: ReactNode,
+    inactiveActionIcon?: ReactNode,
+    contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
+    onActionClick: (entityId: UUID) => void,
+    onClick: (entityId: UUID) => void,
+    onColorChange: (color: HEXColor, entityId: UUID) => void,
+    onContextualMenuClick: (menuId: string, entityId: UUID) => void,
+    onNameChange: (name: string, entityId: UUID) => void
 }
 
 const EntityListItem: FC<EntityListItemProps> = ({
   entity,
-  actionIcon, 
+  activeActionIcon,
+  inactiveActionIcon,
   contextualMenu,
   onActionClick,
   onClick, 
@@ -90,8 +92,14 @@ const EntityListItem: FC<EntityListItemProps> = ({
     }
     {
       !isEditing && <>
-        <IconButton sx={{m: 0, p: 0.5}} onClick={() => onActionClick(entity.id)}>
-          {actionIcon}
+        <IconButton 
+          sx={{
+            m: 0, 
+            p: 0.5,
+            '& .MuiSvgIcon-root': { color: entity.isActive ? undefined : 'action.disabled' }
+          }}
+          onClick={() => onActionClick(entity.id)}>
+          {entity.isActive ? activeActionIcon : inactiveActionIcon}
         </IconButton>
         <IconButton sx={{m: 0, p: 0.5}} onClick={handleContextualMenu}>
           <MoreVertIcon/>

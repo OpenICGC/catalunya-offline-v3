@@ -18,13 +18,20 @@ export interface CatOfflineError {
 export type UUID = string;
 export type HEXColor = `#${string}`;
 
+export type Entity = {
+  id: UUID,
+  name: string,
+  color: HEXColor,
+  isActive?: boolean
+}
+
 export type Scope = {
   id: UUID,
   name: string,
   color: HEXColor
 }
 
-export type ScopeEntity = {
+export type ScopeChildren = {
   id: UUID,
   name: string,
   color?: HEXColor, // Optional, inherits Scope's color
@@ -35,11 +42,11 @@ export type ScopeEntity = {
   isVisible: boolean
 }
 
-export type ScopePoint = ScopeEntity & {
+export type ScopePoint = ScopeChildren & {
   geometry: GeoJSON.Point
 }
 
-export type ScopePath = ScopeEntity & {
+export type ScopePath = ScopeChildren & {
   geometry?: GeoJSON.LineString
 }
 

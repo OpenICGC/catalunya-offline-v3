@@ -1,17 +1,23 @@
 import React, {useState} from 'react';
 import EntityListItem, {EntityListItemProps} from './EntityListItem';
-
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import List from '@mui/material/List';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {Meta, Story} from '@storybook/react';
+
+//MUI
+import List from '@mui/material/List';
+
+//MUI-ICONS
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+//UTILS
 import {v4 as uuidv4} from 'uuid';
 
 export default {
-  title: 'Scope/EntityListItem',
+  title: 'Common/EntityListItem',
   component: EntityListItem
 } as Meta;
 
@@ -22,14 +28,12 @@ export const Default = Template.bind({});
 Default.args = {
   entity: {
     id: uuidv4(),
-    name: 'Mi Punto o Traza',
+    name: 'Mi Ámbito, Punto o Traza',
     color: '#247a44',
-    /*timestamp: Date.now(),
-    description: '',
-    images: [],
-    isVisible: true*/
+    isActive: true,
   },
-  actionIcon: <FileUploadIcon/>,
+  activeActionIcon: <VisibilityIcon/>,
+  inactiveActionIcon: <VisibilityOffIcon color='disabled'/>,
   contextualMenu: [
     {
       id: 'rename',
@@ -71,7 +75,7 @@ Managed.args = {
   ...Default.args
 };
 
-export const ListDefault = TemplateList.bind({});
-ListDefault.args = {
+export const Grouped = TemplateList.bind({});
+Grouped.args = {
   ...Default.args
 };

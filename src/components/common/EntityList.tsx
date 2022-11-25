@@ -4,12 +4,7 @@ import React, {FC, ReactNode, useState} from 'react';
 import List from '@mui/material/List';
 
 //MUI-ICONS
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 //GEOCOMPONETS
 import SearchBox from '@geomatico/geocomponents/SearchBox';
@@ -18,13 +13,15 @@ import SearchBox from '@geomatico/geocomponents/SearchBox';
 import EntityListItem from './EntityListItem';
 
 //UTILS
-import {useTranslation} from 'react-i18next';
-import {HEXColor, Scope, UUID} from '../../types/commonTypes';
+import {Entity, HEXColor, UUID} from '../../types/commonTypes';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
-export type ListPanelProps = {
-    scopes: Array<Scope>,
+export type EntityListProps = {
+    entities: Array<Entity>, //Required: entities may not exist yet => entities.length === 0
     contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
+    activeActionIcon?: ReactNode,
+    inactiveActionIcon?: ReactNode,
     onActionClick: (entityId: UUID) => void,
     onClick: (entityId: UUID) => void,
     onColorChange: (color: HEXColor, entityId: UUID) => void,
@@ -32,47 +29,36 @@ export type ListPanelProps = {
     onNameChange: (name: string, entityId: UUID) => void
 };
 
-const EntityList: FC<ListPanelProps> = ({
-  scopes, 
+//STYLES
+const errorMessageSx = {
+  mt: 1, 
+  mx: 2, 
+  color: 'error.main', 
+  display: 'block'
+};
+
+const EntityList: FC<EntityListProps> = ({
+  entities,
+  contextualMenu,
+  activeActionIcon,
+  inactiveActionIcon,
   onActionClick,
   onClick,
   onColorChange,
   onContextualMenuClick,
   onNameChange}) => {
-    
-  const [searchText, setSearchText] = useState('');
-  const [filteredEntities, setFilteredEntities] = useState(scopes);
-  const handleSearchClick = () => setFilteredEntities(scopes
-    .filter(obj => JSON.stringify(obj).toString().toLowerCase().includes(searchText.toLowerCase())));
 
+  const [searchText, setSearchText] = useState('');
+  const [filteredEntities, setFilteredEntities] = useState(entities);
+
+  const handleSearchClick = () => setFilteredEntities(
+    entities?.filter(obj => JSON.stringify(obj).toString().toLowerCase().includes(searchText.toLowerCase()))
+  );
+  
   const handleOnTextChange = (text: string ) => setSearchText(text);
   
-  const {t} = useTranslation();
-  const contextualMenu = [
-    {
-      id: 'rename',
-      label: t('actions.rename'),
-      icon: <EditIcon/>
-    },
-    {
-      id: 'delete',
-      label: t('actions.delete'),
-      icon: <DeleteIcon/>
-    },
-    {
-      id: 'instamaps',
-      label: t('actions.instamaps'),
-      icon: <MoreHorizIcon/>
-    },
-    {
-      id: 'dataSchema',
-      label: t('actions.dataSchema'),
-      icon: <DashboardIcon/>
-    }
-  ];
-  
   return <>
-    <Box sx={{mx: 1, mt: 1}}>
+    <Box sx={{mx: 1, mt: 2}}>
       <SearchBox
         text={searchText}
         placeholder={'Buscar...'}
@@ -82,13 +68,20 @@ const EntityList: FC<ListPanelProps> = ({
         dense
       />
     </Box>
-
+    {
+      entities.length === 0 ?
+        <Typography variant='caption' sx={errorMessageSx}>No existe ningún elemento.</Typography>
+        : filteredEntities.length === 0 ?
+          <Typography variant='caption' sx={errorMessageSx}>No coincide ningún elemento con la búsqueda.</Typography>
+          : undefined
+    }
     <List dense sx={{ml: 0.75, my: 0, mr: 0}}>
       {
         filteredEntities.map(entity => <EntityListItem
           key={entity.id}
           entity={entity}
-          actionIcon={<FileUploadIcon/>}
+          activeActionIcon={activeActionIcon}
+          inactiveActionIcon={inactiveActionIcon}
           contextualMenu={contextualMenu}
           onActionClick={onActionClick}
           onClick={onClick}
