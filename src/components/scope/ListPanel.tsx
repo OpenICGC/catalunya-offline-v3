@@ -16,8 +16,9 @@ import ManagerHeader from '../common/ManagerHeader';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {Entity, HEXColor, UUID} from '../../types/commonTypes';
+import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
+import {Entity} from '../common/EntityListItem';
 
 export type ListPanelProps = {
     entities: Array<Entity>,

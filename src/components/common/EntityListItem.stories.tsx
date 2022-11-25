@@ -59,14 +59,16 @@ Default.args = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ManagedTemplate: Story<EntityListItemProps> = ({entity, onColorChange, onNameChange, ...args}) => {
-  const [newColor, setNewColor] = useState(entity.color);
-  const [newName, setNewName] = useState(entity.name);
-  const computedEntity = {...entity, color: newColor, name: newName};
+const ManagedTemplate: Story<EntityListItemProps> = ({entity, onColorChange, onNameChange, onActionClick, ...args}) => {
+  const [getColor, setNewColor] = useState(entity.color);
+  const [getName, setNewName] = useState(entity.name);
+  const [getActive, setActive] = useState(entity.isActive);
+  const computedEntity = {...entity, color: getColor, name: getName, isActive: getActive};
   return <EntityListItem
     entity={computedEntity}
     onColorChange={setNewColor}
     onNameChange={setNewName}
+    onActionClick={() => setActive(!computedEntity.isActive)}
     {...args} />;
 };
 

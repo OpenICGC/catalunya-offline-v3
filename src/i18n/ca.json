@@ -4,11 +4,12 @@
     "cancel": "Cancel·La",
     "close": "Tanca",
     "dataSchema": "Esquema de dades",
-    "delete": "Esborrar",
+    "delete": "Esborra",
     "download": "Descarrega",
     "downloading": "Descarregant...",
     "instamaps": "Instamaps",
-    "rename": "Reanomerar"
+    "rename": "Reanomena",
+    "search": "Cerca..."
   },
   "baseMapManager": "Mapes Base",
   "downloadingAlert": {

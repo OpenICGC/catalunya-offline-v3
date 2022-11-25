@@ -16,7 +16,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
-import {HEXColor, Entity, UUID} from '../../types/commonTypes';
+import {HEXColor, UUID} from '../../types/commonTypes';
+
+export type Entity = {
+  id: UUID,
+  name: string,
+  color: HEXColor,
+  isActive?: boolean
+}
 
 export type EntityListItemProps = {
     entity: Entity,

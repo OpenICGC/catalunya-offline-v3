@@ -25,6 +25,8 @@ const AddButton: FC<AddButtonProps> = ({
   const iconSize = fabSize / 2;
   const fabColor = '#424242'; //grey.800 getContrast does not support 'grey.800' as a parameter
 
+  const handleClick = () => onClick();
+
   const fabSx = {
     width: fabSize,
     height: fabSize,
@@ -40,7 +42,7 @@ const AddButton: FC<AddButtonProps> = ({
     }
   };
 
-  return <Fab sx={fabSx} onClick={onClick}>
+  return <Fab sx={fabSx} onClick={handleClick}>
     {children}
   </Fab>;
 };

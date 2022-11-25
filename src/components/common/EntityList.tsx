@@ -1,4 +1,4 @@
-import React, {FC, ReactNode, useState} from 'react';
+import React, {FC, ReactNode, useMemo, useState} from 'react';
 
 //MUI
 import List from '@mui/material/List';
@@ -10,12 +10,13 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import SearchBox from '@geomatico/geocomponents/SearchBox';
 
 //CATOFFLINE
-import EntityListItem from './EntityListItem';
+import EntityListItem, {Entity} from './EntityListItem';
 
 //UTILS
-import {Entity, HEXColor, UUID} from '../../types/commonTypes';
+import {HEXColor, UUID} from '../../types/commonTypes';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import {useTranslation} from 'react-i18next';
 
 export type EntityListProps = {
     entities: Array<Entity>, //Required: entities may not exist yet => entities.length === 0
@@ -37,6 +38,8 @@ const errorMessageSx = {
   display: 'block'
 };
 
+const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
 const EntityList: FC<EntityListProps> = ({
   entities,
   contextualMenu,
@@ -48,20 +51,23 @@ const EntityList: FC<EntityListProps> = ({
   onContextualMenuClick,
   onNameChange}) => {
 
+  const {t} = useTranslation();
   const [searchText, setSearchText] = useState('');
-  const [filteredEntities, setFilteredEntities] = useState(entities);
 
-  const handleSearchClick = () => setFilteredEntities(
-    entities?.filter(obj => JSON.stringify(obj).toString().toLowerCase().includes(searchText.toLowerCase()))
-  );
+  const filteredEntities = useMemo(() =>
+    searchText ?
+      entities.filter(entity => normalize(entity.name).includes(normalize(searchText))) :
+      entities
+  , [searchText]);
   
-  const handleOnTextChange = (text: string ) => setSearchText(text);
+  const handleOnTextChange = (text: string) => setSearchText(text);
+  const handleSearchClick = () => undefined;
   
   return <>
     <Box sx={{mx: 1, mt: 2}}>
       <SearchBox
         text={searchText}
-        placeholder={'Buscar...'}
+        placeholder={t('actions.search')}
         AdvanceSearchIcon={KeyboardBackspaceIcon}
         onSearchClick={handleSearchClick}
         onTextChange={handleOnTextChange}
