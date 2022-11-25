@@ -16,10 +16,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
-import {HEXColor, ScopeEntity, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, UUID} from '../../types/commonTypes';
 
 export type EntityListItemProps = {
-  entity: ScopeEntity,
+  entity: Scope,
   actionIcon?: ReactNode,
   contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
   onActionClick: (entityId: UUID) => void,
@@ -67,8 +67,8 @@ const EntityListItem: FC<EntityListItemProps> = ({
     }
   };
   
-  return <ListItem sx={{height: '48px', pl: 1, pr: 0}}>
-    <ListItemIcon sx={{minWidth: '24px'}}>
+  return <ListItem sx={{height: '48px', p: 0, m: 0}}>
+    <ListItemIcon sx={{minWidth: '24px', p: 0}}>
       <ColorPicker
         hideTextfield={true}
         disableAlpha={true}

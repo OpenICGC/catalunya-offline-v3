@@ -24,10 +24,10 @@ Default.args = {
     id: uuidv4(),
     name: 'Mi Punto o Traza',
     color: '#247a44',
-    timestamp: Date.now(),
+    /*timestamp: Date.now(),
     description: '',
     images: [],
-    isVisible: true
+    isVisible: true*/
   },
   actionIcon: <FileUploadIcon/>,
   contextualMenu: [

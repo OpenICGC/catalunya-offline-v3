@@ -4,45 +4,60 @@ import {Meta, Story} from '@storybook/react';
 
 import Box from '@mui/material/Box';
 import {DRAWER_WIDTH} from '../../config';
+import {v4 as uuidv4} from 'uuid';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 export default {
   title: 'Scope/ListPanel',
-  component: ListPanel,
-  argTypes: {
-    color: { control: 'color' },
-  },
+  component: ListPanel
 } as Meta;
 
 const Template: Story<ListPanelProps> = args => <ListPanel {...args}/>;
-const DeviceTemplate: Story<ManagerHeaderProps> = args => <Box sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><ListPanel {...args}/></Box>;
+const DeviceTemplate: Story<ListPanelProps> = args => <Box
+  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><ListPanel {...args}/></Box>;
 
 export const Default = Template.bind({});
 Default.args = {
   scopes: [
     {
-      id: '123e4567-e89b-12d3-a456-426614174000',
-      name: 'Ámbito 01',
-      color: '#27AE60',
+      id: uuidv4(),
+      name: 'Mi Punto o Traza',
+      color: '#247a44',
     },
     {
-      id: '123e4567-e89b-12d3-a456-426614174200',
-      name: 'Ámbito 02',
-      color: '#CB4335',
+      id: uuidv4(),
+      name: 'Mi Punto o Traza',
+      color: '#fc5252',
     },
     {
-      id: '123e4567-e89b-1223-a456-426614174000',
-      name: 'Ámbito 03',
-      color: '#A2D9CE',
+      id: uuidv4(),
+      name: 'Mi Punto o Traza',
+      color: '#f5017a',
+    },
+  ],
+  contextualMenu: [
+    {
+      id: 'rename',
+      label: 'Renombrar',
+      icon: <EditIcon/>
     },
     {
-      id: '123e4567-e89b-22d3-a456-426614174000',
-      name: 'Ámbito 04',
-      color: '#85929E',
+      id: 'delete',
+      label: 'Borrar',
+      icon: <DeleteIcon/>
     },
     {
-      id: '223e4567-e89b-12d3-a456-426614174000',
-      name: 'Ámbito 05',
-      color: '#F7DC6F',
+      id: 'instamaps',
+      label: 'Instamaps',
+      icon: <MoreHorizIcon/>
+    },
+    {
+      id: 'dataSchema',
+      label: 'Esquema de datos',
+      icon: <DashboardIcon/>
     }
   ]
 };
