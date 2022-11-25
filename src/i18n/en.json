@@ -3,8 +3,13 @@
     "accept": "Accept",
     "cancel": "Cancel",
     "close": "Close",
+    "dataSchema": "Data Schema",
+    "delete": "Delete",
     "download": "Download",
-    "downloading": "Downloading..."
+    "downloading": "Downloading...",
+    "instamaps": "Instamaps",
+    "rename": "Rename",
+    "search": "Search..."
   },
   "baseMapManager": "Base Maps",
   "downloadingAlert": {

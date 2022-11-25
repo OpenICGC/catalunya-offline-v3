@@ -1,15 +1,20 @@
 import React from 'react';
 import ManagerHeader, {ManagerHeaderProps} from './ManagerHeader';
+import {Meta, Story} from '@storybook/react';
 
+//MUI
 import Box from '@mui/material/Box';
+
+//MUI-ICONS
 import FolderIcon from '@mui/icons-material/Folder';
 import LayersIcon from '@mui/icons-material/Layers';
 import MapIcon from '@mui/icons-material/Map';
-import {DRAWER_WIDTH} from '../config';
-import {Meta, Story} from '@storybook/react';
+
+//UTILS
+import {DRAWER_WIDTH} from '../../config';
 
 export default {
-  title: 'Scopes/ManagerHeader',
+  title: 'Common/ManagerHeader',
   component: ManagerHeader,
   argTypes: {
     color: { control: 'color' },

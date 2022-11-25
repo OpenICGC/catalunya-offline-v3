@@ -3,8 +3,13 @@
     "accept": "Accepta",
     "cancel": "Cancel·La",
     "close": "Tanca",
+    "dataSchema": "Esquema de dades",
+    "delete": "Esborra",
     "download": "Descarrega",
-    "downloading": "Descarregant..."
+    "downloading": "Descarregant...",
+    "instamaps": "Instamaps",
+    "rename": "Reanomena",
+    "search": "Cerca..."
   },
   "baseMapManager": "Mapes Base",
   "downloadingAlert": {

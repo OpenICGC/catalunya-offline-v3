@@ -20,7 +20,7 @@ import {MAPSTYLES} from '../../config';
 import {Manager} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
 import styled from '@mui/styles/styled';
-import ManagerHeader from '../../components/ManagerHeader';
+import ManagerHeader from '../../components/common/ManagerHeader';
 
 //STYLES
 const ScrollableContent = styled(Box)({

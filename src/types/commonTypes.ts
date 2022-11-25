@@ -24,7 +24,7 @@ export type Scope = {
   color: HEXColor
 }
 
-export type ScopeEntity = {
+export type ScopeChild = {
   id: UUID,
   name: string,
   color?: HEXColor, // Optional, inherits Scope's color
@@ -35,11 +35,11 @@ export type ScopeEntity = {
   isVisible: boolean
 }
 
-export type ScopePoint = ScopeEntity & {
+export type ScopePoint = ScopeChild & {
   geometry: GeoJSON.Point
 }
 
-export type ScopePath = ScopeEntity & {
+export type ScopePath = ScopeChild & {
   geometry?: GeoJSON.LineString
 }
 
