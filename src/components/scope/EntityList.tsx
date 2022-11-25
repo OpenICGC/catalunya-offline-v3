@@ -1,23 +1,26 @@
-import React, {FC, ReactNode} from 'react';
+import React, {FC, ReactNode, useState} from 'react';
 
 //MUI
 import List from '@mui/material/List';
 
 //MUI-ICONS
-import FolderIcon from '@mui/icons-material/Folder';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
+//GEOCOMPONETS
+import SearchBox from '@geomatico/geocomponents/SearchBox';
+
 //CATOFFLINE
-import ManagerHeader from '../ManagerHeader';
 import EntityListItem from './EntityListItem';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor, Scope, UUID} from '../../types/commonTypes';
+import Box from '@mui/material/Box';
 
 export type ListPanelProps = {
     scopes: Array<Scope>,
@@ -29,14 +32,21 @@ export type ListPanelProps = {
     onNameChange: (name: string, entityId: UUID) => void
 };
 
-const ListPanel: FC<ListPanelProps> = ({
+const EntityList: FC<ListPanelProps> = ({
   scopes, 
   onActionClick,
   onClick,
   onColorChange,
   onContextualMenuClick,
   onNameChange}) => {
-  //STYLES
+    
+  const [searchText, setSearchText] = useState('');
+  const [filteredEntities, setFilteredEntities] = useState(scopes);
+  const handleSearchClick = () => setFilteredEntities(scopes
+    .filter(obj => JSON.stringify(obj).toString().toLowerCase().includes(searchText.toLowerCase())));
+
+  const handleOnTextChange = (text: string ) => setSearchText(text);
+  
   const {t} = useTranslation();
   const contextualMenu = [
     {
@@ -60,13 +70,24 @@ const ListPanel: FC<ListPanelProps> = ({
       icon: <DashboardIcon/>
     }
   ];
+  
   return <>
-    <ManagerHeader name='Ámbitos' color='#1b718c' startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText('#fc5252')}}/>}/>
+    <Box sx={{mx: 1, mt: 1}}>
+      <SearchBox
+        text={searchText}
+        placeholder={'Buscar...'}
+        AdvanceSearchIcon={KeyboardBackspaceIcon}
+        onSearchClick={handleSearchClick}
+        onTextChange={handleOnTextChange}
+        dense
+      />
+    </Box>
+
     <List dense sx={{ml: 0.75, my: 0, mr: 0}}>
       {
-        scopes.map(scope => <EntityListItem
-          key={scope.id}
-          entity={scope}
+        filteredEntities.map(entity => <EntityListItem
+          key={entity.id}
+          entity={entity}
           actionIcon={<FileUploadIcon/>}
           contextualMenu={contextualMenu}
           onActionClick={onActionClick}
@@ -80,4 +101,4 @@ const ListPanel: FC<ListPanelProps> = ({
   </>;
 };
 
-export default ListPanel;
+export default EntityList;
