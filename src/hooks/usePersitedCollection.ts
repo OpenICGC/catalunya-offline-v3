@@ -28,7 +28,7 @@ const localStoragePersistor = <DatasetType>(key: string): datasetPersistor<Datas
   };
 };
 
-const useCollectionOf = <ItemType extends CollectionItem>(collectionId: string): collectionDataAccessor<ItemType> => {
+const usePersitedCollection = <ItemType extends CollectionItem>(collectionId: string): collectionDataAccessor<ItemType> => {
   const persistor = localStoragePersistor<Array<ItemType>>(collectionId);
 
   const [data, setData] = useState<Array<ItemType>>(persistor.load() || []);
@@ -46,6 +46,8 @@ const useCollectionOf = <ItemType extends CollectionItem>(collectionId: string):
   };
 };
 
-export const useScopes = () => useCollectionOf<Scope>('scopes');
-export const useScopePoints = (scopeId: UUID) => useCollectionOf<ScopePoint>(`scopePoints_${scopeId}`);
-export const useScopePaths = (scopeId: UUID) => useCollectionOf<ScopePath>(`scopePaths_${scopeId}`);
+export default usePersitedCollection;
+
+export const useScopes = () => usePersitedCollection<Scope>('scopes');
+export const useScopePoints = (scopeId: UUID) => usePersitedCollection<ScopePoint>(`scopePoints_${scopeId}`);
+export const useScopePaths = (scopeId: UUID) => usePersitedCollection<ScopePath>(`scopePaths_${scopeId}`);

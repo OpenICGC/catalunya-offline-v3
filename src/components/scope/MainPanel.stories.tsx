@@ -1,5 +1,5 @@
 import React from 'react';
-import ListPanel, {ListPanelProps} from './ListPanel';
+import MainPanel, {MainPanelProps} from './MainPanel';
 import {Meta, Story} from '@storybook/react';
 
 //MUI
@@ -10,17 +10,17 @@ import {v4 as uuidv4} from 'uuid';
 import {DRAWER_WIDTH} from '../../config';
 
 export default {
-  title: 'Scope/ListPanel',
-  component: ListPanel
+  title: 'Scope/MainPanel',
+  component: MainPanel
 } as Meta;
 
-const Template: Story<ListPanelProps> = args => <ListPanel {...args}/>;
-const DeviceTemplate: Story<ListPanelProps> = args => <Box
-  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><ListPanel {...args}/></Box>;
+const Template: Story<MainPanelProps> = args => <MainPanel {...args}/>;
+const DeviceTemplate: Story<MainPanelProps> = args => <Box
+  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><MainPanel {...args}/></Box>;
 
 export const Default = Template.bind({});
 Default.args = {
-  entities: [
+  items: [
     {
       id: uuidv4(),
       name: 'Mi ámbito 01',
@@ -47,7 +47,7 @@ Default.args = {
 export const Empty = DeviceTemplate.bind({});
 Empty.args = {
   ...Default.args,
-  entities: []
+  items: []
 
 };
 

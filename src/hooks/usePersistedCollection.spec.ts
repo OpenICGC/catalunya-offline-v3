@@ -1,13 +1,13 @@
 import {renderHook, act} from '@testing-library/react-hooks/dom';
 import {expect} from 'chai';
-import {useScopes, useScopePoints, useScopePaths} from './useScopeEntities';
+import {useScopes, useScopePoints, useScopePaths} from './usePersitedCollection';
 import {Scope, ScopePath, ScopePoint} from '../types/commonTypes';
 import {v4 as uuidv4} from 'uuid';
 
-describe('useScopeEntities', () => {
+describe('usePersitedCollection', () => {
   const scopeId = uuidv4();
 
-  it('useScopes should list, create, retrieve, update and delete Scopes', () => {
+  it('useScopes should list, create, retrieve, update and delete Scopes from localStorage', () => {
 
     // GIVEN
     const sampleScope: Scope = {
@@ -45,30 +45,36 @@ describe('useScopeEntities', () => {
     expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([]));
   });
 
-  it('useScopePoints should list, create, retrieve, update and delete ScopePoints', () => {
+  it('useScopePoints should list, create, retrieve, update and delete ScopePoints from localStorage', () => {
 
     // GIVEN
     const samplePoint: ScopePoint = {
+      type: 'Feature',
       id: uuidv4(),
-      name: 'Point 1',
+      properties: {
+        name: 'Point 1',
+        timestamp: Date.now(),
+        description: '',
+        images: [],
+        isVisible: true
+      },
       geometry: {
         type: 'Point',
         coordinates: [0, 0]
-      },
-      timestamp: Date.now(),
-      description: '',
-      images: [],
-      isVisible: true
+      }
     };
     const modifiedPoint: ScopePoint = {
       ...samplePoint,
-      name: 'Point 1bis',
+      properties: {
+        ...samplePoint.properties,
+        name: 'Point 1bis',
+        timestamp: Date.now() + 1,
+        isVisible: false
+      },
       geometry: {
         type: 'Point',
         coordinates: [1, 1]
-      },
-      timestamp: Date.now() + 1,
-      isVisible: false
+      }
     };
     const {result} = renderHook(() => useScopePoints(scopeId));
 
@@ -96,30 +102,36 @@ describe('useScopeEntities', () => {
 
   });
 
-  it('useScopePaths should list, create, retrieve, update and delete ScopePaths', () => {
+  it('useScopePaths should list, create, retrieve, update and delete ScopePaths from localStorage', () => {
 
     // GIVEN
     const samplePath: ScopePath = {
+      type: 'Feature',
       id: uuidv4(),
-      name: 'Path 1',
+      properties: {
+        name: 'Path 1',
+        timestamp: Date.now(),
+        description: '',
+        images: [],
+        isVisible: true
+      },
       geometry: {
         type: 'LineString',
         coordinates: [[0, 0], [1, 1]]
-      },
-      timestamp: Date.now(),
-      description: '',
-      images: [],
-      isVisible: true
+      }
     };
     const modifiedPath: ScopePath = {
       ...samplePath,
-      name: 'Path 1bis',
+      properties: {
+        ...samplePath.properties,
+        name: 'Path 1bis',
+        timestamp: Date.now() + 1,
+        isVisible: false
+      },
       geometry: {
         type: 'LineString',
         coordinates: [[2, 2], [3, 3]]
-      },
-      timestamp: Date.now() + 1,
-      isVisible: false
+      }
     };
     const {result} = renderHook(() => useScopePaths(scopeId));
 
