@@ -1,7 +1,9 @@
 import React, {FC, ReactNode, useMemo, useState} from 'react';
 
 //MUI
+import Box from '@mui/material/Box';
 import MuiList from '@mui/material/List';
+import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -14,8 +16,6 @@ import ListItem, {listItemType} from './ListItem';
 
 //UTILS
 import {HEXColor, UUID} from '../../types/commonTypes';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
 

@@ -1,5 +1,8 @@
 import React, {FC} from 'react';
 
+//MUI
+import Box from '@mui/material/Box';
+
 //MUI-ICONS
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -13,13 +16,12 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddButton from '../buttons/AddButton';
 import List from './List';
 import ManagerHeader from '../common/ManagerHeader';
-import {listItemType} from './ListItem';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
-import Box from '@mui/material/Box';
+import {listItemType} from './ListItem';
 
 export type MainPanelProps = {
   isAccessibleSize?: boolean,

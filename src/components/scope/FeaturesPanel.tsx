@@ -2,33 +2,34 @@ import React, {FC, SyntheticEvent, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
-import EditIcon from '@mui/icons-material/Edit';
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
-import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
+import EditIcon from '@mui/icons-material/Edit';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
+import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+import AddPath from '../icons/AddPath';
 
 //CATOFFLINE
-import Header from './Header';
 import AddButton from '../buttons/AddButton';
-
+import Header from './Header';
 import List from './List';
+
 //UTILS
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {lighten} from '@mui/system/colorManipulator';
 import {listItemType} from './ListItem';
-import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
-import AddPath from '../icons/AddPath';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 
 export type FeaturesPanelProps = {
     isAccessibleSize: boolean,
