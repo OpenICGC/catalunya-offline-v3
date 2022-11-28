@@ -35,7 +35,7 @@ const DeviceTemplate: Story<ListProps> = args => <Box
     
 const DeviceWithHeaderTemplate: Story<ListProps> = args => <Box
   sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}>
-  <ManagerHeader name='Ámbitos' color='#1b718c' startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText('#fc5252')}}/>}/>
+  <ManagerHeader name='Ámbitos' color='#1b718c' startIcon={<FolderIcon/>}/>
   <List {...args}/>
 </Box>;
 

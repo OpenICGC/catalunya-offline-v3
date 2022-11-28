@@ -19,6 +19,7 @@
     "title": "Offline data download"
   },
   "layerManager": "Layers",
+  "scope": "Scope",
   "scopeListItem": {
     "name": "Name"
   },

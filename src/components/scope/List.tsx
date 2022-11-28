@@ -17,6 +17,7 @@ import {HEXColor, UUID} from '../../types/commonTypes';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
+import styled from '@mui/styles/styled';
 
 export type ListProps = {
     items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
@@ -38,6 +39,12 @@ const errorMessageSx = {
   display: 'block'
 };
 
+const ScrollableContent = styled(Box)({
+  overflow: 'auto',
+  padding: '0px',
+  marginBottom: '64px'
+});
+
 const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
 const List: FC<ListProps> = ({
@@ -58,7 +65,7 @@ const List: FC<ListProps> = ({
     searchText ?
       items.filter(item => normalize(item.name).includes(normalize(searchText))) :
       items
-  , [searchText]);
+  , [searchText, items]);
   
   const handleOnTextChange = (text: string) => setSearchText(text);
   const handleSearchClick = () => undefined;
@@ -81,22 +88,24 @@ const List: FC<ListProps> = ({
           <Typography variant='caption' sx={errorMessageSx}>No coincide ningún elemento con la búsqueda.</Typography>
           : undefined
     }
-    <MuiList dense sx={{ml: 0.75, my: 0, mr: 0}}>
-      {
-        filteredItems.map(item => <ListItem
-          key={item.id}
-          item={item}
-          activeActionIcon={activeActionIcon}
-          inactiveActionIcon={inactiveActionIcon}
-          contextualMenu={contextualMenu}
-          onActionClick={onActionClick}
-          onClick={onClick}
-          onColorChange={onColorChange}
-          onContextualMenuClick={onContextualMenuClick}
-          onNameChange={onNameChange}
-        />)
-      }
-    </MuiList>
+    <ScrollableContent>
+      <MuiList dense sx={{ml: 0.75, my: 0, mr: 0}}>
+        {
+          filteredItems.map(item => <ListItem
+            key={item.id}
+            item={item}
+            activeActionIcon={activeActionIcon}
+            inactiveActionIcon={inactiveActionIcon}
+            contextualMenu={contextualMenu}
+            onActionClick={onActionClick}
+            onClick={onClick}
+            onColorChange={onColorChange}
+            onContextualMenuClick={onContextualMenuClick}
+            onNameChange={onNameChange}
+          />)
+        }
+      </MuiList>
+    </ScrollableContent>
   </>;
 };
 

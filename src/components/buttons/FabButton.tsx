@@ -75,7 +75,7 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
     '& .MuiSvgIcon-root': {
       fontSize: iconSize
     },
-    zIndex: 4000
+    zIndex: 1000
   };
 
   const compass = {
@@ -162,7 +162,7 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
     right: 0,
     margin: 'auto',
     position: 'absolute',
-    zIndex: 5000,
+    zIndex: 1001,
     transition: fabTransition
   };
   const fabOpen = {

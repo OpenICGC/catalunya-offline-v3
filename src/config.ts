@@ -4,6 +4,8 @@ export const OFF_CAT = false;
 export const DRAWER_WIDTH = 240;
 export const SM_BREAKPOINT = 850;
 
+export const INITIAL_MANAGER = 'SCOPES';
+
 export const INITIAL_VIEWPORT = {
   latitude: 42.1094,
   longitude: 1.3705,
