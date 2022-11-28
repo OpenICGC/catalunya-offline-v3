@@ -19,8 +19,6 @@ import {listItemType} from './ListItem';
 import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
-import styled from '@mui/styles/styled';
-import Box from '@mui/material/Box';
 
 export type MainPanelProps = {
   isAccessibleSize?: boolean,

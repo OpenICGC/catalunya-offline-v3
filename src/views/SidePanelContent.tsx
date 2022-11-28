@@ -1,9 +1,7 @@
 import React, {FC} from 'react';
 
 //MUI
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import styled from '@mui/styles/styled';
 
 //UTILS
 import {Manager} from '../types/commonTypes';
