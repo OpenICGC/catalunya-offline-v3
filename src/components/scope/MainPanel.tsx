@@ -11,29 +11,29 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
-import EntityList from '../common/EntityList';
+import List from './List';
 import ManagerHeader from '../common/ManagerHeader';
+import {listItemType} from './ListItem';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
-import {Entity} from '../common/EntityListItem';
 
-export type ListPanelProps = {
-    entities: Array<Entity>,
+export type MainPanelProps = {
+    items: Array<listItemType>,
     isAccessibleSize: boolean,
     isLeftHanded: boolean,
-    onActionClick: (entityId: UUID) => void,
+    onActionClick: (itemId: UUID) => void,
     onAddClick: () => void,
-    onClick: (entityId: UUID) => void,
-    onColorChange: (color: HEXColor, entityId: UUID) => void,
-    onContextualMenuClick: (menuId: string, entityId: UUID) => void,
-    onNameChange: (name: string, entityId: UUID) => void
+    onClick: (itemId: UUID) => void,
+    onColorChange: (color: HEXColor, itemId: UUID) => void,
+    onContextualMenuClick: (menuId: string, itemId: UUID) => void,
+    onNameChange: (name: string, itemId: UUID) => void
 };
 
-const ListPanel: FC<ListPanelProps> = ({
-  entities,
+const MainPanel: FC<MainPanelProps> = ({
+  items,
   isAccessibleSize,
   isLeftHanded,
   onActionClick,
@@ -74,8 +74,8 @@ const ListPanel: FC<ListPanelProps> = ({
       color={theme.palette.secondary.main}
       startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText('#fc5252')}}/>}
     />
-    <EntityList 
-      entities={entities}
+    <List
+      items={items}
       contextualMenu={contextualMenu}
       activeActionIcon={<FileUploadIcon/>}
       onActionClick={onActionClick}
@@ -94,4 +94,4 @@ const ListPanel: FC<ListPanelProps> = ({
   </>;
 };
 
-export default ListPanel;
+export default MainPanel;

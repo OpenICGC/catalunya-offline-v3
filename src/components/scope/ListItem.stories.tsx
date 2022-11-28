@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import EntityListItem, {EntityListItemProps} from './EntityListItem';
+import ListItem, {ListItemProps} from './ListItem';
 import {Meta, Story} from '@storybook/react';
 
 //MUI
@@ -17,16 +17,16 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {v4 as uuidv4} from 'uuid';
 
 export default {
-  title: 'Common/EntityListItem',
-  component: EntityListItem
+  title: 'Scope/ListItem',
+  component: ListItem
 } as Meta;
 
-const Template: Story<EntityListItemProps> = args => <EntityListItem {...args}/>;
-const TemplateList: Story<EntityListItemProps> = args => <List><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/><EntityListItem {...args}/></List>;
+const Template: Story<ListItemProps> = args => <ListItem {...args}/>;
+const TemplateList: Story<ListItemProps> = args => <List><ListItem {...args}/><ListItem {...args}/><ListItem {...args}/><ListItem {...args}/></List>;
 
 export const Default = Template.bind({});
 Default.args = {
-  entity: {
+  item: {
     id: uuidv4(),
     name: 'Mi Ámbito, Punto o Traza',
     color: '#247a44',
@@ -59,16 +59,16 @@ Default.args = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ManagedTemplate: Story<EntityListItemProps> = ({entity, onColorChange, onNameChange, onActionClick, ...args}) => {
-  const [getColor, setNewColor] = useState(entity.color);
-  const [getName, setNewName] = useState(entity.name);
-  const [getActive, setActive] = useState(entity.isActive);
-  const computedEntity = {...entity, color: getColor, name: getName, isActive: getActive};
-  return <EntityListItem
-    entity={computedEntity}
+const ManagedTemplate: Story<ListItemProps> = ({item, onColorChange, onNameChange, onActionClick, ...args}) => {
+  const [getColor, setNewColor] = useState(item.color);
+  const [getName, setNewName] = useState(item.name);
+  const [getActive, setActive] = useState(item.isActive);
+  const computedItem = {...item, color: getColor, name: getName, isActive: getActive};
+  return <ListItem
+    item={computedItem}
     onColorChange={setNewColor}
     onNameChange={setNewName}
-    onActionClick={() => setActive(!computedEntity.isActive)}
+    onActionClick={() => setActive(!computedItem.isActive)}
     {...args} />;
 };
 

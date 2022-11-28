@@ -1,7 +1,7 @@
 import React, {FC, ReactNode, useMemo, useState} from 'react';
 
 //MUI
-import List from '@mui/material/List';
+import MuiList from '@mui/material/List';
 
 //MUI-ICONS
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -10,7 +10,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import SearchBox from '@geomatico/geocomponents/SearchBox';
 
 //CATOFFLINE
-import EntityListItem, {Entity} from './EntityListItem';
+import ListItem, {listItemType} from './ListItem';
 
 //UTILS
 import {HEXColor, UUID} from '../../types/commonTypes';
@@ -18,16 +18,16 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
 
-export type EntityListProps = {
-    entities: Array<Entity>, //Required: entities may not exist yet => entities.length === 0
+export type ListProps = {
+    items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
     contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
     activeActionIcon?: ReactNode,
     inactiveActionIcon?: ReactNode,
-    onActionClick: (entityId: UUID) => void,
-    onClick: (entityId: UUID) => void,
-    onColorChange: (color: HEXColor, entityId: UUID) => void,
-    onContextualMenuClick: (menuId: string, entityId: UUID) => void,
-    onNameChange: (name: string, entityId: UUID) => void
+    onActionClick: (itemId: UUID) => void,
+    onClick: (itemId: UUID) => void,
+    onColorChange: (color: HEXColor, itemId: UUID) => void,
+    onContextualMenuClick: (menuId: string, itemId: UUID) => void,
+    onNameChange: (name: string, itemId: UUID) => void
 };
 
 //STYLES
@@ -40,8 +40,8 @@ const errorMessageSx = {
 
 const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
-const EntityList: FC<EntityListProps> = ({
-  entities,
+const List: FC<ListProps> = ({
+  items,
   contextualMenu,
   activeActionIcon,
   inactiveActionIcon,
@@ -54,10 +54,10 @@ const EntityList: FC<EntityListProps> = ({
   const {t} = useTranslation();
   const [searchText, setSearchText] = useState('');
 
-  const filteredEntities = useMemo(() =>
+  const filteredItems = useMemo(() =>
     searchText ?
-      entities.filter(entity => normalize(entity.name).includes(normalize(searchText))) :
-      entities
+      items.filter(item => normalize(item.name).includes(normalize(searchText))) :
+      items
   , [searchText]);
   
   const handleOnTextChange = (text: string) => setSearchText(text);
@@ -75,17 +75,17 @@ const EntityList: FC<EntityListProps> = ({
       />
     </Box>
     {
-      entities.length === 0 ?
+      items.length === 0 ?
         <Typography variant='caption' sx={errorMessageSx}>No existe ningún elemento.</Typography>
-        : filteredEntities.length === 0 ?
+        : filteredItems.length === 0 ?
           <Typography variant='caption' sx={errorMessageSx}>No coincide ningún elemento con la búsqueda.</Typography>
           : undefined
     }
-    <List dense sx={{ml: 0.75, my: 0, mr: 0}}>
+    <MuiList dense sx={{ml: 0.75, my: 0, mr: 0}}>
       {
-        filteredEntities.map(entity => <EntityListItem
-          key={entity.id}
-          entity={entity}
+        filteredItems.map(item => <ListItem
+          key={item.id}
+          item={item}
           activeActionIcon={activeActionIcon}
           inactiveActionIcon={inactiveActionIcon}
           contextualMenu={contextualMenu}
@@ -96,8 +96,8 @@ const EntityList: FC<EntityListProps> = ({
           onNameChange={onNameChange}
         />)
       }
-    </List>
+    </MuiList>
   </>;
 };
 
-export default EntityList;
+export default List;

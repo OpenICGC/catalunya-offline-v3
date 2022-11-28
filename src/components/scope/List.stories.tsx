@@ -1,5 +1,5 @@
 import React from 'react';
-import EntityList, {EntityListProps} from './EntityList';
+import List, {ListProps} from './List';
 import {Meta, Story} from '@storybook/react';
 
 //MUI
@@ -17,30 +17,31 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 //CATOFFLINE
-import ManagerHeader from './ManagerHeader';
+import ManagerHeader from '../common/ManagerHeader';
 
 //UTILS
 import {DRAWER_WIDTH} from '../../config';
 import {v4 as uuidv4} from 'uuid';
 
 export default {
-  title: 'Common/EntityList',
-  component: EntityList
+  title: 'Scope/List',
+  component: List
 } as Meta;
 
-const Template: Story<EntityListProps> = args => <EntityList {...args}/>;
-const DeviceTemplate: Story<EntityListProps> = args => <Box
-  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><EntityList {...args}/></Box>;
+const Template: Story<ListProps> = args => <List {...args}/>;
+
+const DeviceTemplate: Story<ListProps> = args => <Box
+  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><List {...args}/></Box>;
     
-const DeviceEntityTemplate: Story<EntityListProps> = args => <Box
+const DeviceWithHeaderTemplate: Story<ListProps> = args => <Box
   sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}>
   <ManagerHeader name='Ámbitos' color='#1b718c' startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText('#fc5252')}}/>}/>
-  <EntityList {...args}/>
+  <List {...args}/>
 </Box>;
 
 export const Scope = Template.bind({});
 Scope.args = {
-  entities: [
+  items: [
     {
       id: uuidv4(),
       name: 'Mi Ámbito 01',
@@ -88,12 +89,12 @@ Scope.args = {
 export const Empty = Template.bind({});
 Empty.args = {
   ...Scope.args,
-  entities: [],
+  items: [],
 };
 
 export const Point_Path = Template.bind({});
 Point_Path.args = {
-  entities: [
+  items: [
     {
       id: uuidv4(),
       name: 'Mi Punto o Traza 01',
@@ -144,7 +145,7 @@ Device.args = {
   ...Scope.args
 };
 
-export const DeviceWithHeader = DeviceEntityTemplate.bind({});
+export const DeviceWithHeader = DeviceWithHeaderTemplate.bind({});
 DeviceWithHeader.args = {
   ...Scope.args
 };

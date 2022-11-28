@@ -2,7 +2,7 @@ import React, {KeyboardEvent, FC, ChangeEvent, SyntheticEvent, useState, ReactNo
 
 //MUI
 import IconButton from '@mui/material/IconButton';
-import ListItem from '@mui/material/ListItem';
+import MuiListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
@@ -18,27 +18,27 @@ import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
 
-export type Entity = {
+export type listItemType = {
   id: UUID,
   name: string,
   color: HEXColor,
   isActive?: boolean
 }
 
-export type EntityListItemProps = {
-    entity: Entity,
-    activeActionIcon?: ReactNode,
-    inactiveActionIcon?: ReactNode,
-    contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
-    onActionClick: (entityId: UUID) => void,
-    onClick: (entityId: UUID) => void,
-    onColorChange: (color: HEXColor, entityId: UUID) => void,
-    onContextualMenuClick: (menuId: string, entityId: UUID) => void,
-    onNameChange: (name: string, entityId: UUID) => void
+export type ListItemProps = {
+  item: listItemType,
+  activeActionIcon?: ReactNode,
+  inactiveActionIcon?: ReactNode,
+  contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
+  onActionClick: (itemId: UUID) => void,
+  onClick: (itemId: UUID) => void,
+  onColorChange: (color: HEXColor, itemId: UUID) => void,
+  onContextualMenuClick: (menuId: string, itemId: UUID) => void,
+  onNameChange: (name: string, itemId: UUID) => void
 }
 
-const EntityListItem: FC<EntityListItemProps> = ({
-  entity,
+const ListItem: FC<ListItemProps> = ({
+  item,
   activeActionIcon,
   inactiveActionIcon,
   contextualMenu,
@@ -60,11 +60,11 @@ const EntityListItem: FC<EntityListItemProps> = ({
   const handleClose = () => setAnchorEl(null);
   const handleAction = (actionId: string) => actionId === 'rename' ?
     setIsEditing(true) :
-    onContextualMenuClick(actionId, entity.id);
+    onContextualMenuClick(actionId, item.id);
 
   //EDIT
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, entity.id);
-  const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, entity.id);
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, item.id);
+  const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, item.id);
   const handleBlur = () => {
     setAnchorEl(null);
     setIsEditing(false);
@@ -76,12 +76,12 @@ const EntityListItem: FC<EntityListItemProps> = ({
     }
   };
   
-  return <ListItem sx={{height: '48px', p: 0, m: 0}}>
+  return <MuiListItem sx={{height: '48px', p: 0, m: 0}}>
     <ListItemIcon sx={{minWidth: '24px', p: 0}}>
       <ColorPicker
         hideTextfield={true}
         disableAlpha={true}
-        value={entity.color}
+        value={item.color}
         inputFormats={[]}
         onChange={handleColorChange}
       />
@@ -93,9 +93,9 @@ const EntityListItem: FC<EntityListItemProps> = ({
           onChange={handleNameChange} 
           onBlur={handleBlur} 
           onKeyDown={handleInputOut}
-          defaultValue={entity.name}
+          defaultValue={item.name}
         />
-        : <ListItemText primary={entity.name} sx={{mt: 1, ml: isEditing ? 1 : 'auto', cursor: 'pointer'}} onClick={() => onClick(entity.id)}/>
+        : <ListItemText primary={item.name} sx={{mt: 1, ml: isEditing ? 1 : 'auto', cursor: 'pointer'}} onClick={() => onClick(item.id)}/>
     }
     {
       !isEditing && <>
@@ -103,10 +103,10 @@ const EntityListItem: FC<EntityListItemProps> = ({
           sx={{
             m: 0, 
             p: 0.5,
-            '& .MuiSvgIcon-root': { color: entity.isActive ? undefined : 'action.disabled' }
+            '& .MuiSvgIcon-root': { color: item.isActive ? undefined : 'action.disabled' }
           }}
-          onClick={() => onActionClick(entity.id)}>
-          {entity.isActive ? activeActionIcon : inactiveActionIcon}
+          onClick={() => onActionClick(item.id)}>
+          {item.isActive ? activeActionIcon : inactiveActionIcon}
         </IconButton>
         <IconButton sx={{m: 0, p: 0.5}} onClick={handleContextualMenu}>
           <MoreVertIcon/>
@@ -137,7 +137,7 @@ const EntityListItem: FC<EntityListItemProps> = ({
         </Menu>
       </>
     }
-  </ListItem>;
+  </MuiListItem>;
 };
 
-export default EntityListItem;
+export default ListItem;

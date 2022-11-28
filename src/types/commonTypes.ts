@@ -24,23 +24,26 @@ export type Scope = {
   color: HEXColor
 }
 
-export type ScopeChild = {
+export interface ScopeFeature extends GeoJSON.Feature<GeoJSON.Geometry | null> {
+  type: 'Feature',
   id: UUID,
-  name: string,
-  color?: HEXColor, // Optional, inherits Scope's color
-  geometry?: GeoJSON.Geometry,
-  timestamp: EpochTimeStamp, // In milliseconds https://w3c.github.io/hr-time/#the-epochtimestamp-typedef
-  description: string,
-  images: Array<ScopeImage>,
-  isVisible: boolean
+  geometry: GeoJSON.Geometry | null,
+  properties: {
+    name: string,
+    color?: HEXColor, // Optional, inherits Scope's color
+    timestamp: EpochTimeStamp, // In milliseconds https://w3c.github.io/hr-time/#the-epochtimestamp-typedef
+    description: string,
+    images: Array<ScopeImage>,
+    isVisible: boolean
+  }
 }
 
-export type ScopePoint = ScopeChild & {
-  geometry: GeoJSON.Point
+export interface ScopePoint extends ScopeFeature {
+  geometry: GeoJSON.Point// Point geometry is required (not nullable)
 }
 
-export type ScopePath = ScopeChild & {
-  geometry?: GeoJSON.LineString
+export interface ScopePath extends ScopeFeature {
+  geometry: GeoJSON.LineString | null // Path geometry is nullable
 }
 
 export type ScopeImage = void; // TODO
