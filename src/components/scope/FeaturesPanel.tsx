@@ -33,18 +33,20 @@ import Stack from '@mui/material/Stack';
 export type FeaturesPanelProps = {
     isAccessibleSize: boolean,
     isLeftHanded: boolean,
-  name: string,
-  color: HEXColor,
-  pointItems: Array<listItemType>,
-  pathItems: Array<listItemType>,
-  onBackButtonClick: () => void,
+    name: string,
+    color: HEXColor,
+    pointItems: Array<listItemType>,
+    pathItems: Array<listItemType>,
+    onBackButtonClick: () => void,
     onAddPoint: () => void,
     onAddPath: () => void,
-  onClick: (itemId: UUID) => void,
-  onColorChange: (color: HEXColor, itemId: UUID) => void,
-  onContextualMenuClick: (menuId: string, itemId: UUID) => void,
-  onNameChange: (name: string, itemId: UUID) => void
-  toggleVisibility: () => void,
+    onClick: (itemId: UUID) => void,
+    onColorChange: (color: HEXColor, itemId: UUID) => void,
+    onGoTo: (itemId: UUID) => void,
+    onDelete: (itemId: UUID) => void,
+    onExport: (itemId: UUID) => void,
+    onNameChange: (name: string, itemId: UUID) => void
+    toggleVisibility: (itemId: UUID) => void
 };
 
 const FeaturesPanel: FC<FeaturesPanelProps> = ({
@@ -59,7 +61,9 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   onBackButtonClick,
   onClick,
   onColorChange,
-  onContextualMenuClick,
+  onGoTo,
+  onDelete,
+  onExport,
   onNameChange,
   toggleVisibility
 }) => {
@@ -68,11 +72,19 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   const [tabValue, setTabValue] = useState(0);
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
+  const handleContextualMenuClick = (menuId: string, itemId: UUID) => {
+    const menuEntry = contextualMenu.find(({id}) => id === menuId);
+    if (menuEntry?.callbackProp) {
+      menuEntry.callbackProp(itemId);
+    }
+  };
+  
   const contextualMenu = [
     {
       id: 'goTo',
       label: t('actions.goTo'),
-      icon: <SwipeRightAltIcon/>
+      icon: <SwipeRightAltIcon/>,
+      callbackProp: onGoTo
     },
     {
       id: 'edit',
@@ -82,12 +94,14 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     {
       id: 'delete',
       label: t('actions.delete'),
-      icon: <DeleteIcon/>
+      icon: <DeleteIcon/>,
+      callbackProp: onDelete
     },
     {
       id: 'export',
       label: 'Exportar',
-      icon: <FileUploadIcon/>
+      icon: <FileUploadIcon/>,
+      callbackProp: onExport
     }
   ];
 
@@ -141,7 +155,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         onActionClick={toggleVisibility}
         onClick={onClick}
         onColorChange={onColorChange}
-        onContextualMenuClick={onContextualMenuClick}
+        onContextualMenuClick={handleContextualMenuClick}
         onNameChange={onNameChange}
       />
       <Box sx={{width: '100%', height: 0}}>
@@ -165,7 +179,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
           onActionClick={toggleVisibility}
           onClick={onClick}
           onColorChange={onColorChange}
-          onContextualMenuClick={onContextualMenuClick}
+          onContextualMenuClick={handleContextualMenuClick}
           onNameChange={onNameChange}
         />
         <Box sx={{width: '100%', height: 0}}>
