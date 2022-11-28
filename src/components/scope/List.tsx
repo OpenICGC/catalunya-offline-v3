@@ -41,7 +41,8 @@ const errorMessageSx = {
 
 const ScrollableContent = styled(Box)({
   overflow: 'auto',
-  padding: '0px'
+  padding: '0px',
+  marginBottom: '64px'
 });
 
 const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
@@ -88,7 +89,7 @@ const List: FC<ListProps> = ({
           : undefined
     }
     <ScrollableContent>
-      <MuiList dense sx={{ml: 0.75, my: 0, mr: 0, pb: 7}}>
+      <MuiList dense sx={{ml: 0.75, my: 0, mr: 0}}>
         {
           filteredItems.map(item => <ListItem
             key={item.id}

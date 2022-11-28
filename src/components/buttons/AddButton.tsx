@@ -32,10 +32,8 @@ const AddButton: FC<AddButtonProps> = ({
     height: fabSize,
     bgcolor: fabColor,
     m: 1,
-    position: 'absolute',
-    bottom: 2,
-    left: isLeftHanded ? 2 : 'inherit',
-    right: isLeftHanded ? 'inherit' : 2,
+    top: '-64px',
+    float: isLeftHanded ? 'left' : 'right',
     '&:hover': {
       bgcolor: fabColor,
     },

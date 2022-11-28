@@ -99,13 +99,15 @@ const MainPanel: FC<MainPanelProps> = ({
       onContextualMenuClick={handleContextualMenuClick}
       onNameChange={onRename}
     />
-    <AddButton
-      isAccessibleSize={isAccessibleSize}
-      isLeftHanded={isLeftHanded}
-      onClick={onAdd}
-    >
-      <CreateNewFolderIcon/>
-    </AddButton>
+    <div style={{width: '100%', height: 0}}>
+      <AddButton
+        isAccessibleSize={isAccessibleSize}
+        isLeftHanded={isLeftHanded}
+        onClick={onAdd}
+      >
+        <CreateNewFolderIcon/>
+      </AddButton>
+    </div>
   </>;
 };
 
