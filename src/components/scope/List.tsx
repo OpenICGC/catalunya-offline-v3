@@ -58,7 +58,7 @@ const List: FC<ListProps> = ({
     searchText ?
       items.filter(item => normalize(item.name).includes(normalize(searchText))) :
       items
-  , [searchText]);
+  , [searchText, items]);
   
   const handleOnTextChange = (text: string) => setSearchText(text);
   const handleSearchClick = () => undefined;

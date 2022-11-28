@@ -1,14 +1,14 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 
-import Map from '@geomatico/geocomponents/Map';
+import GeocomponentMap from '@geomatico/geocomponents/Map';
 
-import {Manager} from '../../types/commonTypes';
-import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../../utils/mbtiles';
-import useBackgroundGeolocation, { Geolocation } from '../../hooks/useBackgroundGeolocation';
-import FabButton from '../../components/buttons/FabButton';
-import useCompass from '../../hooks/useCompass';
-import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../../config';
+import {Manager} from '../types/commonTypes';
+import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../utils/mbtiles';
+import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeolocation';
+import FabButton from '../components/buttons/FabButton';
+import useCompass from '../hooks/useCompass';
+import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
 
 mbtiles(maplibregl);
 
@@ -85,7 +85,7 @@ export type MainContentProps = {
   onManagerChanged: (newManager: Manager) => void
 };
 
-const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
+const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
   const mapRef = useRef<maplibregl.Map>();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
@@ -185,7 +185,7 @@ const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}
   };
 
   return (mbtilesStatus === READY || OFF_CAT) ?
-    <Map
+    <GeocomponentMap
       {...MAP_PROPS}
       reuseMaps
       ref={mapRef}
@@ -206,9 +206,9 @@ const MainContent: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}
         onBaseMapsClick={() => changeManager('BASEMAPS')}
         onFoldersClick={() => changeManager('SCOPES')}
       />
-    </Map> : <div>
+    </GeocomponentMap> : <div>
       {mbtilesStatusMessages[mbtilesStatus]}
     </div>;
 };
 
-export default MainContent;
+export default Map;

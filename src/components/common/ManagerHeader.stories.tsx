@@ -27,27 +27,27 @@ const DeviceTemplate: Story<ManagerHeaderProps> = args => <Box sx={{width: DRAWE
 export const Scopes = Template.bind({});
 Scopes.args = {
   name: 'Ámbitos',
-  startIcon: <FolderIcon sx={{color: theme => theme.palette.getContrastText('#1b718c')}}/>,
+  startIcon: <FolderIcon/>,
   color: '#1b718c'
 };
 
 export const Layers = Template.bind({});
 Layers.args = {
   name: 'Capas',
-  startIcon: <LayersIcon sx={{color: theme => theme.palette.getContrastText('#93f501')}}/>,
+  startIcon: <LayersIcon/>,
   color: '#93f501'
 };
 
 export const BaseMaps = Template.bind({});
 BaseMaps.args = {
   name: 'Mapas Base',
-  startIcon: <MapIcon sx={{color: theme => theme.palette.getContrastText('#fc5252')}}/>,
+  startIcon: <MapIcon/>,
   color: '#fc5252'
 };
 
 export const Device = DeviceTemplate.bind({});
 Device.args = {
   name: 'Mapas Base',
-  startIcon: <MapIcon sx={{color: theme => theme.palette.getContrastText('#fc5252')}}/>,
+  startIcon: <MapIcon/>,
   color: '#fc5252'
 };

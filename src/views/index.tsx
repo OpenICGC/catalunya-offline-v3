@@ -1,22 +1,19 @@
 import React, {FC, useEffect, useState} from 'react';
 
-import Layout from '../../components/Layout';
+import Layout from '../components/Layout';
 import SidePanelContent from './SidePanelContent';
-import MainContent from './MainContent';
+import Map from './Map';
 
-import {INITIAL_MAPSTYLE_URL, SM_BREAKPOINT} from '../../config';
+import {INITIAL_MANAGER, INITIAL_MAPSTYLE_URL, SM_BREAKPOINT} from '../config';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import {Manager} from '../../types/commonTypes';
+import {Manager} from '../types/commonTypes';
 
 const Index: FC = () => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
   const [isSidePanelOpen, setSidePanelOpen] = useState(widescreen);
 
   const [mapStyle, setMapStyle] = useState(INITIAL_MAPSTYLE_URL);
-  const [manager, setManager] = useState<Manager | undefined>(widescreen ? 'BASEMAPS' : undefined);
-
-  console.log('manager', manager);
-  console.log('isSidePanelOpen', isSidePanelOpen);
+  const [manager, setManager] = useState<Manager>(widescreen ? INITIAL_MANAGER : undefined);
 
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);
@@ -36,7 +33,7 @@ const Index: FC = () => {
     : <></>
   ;
 
-  const mainContent = <MainContent
+  const mainContent = <Map
     mapStyle={mapStyle}
     manager={manager}
     onManagerChanged={setManager}

@@ -39,9 +39,7 @@ Default.args = {
       color: '#f5017a',
       isActive: true
     },
-  ],
-  isAccessibleSize: false,
-  isLeftHanded: false,
+  ]
 };
 
 export const Empty = DeviceTemplate.bind({});

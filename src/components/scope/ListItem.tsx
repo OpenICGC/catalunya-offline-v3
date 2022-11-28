@@ -79,8 +79,8 @@ const ListItem: FC<ListItemProps> = ({
   return <MuiListItem sx={{height: '48px', p: 0, m: 0}}>
     <ListItemIcon sx={{minWidth: '24px', p: 0}}>
       <ColorPicker
-        hideTextfield={true}
-        disableAlpha={true}
+        hideTextfield
+        disableAlpha
         value={item.color}
         inputFormats={[]}
         onChange={handleColorChange}

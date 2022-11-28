@@ -19,6 +19,7 @@
     "title": "Descarga de datos offline"
   },
   "layerManager": "Capas",
+  "scope": "Ámbito",
   "scopeListItem": {
     "name": "Nombre"
   },

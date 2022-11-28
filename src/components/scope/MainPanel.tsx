@@ -21,30 +21,35 @@ import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
 
 export type MainPanelProps = {
-    items: Array<listItemType>,
-    isAccessibleSize: boolean,
-    isLeftHanded: boolean,
-    onActionClick: (itemId: UUID) => void,
-    onAddClick: () => void,
-    onClick: (itemId: UUID) => void,
-    onColorChange: (color: HEXColor, itemId: UUID) => void,
-    onContextualMenuClick: (menuId: string, itemId: UUID) => void,
-    onNameChange: (name: string, itemId: UUID) => void
+  isAccessibleSize?: boolean,
+  isLeftHanded?: boolean,
+  items: Array<listItemType>,
+  onAdd: () => void,
+  onSelect: (itemId: UUID) => void,
+  onColorChange: (color: HEXColor, itemId: UUID) => void,
+  onRename: (name: string, itemId: UUID) => void,
+  onShare: (itemId: UUID) => void,
+  onDelete: (itemId: UUID) => void,
+  onInstamaps: (itemId: UUID) => void,
+  onDataSchema: (itemId: UUID) => void
 };
 
 const MainPanel: FC<MainPanelProps> = ({
+  isAccessibleSize = false,
+  isLeftHanded = false,
   items,
-  isAccessibleSize,
-  isLeftHanded,
-  onActionClick,
-  onAddClick,
-  onClick,
+  onAdd,
+  onSelect,
   onColorChange,
-  onContextualMenuClick,
-  onNameChange}) => {
-  
+  onRename,
+  onShare,
+  onDelete,
+  onInstamaps,
+  onDataSchema
+}) => {
   const {t} = useTranslation();
   const theme = useTheme();
+
   const contextualMenu = [
     {
       id: 'rename',
@@ -54,40 +59,50 @@ const MainPanel: FC<MainPanelProps> = ({
     {
       id: 'delete',
       label: t('actions.delete'),
-      icon: <DeleteIcon/>
+      icon: <DeleteIcon/>,
+      callbackProp: onDelete
     },
     {
       id: 'instamaps',
       label: t('actions.instamaps'),
-      icon: <MoreHorizIcon/>
+      icon: <MoreHorizIcon/>,
+      callbackProp: onInstamaps
     },
     {
       id: 'dataSchema',
       label: t('actions.dataSchema'),
-      icon: <DashboardIcon/>
+      icon: <DashboardIcon/>,
+      callbackProp: onDataSchema
     }
   ];
+
+  const handleContextualMenuClick = (menuId: string, itemId: UUID) => {
+    const menuEntry = contextualMenu.find(({id}) => id === menuId);
+    if (menuEntry?.callbackProp) {
+      menuEntry.callbackProp(itemId);
+    }
+  };
 
   return <>
     <ManagerHeader 
       name={t('scopeManager')} 
       color={theme.palette.secondary.main}
-      startIcon={<FolderIcon sx={{color: theme => theme.palette.getContrastText('#fc5252')}}/>}
+      startIcon={<FolderIcon/>}
     />
     <List
       items={items}
       contextualMenu={contextualMenu}
       activeActionIcon={<FileUploadIcon/>}
-      onActionClick={onActionClick}
-      onClick={onClick}
+      onActionClick={onShare}
+      onClick={onSelect}
       onColorChange={onColorChange}
-      onContextualMenuClick={onContextualMenuClick}
-      onNameChange={onNameChange}
+      onContextualMenuClick={handleContextualMenuClick}
+      onNameChange={onRename}
     />
     <AddButton 
       isAccessibleSize={isAccessibleSize} 
       isLeftHanded={isLeftHanded} 
-      onClick={onAddClick}
+      onClick={onAdd}
     >
       <CreateNewFolderIcon/>
     </AddButton>

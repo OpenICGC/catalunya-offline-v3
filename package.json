@@ -35,7 +35,7 @@
     "@capacitor/cli": "^4.4.0",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
-    "@geomatico/geocomponents": "2.0.9",
+    "@geomatico/geocomponents": "2.0.10",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.1.0",
     "@mui/styles": "^5.1.0",
