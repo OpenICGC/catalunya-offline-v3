@@ -12,11 +12,6 @@ import BaseMaps from './sidepanels/BaseMaps';
 import Scopes from './sidepanels/Scopes';
 
 //STYLES
-const ScrollableContent = styled(Box)({
-  overflow: 'auto',
-  padding: '0px'
-});
-
 const stackSx = {
   height: '100%',
   overflow: 'hidden',
@@ -32,20 +27,18 @@ export type SidePanelContentProps = {
 
 const SidePanelContent: FC<SidePanelContentProps> = ({manager, mapStyle, onMapStyleChanged}) => {
   return <Stack sx={stackSx}>
-    <ScrollableContent>
-      {manager === 'LAYERS' &&
-        <Layers/>
-      }
-      {manager === 'BASEMAPS' &&
-        <BaseMaps
-          mapStyle={mapStyle}
-          onMapStyleChanged={onMapStyleChanged}
-        />
-      }
-      {manager === 'SCOPES' &&
-        <Scopes/>
-      }
-    </ScrollableContent>
+    {manager === 'LAYERS' &&
+      <Layers/>
+    }
+    {manager === 'BASEMAPS' &&
+      <BaseMaps
+        mapStyle={mapStyle}
+        onMapStyleChanged={onMapStyleChanged}
+      />
+    }
+    {manager === 'SCOPES' &&
+      <Scopes/>
+    }
   </Stack>;
 };
 

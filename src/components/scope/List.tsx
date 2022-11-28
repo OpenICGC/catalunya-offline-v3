@@ -17,6 +17,7 @@ import {HEXColor, UUID} from '../../types/commonTypes';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
+import styled from '@mui/styles/styled';
 
 export type ListProps = {
     items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
@@ -37,6 +38,11 @@ const errorMessageSx = {
   color: 'error.main', 
   display: 'block'
 };
+
+const ScrollableContent = styled(Box)({
+  overflow: 'auto',
+  padding: '0px'
+});
 
 const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
@@ -81,22 +87,24 @@ const List: FC<ListProps> = ({
           <Typography variant='caption' sx={errorMessageSx}>No coincide ningún elemento con la búsqueda.</Typography>
           : undefined
     }
-    <MuiList dense sx={{ml: 0.75, my: 0, mr: 0}}>
-      {
-        filteredItems.map(item => <ListItem
-          key={item.id}
-          item={item}
-          activeActionIcon={activeActionIcon}
-          inactiveActionIcon={inactiveActionIcon}
-          contextualMenu={contextualMenu}
-          onActionClick={onActionClick}
-          onClick={onClick}
-          onColorChange={onColorChange}
-          onContextualMenuClick={onContextualMenuClick}
-          onNameChange={onNameChange}
-        />)
-      }
-    </MuiList>
+    <ScrollableContent>
+      <MuiList dense sx={{ml: 0.75, my: 0, mr: 0, pb: 7}}>
+        {
+          filteredItems.map(item => <ListItem
+            key={item.id}
+            item={item}
+            activeActionIcon={activeActionIcon}
+            inactiveActionIcon={inactiveActionIcon}
+            contextualMenu={contextualMenu}
+            onActionClick={onActionClick}
+            onClick={onClick}
+            onColorChange={onColorChange}
+            onContextualMenuClick={onContextualMenuClick}
+            onNameChange={onNameChange}
+          />)
+        }
+      </MuiList>
+    </ScrollableContent>
   </>;
 };
 

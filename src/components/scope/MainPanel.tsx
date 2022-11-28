@@ -19,6 +19,8 @@ import {listItemType} from './ListItem';
 import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
+import styled from '@mui/styles/styled';
+import Box from '@mui/material/Box';
 
 export type MainPanelProps = {
   isAccessibleSize?: boolean,
@@ -84,8 +86,8 @@ const MainPanel: FC<MainPanelProps> = ({
   };
 
   return <>
-    <ManagerHeader 
-      name={t('scopeManager')} 
+    <ManagerHeader
+      name={t('scopeManager')}
       color={theme.palette.secondary.main}
       startIcon={<FolderIcon/>}
     />
@@ -99,9 +101,9 @@ const MainPanel: FC<MainPanelProps> = ({
       onContextualMenuClick={handleContextualMenuClick}
       onNameChange={onRename}
     />
-    <AddButton 
-      isAccessibleSize={isAccessibleSize} 
-      isLeftHanded={isLeftHanded} 
+    <AddButton
+      isAccessibleSize={isAccessibleSize}
+      isLeftHanded={isLeftHanded}
       onClick={onAdd}
     >
       <CreateNewFolderIcon/>
