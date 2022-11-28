@@ -7,6 +7,8 @@
     "delete": "Delete",
     "download": "Download",
     "downloading": "Downloading...",
+    "edit": "Edit",
+    "goTo": "Go to",
     "instamaps": "Instamaps",
     "rename": "Rename",
     "search": "Search..."
@@ -17,6 +19,10 @@
     "content_02": "If you don't want to download the data now, you can continue navigating with an online version, and you will be prompted to download them afterwards.",
     "content_03": "Download now the Topographic Map of Catalonia? (350 MB)",
     "title": "Offline data download"
+  },
+  "features": {
+    "paths": "Paths",
+    "points": "Points"
   },
   "layerManager": "Layers",
   "scope": "Scope",

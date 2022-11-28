@@ -1,13 +1,187 @@
-import React, {FC} from 'react';
+import React, {FC, SyntheticEvent, useState} from 'react';
+
+//MUI
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+
+//MUI-ICONS
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import RouteIcon from '@mui/icons-material/Route';
+
+//CATOFFLINE
+import Header from './Header';
+import AddButton from '../buttons/AddButton';
+
+import List from './List';
+//UTILS
+import {HEXColor, UUID} from '../../types/commonTypes';
+import {useTranslation} from 'react-i18next';
+import {lighten} from '@mui/system/colorManipulator';
+import {listItemType} from './ListItem';
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
+import AddPath from '../icons/AddPath';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 
 export type FeaturesPanelProps = {
-  // TODO
+    isAccessibleSize: boolean,
+    isLeftHanded: boolean,
+  name: string,
+  color: HEXColor,
+  pointItems: Array<listItemType>,
+  pathItems: Array<listItemType>,
+  onBackButtonClick: () => void,
+    onAddPoint: () => void,
+    onAddPath: () => void,
+  onClick: (itemId: UUID) => void,
+  onColorChange: (color: HEXColor, itemId: UUID) => void,
+  onContextualMenuClick: (menuId: string, itemId: UUID) => void,
+  onNameChange: (name: string, itemId: UUID) => void
+  toggleVisibility: () => void,
 };
 
-const FeaturesPanel: FC<FeaturesPanelProps> = () => {
+const FeaturesPanel: FC<FeaturesPanelProps> = ({
+  isAccessibleSize,
+  isLeftHanded,
+  name,
+  color,
+  pointItems,
+  pathItems,
+  onAddPoint,
+  onAddPath,
+  onBackButtonClick,
+  onClick,
+  onColorChange,
+  onContextualMenuClick,
+  onNameChange,
+  toggleVisibility
+}) => {
+
+  const {t} = useTranslation();
+  const [tabValue, setTabValue] = useState(0);
+  const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
+
+  const contextualMenu = [
+    {
+      id: 'goTo',
+      label: t('actions.goTo'),
+      icon: <SwipeRightAltIcon/>
+    },
+    {
+      id: 'edit',
+      label: t('actions.edit'),
+      icon: <EditIcon/>
+    },
+    {
+      id: 'delete',
+      label: t('actions.delete'),
+      icon: <DeleteIcon/>
+    },
+    {
+      id: 'export',
+      label: 'Exportar',
+      icon: <FileUploadIcon/>
+    }
+  ];
+
   return <>
-    FeaturesPanel
+    <Header
+      name={name}
+      color={color}
+      numPoints={pointItems.length}
+      numPaths={pathItems.length}
+      onBackButtonClick={onBackButtonClick}
+    />
+    <Tabs
+      value={tabValue}
+      onChange={handleTabChange}
+      textColor='inherit'
+      variant='fullWidth'
+      sx={{
+        color: 'action.disabled',
+        '& .Mui-selected': {
+          bgcolor: lighten(color, 0.25),
+          color: theme => theme.palette.getContrastText(lighten(color, 0.25)),
+        },
+        '& .MuiTabs-indicator': {
+          bgcolor: theme => theme.palette.getContrastText(lighten(color,0.25))
+        }
+      }}
+    >
+      <Tab
+        label={
+          <Stack sx={{flexDirection: 'row', gap: 1}}>
+            <LocationOnIcon/>
+            <Typography>{t('features.points')}</Typography>
+          </Stack>
+        }
+        value={0}
+      />
+      <Tab label={
+        <Stack sx={{flexDirection: 'row', gap: 1}}>
+          <RouteIcon/>
+          <Typography>{t('features.paths')}</Typography>
+        </Stack>
+      } value={1}/>
+    </Tabs>
+    {
+      tabValue === 0 && <><List
+        isAccessibleSize={isAccessibleSize}
+        items={pointItems}
+        contextualMenu={contextualMenu}
+        activeActionIcon={<VisibilityIcon/>}
+        inactiveActionIcon={<VisibilityOffIcon/>}
+        onActionClick={toggleVisibility}
+        onClick={onClick}
+        onColorChange={onColorChange}
+        onContextualMenuClick={onContextualMenuClick}
+        onNameChange={onNameChange}
+      />
+      <Box sx={{width: '100%', height: 0}}>
+        <AddButton
+          isAccessibleSize={isAccessibleSize}
+          isLeftHanded={isLeftHanded}
+          onClick={onAddPoint}
+        >
+          <AddLocationAltIcon/>
+        </AddButton>
+      </Box></>
+    }
+    {
+      tabValue === 1 && <>
+        <List
+          isAccessibleSize={isAccessibleSize}
+          items={pathItems}
+          contextualMenu={contextualMenu}
+          activeActionIcon={<VisibilityIcon/>}
+          inactiveActionIcon={<VisibilityOffIcon/>}
+          onActionClick={toggleVisibility}
+          onClick={onClick}
+          onColorChange={onColorChange}
+          onContextualMenuClick={onContextualMenuClick}
+          onNameChange={onNameChange}
+        />
+        <Box sx={{width: '100%', height: 0}}>
+          <AddButton
+            isAccessibleSize={isAccessibleSize}
+            isLeftHanded={isLeftHanded}
+            onClick={onAddPath}
+          >
+            <AddPath/>
+          </AddButton>
+        </Box>
+      </>
+    }
   </>;
 };
 
 export default FeaturesPanel;
+
+

@@ -7,6 +7,8 @@
     "delete": "Borrar",
     "download": "Descargar",
     "downloading": "Descargando...",
+    "edit": "Editar",
+    "goTo": "Ir a",
     "instamaps": "Instamaps",
     "rename": "Renombrar",
     "search": "Buscar..."
@@ -17,6 +19,10 @@
     "content_02": "Si no quieres descargarlos ahora, puedes continuar navegando con una versión online, y se te ofrecerá descargarlos más adelante.",
     "content_03": "¿Descargar el Mapa topográfico de Catalunya ahora? (350 MB)",
     "title": "Descarga de datos offline"
+  },
+  "features": {
+    "paths": "Trazas",
+    "points": "Puntos"
   },
   "layerManager": "Capas",
   "scope": "Ámbito",

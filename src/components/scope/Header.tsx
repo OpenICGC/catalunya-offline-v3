@@ -77,7 +77,7 @@ const Header: FC<HeaderProps> = ({name, color, numPoints, numPaths, onBackButton
     color: (theme: Theme) => theme.palette.getContrastText(color),
   };
   
-  return <Box sx={{ flexGrow: 1}}>
+  return <Box>
     <AppBar position="static" sx={appBarSx} elevation={0}>
       <Toolbar variant='dense' sx={toolbarSx}>
         <ArrowBackIcon sx={backIconSx} onClick={onBackButtonClick}/>

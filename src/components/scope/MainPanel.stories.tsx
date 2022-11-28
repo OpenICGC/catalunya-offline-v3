@@ -39,6 +39,186 @@ Default.args = {
       color: '#f5017a',
       isActive: true
     },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi ámbito 03',
+      color: '#f5017a',
+      isActive: true
+    }
   ]
 };
 

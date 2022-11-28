@@ -149,3 +149,130 @@ export const DeviceWithHeader = DeviceWithHeaderTemplate.bind({});
 DeviceWithHeader.args = {
   ...Scope.args
 };
+
+export const OverflowItems = Device.bind({});
+OverflowItems.args = {
+  ...Scope.args,
+  items: [
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 01',
+      color: '#247a44',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 02',
+      color: '#fc5252',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 03',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 04',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 05',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 06',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 07',
+      color: '#0132f5',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 08',
+      color: '#0122f5',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 09',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 10',
+      color: '#320634',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 11',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 12',
+      color: '#ce632a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 13',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 14',
+      color: '#59bb7f',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 15',
+      color: '#521f36',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 16',
+      color: '#07702e',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 17',
+      color: '#d70f0f',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 18',
+      color: '#f5017a',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 19',
+      color: '#a1a0a0',
+      isActive: true
+    },
+    {
+      id: uuidv4(),
+      name: 'Mi Punto o Traza 20',
+      color: '#93f501',
+      isActive: true
+    }
+  ]
+};

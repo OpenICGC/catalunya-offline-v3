@@ -7,6 +7,8 @@
     "delete": "Esborra",
     "download": "Descarrega",
     "downloading": "Descarregant...",
+    "edit": "Editar",
+    "goTo": "Anar a",
     "instamaps": "Instamaps",
     "rename": "Reanomena",
     "search": "Cerca..."
@@ -17,6 +19,10 @@
     "content_02": "Si no voleu decarregar-les ara, podeu continuar navegant amb una versió online, i se us tornarà a oferir més endavant.",
     "content_03": "Voleu descarregar ara el Mapa topogràfic de Catalunya? (350 MB)",
     "title": "Descàrrega de dades offline"
+  },
+  "features": {
+    "paths": "Traces",
+    "points": "Punts"
   },
   "layerManager": "Capes",
   "scope": "Àmbit",
