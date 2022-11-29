@@ -26,22 +26,23 @@ import Header from './Header';
 import List from './List';
 
 //UTILS
-import {HEXColor, Scope, ScopePath, ScopePoint, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {lighten} from '@mui/system/colorManipulator';
 import {Theme} from '@mui/material';
+import {listItemType} from './ListItem';
 
 export type FeaturesPanelProps = {
     isAccessibleSize?: boolean,
     isLeftHanded?: boolean,
     scope: Scope,
-    pointItems: Array<ScopePoint>,
-    pathItems: Array<ScopePath>,
+    pointItems: Array<listItemType>,
+    pathItems: Array<listItemType>,
     onBackButtonClick: () => void,
     onAddPoint: () => void,
     onAddPath: () => void,
-    onClickPoint: (itemId: UUID) => void,
-    onClickPath: (itemId: UUID) => void,
+    onSelectPoint: (itemId: UUID) => void,
+    onSelectPath: (itemId: UUID) => void,
     onColorChangePoint: (color: HEXColor, itemId: UUID) => void,
     onColorChangePath: (color: HEXColor, itemId: UUID) => void,
     onGoToPoint: (itemId: UUID) => void,
@@ -65,8 +66,8 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   onAddPoint,
   onAddPath,
   onBackButtonClick,
-  onClickPoint,
-  onClickPath,
+  onSelectPoint,
+  onSelectPath,
   onColorChangePoint,
   onColorChangePath,
   onGoToPoint,
@@ -83,6 +84,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
 
   const {t} = useTranslation();
   const [tabValue, setTabValue] = useState(0);
+
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
   const handleContextualMenuPointClick = (menuId: string, itemId: UUID) => {
@@ -163,7 +165,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       bgcolor: (theme: Theme) => theme.palette.getContrastText(lighten(scope.color,0.25))
     }
   };
-  
+
   return <>
     <Header
       name={scope.name}
@@ -198,12 +200,12 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     {
       tabValue === 0 && <><List
         isAccessibleSize={isAccessibleSize}
-        items={pointItems.properties}
+        items={pointItems}
         contextualMenu={contextualMenu.point}
         activeActionIcon={<VisibilityIcon/>}
         inactiveActionIcon={<VisibilityOffIcon/>}
         onActionClick={toggleVisibilityPoint}
-        onClick={onClickPoint}
+        onClick={onSelectPoint}
         onColorChange={onColorChangePoint}
         onContextualMenuClick={handleContextualMenuPointClick}
         onNameChange={onNameChangePoint}
@@ -222,12 +224,12 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       tabValue === 1 && <>
         <List
           isAccessibleSize={isAccessibleSize}
-          items={pathItems.properties}
+          items={pathItems}
           contextualMenu={contextualMenu.path}
           activeActionIcon={<VisibilityIcon/>}
           inactiveActionIcon={<VisibilityOffIcon/>}
           onActionClick={toggleVisibilityPath}
-          onClick={onClickPath}
+          onClick={onSelectPath}
           onColorChange={onColorChangePath}
           onContextualMenuClick={handleContextualMenuPathClick}
           onNameChange={onNameChangePath}

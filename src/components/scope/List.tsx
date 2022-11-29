@@ -45,7 +45,7 @@ const errorMessageSx = {
 const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
 const List: FC<ListProps> = ({
-  isAccessibleSize,
+  isAccessibleSize = false,
   items,
   contextualMenu,
   activeActionIcon,
