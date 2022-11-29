@@ -88,7 +88,7 @@ const ListItem: FC<ListItemProps> = ({
     </ListItemIcon>
     {
       isEditing ?
-        <TextField size='small' label={t('scopeListItem.name')} variant='outlined' sx={{mr: 1, flexGrow: 1}}
+        <TextField size='small' label={t('properties.name')} variant='outlined' sx={{mr: 1, flexGrow: 1}}
           inputRef={input => input && input.focus()}
           onChange={handleNameChange} 
           onBlur={handleBlur} 
