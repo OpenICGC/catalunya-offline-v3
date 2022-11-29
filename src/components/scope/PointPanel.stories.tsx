@@ -35,7 +35,7 @@ Default.args = {
       name: 'Montseny',
       color: '#fabada',
       timestamp: Date.now(),
-      description: 'Había un árbol con el tronco torcido en medio del camino',
+      description: 'Había un árbol con el tronco torcido en medio del camino.',
       images: [],
       isVisible: true
     }
