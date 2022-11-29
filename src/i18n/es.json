@@ -26,9 +26,16 @@
   },
   "layerManager": "Capas",
   "scope": "Ámbito",
-  "scopeListItem": {
-    "name": "Nombre"
-  },
   "scopeManager": "Ámbitos",
-  "topographicMap": "Mapa topográfico de Catalunya 1:25 000"
+  "topographicMap": "Mapa topográfico de Catalunya 1:25 000",
+  "properties": {
+    "name": "Nombre",
+    "location": "Ubicación",
+    "latitude": "latitud",
+    "longitude": "longitud",
+    "height": "altura",
+    "date": "Fecha",
+    "description": "Descripción",
+    "images": "Imágenes"
+  }
 }
