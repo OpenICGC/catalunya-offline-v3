@@ -25,17 +25,17 @@
     "points": "Punts"
   },
   "layerManager": "Capes",
-  "scope": "Àmbit",
-  "scopeManager": "Àmbits",
-  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
   "properties": {
-    "name": "Nom",
-    "location": "Ubicació",
-    "latitude": "latitud",
-    "longitude": "longitud",
-    "height": "altura",
     "date": "Data",
     "description": "Descripció",
-    "images": "Imatges"
-  }
+    "height": "altura",
+    "images": "Imatges",
+    "latitude": "latitud",
+    "location": "Ubicació",
+    "longitude": "longitud",
+    "name": "Nom"
+  },
+  "scope": "Àmbit",
+  "scopeManager": "Àmbits",
+  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000"
 }

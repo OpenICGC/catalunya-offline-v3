@@ -25,17 +25,17 @@
     "points": "Points"
   },
   "layerManager": "Layers",
-  "scope": "Scope",
-  "scopeManager": "Scopes",
-  "topographicMap": "Topographic Map of Catalonia 1:25 000",
   "properties": {
-    "name": "Name",
-    "location": "Location",
-    "latitude": "latitude",
-    "longitude": "longitude",
-    "height": "height",
     "date": "Date",
     "description": "Description",
-    "images": "Images"
-  }
+    "height": "height",
+    "images": "Images",
+    "latitude": "latitude",
+    "location": "Location",
+    "longitude": "longitude",
+    "name": "Name"
+  },
+  "scope": "Scope",
+  "scopeManager": "Scopes",
+  "topographicMap": "Topographic Map of Catalonia 1:25 000"
 }
