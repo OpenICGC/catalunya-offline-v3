@@ -26,90 +26,148 @@ import Header from './Header';
 import List from './List';
 
 //UTILS
-import {HEXColor, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, ScopePath, ScopePoint, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {lighten} from '@mui/system/colorManipulator';
-import {listItemType} from './ListItem';
+import {Theme} from '@mui/material';
 
 export type FeaturesPanelProps = {
-    isAccessibleSize: boolean,
-    isLeftHanded: boolean,
-    name: string,
-    color: HEXColor,
-    pointItems: Array<listItemType>,
-    pathItems: Array<listItemType>,
+    isAccessibleSize?: boolean,
+    isLeftHanded?: boolean,
+    scope: Scope,
+    pointItems: Array<ScopePoint>,
+    pathItems: Array<ScopePath>,
     onBackButtonClick: () => void,
     onAddPoint: () => void,
     onAddPath: () => void,
-    onClick: (itemId: UUID) => void,
-    onColorChange: (color: HEXColor, itemId: UUID) => void,
-    onGoTo: (itemId: UUID) => void,
-    onDelete: (itemId: UUID) => void,
-    onExport: (itemId: UUID) => void,
-    onNameChange: (name: string, itemId: UUID) => void
-    toggleVisibility: (itemId: UUID) => void
+    onClickPoint: (itemId: UUID) => void,
+    onClickPath: (itemId: UUID) => void,
+    onColorChangePoint: (color: HEXColor, itemId: UUID) => void,
+    onColorChangePath: (color: HEXColor, itemId: UUID) => void,
+    onGoToPoint: (itemId: UUID) => void,
+    onGoToPath: (itemId: UUID) => void,
+    onDeletePoint: (itemId: UUID) => void,
+    onDeletePath: (itemId: UUID) => void,
+    onExportPoint: (itemId: UUID) => void,
+    onExportPath: (itemId: UUID) => void,
+    onNameChangePoint: (name: string, itemId: UUID) => void
+    onNameChangePath: (name: string, itemId: UUID) => void
+    toggleVisibilityPoint: (itemId: UUID) => void
+    toggleVisibilityPath: (itemId: UUID) => void
 };
 
 const FeaturesPanel: FC<FeaturesPanelProps> = ({
-  isAccessibleSize,
-  isLeftHanded,
-  name,
-  color,
+  isAccessibleSize = false,
+  isLeftHanded = false,
+  scope,
   pointItems,
   pathItems,
   onAddPoint,
   onAddPath,
   onBackButtonClick,
-  onClick,
-  onColorChange,
-  onGoTo,
-  onDelete,
-  onExport,
-  onNameChange,
-  toggleVisibility
+  onClickPoint,
+  onClickPath,
+  onColorChangePoint,
+  onColorChangePath,
+  onGoToPoint,
+  onGoToPath,
+  onDeletePoint,
+  onDeletePath,
+  onExportPoint,
+  onExportPath,
+  onNameChangePoint,
+  onNameChangePath,
+  toggleVisibilityPoint,
+  toggleVisibilityPath,
 }) => {
 
   const {t} = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
-  const handleContextualMenuClick = (menuId: string, itemId: UUID) => {
-    const menuEntry = contextualMenu.find(({id}) => id === menuId);
+  const handleContextualMenuPointClick = (menuId: string, itemId: UUID) => {
+    const menuEntry = contextualMenu.point.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
       menuEntry.callbackProp(itemId);
     }
   };
   
-  const contextualMenu = [
-    {
-      id: 'goTo',
-      label: t('actions.goTo'),
-      icon: <SwipeRightAltIcon/>,
-      callbackProp: onGoTo
-    },
-    {
-      id: 'edit',
-      label: t('actions.edit'),
-      icon: <EditIcon/>
-    },
-    {
-      id: 'delete',
-      label: t('actions.delete'),
-      icon: <DeleteIcon/>,
-      callbackProp: onDelete
-    },
-    {
-      id: 'export',
-      label: 'Exportar',
-      icon: <FileUploadIcon/>,
-      callbackProp: onExport
+  const handleContextualMenuPathClick = (menuId: string, itemId: UUID) => {
+    const menuEntry = contextualMenu.path.find(({id}) => id === menuId);
+    if (menuEntry?.callbackProp) {
+      menuEntry.callbackProp(itemId);
     }
-  ];
-
+  };
+  
+  const contextualMenu = {
+    point : [
+      {
+        id: 'goTo',
+        label: t('actions.goTo'),
+        icon: <SwipeRightAltIcon/>,
+        callbackProp: onGoToPoint
+      },
+      {
+        id: 'edit',
+        label: t('actions.edit'),
+        icon: <EditIcon/>
+      },        
+      {
+        id: 'delete',
+        label: t('actions.delete'),
+        icon: <DeleteIcon/>,
+        callbackProp: onDeletePoint
+      }
+      ,
+      {
+        id: 'export',
+        label: 'Exportar',
+        icon: <FileUploadIcon/>,
+        callbackProp: onExportPoint
+      }
+    ],
+    path: [
+      {
+        id: 'goTo',
+        label: t('actions.goTo'),
+        icon: <SwipeRightAltIcon/>,
+        callbackProp: onGoToPath
+      },
+      {
+        id: 'edit',
+        label: t('actions.edit'),
+        icon: <EditIcon/>
+      },
+      {
+        id: 'delete',
+        label: t('actions.delete'),
+        icon: <DeleteIcon/>,
+        callbackProp: onDeletePath
+      },
+      {
+        id: 'export',
+        label: 'Exportar',
+        icon: <FileUploadIcon/>,
+        callbackProp: onExportPath
+      }
+    ]
+  };
+  
+  const tabsSx = {
+    color: 'action.disabled',
+    '& .Mui-selected': {
+      bgcolor: lighten(scope.color, 0.25),
+      color: (theme: Theme) => theme.palette.getContrastText(lighten(scope.color, 0.25)),
+    },
+    '& .MuiTabs-indicator': {
+      bgcolor: (theme: Theme) => theme.palette.getContrastText(lighten(scope.color,0.25))
+    }
+  };
+  
   return <>
     <Header
-      name={name}
-      color={color}
+      name={scope.name}
+      color={scope.color}
       numPoints={pointItems.length}
       numPaths={pathItems.length}
       onBackButtonClick={onBackButtonClick}
@@ -119,16 +177,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       onChange={handleTabChange}
       textColor='inherit'
       variant='fullWidth'
-      sx={{
-        color: 'action.disabled',
-        '& .Mui-selected': {
-          bgcolor: lighten(color, 0.25),
-          color: theme => theme.palette.getContrastText(lighten(color, 0.25)),
-        },
-        '& .MuiTabs-indicator': {
-          bgcolor: theme => theme.palette.getContrastText(lighten(color,0.25))
-        }
-      }}
+      sx={tabsSx}
     >
       <Tab
         label={
@@ -149,15 +198,15 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     {
       tabValue === 0 && <><List
         isAccessibleSize={isAccessibleSize}
-        items={pointItems}
-        contextualMenu={contextualMenu}
+        items={pointItems.properties}
+        contextualMenu={contextualMenu.point}
         activeActionIcon={<VisibilityIcon/>}
         inactiveActionIcon={<VisibilityOffIcon/>}
-        onActionClick={toggleVisibility}
-        onClick={onClick}
-        onColorChange={onColorChange}
-        onContextualMenuClick={handleContextualMenuClick}
-        onNameChange={onNameChange}
+        onActionClick={toggleVisibilityPoint}
+        onClick={onClickPoint}
+        onColorChange={onColorChangePoint}
+        onContextualMenuClick={handleContextualMenuPointClick}
+        onNameChange={onNameChangePoint}
       />
       <Box sx={{width: '100%', height: 0}}>
         <AddButton
@@ -173,15 +222,15 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       tabValue === 1 && <>
         <List
           isAccessibleSize={isAccessibleSize}
-          items={pathItems}
-          contextualMenu={contextualMenu}
+          items={pathItems.properties}
+          contextualMenu={contextualMenu.path}
           activeActionIcon={<VisibilityIcon/>}
           inactiveActionIcon={<VisibilityOffIcon/>}
-          onActionClick={toggleVisibility}
-          onClick={onClick}
-          onColorChange={onColorChange}
-          onContextualMenuClick={handleContextualMenuClick}
-          onNameChange={onNameChange}
+          onActionClick={toggleVisibilityPath}
+          onClick={onClickPath}
+          onColorChange={onColorChangePath}
+          onContextualMenuClick={handleContextualMenuPathClick}
+          onNameChange={onNameChangePath}
         />
         <Box sx={{width: '100%', height: 0}}>
           <AddButton
