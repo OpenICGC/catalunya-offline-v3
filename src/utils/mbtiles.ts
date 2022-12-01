@@ -34,11 +34,12 @@ const sourceDatabases = new Map();
 const getTile = (url: string) => {
   const splitUrl = url.split('/');
   const dbName = splitUrl[2];
+  const uri = Array.from(sourceDatabases.keys()).find(db => db.includes(dbName));
   const z = +splitUrl[splitUrl.length - 3];
   const x = +splitUrl[splitUrl.length - 2];
   const y = +(splitUrl[splitUrl.length - 1].split('.')[0]);
 
-  return getTileFromDatabase(dbName, z, x, y);
+  return getTileFromDatabase(uri, z, x, y);
 };
 
 const getTileFromDatabase = async (dbName: string, z: number, x: number, y: number) => {
@@ -56,23 +57,46 @@ const getTileFromDatabase = async (dbName: string, z: number, x: number, y: numb
 
 const getDatabase = async (dbName: string) => {
   await init;
-  if (!sourceDatabases.has(dbName)) {
-    try {
-      await sqlite.closeConnection(dbName, true);
-    } catch {
+  const platform = Capacitor.getPlatform();
+  if (platform === 'web') {
+    if (!sourceDatabases.has(dbName)) {
+      try {
+        await sqlite.closeConnection(dbName, true);
+      } catch {
       // Pos vale
+      }
+      console.debug(`[mbtiles] creating connection to ${dbName}`);
+      sourceDatabases.set(dbName, sqlite
+        .createConnection(dbName, false, 'no-encryption', 1, true)
+        .then(async db => {
+          console.debug(`[mbtiles] opening ${dbName}`);
+          await db.open();
+          console.debug(`[mbtiles] opened ${dbName}`);
+          return db;
+        })
+      );
     }
-    console.debug(`[mbtiles] creating connection to ${dbName}`);
-    sourceDatabases.set(dbName, sqlite
-      .createConnection(dbName, false, 'no-encryption', 1, true)
-      .then(async db => {
-        console.debug(`[mbtiles] opening ${dbName}`);
-        await db.open();
-        console.debug(`[mbtiles] opened ${dbName}`);
-        return db;
-      })
-    );
+  } else {
+    if (!sourceDatabases.has(dbName)) {
+      try {
+        await sqlite.closeNCConnection(dbName);
+      } catch {
+      // Pos vale
+      }
+      console.debug(`[mbtiles] creating connection to ${dbName}`);
+      console.log(sqlite.isDatabase(dbName));
+      sourceDatabases.set(dbName, sqlite
+        .createNCConnection(dbName, 1)
+        .then(async db => {
+          console.debug(`[mbtiles] opening ${dbName}`);
+          await db.open();
+          console.debug(`[mbtiles] opened ${dbName}`);
+          return db;
+        })
+      );
+    }
   }
+  
   return sourceDatabases.get(dbName);
 };
 
@@ -98,6 +122,7 @@ const isMbtilesDownloaded = async (dbName: string) => {
   console.debug(`[mbtiles] Database ${dbName} is ${result ? '' : 'not '}downloaded`);
   return result;
 };
+
 const downloadMbtiles = async (url: string) => {
   await init;
   // TODO COF-5 Create a better download manager for Web (indexedDB) and Android/iOS, with progress

@@ -9,6 +9,7 @@ import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeo
 import FabButton from '../components/buttons/FabButton';
 import useCompass from '../hooks/useCompass';
 import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
+import useFileTransferDownload from '../hooks/useFileTransfer';
 
 mbtiles(maplibregl);
 
@@ -100,6 +101,21 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
   const enableTracking = () => setTrackingMode(true);
   const disableTracking = () => setTrackingMode(false);
 
+  const {
+    uri,
+    progress,
+    error,
+    cancel
+  } = useFileTransferDownload(MBTILES.downloadMbtilesUrl);
+
+  useEffect(() => console.log({uri, progress, error}), [uri, progress, error]);
+
+  useEffect(() => {
+    if (progress === 100) {
+      setMbtilesStatus(AVAILABLE);
+    }
+  }, [uri, progress]);
+
 
   // Effects on offline tileset downloading
   useEffect(() => {
@@ -111,15 +127,18 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
       if (isDownloaded) {
         setMbtilesStatus(AVAILABLE);
       } else {
-        downloadMbtiles(MBTILES.downloadMbtilesUrl).then(() => setMbtilesStatus(AVAILABLE));
+        //downloadMbtiles(MBTILES.downloadMbtilesUrl).then(() => setMbtilesStatus(AVAILABLE));
+        //downloadMbtilesBetter(MBTILES.downloadMbtilesUrl, (progress) => console.log(progress))
+        //  .then(() => setMbtilesStatus(AVAILABLE));
+
         setMbtilesStatus(DOWNLOADING);
       }
     });
   }, []);
 
   useEffect(() => {
-    if (mbtilesStatus === AVAILABLE) {
-      getDatabase(MBTILES.dbName).then(() => setMbtilesStatus(READY));
+    if (mbtilesStatus === AVAILABLE && uri) {
+      getDatabase(uri).then(() => setMbtilesStatus(READY));
       setMbtilesStatus(OPENING);
     }
   }, [mbtilesStatus]);
@@ -207,7 +226,7 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
         onFoldersClick={() => changeManager('SCOPES')}
       />
     </GeocomponentMap> : <div>
-      {mbtilesStatusMessages[mbtilesStatus]}
+      {mbtilesStatusMessages[mbtilesStatus] + progress + '%'}
     </div>;
 };
 
