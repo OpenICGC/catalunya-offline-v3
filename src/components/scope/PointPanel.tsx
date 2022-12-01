@@ -193,14 +193,6 @@ const PointPanel: FC<PointPanelProps> = ({
     marginBottom: isEditing ? '32px' : '16px',
   });
 
-  const item = {
-    id: point.id,
-    name: point.properties.name,
-    color: point.properties.color || scope.color,
-    isActive: point.properties.isVisible,
-    isEditing: isEditing
-  };
-  
   const precisePositionIconSx = {
     '&:hover': {
       bgcolor: !isEditing ? 'common.white' : undefined,
@@ -280,7 +272,10 @@ const PointPanel: FC<PointPanelProps> = ({
     />
     <Box>{/*makes up&down margin*/}
       <ListItem
-        item={item}
+        itemId={point.id}
+        name={point.properties.name}
+        color={point.properties.color || scope.color}
+        isActive={point.properties.isVisible}
         isEditing={isEditing}
         actionIcons={actionIcons}
         onActionClick={handleActionClick}

@@ -27,12 +27,10 @@ const TemplateList: Story<ListItemProps> = args => <List><ListItem {...args}/><L
 
 export const Default = Template.bind({});
 Default.args = {
-  item: {
-    id: uuidv4(),
-    name: 'Mi Ámbito, Punto o Traza',
-    color: '#247a44',
-    isActive: true,
-  },
+  itemId: uuidv4(),
+  name: 'Mi Ámbito, Punto o Traza',
+  color: '#247a44',
+  isActive: true,
   isEditing: false,
   actionIcons: [
     {
@@ -68,35 +66,29 @@ Default.args = {
 export const Editing = Template.bind({});
 Editing.args = {
   ...Default.args,
-  item: {
-    id: uuidv4(),
-    name: 'Mi Ámbito, Punto o Traza',
-    color: '#247a44',
-    isActive: true,
-  },
+  itemId: uuidv4(),
+  name: 'Mi Ámbito, Punto o Traza',
+  color: '#247a44',
+  isActive: true,
   isEditing: true
 };
 
 export const Error = Template.bind({});
 Error.args = {
   ...Default.args,
-  item: {
-    id: uuidv4(),
-    name: '',
-    color: '#247a44',
-    isActive: true,
-  },
+  itemId: uuidv4(),
+  name: 'Mi Ámbito, Punto o Traza',
+  color: '#247a44',
+  isActive: true,
   isEditing: true
 };
 
 export const PointDetail = TemplateList.bind({});
 PointDetail.args = {
-  item: {
-    id: uuidv4(),
-    name: 'Mi Punto',
-    color: '#247a44',
-    isActive: true,
-  },
+  itemId: uuidv4(),
+  name: 'Mi Ámbito, Punto o Traza',
+  color: '#247a44',
+  isActive: true,
   isEditing: false,
   actionIcons: [
     {
@@ -111,16 +103,17 @@ PointDetail.args = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ManagedTemplate: Story<ListItemProps> = ({item, onColorChange, onNameChange, onActionClick, ...args}) => {
-  const [getColor, setNewColor] = useState(item.color);
-  const [getName, setNewName] = useState(item.name);
-  const [getActive, setActive] = useState(item.isActive);
-  const computedItem = {...item, color: getColor, name: getName, isActive: getActive};
+const ManagedTemplate: Story<ListItemProps> = ({color, name, isActive, onColorChange, onNameChange, onActionClick, ...args}) => {
+  const [getColor, setNewColor] = useState(color);
+  const [getName, setNewName] = useState(name);
+  const [getActive, setActive] = useState(isActive);
   return <ListItem
-    item={computedItem}
+    color={getColor}
     onColorChange={setNewColor}
+    name={getName}
     onNameChange={setNewName}
-    onActionClick={() => setActive(!computedItem.isActive)}
+    isActive={getActive}
+    onActionClick={() => setActive(!isActive)}
     {...args} />;
 };
 
@@ -133,5 +126,3 @@ export const Grouped = TemplateList.bind({});
 Grouped.args = {
   ...Default.args
 };
-
-

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import List, {ListProps} from './List';
 import {Meta, Story} from '@storybook/react';
 
@@ -23,6 +23,17 @@ import ManagerHeader from '../common/ManagerHeader';
 import {DRAWER_WIDTH} from '../../config';
 import {v4 as uuidv4} from 'uuid';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
+import {HEXColor, UUID} from '../../types/commonTypes';
+import {listItemType} from './ListItem';
+
+const stackSx = {
+  height: '500px',
+  width: DRAWER_WIDTH,
+  boxShadow: 3,
+  overflow: 'hidden',
+  m: 0,
+  p: 0
+};
 
 export default {
   title: 'Scope/List',
@@ -31,23 +42,31 @@ export default {
 
 const Template: Story<ListProps> = args => <List {...args}/>;
 
-const DeviceTemplate: Story<ListProps> = args => <Stack sx={{
-  height: '500px',
-  width: DRAWER_WIDTH,
-  boxShadow: 3,
-  overflow: 'hidden',
-  m: 0,
-  p: 0
-}}><List {...args}/></Stack>;
+const DeviceTemplate: Story<ListProps> = args => <Stack sx={stackSx}><List {...args}/></Stack>;
 
-const DeviceWithHeaderTemplate: Story<ListProps> = args => <Stack sx={{
-  height: '500px',
-  width: DRAWER_WIDTH,
-  boxShadow: 3,
-  overflow: 'hidden',
-  m: 0,
-  p: 0
-}}>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ManagedTemplate: Story<ListProps> = ({items, onNameChange, onColorChange, ...args}) => {
+  const [getItems, setItems] = useState<Array<listItemType>>(items);
+
+  const handleColorChange = useCallback((color: HEXColor, itemId: UUID) => setItems(
+    prevItems => prevItems.map(item => item.id === itemId ? {...item, color} : item)
+  ), []);
+
+  const handleNameChange = useCallback((name: string, itemId: UUID) => setItems(
+    prevItems => prevItems.map(item => item.id === itemId ? {...item, name} : item)
+  ), []);
+
+  return <Stack sx={stackSx}>
+    <List
+      items={getItems}
+      onColorChange={handleColorChange}
+      onNameChange={handleNameChange}
+      {...args}
+    />
+  </Stack>;
+};
+
+const DeviceWithHeaderTemplate: Story<ListProps> = args => <Stack sx={stackSx}>
   <ManagerHeader name="Ámbitos" color="#1b718c" startIcon={<FolderIcon/>}/>
   <List {...args}/>
 </Stack>;
@@ -91,6 +110,11 @@ Scope.args = {
     }
   ],
   isAccessibleSize: false
+};
+
+export const Managed = ManagedTemplate.bind({});
+Managed.args = {
+  ...Scope.args
 };
 
 export const Empty = Template.bind({});

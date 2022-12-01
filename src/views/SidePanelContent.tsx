@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import {Manager} from '../types/commonTypes';
 import Layers from './sidepanels/Layers';
 import BaseMaps from './sidepanels/BaseMaps';
-import Scopes from './sidepanels/Scopes';
+import ScopeMain from './sidepanels/ScopeMain';
 
 //STYLES
 const stackSx = {
@@ -35,7 +35,7 @@ const SidePanelContent: FC<SidePanelContentProps> = ({manager, mapStyle, onMapSt
       />
     }
     {manager === 'SCOPES' &&
-      <Scopes/>
+      <ScopeMain/>
     }
   </Stack>;
 };

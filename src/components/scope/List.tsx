@@ -52,18 +52,15 @@ const List: FC<ListProps> = ({
   onContextualMenuClick,
   onNameChange}) => {
 
-  const ScrollableContent = styled(Box)({
+  const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',
     padding: '0px',
     marginBottom: isAccessibleSize ? '72px' : '64px',
-  });
+  }), [isAccessibleSize]);
     
   const {t} = useTranslation();
   const [searchText, setSearchText] = useState('');
   const [editableId, setEditableId] = useState('');
-  
-  const handleOnTextChange = (text: string) => setSearchText(text);
-  const handleSearchClick = () => undefined;
 
   const handleContextualMenuClick = (actionId: string, itemId: UUID) => {
     actionId === 'rename' ? 
@@ -75,9 +72,13 @@ const List: FC<ListProps> = ({
 
   const filteredItems = useMemo(() =>
     searchText ?
-      items.filter(item => normalize(item.name).includes(normalize(searchText))) : items
+      items.filter(item => normalize(item.name).includes(normalize(searchText))) :
+      items
   , [searchText, items]);
-    
+  
+  const handleOnTextChange = (text: string) => setSearchText(text);
+  const handleSearchClick = () => undefined;
+  
   return <>
     <Box sx={{px: 1, pt: 1, pb: 1, bgcolor: 'common.white'}}>
       <SearchBox
@@ -99,21 +100,21 @@ const List: FC<ListProps> = ({
     <ScrollableContent>
       <MuiList dense sx={{ml: 0.75, my: 0, mr: 0}}>
         {
-          filteredItems.map((filteredItem) => {
-            return <ListItem
-              key={filteredItem.id}
-              item={filteredItem}
-              isEditing={filteredItem.id === editableId}
-              actionIcons={actionIcons}
-              contextualMenu={contextualMenu}
-              onActionClick={onActionClick}
-              onClick={onClick}
-              onColorChange={onColorChange}
-              onContextualMenuClick={handleContextualMenuClick}
-              onNameChange={onNameChange}
-              onStopEditing={handleStopEditing}
-            />;
-          })
+          filteredItems.map(item => <ListItem
+            key={item.id}
+            itemId={item.id}
+            name={item.name}
+            color={item.color}
+            isEditing={item.id === editableId}
+            actionIcons={actionIcons}
+            contextualMenu={contextualMenu}
+            onActionClick={onActionClick}
+            onClick={onClick}
+            onColorChange={onColorChange}
+            onContextualMenuClick={handleContextualMenuClick}
+            onNameChange={onNameChange}
+            onStopEditing={handleStopEditing}
+          />)
         }
       </MuiList>
     </ScrollableContent>

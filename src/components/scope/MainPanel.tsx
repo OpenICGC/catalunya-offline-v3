@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback, useMemo} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -22,6 +22,8 @@ import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
 import {listItemType} from './ListItem';
+
+const boxSx = {width: '100%', height: 0};
 
 export type MainPanelProps = {
   isAccessibleSize?: boolean,
@@ -53,7 +55,7 @@ const MainPanel: FC<MainPanelProps> = ({
   const {t} = useTranslation();
   const theme = useTheme();
 
-  const contextualMenu = [
+  const contextualMenu = useMemo(() => ([
     {
       id: 'rename',
       label: t('actions.rename'),
@@ -77,14 +79,16 @@ const MainPanel: FC<MainPanelProps> = ({
       icon: <DashboardIcon/>,
       callbackProp: onDataSchema
     }
-  ];
+  ]), [onDelete, onInstamaps, onDataSchema, t]);
 
-  const handleContextualMenuClick = (menuId: string, itemId: UUID) => {
+  const handleContextualMenuClick = useCallback((menuId: string, itemId: UUID) => {
     const menuEntry = contextualMenu.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
       menuEntry.callbackProp(itemId);
     }
-  };
+  }, [contextualMenu]);
+
+  const actionIcons = useMemo(() => ([{id: 'export', activeIcon: <FileUploadIcon/>}]), []);
 
   return <>
     <ManagerHeader
@@ -96,14 +100,14 @@ const MainPanel: FC<MainPanelProps> = ({
       isAccessibleSize={isAccessibleSize}
       items={items}
       contextualMenu={contextualMenu}
-      actionIcons={[{id: 'export', activeIcon: <FileUploadIcon/>}]}
+      actionIcons={actionIcons}
       onActionClick={onShare}
       onClick={onSelect}
       onColorChange={onColorChange}
       onContextualMenuClick={handleContextualMenuClick}
       onNameChange={onRename}
     />
-    <Box sx={{width: '100%', height: 0}}>
+    <Box sx={boxSx}>
       <AddButton
         isAccessibleSize={isAccessibleSize}
         isLeftHanded={isLeftHanded}

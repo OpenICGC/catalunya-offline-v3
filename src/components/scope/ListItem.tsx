@@ -1,4 +1,4 @@
-import React, {KeyboardEvent, FC, ChangeEvent, SyntheticEvent, useState, ReactNode} from 'react';
+import React, {KeyboardEvent, FC, ChangeEvent, SyntheticEvent, useState, ReactNode, memo} from 'react';
 
 //MUI
 import IconButton from '@mui/material/IconButton';
@@ -27,7 +27,10 @@ export type listItemType = {
 }
 
 export type ListItemProps = {
-  item: listItemType,
+  itemId: UUID,
+  name: string,
+  color: HEXColor,
+  isActive?: boolean,
   isEditing: boolean,
   actionIcons?: Array<{ id: string, activeIcon: ReactNode, inactiveIcon?: ReactNode }>,
   contextualMenu?: Array<{ id: string, label: string, icon?: ReactNode }>,
@@ -39,8 +42,13 @@ export type ListItemProps = {
   onStopEditing?: () => void
 }
 
-const ListItem: FC<ListItemProps> = ({
-  item,
+// TODO add display name
+// eslint-disable-next-line react/display-name
+const ListItem: FC<ListItemProps> = memo(({
+  itemId,
+  name,
+  color,
+  isActive,
   isEditing,
   actionIcons,
   contextualMenu,
@@ -57,7 +65,7 @@ const ListItem: FC<ListItemProps> = ({
   const actionIconSx = {
     m: 0, 
     p: 0.5,
-    '& .MuiSvgIcon-root': { color: item.isActive ? 'action.active' : 'action.disabled' }
+    '& .MuiSvgIcon-root': { color: isActive ? 'action.active' : 'action.disabled' }
   };
   
   const noEditableTextField = {
@@ -81,11 +89,11 @@ const ListItem: FC<ListItemProps> = ({
     setAnchorEl(e.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
-  const handleAction = (actionId: string) => onContextualMenuClick && onContextualMenuClick(actionId, item.id);
-    
+  const handleAction = (actionId: string) => onContextualMenuClick && onContextualMenuClick(actionId, itemId);
+
   //EDIT
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, item.id);
-  const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, item.id);
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, itemId);
+  const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, itemId);
   const handleBlur = () => {
     setAnchorEl(null);
     onStopEditing && onStopEditing();
@@ -104,12 +112,12 @@ const ListItem: FC<ListItemProps> = ({
           <ColorPicker
             hideTextfield
             disableAlpha
-            value={item.color}
+            value={color}
             inputFormats={[]}
             onChange={handleColorChange}
           />
           :
-          <Box sx={{width: 24, height: 24, bgcolor: item.color, borderRadius: 1, mx: 0.75}}/>
+          <Box sx={{width: 24, height: 24, bgcolor: color, borderRadius: 1, mx: 0.75}}/>
       }
 
     </ListItemIcon>
@@ -117,24 +125,24 @@ const ListItem: FC<ListItemProps> = ({
       isEditing ?
         <TextField size='small' label='' variant='outlined' sx={{mr: 1, flexGrow: 1}}
           key='listItem'
-          error={item.name.length < 1}
+          error={name.length < 1}
           inputRef={input => input && input.focus()}
           onChange={handleNameChange} 
           onBlur={handleBlur} 
           onKeyDown={handleInputOut}
-          defaultValue={item.name}
+          defaultValue={name}
         />
         :
         <TextField size='small' label='' variant='outlined' sx={noEditableTextField}
-          onClick={() => onClick(item.id)}
+          onClick={() => onClick(itemId)}
           inputProps={{ readOnly: true }}
-          defaultValue={item.name}
+          defaultValue={name}
         />
     }
     {
       !isEditing && actionIcons?.map(i =>
-        <IconButton key={i.id} onClick={() => onActionClick(item.id, i?.id)} sx={actionIconSx}>
-          {item.isActive ? i.activeIcon : i.inactiveIcon}
+        <IconButton key={i.id} onClick={() => onActionClick(itemId, i?.id)} sx={actionIconSx}>
+          {isActive ? i.activeIcon : i.inactiveIcon}
         </IconButton>)
     }
     {
@@ -169,6 +177,6 @@ const ListItem: FC<ListItemProps> = ({
       </>
     }
   </MuiListItem>;
-};
+});
 
 export default ListItem;
