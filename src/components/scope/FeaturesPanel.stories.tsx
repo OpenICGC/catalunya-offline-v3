@@ -2,11 +2,11 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react';
 import FeaturesPanel, {FeaturesPanelProps} from './FeaturesPanel';
 
-import Box from '@mui/material/Box';
 import {DRAWER_WIDTH} from '../../config';
 import {v4 as uuidv4} from 'uuid';
 
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
+import Stack from '@mui/material/Stack';
 
 export default {
   title: 'Scope/FeaturesPanel',
@@ -15,8 +15,16 @@ export default {
 
 const Template: Story<FeaturesPanelProps> = args => <FeaturesPanel {...args}/>;
 
-const DeviceTemplate: Story<FeaturesPanelProps> = args => <Box
-  sx={{width: DRAWER_WIDTH, height: 544, boxShadow: 3}}><FeaturesPanel {...args}/></Box>;
+const DeviceTemplate: Story<FeaturesPanelProps> = args => <Stack sx={{
+  height: '500px',
+  width: DRAWER_WIDTH,
+  boxShadow: 3,
+  overflow: 'hidden',
+  m: 0,
+  p: 0
+}}>
+  <FeaturesPanel {...args}/>
+</Stack>;
 
 const palette = useColorRamp('BrewerOranges4').hexColors;
 

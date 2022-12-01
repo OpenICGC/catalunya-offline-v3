@@ -3,7 +3,7 @@ import ManagerHeader, {ManagerHeaderProps} from './ManagerHeader';
 import {Meta, Story} from '@storybook/react';
 
 //MUI
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 //MUI-ICONS
 import FolderIcon from '@mui/icons-material/Folder';
@@ -17,12 +17,22 @@ export default {
   title: 'Common/ManagerHeader',
   component: ManagerHeader,
   argTypes: {
-    color: { control: 'color' },
-  },
+    color: {control: 'color'}
+  }
 } as Meta;
 
 const Template: Story<ManagerHeaderProps> = args => <ManagerHeader {...args}/>;
-const DeviceTemplate: Story<ManagerHeaderProps> = args => <Box sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><ManagerHeader {...args}/></Box>;
+const DeviceTemplate: Story<ManagerHeaderProps> = args =>
+  <Stack sx={{
+    height: '500px',
+    width: DRAWER_WIDTH,
+    boxShadow: 3,
+    overflow: 'hidden',
+    m: 0,
+    p: 0
+  }}>
+    <ManagerHeader {...args}/>
+  </Stack>;
 
 export const Scopes = Template.bind({});
 Scopes.args = {
