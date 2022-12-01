@@ -3,11 +3,12 @@ import MainPanel, {MainPanelProps} from './MainPanel';
 import {Meta, Story} from '@storybook/react';
 
 //MUI
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 //UTILS
 import {v4 as uuidv4} from 'uuid';
 import {DRAWER_WIDTH} from '../../config';
+
 
 export default {
   title: 'Scope/MainPanel',
@@ -15,31 +16,26 @@ export default {
 } as Meta;
 
 const Template: Story<MainPanelProps> = args => <MainPanel {...args}/>;
-const DeviceTemplate: Story<MainPanelProps> = args => <Box
-  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><MainPanel {...args}/></Box>;
+const DeviceTemplate: Story<MainPanelProps> = args =>
+  <Stack sx={{
+    height: '500px',
+    width: DRAWER_WIDTH,
+    boxShadow: 3,
+    overflow: 'hidden',
+    m: 0,
+    p: 0
+  }}>
+    <MainPanel {...args}/>
+  </Stack>;
 
 export const Default = Template.bind({});
 Default.args = {
-  items: [
-    {
-      id: uuidv4(),
-      name: 'Mi ámbito 01',
-      color: '#247a44',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi ámbito 02',
-      color: '#fc5252',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi ámbito 03',
-      color: '#f5017a',
-      isActive: true
-    },
-  ]
+  items: [...Array(20).keys()].map(i => ({
+    id: uuidv4(),
+    name: `Mi ámbito ${i}`,
+    color: '#fabada',
+    isActive: true,
+  })),
 };
 
 export const Empty = DeviceTemplate.bind({});

@@ -1,5 +1,8 @@
 import React, {FC} from 'react';
 
+//MUI
+import Box from '@mui/material/Box';
+
 //MUI-ICONS
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -13,12 +16,12 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddButton from '../buttons/AddButton';
 import List from './List';
 import ManagerHeader from '../common/ManagerHeader';
-import {listItemType} from './ListItem';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
+import {listItemType} from './ListItem';
 
 export type MainPanelProps = {
   isAccessibleSize?: boolean,
@@ -90,6 +93,7 @@ const MainPanel: FC<MainPanelProps> = ({
       startIcon={<FolderIcon/>}
     />
     <List
+      isAccessibleSize={isAccessibleSize}
       items={items}
       contextualMenu={contextualMenu}
       activeActionIcon={<FileUploadIcon/>}
@@ -99,7 +103,7 @@ const MainPanel: FC<MainPanelProps> = ({
       onContextualMenuClick={handleContextualMenuClick}
       onNameChange={onRename}
     />
-    <div style={{width: '100%', height: 0}}>
+    <Box sx={{width: '100%', height: 0}}>
       <AddButton
         isAccessibleSize={isAccessibleSize}
         isLeftHanded={isLeftHanded}
@@ -107,7 +111,7 @@ const MainPanel: FC<MainPanelProps> = ({
       >
         <CreateNewFolderIcon/>
       </AddButton>
-    </div>
+    </Box>
   </>;
 };
 

@@ -1,7 +1,9 @@
 import React, {FC, ReactNode, useMemo, useState} from 'react';
 
 //MUI
+import Box from '@mui/material/Box';
 import MuiList from '@mui/material/List';
+import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -14,12 +16,11 @@ import ListItem, {listItemType} from './ListItem';
 
 //UTILS
 import {HEXColor, UUID} from '../../types/commonTypes';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
 
 export type ListProps = {
+    isAccessibleSize: boolean,
     items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
     contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
     activeActionIcon?: ReactNode,
@@ -39,15 +40,12 @@ const errorMessageSx = {
   display: 'block'
 };
 
-const ScrollableContent = styled(Box)({
-  overflow: 'auto',
-  padding: '0px',
-  marginBottom: '64px'
-});
+
 
 const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
 const List: FC<ListProps> = ({
+  isAccessibleSize = false,
   items,
   contextualMenu,
   activeActionIcon,
@@ -58,6 +56,12 @@ const List: FC<ListProps> = ({
   onContextualMenuClick,
   onNameChange}) => {
 
+  const ScrollableContent = styled(Box)({
+    overflow: 'auto',
+    padding: '0px',
+    marginBottom: isAccessibleSize ? '72px' : '64px',
+  });
+    
   const {t} = useTranslation();
   const [searchText, setSearchText] = useState('');
 
@@ -71,7 +75,7 @@ const List: FC<ListProps> = ({
   const handleSearchClick = () => undefined;
   
   return <>
-    <Box sx={{mx: 1, mt: 2}}>
+    <Box sx={{px: 1, pt: 1, pb: 1, bgcolor: 'common.white'}}>
       <SearchBox
         text={searchText}
         placeholder={t('actions.search')}
