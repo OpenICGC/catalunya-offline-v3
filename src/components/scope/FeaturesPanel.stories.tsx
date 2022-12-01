@@ -6,18 +6,20 @@ import Box from '@mui/material/Box';
 import {DRAWER_WIDTH} from '../../config';
 import {v4 as uuidv4} from 'uuid';
 
+import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
+
 export default {
   title: 'Scope/FeaturesPanel',
-  color: {control: 'color'}
+  component: FeaturesPanel
 } as Meta;
 
 const Template: Story<FeaturesPanelProps> = args => <FeaturesPanel {...args}/>;
 
 const DeviceTemplate: Story<FeaturesPanelProps> = args => <Box
   sx={{width: DRAWER_WIDTH, height: 544, boxShadow: 3}}><FeaturesPanel {...args}/></Box>;
-    
-/*const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;*/
-    
+
+const palette = useColorRamp('BrewerOranges4').hexColors;
+
 export const Default = Template.bind({});
 Default.args = {
   scope: {
@@ -25,16 +27,37 @@ Default.args = {
     name: 'Montseny',
     color: '#095c7a'
   },
-  pointItems: [...Array(15).keys()].map(i => ({
+  scopePoints: [...Array(15).keys()].map(i => ({
+    type: 'Feature',
     id: uuidv4(),
-    name: `Mi punto ${i}`,
-    color: '#fabada', //randomColor
-    isActive: Math.random() < 0.5,
+    geometry: {
+      type: 'Point',
+      coordinates: [0, 0]
+    },
+    properties: {
+      name: `Mi punto ${i}`,
+      timestamp: Date.now(),
+      description: '',
+      images: [],
+      color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
+      isVisible: Math.random() < 0.5
+    }
   })),
-  pathItems: [...Array(5).keys()].map(i => ({
+  scopePaths: [...Array(20).keys()].map(i => ({
+    type: 'Feature',
     id: uuidv4(),
-    name: `Mi traza ${i}`,
-    color: '#fabada',
+    geometry: {
+      type: 'LineString',
+      coordinates: [[0, 0], [1, 1]]
+    },
+    properties: {
+      name: `Mi traza ${i}`,
+      timestamp: Date.now(),
+      description: '',
+      images: [],
+      color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
+      isVisible: Math.random() < 0.5
+    }
   })),
   isAccessibleSize: false,
   isLeftHanded: false
@@ -44,4 +67,3 @@ export const Device = DeviceTemplate.bind({});
 Device.args = {
   ...Default.args
 };
-
