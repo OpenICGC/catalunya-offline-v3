@@ -23,7 +23,7 @@ export type ListProps = {
     isAccessibleSize: boolean,
     items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
     contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
-    activeActionIcon?: ReactNode,
+    activeActionIcons?: Array<{ id: string, icon: ReactNode }>,
     inactiveActionIcon?: ReactNode,
     onActionClick: (itemId: UUID) => void,
     onClick: (itemId: UUID) => void,
@@ -48,7 +48,7 @@ const List: FC<ListProps> = ({
   isAccessibleSize = false,
   items,
   contextualMenu,
-  activeActionIcon,
+  activeActionIcons,
   inactiveActionIcon,
   onActionClick,
   onClick,
@@ -98,7 +98,7 @@ const List: FC<ListProps> = ({
           filteredItems.map(item => <ListItem
             key={item.id}
             item={item}
-            activeActionIcon={activeActionIcon}
+            activeActionIcons={activeActionIcons}
             inactiveActionIcon={inactiveActionIcon}
             contextualMenu={contextualMenu}
             onActionClick={onActionClick}

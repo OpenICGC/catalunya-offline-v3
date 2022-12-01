@@ -96,7 +96,12 @@ Scope.args = {
       icon: <DashboardIcon/>
     }
   ],
-  activeActionIcon: <FileUploadIcon/>
+  activeActionIcons: [
+    {
+      id: 'export',
+      icon: <FileUploadIcon/>
+    }
+  ]
 };
 
 export const Empty = Template.bind({});
@@ -149,8 +154,13 @@ Point_Path.args = {
       icon: <FileUploadIcon/>
     }
   ],
-  activeActionIcon: <VisibilityIcon/>,
-  inactiveActionIcon: <VisibilityOffIcon/>
+  activeActionIcons: [
+    {
+      id: 'visibility',
+      icon: <VisibilityIcon/>
+    }
+  ],
+  inactiveActionIcon:  <VisibilityOffIcon/>,
 };
 
 export const Device = DeviceTemplate.bind({});

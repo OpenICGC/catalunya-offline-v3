@@ -17,6 +17,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
+import EditIcon from '@mui/icons-material/Edit';
+import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
+import Box from '@mui/material/Box';
 
 export type listItemType = {
   id: UUID,
@@ -27,19 +30,19 @@ export type listItemType = {
 
 export type ListItemProps = {
   item: listItemType,
-  activeActionIcon?: ReactNode,
+  activeActionIcons?: Array<{ id: string, icon: ReactNode }>,
   inactiveActionIcon?: ReactNode,
-  contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
-  onActionClick: (itemId: UUID) => void,
+  contextualMenu?: Array<{ id: string, label: string, icon?: ReactNode }>,
+  onActionClick: (itemId: UUID, actionId: string) => void,
   onClick: (itemId: UUID) => void,
   onColorChange: (color: HEXColor, itemId: UUID) => void,
-  onContextualMenuClick: (menuId: string, itemId: UUID) => void,
+  onContextualMenuClick?: (menuId: string, itemId: UUID) => void,
   onNameChange: (name: string, itemId: UUID) => void
 }
 
 const ListItem: FC<ListItemProps> = ({
   item,
-  activeActionIcon,
+  activeActionIcons,
   inactiveActionIcon,
   contextualMenu,
   onActionClick,
@@ -50,6 +53,13 @@ const ListItem: FC<ListItemProps> = ({
 }) => {
   const {t} = useTranslation();
 
+  //STYLES
+  const actionIconSx = {
+    m: 0, 
+    p: 0.5,
+    '& .MuiSvgIcon-root': { color: item.isActive ? undefined : 'action.disabled' }
+  };
+  
   //CONTEXTUAL MENU
   const [isEditing, setIsEditing] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -60,7 +70,7 @@ const ListItem: FC<ListItemProps> = ({
   const handleClose = () => setAnchorEl(null);
   const handleAction = (actionId: string) => actionId === 'rename' ?
     setIsEditing(true) :
-    onContextualMenuClick(actionId, item.id);
+    onContextualMenuClick && onContextualMenuClick(actionId, item.id);
 
   //EDIT
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, item.id);
@@ -98,16 +108,15 @@ const ListItem: FC<ListItemProps> = ({
         : <ListItemText primary={item.name} sx={{mt: 1, ml: isEditing ? 1 : 'auto', cursor: 'pointer'}} onClick={() => onClick(item.id)}/>
     }
     {
-      !isEditing && <>
-        <IconButton 
-          sx={{
-            m: 0, 
-            p: 0.5,
-            '& .MuiSvgIcon-root': { color: item.isActive ? undefined : 'action.disabled' }
-          }}
-          onClick={() => onActionClick(item.id)}>
-          {item.isActive ? activeActionIcon : inactiveActionIcon}
-        </IconButton>
+      !isEditing && activeActionIcons?.map(i =>
+        <Box key={i.id}>
+          <IconButton onClick={() => onActionClick(item.id, i?.id)} sx={actionIconSx}>
+            {item.isActive ? i.icon : inactiveActionIcon}
+          </IconButton>
+        </Box>)
+    }
+    {
+      !isEditing && contextualMenu && <>
         <IconButton sx={{m: 0, p: 0.5}} onClick={handleContextualMenu}>
           <MoreVertIcon/>
         </IconButton>
@@ -127,7 +136,7 @@ const ListItem: FC<ListItemProps> = ({
         >
           <MenuList dense sx={{p: 0}}>
             {
-              contextualMenu.map(({id, label, icon}) => <MenuItem key={id} onClick={() => handleAction(id)}>
+              contextualMenu?.map(({id, label, icon}) => <MenuItem key={id} onClick={() => handleAction(id)}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText>{t(label)}</ListItemText>
               </MenuItem>

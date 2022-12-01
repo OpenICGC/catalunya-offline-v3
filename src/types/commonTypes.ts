@@ -46,4 +46,10 @@ export interface ScopePath extends ScopeFeature {
   geometry: GeoJSON.LineString | null // Path geometry is nullable
 }
 
-export type ScopeImage = void; // TODO
+export type ScopeImage = {
+    id: UUID,
+    url: string,
+    name: string,
+    contentType: string
+    isLoading: boolean,
+}

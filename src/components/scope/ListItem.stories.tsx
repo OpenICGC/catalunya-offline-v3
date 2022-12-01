@@ -15,6 +15,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 //UTILS
 import {v4 as uuidv4} from 'uuid';
+import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 
 export default {
   title: 'Scope/ListItem',
@@ -32,7 +33,12 @@ Default.args = {
     color: '#247a44',
     isActive: true,
   },
-  activeActionIcon: <VisibilityIcon/>,
+  activeActionIcons: [
+    {
+      id: 'visibility',
+      icon: <VisibilityIcon/>
+    }
+  ],
   inactiveActionIcon: <VisibilityOffIcon color='disabled'/>,
   contextualMenu: [
     {
@@ -54,6 +60,26 @@ Default.args = {
       id: 'dataSchema',
       label: 'Esquema de datos',
       icon: <DashboardIcon/>
+    }
+  ]
+};
+
+export const PointDetail = TemplateList.bind({});
+PointDetail.args = {
+  item: {
+    id: uuidv4(),
+    name: 'Mi Punto',
+    color: '#247a44',
+    isActive: true,
+  },
+  activeActionIcons: [
+    {
+      id: 'edit',
+      icon: <EditIcon/>
+    },
+    {
+      id: 'goto',
+      icon: <SwipeRightAltIcon/>
     }
   ]
 };
@@ -81,3 +107,5 @@ export const Grouped = TemplateList.bind({});
 Grouped.args = {
   ...Default.args
 };
+
+
