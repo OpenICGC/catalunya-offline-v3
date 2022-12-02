@@ -4,8 +4,8 @@ import {Meta, Story} from '@storybook/react';
 import PointPanel, {PointPanelProps} from './PointPanel';
 
 import {v4 as uuidv4} from 'uuid';
-import Box from '@mui/material/Box';
 import {DRAWER_WIDTH} from '../../config';
+import Stack from '@mui/material/Stack';
 
 export default {
   title: 'Scope/PointPanel',
@@ -13,9 +13,17 @@ export default {
 } as Meta;
 
 const Template: Story<PointPanelProps> = args => <PointPanel {...args}/>;
-const DeviceTemplate: Story<PointPanelProps> = args => <Box
-  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><PointPanel {...args}/></Box>;
-
+const DeviceTemplate: Story<PointPanelProps> = args => <Stack sx={{
+  height: '800px',
+  width: DRAWER_WIDTH,
+  boxShadow: 3,
+  overflow: 'hidden',
+  m: 0,
+  p: 0
+}}>
+  <PointPanel {...args}/>
+</Stack>;
+    
 export const Default = Template.bind({});
 Default.args = {
   scope: {
@@ -47,7 +55,7 @@ Default.args = {
     name: `Imagen ${i}`,
     contentType: 'image/jpg',
     isLoading: Math.random() < 0.1,
-  })),
+  }))
 };
 
 export const Device = DeviceTemplate.bind({});

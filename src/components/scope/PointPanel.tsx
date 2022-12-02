@@ -17,7 +17,6 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
-import EventIcon from '@mui/icons-material/Event';
 import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 
 //CATOFFLINE
@@ -32,7 +31,8 @@ import {HEXColor, Scope, ScopeImage, ScopePoint, UUID} from '../../types/commonT
 import styled from '@mui/styles/styled';
 import i18n from 'i18next';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import moment from 'moment';
+import moment, {Moment} from 'moment';
+import {Theme} from '@mui/material';
 
 //STYLES
 const sectionTitleSx = {
@@ -42,7 +42,6 @@ const sectionTitleSx = {
 const SectionContent = styled(Stack)({
   padding: '8px',
   marginBottom: '0px',
-  /*outline: '1px solid red'*/
 });
 
 const coordTitle = {
@@ -79,51 +78,39 @@ const DateTimeFieldEditable = styled(TextField)({
     padding: '4px',
     fontSize: '0.875rem',
     minWidth: '30px'
-  }
-});
-const DateTimeFieldNoEditable = styled(TextField)({
-  borderRadius: '4px',
-  flexGrow: 1,
-  fontSize: '0.875rem',
-  '& .MuiInputBase-input': {
-    padding: '4px',
-    fontSize: '0.875rem',
-    minWidth: '25px',
-    cursor: 'default'
-  }
-});
-
-/*const DateFieldEditable = styled(TextField)({
-  flexGrow: 1,
-  '& .MuiInputBase-input': {
-    outline: '0px solid white',
-    padding: '4px',
   },
   '& .MuiButtonBase-root': {
     paddingRight: '2px'
   }
 });
-const DateFieldNoEditable = styled(TextField)({
-  '& .Mui-disabled': {
-    border: '0px solid red',
-    outline: '0px solid red',
-  },
-  flexGrow: 1,
-  '& .MuiTextField-root': {
-    border: '0px solid red',
-  },
-  '& .MuiInputBase-input': {
-    outline: '0px solid white',
-    padding: '4px',
-    cursor: 'default',
-  },
-  '& .MuiButtonBase-root': {
-    paddingRight: '2px',
-  },
-  '&:focus': {
-    border: 'none',
-  }
-});*/
+const DateTimeFieldNoEditable = styled(TextField)<Theme>(({theme}) => {
+  return {
+    borderRadius: '4px',
+    flexGrow: 1,
+    fontSize: '0.875rem',
+    /*outline: '1px solid green',*/
+    '& .MuiInputBase-input': { //text
+      padding: '4px',
+      fontSize: '0.875rem',
+      minWidth: '25px',
+      cursor: 'default',
+    },
+    '& fieldset.MuiOutlinedInput-notchedOutline': {
+      borderColor: 'transparent',
+    },
+    '&:hover fieldset.MuiOutlinedInput-notchedOutline': {
+      borderColor: 'transparent',
+    },
+    '& fieldset.MuiOutlinedInput-notchedOutline:hover': {
+      borderColor: 'transparent',
+    },
+    '& .MuiButtonBase-root': { //icon
+      paddingRight: '2px',
+      color: theme.palette.action.active
+    }
+  };
+});
+
 const textAreaCommon = {
   cursor: 'default',
   padding: '8px',
@@ -172,9 +159,8 @@ export type PointPanelProps = {
     onDeleteImage: (imageId: UUID) => void,
     onDownloadImage: (imageId: UUID, content_type: string) => void,
     onAddPrecisePosition: () => void,
-
-    /*isAccessibleSize?: boolean,
-    isLeftHanded?: boolean,*/
+    isAccessibleSize?: boolean,
+    isLeftHanded?: boolean,
 };
 
 const PointPanel: FC<PointPanelProps> = ({
@@ -196,22 +182,16 @@ const PointPanel: FC<PointPanelProps> = ({
   onAddPrecisePosition
         
 }) => {
-  const item = {
-    id: point.id,
-    name: point.properties.name,
-    color: point.properties.color || scope.color,
-    isActive: point.properties.isVisible
-  };
   
-  const activeActionIcons = [
+  const actionIcons = [
     {
       id: 'rename',
-      icon: <EditIcon/>,
+      activeIcon: <EditIcon/>,
       callbackProp: onRename
     },
     {
       id: 'goTo',
-      icon: <SwipeRightAltIcon/>,
+      activeIcon: <SwipeRightAltIcon/>,
       callbackProp: onGoTo
     }
   ];
@@ -222,6 +202,14 @@ const PointPanel: FC<PointPanelProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [pointToUpdate, setPointToUpdate] = useState(point);
 
+  const item = {
+    id: point.id,
+    name: point.properties.name,
+    color: point.properties.color || scope.color,
+    isActive: point.properties.isVisible,
+    isEditing: isEditing
+  };
+  
   const handleActionClick = (itemId: string, actionId: string) => {
     actionId === 'rename' ? setIsEditing(true) : onActionClick(itemId, actionId);
   };
@@ -233,6 +221,7 @@ const PointPanel: FC<PointPanelProps> = ({
       color: color
     }
   });
+
   const handleNameChange = (name: string) => setPointToUpdate({
     ...pointToUpdate,
     properties: {
@@ -240,25 +229,18 @@ const PointPanel: FC<PointPanelProps> = ({
       name: name
     }
   });
-  /*  const handleDateChange = (e: ChangeEvent<HTMLInputElement> | null) => e && setPointToUpdate({
+
+  const handleDateChange = (value: Moment | null, keyboardInputValue?: string) => console.log(value, keyboardInputValue);
+  
+  const handleDateAccept = (value: Moment | null) => value && setPointToUpdate(({
     ...pointToUpdate,
     properties: {
       ...pointToUpdate.properties,
-      timestamp: parseInt(e.target.value)
+      timestamp: value.unix()
     }
-  });*/
-    
-  const handleDateChange = (value: TValue) => {
-    console.log('value', value);
-    console.log('valueUnix', value.unix());
-    setPointToUpdate(({
-      ...pointToUpdate,
-      properties: {
-        ...pointToUpdate.properties,
-        timestamp: value
-      }
-    }));
-  };
+  }));
+
+
   const handleDescriptionChange = (value: ChangeEvent<HTMLTextAreaElement>) => setPointToUpdate({
     ...pointToUpdate,
     properties: {
@@ -266,7 +248,7 @@ const PointPanel: FC<PointPanelProps> = ({
       description: value.target.value
     }
   });
-    
+
   const handleCoordinatesChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, coordIndex: number) => {
     const newCoords = [...pointToUpdate.geometry.coordinates];
     newCoords[coordIndex] = parseInt(e.target.value);
@@ -292,13 +274,14 @@ const PointPanel: FC<PointPanelProps> = ({
     />
     <ListItem 
       item={item}
-      activeActionIcons={activeActionIcons}
+      isEditing={isEditing}
+      actionIcons={actionIcons}
       onActionClick={handleActionClick}
       onClick={() => console.log('click')}
       onColorChange={handleColorChange}
       onNameChange={handleNameChange}
     />
-    <Stack gap={1}>
+    <Stack>
       <SectionContent id='location'>
         <Typography sx={sectionTitleSx} variant='caption'>{t('properties.location')}</Typography>
         <Location gap={0.5} >
@@ -335,8 +318,6 @@ const PointPanel: FC<PointPanelProps> = ({
             {
               isEditing ?
                 <CoordsFieldEditable size='small' label='' variant='outlined'
-                  /*inputRef={input => input && input.focus()}*/
-                  /*onChange={handleCoordinatesChange(2)}*/
                   defaultValue={point.geometry.coordinates[2]}
                 />
                 : <CoordsFieldNoEditable
@@ -363,16 +344,16 @@ const PointPanel: FC<PointPanelProps> = ({
         {
           isEditing ? <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
             <DateTimePicker
-              onChange={(value: TValue) => console.log('valido', moment(value).unix())}
-              onAccept={handleDateChange}
+              onChange={handleDateChange}
+              onAccept={handleDateAccept}
               value={pointToUpdate.properties.timestamp || moment()}
               renderInput={(params) => <DateTimeFieldEditable {...params} size="small" />}/>
           </LocalizationProvider> : <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
             <DateTimePicker
               readOnly
-              onChange={(value: TValue) => console.log('valido', moment(value, 'MM-DD-YYYY'))}
-              onAccept={handleDateChange}
-              value={pointToUpdate.properties.timestamp}
+              onChange={handleDateChange}
+              onAccept={handleDateAccept}
+              value={moment(pointToUpdate.properties.timestamp, 'x')}
               renderInput={(params) => <DateTimeFieldNoEditable {...params} />}/>
           </LocalizationProvider>
         }
