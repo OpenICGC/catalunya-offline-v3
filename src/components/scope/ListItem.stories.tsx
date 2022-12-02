@@ -33,13 +33,14 @@ Default.args = {
     color: '#247a44',
     isActive: true,
   },
-  activeActionIcons: [
+  isEditing: false,
+  actionIcons: [
     {
       id: 'visibility',
-      icon: <VisibilityIcon/>
+      activeIcon: <VisibilityIcon/>,
+      inactiveIcon: <VisibilityOffIcon color='disabled'/>,
     }
   ],
-  inactiveActionIcon: <VisibilityOffIcon color='disabled'/>,
   contextualMenu: [
     {
       id: 'rename',
@@ -64,6 +65,18 @@ Default.args = {
   ]
 };
 
+export const Editing = Template.bind({});
+Editing.args = {
+  ...Default.args,
+  item: {
+    id: uuidv4(),
+    name: 'Mi Ámbito, Punto o Traza',
+    color: '#247a44',
+    isActive: true,
+  },
+  isEditing: true
+};
+
 export const PointDetail = TemplateList.bind({});
 PointDetail.args = {
   item: {
@@ -72,14 +85,15 @@ PointDetail.args = {
     color: '#247a44',
     isActive: true,
   },
-  activeActionIcons: [
+  isEditing: false,
+  actionIcons: [
     {
-      id: 'edit',
-      icon: <EditIcon/>
+      id: 'rename',
+      activeIcon: <EditIcon/>,
     },
     {
       id: 'goto',
-      icon: <SwipeRightAltIcon/>
+      activeIcon: <SwipeRightAltIcon/>,
     }
   ]
 };
