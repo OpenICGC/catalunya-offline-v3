@@ -230,16 +230,15 @@ const PointPanel: FC<PointPanelProps> = ({
     }
   });
 
-  const handleDateChange = (value: Moment | null, keyboardInputValue?: string) => console.log(value, keyboardInputValue);
-  
-  const handleDateAccept = (value: Moment | null) => value && setPointToUpdate(({
-    ...pointToUpdate,
-    properties: {
-      ...pointToUpdate.properties,
-      timestamp: value.unix()
-    }
-  }));
-
+  const handleDateChange = (value: Moment | null) => {
+    value && setPointToUpdate(({
+      ...pointToUpdate,
+      properties: {
+        ...pointToUpdate.properties,
+        timestamp: value.toDate().getTime()
+      }
+    }));
+  };
 
   const handleDescriptionChange = (value: ChangeEvent<HTMLTextAreaElement>) => setPointToUpdate({
     ...pointToUpdate,
@@ -341,22 +340,13 @@ const PointPanel: FC<PointPanelProps> = ({
       </SectionContent>
       <SectionContent id='date'>
         <Typography sx={sectionTitleSx} variant='caption'>{t('properties.date')}</Typography>
-        {
-          isEditing ? <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
-            <DateTimePicker
-              onChange={handleDateChange}
-              onAccept={handleDateAccept}
-              value={pointToUpdate.properties.timestamp || moment()}
-              renderInput={(params) => <DateTimeFieldEditable {...params} size="small" />}/>
-          </LocalizationProvider> : <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
-            <DateTimePicker
-              readOnly
-              onChange={handleDateChange}
-              onAccept={handleDateAccept}
-              value={moment(pointToUpdate.properties.timestamp, 'x')}
-              renderInput={(params) => <DateTimeFieldNoEditable {...params} />}/>
-          </LocalizationProvider>
-        }
+        <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
+          <DateTimePicker
+            readOnly={!isEditing}
+            onChange={handleDateChange}
+            value={moment(pointToUpdate.properties.timestamp, 'x')}
+            renderInput={(params) => isEditing ? <DateTimeFieldEditable {...params} size="small" /> : <DateTimeFieldNoEditable {...params} />}/>
+        </LocalizationProvider>
       </SectionContent>
       <SectionContent id='description'>
         <Typography sx={sectionTitleSx} variant='caption'>{t('properties.description')}</Typography>
