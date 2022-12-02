@@ -22,7 +22,7 @@ import ManagerHeader from '../common/ManagerHeader';
 //UTILS
 import {DRAWER_WIDTH} from '../../config';
 import {v4 as uuidv4} from 'uuid';
-
+import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 
 export default {
   title: 'Scope/List',
@@ -52,28 +52,16 @@ const DeviceWithHeaderTemplate: Story<ListProps> = args => <Stack sx={{
   <List {...args}/>
 </Stack>;
 
+const palette = useColorRamp('BrewerOranges4').hexColors;
+
 export const Scope = Template.bind({});
 Scope.args = {
-  items: [
-    {
-      id: uuidv4(),
-      name: 'Mi Ámbito 01',
-      color: '#247a44',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Ámbito 02',
-      color: '#fc5252',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Ámbito 03',
-      color: '#f5017a',
-      isActive: true
-    }
-  ],
+  items: [...Array(3).keys()].map(i => ({
+    id: uuidv4(),
+    name: `Mi ámbito ${i}`,
+    color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
+    isActive: true,
+  })),
   contextualMenu: [
     {
       id: 'rename',
@@ -96,12 +84,13 @@ Scope.args = {
       icon: <DashboardIcon/>
     }
   ],
-  activeActionIcons: [
+  actionIcons: [
     {
       id: 'export',
-      icon: <FileUploadIcon/>
+      activeIcon: <FileUploadIcon/>
     }
-  ]
+  ],
+  isAccessibleSize: false
 };
 
 export const Empty = Template.bind({});
@@ -112,26 +101,12 @@ Empty.args = {
 
 export const Point_Path = Template.bind({});
 Point_Path.args = {
-  items: [
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 01',
-      color: '#247a44',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 02',
-      color: '#fc5252',
-      isActive: false
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 03',
-      color: '#f5017a',
-      isActive: true
-    }
-  ],
+  items: [...Array(3).keys()].map(i => ({
+    id: uuidv4(),
+    name: `Mi punto o traza ${i}`,
+    color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
+    isActive: Math.random() < 0.5
+  })),
   contextualMenu: [
     {
       id: 'goTo',
@@ -154,13 +129,14 @@ Point_Path.args = {
       icon: <FileUploadIcon/>
     }
   ],
-  activeActionIcons: [
+  actionIcons: [
     {
       id: 'visibility',
-      icon: <VisibilityIcon/>
+      activeIcon: <VisibilityIcon/>,
+      inactiveIcon: <VisibilityOffIcon color='disabled'/>,
     }
   ],
-  inactiveActionIcon:  <VisibilityOffIcon/>,
+  isAccessibleSize: false
 };
 
 export const Device = DeviceTemplate.bind({});
@@ -176,126 +152,10 @@ DeviceWithHeader.args = {
 export const OverflowItems = Device.bind({});
 OverflowItems.args = {
   ...Scope.args,
-  items: [
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 01',
-      color: '#247a44',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 02',
-      color: '#fc5252',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 03',
-      color: '#f5017a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 04',
-      color: '#f5017a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 05',
-      color: '#f5017a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 06',
-      color: '#f5017a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 07',
-      color: '#0132f5',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 08',
-      color: '#0122f5',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 09',
-      color: '#f5017a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 10',
-      color: '#320634',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 11',
-      color: '#f5017a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 12',
-      color: '#ce632a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 13',
-      color: '#f5017a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 14',
-      color: '#59bb7f',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 15',
-      color: '#521f36',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 16',
-      color: '#07702e',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 17',
-      color: '#d70f0f',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 18',
-      color: '#f5017a',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 19',
-      color: '#a1a0a0',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 20',
-      color: '#93f501',
-      isActive: true
-    }
-  ]
+  items: [...Array(20).keys()].map(i => ({
+    id: uuidv4(),
+    name: `Mi punto o traza ${i}`,
+    color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
+    isActive: Math.random() < 0.5,
+  })),
 };
