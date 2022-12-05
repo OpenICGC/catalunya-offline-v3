@@ -16,7 +16,7 @@ export const INITIAL_VIEWPORT = {
 
 export const MAP_PROPS = {
   minZoom: 7,
-  maxZoom: 14.99,
+  maxZoom: 14.99, // 17,
   maxPitch: 60,
   ...(OFF_CAT ? {} : {maxBounds: [0.055047, 40.434881, 3.420395, 42.956628]}),
   hash: false
@@ -39,6 +39,10 @@ export const MAPSTYLES: MapStyles = [{
   label: 'ContextMaps',
   thumbnail: 'https://visors.icgc.cat/contextmaps/imatges_estil/icgc_mapa_estandard.png',
   id: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json'
+}, {
+  label: 'bt5m Complert',
+  thumbnail: 'https://betaportal.icgc.cat/wordpress/wp-content/uploads/2017/03/bt5mnicetopo-150x150.png',
+  id: 'mapstyles/bt5m-nice-alti.json'
 }];
 
 export const INITIAL_MAPSTYLE_URL = MAPSTYLES[OFF_CAT ? 2 : 0].id;
