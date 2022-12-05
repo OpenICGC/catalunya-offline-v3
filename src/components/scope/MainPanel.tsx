@@ -19,30 +19,29 @@ import ManagerHeader from '../common/ManagerHeader';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {HEXColor, UUID} from '../../types/commonTypes';
+import {HEXColor, UUID, Scope} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
-import {listItemType} from './ListItem';
 
 const boxSx = {width: '100%', height: 0};
 
 export type MainPanelProps = {
   isAccessibleSize?: boolean,
   isLeftHanded?: boolean,
-  items: Array<listItemType>,
+  scopes: Array<Scope>,
   onAdd: () => void,
-  onSelect: (itemId: UUID) => void,
-  onColorChange: (color: HEXColor, itemId: UUID) => void,
-  onRename: (name: string, itemId: UUID) => void,
-  onShare: (itemId: UUID) => void,
-  onDelete: (itemId: UUID) => void,
-  onInstamaps: (itemId: UUID) => void,
-  onDataSchema: (itemId: UUID) => void
+  onSelect: (scopeId: UUID) => void,
+  onColorChange: (scopeId: UUID, color: HEXColor) => void,
+  onRename: (scopeId: UUID, name: string) => void,
+  onShare: (scopeId: UUID) => void,
+  onDelete: (scopeId: UUID) => void,
+  onInstamaps: (scopeId: UUID) => void,
+  onDataSchema: (scopeId: UUID) => void
 };
 
 const MainPanel: FC<MainPanelProps> = ({
   isAccessibleSize = false,
   isLeftHanded = false,
-  items,
+  scopes,
   onAdd,
   onSelect,
   onColorChange,
@@ -57,8 +56,8 @@ const MainPanel: FC<MainPanelProps> = ({
 
   const contextualMenu = useMemo(() => ([
     {
-      id: 'rename',
-      label: t('actions.rename'),
+      id: 'edit',
+      label: t('actions.edit'),
       icon: <EditIcon/>
     },
     {
@@ -81,10 +80,10 @@ const MainPanel: FC<MainPanelProps> = ({
     }
   ]), [onDelete, onInstamaps, onDataSchema, t]);
 
-  const handleContextualMenuClick = useCallback((menuId: string, itemId: UUID) => {
+  const handleContextualMenuClick = useCallback((scopeId: UUID, menuId: string) => {
     const menuEntry = contextualMenu.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
-      menuEntry.callbackProp(itemId);
+      menuEntry.callbackProp(scopeId);
     }
   }, [contextualMenu]);
 
@@ -98,7 +97,7 @@ const MainPanel: FC<MainPanelProps> = ({
     />
     <List
       isAccessibleSize={isAccessibleSize}
-      items={items}
+      items={scopes}
       contextualMenu={contextualMenu}
       actionIcons={actionIcons}
       onActionClick={onShare}

@@ -7,10 +7,10 @@
     "delete": "Borrar",
     "download": "Descargar",
     "downloading": "Descargando...",
+    "edit": "Edita",
     "export": "Exportar",
     "goTo": "Ir a",
     "instamaps": "Instamaps",
-    "rename": "Renombrar",
     "search": "Buscar..."
   },
   "baseMapManager": "Mapas Base",
@@ -36,6 +36,10 @@
     "name": "Nombre"
   },
   "scope": "Ámbito",
+  "scopeList": {
+    "empty": "No existe ningún elemento",
+    "notFound": "No coincide ningún elemento con la búsqueda"
+  },
   "scopeManager": "Ámbitos",
   "topographicMap": "Mapa topográfico de Catalunya 1:25 000"
 }

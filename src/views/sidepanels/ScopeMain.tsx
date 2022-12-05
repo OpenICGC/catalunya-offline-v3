@@ -26,7 +26,7 @@ const ScopeMain: FC = () => {
     });
   };
 
-  const scopeColorChange = (newColor: HEXColor, scopeId: UUID) => {
+  const scopeColorChange = (scopeId: UUID, newColor: HEXColor) => {
     const existing = scopeStore.retrieve(scopeId);
     existing && scopeStore.update({
       ...existing,
@@ -34,7 +34,7 @@ const ScopeMain: FC = () => {
     });
   };
 
-  const scopeRename = (newName: string, scopeId: UUID) => {
+  const scopeRename = (scopeId: UUID, newName: string) => {
     const existing = scopeStore.retrieve(scopeId);
     existing && scopeStore.update({
       ...existing,
@@ -61,7 +61,7 @@ const ScopeMain: FC = () => {
 
   return !selectedScope ?
     <MainPanel
-      items={scopeStore.list}
+      scopes={scopeStore.list}
       onSelect={selectScope}
       onAdd={scopeAdd}
       onColorChange={scopeColorChange}

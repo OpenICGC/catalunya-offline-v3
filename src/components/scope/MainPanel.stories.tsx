@@ -8,8 +8,7 @@ import Stack from '@mui/material/Stack';
 //UTILS
 import {v4 as uuidv4} from 'uuid';
 import {DRAWER_WIDTH} from '../../config';
-import {listItemType} from './ListItem';
-import {HEXColor, UUID} from '../../types/commonTypes';
+import {HEXColor, UUID, Scope} from '../../types/commonTypes';
 
 
 export default {
@@ -29,30 +28,29 @@ const stackSx = {
 const Template: Story<MainPanelProps> = args => <MainPanel {...args}/>;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ManagedTemplate: Story<MainPanelProps> = ({items, onAdd, onColorChange, onRename, onDelete, ...args}) => {
-  const [getItems, setItems] = useState<Array<listItemType>>(items);
+const ManagedTemplate: Story<MainPanelProps> = ({scopes, onAdd, onColorChange, onRename, onDelete, ...args}) => {
+  const [getScopes, setScopes] = useState<Array<Scope>>(scopes);
 
-  const handleAdd = useCallback(() => setItems(
-    prevItems => ([...prevItems, {
+  const handleAdd = useCallback(() => setScopes(
+    prevScopes => ([...prevScopes, {
       id: uuidv4(),
       name: 'Nuevo ámbito',
-      color: '#fabada',
-      isActive: true
+      color: '#fabada'
     }])
   ), []);
-  const handleColorChange = useCallback((color: HEXColor, itemId: UUID) => setItems(
-    prevItems => prevItems.map(item => item.id === itemId ? {...item, color} : item)
+  const handleColorChange = useCallback((scopeId: UUID, color: HEXColor) => setScopes(
+    prevScopes => prevScopes.map(scope => scope.id === scopeId ? {...scope, color} : scope)
   ), []);
-  const handleRename = useCallback((name: string, itemId: UUID) => setItems(
-    prevItems => prevItems.map(item => item.id === itemId ? {...item, name} : item)
+  const handleRename = useCallback((scopeId: UUID, name: string) => setScopes(
+    prevScopes => prevScopes.map(scope => scope.id === scopeId ? {...scope, name} : scope)
   ), []);
-  const handleDelete = useCallback((itemId: UUID) => setItems(
-    prevItems => prevItems.filter(item => item.id !== itemId)
+  const handleDelete = useCallback((scopeId: UUID) => setScopes(
+    prevScopes => prevScopes.filter(scope => scope.id !== scopeId)
   ), []);
 
   return <Stack sx={stackSx}>
     <MainPanel
-      items={getItems}
+      scopes={getScopes}
       onAdd={handleAdd}
       onColorChange={handleColorChange}
       onRename={handleRename}
@@ -69,7 +67,7 @@ const DeviceTemplate: Story<MainPanelProps> = args =>
 
 export const Default = Template.bind({});
 Default.args = {
-  items: [...Array(20).keys()].map(i => ({
+  scopes: [...Array(20).keys()].map(i => ({
     id: uuidv4(),
     name: `Mi ámbito ${i}`,
     color: '#fabada',
@@ -86,7 +84,7 @@ Managed.args = {
 export const Empty = DeviceTemplate.bind({});
 Empty.args = {
   ...Default.args,
-  items: []
+  scopes: []
 
 };
 

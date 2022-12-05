@@ -23,14 +23,13 @@ import AddPath from '../icons/AddPath';
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
 import Header from './Header';
-import List from './List';
+import List, {listItemType} from './List';
 
 //UTILS
 import {HEXColor, Scope, ScopePath, ScopePoint, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {lighten} from '@mui/system/colorManipulator';
 import {Theme} from '@mui/material';
-import {listItemType} from './ListItem';
 
 export type FeaturesPanelProps = {
   isAccessibleSize?: boolean,
@@ -40,21 +39,21 @@ export type FeaturesPanelProps = {
   scopePaths: Array<ScopePath>,
   onBackButtonClick: () => void,
   onAddPoint: () => void,
-  onSelectPoint: (itemId: UUID) => void,
-  onColorChangePoint: (color: HEXColor, itemId: UUID) => void,
-  onGoToPoint: (itemId: UUID) => void,
-  onDeletePoint: (itemId: UUID) => void,
-  onExportPoint: (itemId: UUID) => void,
-  onNameChangePoint: (name: string, itemId: UUID) => void
-  onToggleVisibilityPoint: (itemId: UUID) => void,
+  onSelectPoint: (pointId: UUID) => void,
+  onColorChangePoint: (pointId: UUID, color: HEXColor) => void,
+  onGoToPoint: (pointId: UUID) => void,
+  onDeletePoint: (pointId: UUID) => void,
+  onExportPoint: (pointId: UUID) => void,
+  onNameChangePoint: (pointId: UUID, name: string) => void
+  onToggleVisibilityPoint: (pointId: UUID) => void,
   onAddPath: () => void,
-  onSelectPath: (itemId: UUID) => void,
-  onColorChangePath: (color: HEXColor, itemId: UUID) => void,
-  onGoToPath: (itemId: UUID) => void,
-  onDeletePath: (itemId: UUID) => void,
-  onExportPath: (itemId: UUID) => void,
-  onNameChangePath: (name: string, itemId: UUID) => void
-  onToggleVisibilityPath: (itemId: UUID) => void
+  onSelectPath: (pathId: UUID) => void,
+  onColorChangePath: (pathId: UUID, color: HEXColor) => void,
+  onGoToPath: (pathId: UUID) => void,
+  onDeletePath: (pathId: UUID) => void,
+  onExportPath: (pathId: UUID) => void,
+  onNameChangePath: (pathId: UUID, name: string) => void
+  onToggleVisibilityPath: (pathId: UUID) => void
 };
 
 const FeaturesPanel: FC<FeaturesPanelProps> = ({
@@ -86,14 +85,22 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
 
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
-  const handleContextualMenuPointClick = (menuId: string, itemId: UUID) => {
+  const handleActionPointClick = (pointId: UUID) => {
+    onToggleVisibilityPoint(pointId);
+  };
+
+  const handleContextualMenuPointClick = (itemId: UUID, menuId: string) => {
     const menuEntry = contextualMenu.point.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
       menuEntry.callbackProp(itemId);
     }
   };
-  
-  const handleContextualMenuPathClick = (menuId: string, itemId: UUID) => {
+
+  const handleActionPathClick = (pathId: UUID) => {
+    onToggleVisibilityPath(pathId);
+  };
+
+  const handleContextualMenuPathClick = (itemId: UUID, menuId: string) => {
     const menuEntry = contextualMenu.path.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
       menuEntry.callbackProp(itemId);
@@ -109,8 +116,8 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         callbackProp: onGoToPoint
       },
       {
-        id: 'rename',
-        label: t('actions.rename'),
+        id: 'edit',
+        label: t('actions.edit'),
         icon: <EditIcon/>
       },        
       {
@@ -135,8 +142,8 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         callbackProp: onGoToPath
       },
       {
-        id: 'rename',
-        label: t('actions.rename'),
+        id: 'edit',
+        label: t('actions.edit'),
         icon: <EditIcon/>
       },
       {
@@ -218,7 +225,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         items={pointItems}
         contextualMenu={contextualMenu.point}
         actionIcons={actionIcons}
-        onActionClick={onToggleVisibilityPoint}
+        onActionClick={handleActionPointClick}
         onClick={onSelectPoint}
         onColorChange={onColorChangePoint}
         onContextualMenuClick={handleContextualMenuPointClick}
@@ -241,7 +248,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
           items={pathItems}
           contextualMenu={contextualMenu.path}
           actionIcons={actionIcons}
-          onActionClick={onToggleVisibilityPath}
+          onActionClick={handleActionPathClick}
           onClick={onSelectPath}
           onColorChange={onColorChangePath}
           onContextualMenuClick={handleContextualMenuPathClick}

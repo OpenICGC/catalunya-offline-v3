@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import List, {ListProps} from './List';
+import List, {listItemType, ListProps} from './List';
 import {Meta, Story} from '@storybook/react';
 
 //MUI
@@ -24,7 +24,6 @@ import {DRAWER_WIDTH} from '../../config';
 import {v4 as uuidv4} from 'uuid';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 import {HEXColor, UUID} from '../../types/commonTypes';
-import {listItemType} from './ListItem';
 
 const stackSx = {
   height: '500px',
@@ -48,11 +47,11 @@ const DeviceTemplate: Story<ListProps> = args => <Stack sx={stackSx}><List {...a
 const ManagedTemplate: Story<ListProps> = ({items, onNameChange, onColorChange, ...args}) => {
   const [getItems, setItems] = useState<Array<listItemType>>(items);
 
-  const handleColorChange = useCallback((color: HEXColor, itemId: UUID) => setItems(
+  const handleColorChange = useCallback((itemId: UUID, color: HEXColor) => setItems(
     prevItems => prevItems.map(item => item.id === itemId ? {...item, color} : item)
   ), []);
 
-  const handleNameChange = useCallback((name: string, itemId: UUID) => setItems(
+  const handleNameChange = useCallback((itemId: UUID, name: string) => setItems(
     prevItems => prevItems.map(item => item.id === itemId ? {...item, name} : item)
   ), []);
 
@@ -71,20 +70,19 @@ const DeviceWithHeaderTemplate: Story<ListProps> = args => <Stack sx={stackSx}>
   <List {...args}/>
 </Stack>;
 
-const palette = useColorRamp('BrewerOranges4').hexColors;
+const palette = useColorRamp('BrewerDark27').hexColors;
 
-export const Scope = Template.bind({});
-Scope.args = {
-  items: [...Array(3).keys()].map(i => ({
+export const Default = Template.bind({});
+Default.args = {
+  items: [...Array(20).keys()].map(i => ({
     id: uuidv4(),
     name: `Mi ámbito ${i}`,
-    color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
-    isActive: true,
+    color: palette[i % palette.length]
   })),
   contextualMenu: [
     {
-      id: 'rename',
-      label: 'Renombrar',
+      id: 'edit',
+      label: 'Editar',
       icon: <EditIcon/>
     },
     {
@@ -114,21 +112,21 @@ Scope.args = {
 
 export const Managed = ManagedTemplate.bind({});
 Managed.args = {
-  ...Scope.args
+  ...Default.args
 };
 
 export const Empty = Template.bind({});
 Empty.args = {
-  ...Scope.args,
+  ...Default.args,
   items: []
 };
 
-export const Point_Path = Template.bind({});
-Point_Path.args = {
-  items: [...Array(3).keys()].map(i => ({
+export const PointOrPath = Template.bind({});
+PointOrPath.args = {
+  items: [...Array(20).keys()].map(i => ({
     id: uuidv4(),
     name: `Mi punto o traza ${i}`,
-    color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
+    color: palette[Math.floor(Math.random() * palette.length)], // Color asignado la mitad de las veces
     isActive: Math.random() < 0.5
   })),
   contextualMenu: [
@@ -165,21 +163,10 @@ Point_Path.args = {
 
 export const Device = DeviceTemplate.bind({});
 Device.args = {
-  ...Scope.args
+  ...Default.args
 };
 
 export const DeviceWithHeader = DeviceWithHeaderTemplate.bind({});
 DeviceWithHeader.args = {
-  ...Scope.args
-};
-
-export const OverflowItems = Device.bind({});
-OverflowItems.args = {
-  ...Scope.args,
-  items: [...Array(20).keys()].map(i => ({
-    id: uuidv4(),
-    name: `Mi punto o traza ${i}`,
-    color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
-    isActive: Math.random() < 0.5,
-  })),
+  ...Default.args
 };

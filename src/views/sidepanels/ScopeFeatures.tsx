@@ -45,7 +45,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     });
   };
 
-  const pointColorChange = (newColor: HEXColor, pointId: UUID) => {
+  const pointColorChange = (pointId: UUID, newColor: HEXColor) => {
     const existing = pointStore.retrieve(pointId);
     existing && pointStore.update({
       ...existing,
@@ -56,7 +56,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     });
   };
 
-  const pointRename = (newName: string, pointId: UUID) => {
+  const pointRename = (pointId: UUID, newName: string) => {
     const existing = pointStore.retrieve(pointId);
     existing && pointStore.update({
       ...existing,
@@ -110,7 +110,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     });
   };
 
-  const pathColorChange = (newColor: HEXColor, pathId: UUID) => {
+  const pathColorChange = (pathId: UUID, newColor: HEXColor) => {
     const existing = pathStore.retrieve(pathId);
     existing && pathStore.update({
       ...existing,
@@ -121,7 +121,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     });
   };
 
-  const pathRename = (newName: string, pathId: UUID) => {
+  const pathRename = (pathId: UUID, newName: string) => {
     const existing = pathStore.retrieve(pathId);
     existing && pathStore.update({
       ...existing,
@@ -179,8 +179,6 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     onDeletePath={pathDelete}
     onGoToPath={pathGoTo}
     onExportPath={pathExport}
-
-
   /> : <div>Error: the selected scope does not exist</div>;
 };
 

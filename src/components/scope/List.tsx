@@ -1,4 +1,4 @@
-import React, {FC, ReactNode, useMemo, useState} from 'react';
+import React, {FC, ReactNode, useCallback, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -12,34 +12,61 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import SearchBox from '@geomatico/geocomponents/SearchBox';
 
 //CATOFFLINE
-import ListItem, {listItemType} from './ListItem';
+import ListItem from './ListItem';
 
 //UTILS
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
 
-export type ListProps = {
-    isAccessibleSize: boolean,
-    items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
-    contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
-    actionIcons?: Array<{ id: string, activeIcon: ReactNode, inactiveIcon?: ReactNode }>,
-    onActionClick: (itemId: UUID) => void,
-    onClick: (itemId: UUID) => void,
-    onColorChange: (color: HEXColor, itemId: UUID) => void,
-    onContextualMenuClick: (menuId: string, itemId: UUID) => void,
-    onNameChange: (name: string, itemId: UUID) => void
-};
-
-//STYLES
 const errorMessageSx = {
-  mt: 1, 
-  mx: 2, 
-  color: 'error.main', 
+  mt: 1,
+  mx: 2,
+  color: 'error.main',
   display: 'block'
 };
 
-const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+const searchBoxWrapperSx = {
+  px: 1,
+  pt: 1,
+  pb: 1,
+  bgcolor: 'common.white'
+};
+
+const muiListSx = {ml: 0.75, my: 0, mr: 0};
+
+const normalizeSearchString = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+export interface listItemType {
+  id: UUID;
+  name: string;
+  color: HEXColor;
+  isActive?: boolean;
+}
+
+export interface contextualMenuEntry {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+}
+
+export interface actionIconType {
+  id: string;
+  activeIcon: ReactNode;
+  inactiveIcon?: ReactNode;
+}
+
+export type ListProps = {
+  isAccessibleSize: boolean,
+  items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
+  actionIcons?: Array<actionIconType>,
+  contextualMenu: Array<contextualMenuEntry>,
+  onClick: (itemId: UUID) => void,
+  onColorChange: (itemId: UUID, color: HEXColor) => void,
+  onNameChange: (itemId: UUID, name: string) => void
+  onActionClick: (itemId: UUID, actionId: string) => void,
+  onContextualMenuClick: (itemId: UUID, menuId: string) => void
+};
 
 const List: FC<ListProps> = ({
   isAccessibleSize = false,
@@ -49,7 +76,7 @@ const List: FC<ListProps> = ({
   onActionClick,
   onClick,
   onColorChange,
-  onContextualMenuClick,
+  onContextualMenuClick = () => undefined,
   onNameChange}) => {
 
   const ScrollableContent = useMemo(() => styled(Box)({
@@ -60,52 +87,52 @@ const List: FC<ListProps> = ({
     
   const {t} = useTranslation();
   const [searchText, setSearchText] = useState('');
-  const [editableId, setEditableId] = useState('');
-
-  const handleContextualMenuClick = (actionId: string, itemId: UUID) => {
-    actionId === 'rename' ? 
-      setEditableId(itemId)
-      : onContextualMenuClick && onContextualMenuClick(actionId, itemId);
-  };
-
-  const handleStopEditing = () => setEditableId('');
+  const [getEditingId, setEditingId] = useState<UUID | undefined>();
 
   const filteredItems = useMemo(() =>
     searchText ?
-      items.filter(item => normalize(item.name).includes(normalize(searchText))) :
+      items.filter(item => normalizeSearchString(item.name).includes(normalizeSearchString(searchText))) :
       items
   , [searchText, items]);
-  
-  const handleOnTextChange = (text: string) => setSearchText(text);
-  const handleSearchClick = () => undefined;
+
+  const handleContextualMenuClick = useCallback((itemId: UUID, actionId: string) => {
+    actionId === 'edit' ?
+      setEditingId(itemId) :
+      onContextualMenuClick(itemId, actionId);
+  }, [onContextualMenuClick]);
+
+  const handleStopEditing = useCallback(() => setEditingId(undefined), []);
+
+  const handleSearchClick = useCallback(() => undefined, []);
   
   return <>
-    <Box sx={{px: 1, pt: 1, pb: 1, bgcolor: 'common.white'}}>
+    <Box sx={searchBoxWrapperSx}>
       <SearchBox
         text={searchText}
         placeholder={t('actions.search')}
         AdvanceSearchIcon={KeyboardBackspaceIcon}
         onSearchClick={handleSearchClick}
-        onTextChange={handleOnTextChange}
+        onTextChange={setSearchText}
         dense
       />
     </Box>
     {
       items.length === 0 ?
-        <Typography variant='caption' sx={errorMessageSx}>No existe ningún elemento.</Typography>
+        <Typography variant='caption' sx={errorMessageSx}>{t('scopeList.empty')}</Typography>
         : filteredItems.length === 0 ?
-          <Typography variant='caption' sx={errorMessageSx}>No coincide ningún elemento con la búsqueda.</Typography>
+          <Typography variant='caption' sx={errorMessageSx}>{t('scopeList.notFound')}</Typography>
           : undefined
     }
     <ScrollableContent>
-      <MuiList dense sx={{ml: 0.75, my: 0, mr: 0}}>
+      <MuiList dense sx={muiListSx}>
         {
           filteredItems.map(item => <ListItem
             key={item.id}
             itemId={item.id}
             name={item.name}
             color={item.color}
-            isEditing={item.id === editableId}
+            isEditing={item.id === getEditingId}
+            isActive={item.isActive}
             actionIcons={actionIcons}
             contextualMenu={contextualMenu}
             onActionClick={onActionClick}

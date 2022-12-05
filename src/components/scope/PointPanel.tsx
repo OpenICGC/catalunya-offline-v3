@@ -30,7 +30,7 @@ import {useTranslation} from 'react-i18next';
 import {HEXColor, Scope, ScopePoint, UUID} from '../../types/commonTypes';
 import styled from '@mui/styles/styled';
 import i18n from 'i18next';
-import type {} from '@mui/x-date-pickers/themeAugmentation';
+//import type {} from '@mui/x-date-pickers/themeAugmentation';
 import moment, {Moment} from 'moment';
 import {Theme} from '@mui/material';
 import Box from '@mui/material/Box';
@@ -204,7 +204,7 @@ const PointPanel: FC<PointPanelProps> = ({
     actionId === 'rename' ? setIsEditing(true) : onGoTo(itemId);
   };
   
-  const handleColorChange = (color: HEXColor) => {
+  const handleColorChange = (id: UUID, color: HEXColor) => {
     pointToUpdate.properties.color && setPointToUpdate({
       ...pointToUpdate,
       properties: {
