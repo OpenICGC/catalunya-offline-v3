@@ -45,7 +45,7 @@ const ManagerHeader: FC<ManagerHeaderProps> = ({name, color = 'primary', startIc
 
   const scopeNameSx = {
     color: (theme: Theme) => theme.palette.getContrastText(color),
-    width: '180px',
+    width: '80vw',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
