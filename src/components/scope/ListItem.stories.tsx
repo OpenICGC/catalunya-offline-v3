@@ -16,6 +16,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 //UTILS
 import {v4 as uuidv4} from 'uuid';
 import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
+import {UUID} from '../../types/commonTypes';
 
 export default {
   title: 'Scope/ListItem',
@@ -23,16 +24,42 @@ export default {
 } as Meta;
 
 const Template: Story<ListItemProps> = args => <ListItem {...args}/>;
-const TemplateList: Story<ListItemProps> = args => <List><ListItem {...args}/><ListItem {...args}/><ListItem {...args}/><ListItem {...args}/></List>;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ManagedTemplate: Story<ListItemProps> = ({isEditing, color, name, isActive, onColorChange, onNameChange, onActionClick, onContextualMenuClick, onStopEditing, ...args }) => {
+  const [getEditing, setEditing] = useState(isEditing);
+  const [getColor, setNewColor] = useState(color);
+  const [getName, setNewName] = useState(name);
+  const [getActive, setActive] = useState(isActive);
+
+  const handleContextualMenuClick = (id: UUID, action: string) => {
+    console.log(id, action);
+    if (action == 'edit') {
+      setEditing(true);
+    }
+  };
+
+  return <ListItem
+    isEditing={getEditing}
+    onContextualMenuClick={handleContextualMenuClick}
+    onStopEditing={() => setEditing(false)}
+    color={getColor}
+    onColorChange={(id, value) => setNewColor(value)}
+    name={getName}
+    onNameChange={(id, value) => setNewName(value)}
+    isActive={getActive}
+    onActionClick={() => setActive(!getActive)}
+    {...args} />;
+};
+
+const ListTemplate: Story<ListItemProps> = args => <List><ListItem {...args}/><ListItem {...args}/><ListItem {...args}/><ListItem {...args}/></List>;
 
 export const Default = Template.bind({});
 Default.args = {
-  item: {
-    id: uuidv4(),
-    name: 'Mi Ámbito, Punto o Traza',
-    color: '#247a44',
-    isActive: true,
-  },
+  itemId: uuidv4(),
+  name: 'Mi Ámbito, Punto o Traza',
+  color: '#247a44',
+  isActive: true,
   isEditing: false,
   actionIcons: [
     {
@@ -43,8 +70,8 @@ Default.args = {
   ],
   contextualMenu: [
     {
-      id: 'rename',
-      label: 'Renombrar',
+      id: 'edit',
+      label: 'Editar',
       icon: <EditIcon/>
     },
     {
@@ -68,60 +95,14 @@ Default.args = {
 export const Editing = Template.bind({});
 Editing.args = {
   ...Default.args,
-  item: {
-    id: uuidv4(),
-    name: 'Mi Ámbito, Punto o Traza',
-    color: '#247a44',
-    isActive: true,
-  },
   isEditing: true
 };
 
 export const Error = Template.bind({});
 Error.args = {
   ...Default.args,
-  item: {
-    id: uuidv4(),
-    name: '',
-    color: '#247a44',
-    isActive: true,
-  },
+  name: '',
   isEditing: true
-};
-
-export const PointDetail = TemplateList.bind({});
-PointDetail.args = {
-  item: {
-    id: uuidv4(),
-    name: 'Mi Punto',
-    color: '#247a44',
-    isActive: true,
-  },
-  isEditing: false,
-  actionIcons: [
-    {
-      id: 'rename',
-      activeIcon: <EditIcon/>,
-    },
-    {
-      id: 'goto',
-      activeIcon: <SwipeRightAltIcon/>,
-    }
-  ]
-};
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ManagedTemplate: Story<ListItemProps> = ({item, onColorChange, onNameChange, onActionClick, ...args}) => {
-  const [getColor, setNewColor] = useState(item.color);
-  const [getName, setNewName] = useState(item.name);
-  const [getActive, setActive] = useState(item.isActive);
-  const computedItem = {...item, color: getColor, name: getName, isActive: getActive};
-  return <ListItem
-    item={computedItem}
-    onColorChange={setNewColor}
-    onNameChange={setNewName}
-    onActionClick={() => setActive(!computedItem.isActive)}
-    {...args} />;
 };
 
 export const Managed = ManagedTemplate.bind({});
@@ -129,9 +110,24 @@ Managed.args = {
   ...Default.args
 };
 
-export const Grouped = TemplateList.bind({});
-Grouped.args = {
+export const InAList = ListTemplate.bind({});
+InAList.args = {
   ...Default.args
 };
 
-
+export const PointDetail = Template.bind({});
+PointDetail.args = {
+  ...Default.args,
+  name: 'Mi punto',
+  contextualMenu: undefined,
+  actionIcons: [
+    {
+      id: 'rename',
+      activeIcon: <EditIcon/>,
+    },
+    {
+      id: 'goTo',
+      activeIcon: <SwipeRightAltIcon/>,
+    }
+  ],
+};

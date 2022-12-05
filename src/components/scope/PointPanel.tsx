@@ -30,7 +30,7 @@ import {useTranslation} from 'react-i18next';
 import {HEXColor, Scope, ScopePoint, UUID} from '../../types/commonTypes';
 import styled from '@mui/styles/styled';
 import i18n from 'i18next';
-import type {} from '@mui/x-date-pickers/themeAugmentation';
+//import type {} from '@mui/x-date-pickers/themeAugmentation';
 import moment, {Moment} from 'moment';
 import {Theme} from '@mui/material';
 import Box from '@mui/material/Box';
@@ -193,14 +193,6 @@ const PointPanel: FC<PointPanelProps> = ({
     marginBottom: isEditing ? '32px' : '16px',
   });
 
-  const item = {
-    id: point.id,
-    name: point.properties.name,
-    color: point.properties.color || scope.color,
-    isActive: point.properties.isVisible,
-    isEditing: isEditing
-  };
-  
   const precisePositionIconSx = {
     '&:hover': {
       bgcolor: !isEditing ? 'common.white' : undefined,
@@ -212,7 +204,7 @@ const PointPanel: FC<PointPanelProps> = ({
     actionId === 'rename' ? setIsEditing(true) : onGoTo(itemId);
   };
   
-  const handleColorChange = (color: HEXColor) => {
+  const handleColorChange = (id: UUID, color: HEXColor) => {
     pointToUpdate.properties.color && setPointToUpdate({
       ...pointToUpdate,
       properties: {
@@ -280,7 +272,10 @@ const PointPanel: FC<PointPanelProps> = ({
     />
     <Box>{/*makes up&down margin*/}
       <ListItem
-        item={item}
+        itemId={point.id}
+        name={point.properties.name}
+        color={point.properties.color || scope.color}
+        isActive={point.properties.isVisible}
         isEditing={isEditing}
         actionIcons={actionIcons}
         onActionClick={handleActionClick}
