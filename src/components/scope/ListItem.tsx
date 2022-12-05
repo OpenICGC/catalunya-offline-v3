@@ -17,6 +17,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
+import Box from '@mui/material/Box';
 
 export type listItemType = {
   id: UUID,
@@ -98,17 +99,25 @@ const ListItem: FC<ListItemProps> = ({
   
   return <MuiListItem sx={{height: '48px', p: 0, m: 0}}>
     <ListItemIcon sx={{minWidth: '24px', p: 0}}>
-      <ColorPicker
-        hideTextfield
-        disableAlpha
-        value={item.color}
-        inputFormats={[]}
-        onChange={handleColorChange}
-      />
+      {
+        isEditing ?
+          <ColorPicker
+            hideTextfield
+            disableAlpha
+            value={item.color}
+            inputFormats={[]}
+            onChange={handleColorChange}
+          />
+          :
+          <Box sx={{width: 24, height: 24, bgcolor: item.color, borderRadius: 1, mx: 0.75}}/>
+      }
+
     </ListItemIcon>
     {
       isEditing ?
         <TextField size='small' label='' variant='outlined' sx={{mr: 1, flexGrow: 1}}
+          key='listItem'
+          error={item.name.length < 1}
           inputRef={input => input && input.focus()}
           onChange={handleNameChange} 
           onBlur={handleBlur} 

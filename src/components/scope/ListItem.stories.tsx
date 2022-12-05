@@ -77,6 +77,18 @@ Editing.args = {
   isEditing: true
 };
 
+export const Error = Template.bind({});
+Error.args = {
+  ...Default.args,
+  item: {
+    id: uuidv4(),
+    name: '',
+    color: '#247a44',
+    isActive: true,
+  },
+  isEditing: true
+};
+
 export const PointDetail = TemplateList.bind({});
 PointDetail.args = {
   item: {

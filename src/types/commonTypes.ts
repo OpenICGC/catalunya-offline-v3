@@ -50,6 +50,6 @@ export type ScopeImage = {
     id: UUID,
     url: string,
     name: string,
-    contentType: string
-    isLoading: boolean,
+    contentType: string,
+    isLoading: boolean
 }

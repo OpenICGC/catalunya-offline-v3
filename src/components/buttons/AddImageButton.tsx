@@ -13,7 +13,7 @@ const AddImageButton: FC<AddImageButtonProps> = ({
 }) => {
 
   //STYLES
-  const height = 70;
+  const height = 68;
   const buttonSx = {
     color: 'grey.500',
     justifyContent: 'center',

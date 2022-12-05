@@ -23,6 +23,16 @@ const DeviceTemplate: Story<PointPanelProps> = args => <Stack sx={{
 }}>
   <PointPanel {...args}/>
 </Stack>;
+const SmallDeviceTemplate: Story<PointPanelProps> = args => <Stack sx={{
+  height: '500px',
+  width: DRAWER_WIDTH,
+  boxShadow: 3,
+  overflow: 'hidden',
+  m: 0,
+  p: 0
+}}>
+  <PointPanel {...args}/>
+</Stack>;
     
 export const Default = Template.bind({});
 Default.args = {
@@ -39,26 +49,30 @@ Default.args = {
       coordinates: [40.4125, -3.6897, 1225]
     },
     properties: {
-      name: 'Can Net',
-      color: '#197983',
+      name: 'C',
+      color: undefined,
       timestamp: Date.now(),
       description: 'Había un árbol con el tronco torcido en medio del camino.',
-      images: [],
+      images: [...Array(3).keys()].map(i => ({
+        id: uuidv4(),
+        url: 'https://picsum.photos/300/200',
+        name: `Imagen ${i}`,
+        contentType: 'image/jpg',
+        isLoading: Math.random() < 0.1,
+      })),
       isVisible: true
     }
   },
   numPoints: 13,
-  numPaths: 5,
-  images: [...Array(3).keys()].map(i => ({
-    id: uuidv4(),
-    url: 'https://picsum.photos/300/200',
-    name: `Imagen ${i}`,
-    contentType: 'image/jpg',
-    isLoading: Math.random() < 0.1,
-  }))
+  numPaths: 5
 };
 
 export const Device = DeviceTemplate.bind({});
 Device.args = {
+  ...Default.args
+};
+
+export const SmallDevice = SmallDeviceTemplate.bind({});
+SmallDevice.args = {
   ...Default.args
 };

@@ -30,7 +30,6 @@ const Thumbnail : FC<ThumbnailProps> = ({
   const Image = styled('img')({
     aspectRatio: '4/3',
     objectFit: 'cover',
-    /*marginRight: !isDeletable || !image.isLoading ? '10px' : '0px'*/
   });
 
   const defaultImage = 'assets/defaultImage.jpg';
@@ -63,10 +62,10 @@ const Thumbnail : FC<ThumbnailProps> = ({
     }
   };
 
-  return <Box display='flex' alignItems='flex-start' sx={{p: 0, my: 1, width: 112}}>
+  return <Box display='flex' alignItems='flex-start' sx={{p: 0, my: 1, width: 110}}>
     <Image
       alt={image.name}
-      height={70}
+      height={68}
       src={image.isLoading ? defaultImage : image.url}
       onClick={() => onDownloadImage(image.id, image.contentType)}
     />
