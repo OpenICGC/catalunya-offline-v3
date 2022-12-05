@@ -23,8 +23,7 @@ export type ListProps = {
     isAccessibleSize: boolean,
     items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
     contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
-    activeActionIcon?: ReactNode,
-    inactiveActionIcon?: ReactNode,
+    actionIcons?: Array<{ id: string, activeIcon: ReactNode, inactiveIcon?: ReactNode }>,
     onActionClick: (itemId: UUID) => void,
     onClick: (itemId: UUID) => void,
     onColorChange: (color: HEXColor, itemId: UUID) => void,
@@ -40,16 +39,13 @@ const errorMessageSx = {
   display: 'block'
 };
 
-
-
 const normalize = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
 const List: FC<ListProps> = ({
   isAccessibleSize = false,
   items,
   contextualMenu,
-  activeActionIcon,
-  inactiveActionIcon,
+  actionIcons,
   onActionClick,
   onClick,
   onColorChange,
@@ -64,16 +60,24 @@ const List: FC<ListProps> = ({
     
   const {t} = useTranslation();
   const [searchText, setSearchText] = useState('');
-
-  const filteredItems = useMemo(() =>
-    searchText ?
-      items.filter(item => normalize(item.name).includes(normalize(searchText))) :
-      items
-  , [searchText, items]);
+  const [editableId, setEditableId] = useState('');
   
   const handleOnTextChange = (text: string) => setSearchText(text);
   const handleSearchClick = () => undefined;
-  
+
+  const handleContextualMenuClick = (actionId: string, itemId: UUID) => {
+    actionId === 'rename' ? 
+      setEditableId(itemId)
+      : onContextualMenuClick && onContextualMenuClick(actionId, itemId);
+  };
+
+  const handleStopEditing = () => setEditableId('');
+
+  const filteredItems = useMemo(() =>
+    searchText ?
+      items.filter(item => normalize(item.name).includes(normalize(searchText))) : items
+  , [searchText, items]);
+    
   return <>
     <Box sx={{px: 1, pt: 1, pb: 1, bgcolor: 'common.white'}}>
       <SearchBox
@@ -95,18 +99,21 @@ const List: FC<ListProps> = ({
     <ScrollableContent>
       <MuiList dense sx={{ml: 0.75, my: 0, mr: 0}}>
         {
-          filteredItems.map(item => <ListItem
-            key={item.id}
-            item={item}
-            activeActionIcon={activeActionIcon}
-            inactiveActionIcon={inactiveActionIcon}
-            contextualMenu={contextualMenu}
-            onActionClick={onActionClick}
-            onClick={onClick}
-            onColorChange={onColorChange}
-            onContextualMenuClick={onContextualMenuClick}
-            onNameChange={onNameChange}
-          />)
+          filteredItems.map((filteredItem) => {
+            return <ListItem
+              key={filteredItem.id}
+              item={filteredItem}
+              isEditing={filteredItem.id === editableId}
+              actionIcons={actionIcons}
+              contextualMenu={contextualMenu}
+              onActionClick={onActionClick}
+              onClick={onClick}
+              onColorChange={onColorChange}
+              onContextualMenuClick={handleContextualMenuClick}
+              onNameChange={onNameChange}
+              onStopEditing={handleStopEditing}
+            />;
+          })
         }
       </MuiList>
     </ScrollableContent>

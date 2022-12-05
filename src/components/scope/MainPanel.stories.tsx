@@ -35,7 +35,8 @@ Default.args = {
     name: `Mi ámbito ${i}`,
     color: '#fabada',
     isActive: true,
-  })),
+    isEditing: false
+  }))
 };
 
 export const Empty = DeviceTemplate.bind({});

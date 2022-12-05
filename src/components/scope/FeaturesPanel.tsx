@@ -179,6 +179,8 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     isActive: scopePath.properties.isVisible
   }));
 
+  const actionIcons = [{id: 'visibility', activeIcon: <VisibilityIcon/>, inactiveIcon: <VisibilityOffIcon/>}];
+
   return <>
     <Header
       name={scope.name}
@@ -215,8 +217,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         isAccessibleSize={isAccessibleSize}
         items={pointItems}
         contextualMenu={contextualMenu.point}
-        activeActionIcon={<VisibilityIcon/>}
-        inactiveActionIcon={<VisibilityOffIcon/>}
+        actionIcons={actionIcons}
         onActionClick={onToggleVisibilityPoint}
         onClick={onSelectPoint}
         onColorChange={onColorChangePoint}
@@ -239,8 +240,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
           isAccessibleSize={isAccessibleSize}
           items={pathItems}
           contextualMenu={contextualMenu.path}
-          activeActionIcon={<VisibilityIcon/>}
-          inactiveActionIcon={<VisibilityOffIcon/>}
+          actionIcons={actionIcons}
           onActionClick={onToggleVisibilityPath}
           onClick={onSelectPath}
           onColorChange={onColorChangePath}

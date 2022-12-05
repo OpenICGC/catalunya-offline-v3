@@ -17,6 +17,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useTranslation} from 'react-i18next';
 import {ColorPicker} from 'material-ui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
+import Box from '@mui/material/Box';
 
 export type listItemType = {
   id: UUID,
@@ -27,87 +28,117 @@ export type listItemType = {
 
 export type ListItemProps = {
   item: listItemType,
-  activeActionIcon?: ReactNode,
-  inactiveActionIcon?: ReactNode,
-  contextualMenu: Array<{ id: string, label: string, icon?: ReactNode }>,
-  onActionClick: (itemId: UUID) => void,
+  isEditing: boolean,
+  actionIcons?: Array<{ id: string, activeIcon: ReactNode, inactiveIcon?: ReactNode }>,
+  contextualMenu?: Array<{ id: string, label: string, icon?: ReactNode }>,
+  onActionClick: (itemId: UUID, actionId: string) => void,
   onClick: (itemId: UUID) => void,
   onColorChange: (color: HEXColor, itemId: UUID) => void,
-  onContextualMenuClick: (menuId: string, itemId: UUID) => void,
-  onNameChange: (name: string, itemId: UUID) => void
+  onContextualMenuClick?: (menuId: string, itemId: UUID) => void,
+  onNameChange: (name: string, itemId: UUID) => void,
+  onStopEditing?: () => void
 }
 
 const ListItem: FC<ListItemProps> = ({
   item,
-  activeActionIcon,
-  inactiveActionIcon,
+  isEditing,
+  actionIcons,
   contextualMenu,
   onActionClick,
-  onClick, 
+  onClick,
   onColorChange, 
   onContextualMenuClick,
-  onNameChange
+  onNameChange,
+  onStopEditing
 }) => {
   const {t} = useTranslation();
 
+  //STYLES
+  const actionIconSx = {
+    m: 0, 
+    p: 0.5,
+    '& .MuiSvgIcon-root': { color: item.isActive ? 'action.active' : 'action.disabled' }
+  };
+  
+  const noEditableTextField = {
+    mr: 1, 
+    flexGrow: 1,  
+    '& fieldset.MuiOutlinedInput-notchedOutline': {
+      borderColor: 'transparent',
+    },
+    '&:hover fieldset.MuiOutlinedInput-notchedOutline': {
+      borderColor: 'transparent',
+    },
+    '& fieldset.MuiOutlinedInput-notchedOutline:hover': {
+      borderColor: 'transparent',
+    }
+  };
+  
   //CONTEXTUAL MENU
-  const [isEditing, setIsEditing] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleContextualMenu = (e: SyntheticEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
   };
   const handleClose = () => setAnchorEl(null);
-  const handleAction = (actionId: string) => actionId === 'rename' ?
-    setIsEditing(true) :
-    onContextualMenuClick(actionId, item.id);
-
+  const handleAction = (actionId: string) => onContextualMenuClick && onContextualMenuClick(actionId, item.id);
+    
   //EDIT
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(e.target.value, item.id);
   const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`, item.id);
   const handleBlur = () => {
     setAnchorEl(null);
-    setIsEditing(false);
+    onStopEditing && onStopEditing();
   };
   const handleInputOut = (e: KeyboardEvent<HTMLInputElement>) => {
     if(e.key === 'Enter') {
       setAnchorEl(null);
-      setIsEditing(false);
+      onStopEditing && onStopEditing();
     }
   };
   
   return <MuiListItem sx={{height: '48px', p: 0, m: 0}}>
     <ListItemIcon sx={{minWidth: '24px', p: 0}}>
-      <ColorPicker
-        hideTextfield
-        disableAlpha
-        value={item.color}
-        inputFormats={[]}
-        onChange={handleColorChange}
-      />
+      {
+        isEditing ?
+          <ColorPicker
+            hideTextfield
+            disableAlpha
+            value={item.color}
+            inputFormats={[]}
+            onChange={handleColorChange}
+          />
+          :
+          <Box sx={{width: 24, height: 24, bgcolor: item.color, borderRadius: 1, mx: 0.75}}/>
+      }
+
     </ListItemIcon>
     {
       isEditing ?
-        <TextField size='small' label={t('scopeListItem.name')} variant='outlined' sx={{mr: 1, flexGrow: 1}}
+        <TextField size='small' label='' variant='outlined' sx={{mr: 1, flexGrow: 1}}
+          key='listItem'
+          error={item.name.length < 1}
           inputRef={input => input && input.focus()}
           onChange={handleNameChange} 
           onBlur={handleBlur} 
           onKeyDown={handleInputOut}
           defaultValue={item.name}
         />
-        : <ListItemText primary={item.name} sx={{mt: 1, ml: isEditing ? 1 : 'auto', cursor: 'pointer'}} onClick={() => onClick(item.id)}/>
+        :
+        <TextField size='small' label='' variant='outlined' sx={noEditableTextField}
+          onClick={() => onClick(item.id)}
+          inputProps={{ readOnly: true }}
+          defaultValue={item.name}
+        />
     }
     {
-      !isEditing && <>
-        <IconButton 
-          sx={{
-            m: 0, 
-            p: 0.5,
-            '& .MuiSvgIcon-root': { color: item.isActive ? undefined : 'action.disabled' }
-          }}
-          onClick={() => onActionClick(item.id)}>
-          {item.isActive ? activeActionIcon : inactiveActionIcon}
-        </IconButton>
+      !isEditing && actionIcons?.map(i =>
+        <IconButton key={i.id} onClick={() => onActionClick(item.id, i?.id)} sx={actionIconSx}>
+          {item.isActive ? i.activeIcon : i.inactiveIcon}
+        </IconButton>)
+    }
+    {
+      !isEditing && contextualMenu && <>
         <IconButton sx={{m: 0, p: 0.5}} onClick={handleContextualMenu}>
           <MoreVertIcon/>
         </IconButton>
@@ -127,7 +158,7 @@ const ListItem: FC<ListItemProps> = ({
         >
           <MenuList dense sx={{p: 0}}>
             {
-              contextualMenu.map(({id, label, icon}) => <MenuItem key={id} onClick={() => handleAction(id)}>
+              contextualMenu?.map(({id, label, icon}) => <MenuItem key={id} onClick={() => handleAction(id)}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText>{t(label)}</ListItemText>
               </MenuItem>

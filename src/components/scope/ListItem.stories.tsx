@@ -15,6 +15,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 //UTILS
 import {v4 as uuidv4} from 'uuid';
+import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 
 export default {
   title: 'Scope/ListItem',
@@ -32,8 +33,14 @@ Default.args = {
     color: '#247a44',
     isActive: true,
   },
-  activeActionIcon: <VisibilityIcon/>,
-  inactiveActionIcon: <VisibilityOffIcon color='disabled'/>,
+  isEditing: false,
+  actionIcons: [
+    {
+      id: 'visibility',
+      activeIcon: <VisibilityIcon/>,
+      inactiveIcon: <VisibilityOffIcon color='disabled'/>,
+    }
+  ],
   contextualMenu: [
     {
       id: 'rename',
@@ -54,6 +61,51 @@ Default.args = {
       id: 'dataSchema',
       label: 'Esquema de datos',
       icon: <DashboardIcon/>
+    }
+  ]
+};
+
+export const Editing = Template.bind({});
+Editing.args = {
+  ...Default.args,
+  item: {
+    id: uuidv4(),
+    name: 'Mi Ámbito, Punto o Traza',
+    color: '#247a44',
+    isActive: true,
+  },
+  isEditing: true
+};
+
+export const Error = Template.bind({});
+Error.args = {
+  ...Default.args,
+  item: {
+    id: uuidv4(),
+    name: '',
+    color: '#247a44',
+    isActive: true,
+  },
+  isEditing: true
+};
+
+export const PointDetail = TemplateList.bind({});
+PointDetail.args = {
+  item: {
+    id: uuidv4(),
+    name: 'Mi Punto',
+    color: '#247a44',
+    isActive: true,
+  },
+  isEditing: false,
+  actionIcons: [
+    {
+      id: 'rename',
+      activeIcon: <EditIcon/>,
+    },
+    {
+      id: 'goto',
+      activeIcon: <SwipeRightAltIcon/>,
     }
   ]
 };
@@ -81,3 +133,5 @@ export const Grouped = TemplateList.bind({});
 Grouped.args = {
   ...Default.args
 };
+
+

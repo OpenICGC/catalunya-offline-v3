@@ -25,10 +25,17 @@
     "points": "Points"
   },
   "layerManager": "Layers",
-  "scope": "Scope",
-  "scopeListItem": {
+  "properties": {
+    "date": "Date",
+    "description": "Description",
+    "height": "height",
+    "images": "Images",
+    "latitude": "latitude",
+    "location": "Location",
+    "longitude": "longitude",
     "name": "Name"
   },
+  "scope": "Scope",
   "scopeManager": "Scopes",
   "topographicMap": "Topographic Map of Catalonia 1:25 000"
 }
