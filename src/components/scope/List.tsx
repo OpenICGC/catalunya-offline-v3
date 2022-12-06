@@ -76,15 +76,20 @@ const List: FC<ListProps> = ({
   listSx={}
 }) => {
 
-  const muiListSx = {ml: 0.75, my: 0, mr: 0, ...listSx};
+  const muiListSx = useMemo(() => ({
+    ml: 0.75,
+    my: 0,
+    mr: 0,
+    ...listSx
+  }), [listSx]);
 
-  const searchBoxWrapperSx = {
+  const searchBoxWrapperSx = useMemo(() => ({
     px: 1,
     pt: 1,
     pb: 1,
     bgcolor: 'common.white',
     ...searchSx
-  };
+  }), [searchSx]);
 
   const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',

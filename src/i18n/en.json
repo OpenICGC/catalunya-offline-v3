@@ -25,7 +25,7 @@
     "points": "Points"
   },
   "layerManager": "Layers",
-  "noScopesAlert": "The point does not belong to any scope, choose one",
+  "noScopeAlert": "Choose the point's scope",
   "properties": {
     "date": "Date",
     "description": "Description",

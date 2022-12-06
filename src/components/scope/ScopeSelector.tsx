@@ -21,7 +21,7 @@ import {Scope} from '../../types/commonTypes';
 
 export interface ScopeSelectorProps {
     isAccesibleSize: boolean;
-    isOpen: boolean;
+    isOpen?: boolean;
     scopes: Array<Scope>;
     onClick: () => void;
     onAccept: () => void;
@@ -30,7 +30,7 @@ export interface ScopeSelectorProps {
 
 const ScopeSelector: FC<ScopeSelectorProps> = ({
   isAccesibleSize,
-  isOpen,
+  isOpen = true,
   scopes,
   onClick,
   onAccept,
@@ -42,7 +42,7 @@ const ScopeSelector: FC<ScopeSelectorProps> = ({
   return <Dialog open={isOpen} onClose={onClose} fullWidth PaperProps={{sx: {height: '500px'}}}>
     <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.35}}>
       <ReportProblemIcon sx={{mr: 1}}/>
-      El punto no pertenece a ningún ámbito, elige uno.
+      {t('noScopeAlert')}
     </DialogTitle>
     <Divider/>
     <List

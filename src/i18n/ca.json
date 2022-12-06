@@ -25,7 +25,7 @@
     "points": "Punts"
   },
   "layerManager": "Capes",
-  "noScopesAlert": "El punt no pertany a cap àmbit, tria'n un",
+  "noScopeAlert": "Trieu un àmbit per al punt",
   "properties": {
     "date": "Data",
     "description": "Descripció",

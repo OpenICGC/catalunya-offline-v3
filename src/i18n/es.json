@@ -25,7 +25,7 @@
     "points": "Puntos"
   },
   "layerManager": "Capas",
-  "noScopesAlert": "El punto no pertenece a ningún ámbito, elige uno",
+  "noScopeAlert": "Elige un ámbito para el punto",
   "properties": {
     "date": "Fecha",
     "description": "Descripción",
