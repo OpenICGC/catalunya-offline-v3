@@ -14,10 +14,10 @@ import {grey} from '@mui/material/colors';
 import {ScopeImage, UUID} from '../../types/commonTypes';
 
 export type ThumbnailProps = {
-    image: ScopeImage,
-    isDeletable: boolean,
+  image: ScopeImage,
+  isDeletable: boolean,
   onDelete: (imageId: UUID) => void,
-  onDownloadImage: (imageId: UUID, content_type: string) => void
+  onDownloadImage: (imageId: UUID, contentType: string) => void
 };
 
 const Thumbnail : FC<ThumbnailProps> = ({
