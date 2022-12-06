@@ -103,7 +103,7 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
   
   return <>
     <Stack sx={{position: 'absolute', top: 0, width: '100%'}}>
-      <ManagerHeader name={`${scope.name.toUpperCase()} > Añadir punto`} color='#ffd300' startIcon={<AddLocationAltIcon/>}/>
+      <ManagerHeader name={`${scope.name.toUpperCase()} - ${t('actions.addPoint')}`} color='#ffd300' startIcon={<AddLocationAltIcon/>}/>
     </Stack>
     <Stack sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
       <PrecisePosition sx={precisePositionIcon}/>

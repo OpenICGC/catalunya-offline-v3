@@ -1,5 +1,6 @@
 {
   "actions": {
+    "addPoint": "Añadir punto",
     "accept": "Aceptar",
     "cancel": "Cancelar",
     "close": "Cerrar",
