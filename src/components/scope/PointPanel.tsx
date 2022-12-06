@@ -30,7 +30,6 @@ import {useTranslation} from 'react-i18next';
 import {HEXColor, Scope, ScopePoint, UUID} from '../../types/commonTypes';
 import styled from '@mui/styles/styled';
 import i18n from 'i18next';
-//import type {} from '@mui/x-date-pickers/themeAugmentation';
 import moment, {Moment} from 'moment';
 import {Theme} from '@mui/material';
 import Box from '@mui/material/Box';
@@ -51,11 +50,11 @@ export type PointPanelProps = {
     numPaths: number,
     isLoading?: boolean,
     onBackButtonClick: () => void,
-    onPointChange: (point: ScopePoint) => void,
-    onGoTo: (itemId: UUID) => void,
+    onPointChange: (newPoint: ScopePoint) => void,
+    onGoTo: (pointId: UUID) => void,
     onAddImage: () => void,
     onDeleteImage: (imageId: UUID) => void,
-    onDownloadImage: (imageId: UUID, content_type: string) => void,
+    onDownloadImage: (imageId: UUID, contentType: string) => void,
     onAddPrecisePosition: () => void,
 };
 
@@ -71,7 +70,6 @@ const PointPanel: FC<PointPanelProps> = ({
   onDeleteImage,
   onDownloadImage,
   onAddPrecisePosition
-        
 }) => {
   //EDIT
   const [isEditing, setIsEditing] = useState(false);
@@ -200,11 +198,11 @@ const PointPanel: FC<PointPanelProps> = ({
     }
   };
   
-  const handleActionClick = (itemId: string, actionId: string) => {
-    actionId === 'rename' ? setIsEditing(true) : onGoTo(itemId);
+  const handleActionClick = (pointId: string, actionId: string) => {
+    actionId === 'rename' ? setIsEditing(true) : onGoTo(pointId);
   };
   
-  const handleColorChange = (id: UUID, color: HEXColor) => {
+  const handleColorChange = (pointId: UUID, color: HEXColor) => {
     pointToUpdate.properties.color && setPointToUpdate({
       ...pointToUpdate,
       properties: {
@@ -214,7 +212,7 @@ const PointPanel: FC<PointPanelProps> = ({
     });
   };
 
-  const handleNameChange = (name: string) => setPointToUpdate({
+  const handleNameChange = (pointId: UUID, name: string) => setPointToUpdate({
     ...pointToUpdate,
     properties: {
       ...pointToUpdate.properties,
@@ -268,18 +266,17 @@ const PointPanel: FC<PointPanelProps> = ({
       color={scope.color}
       numPoints={numPoints}
       numPaths={numPaths}
-      onBackButtonClick={() => onBackButtonClick()}
+      onBackButtonClick={onBackButtonClick}
     />
     <Box>{/*makes up&down margin*/}
       <ListItem
-        itemId={point.id}
-        name={point.properties.name}
-        color={point.properties.color || scope.color}
-        isActive={point.properties.isVisible}
+        itemId={pointToUpdate.id}
+        name={pointToUpdate.properties.name}
+        color={pointToUpdate.properties.color || scope.color}
+        isActive={pointToUpdate.properties.isVisible}
         isEditing={isEditing}
         actionIcons={actionIcons}
         onActionClick={handleActionClick}
-        onClick={() => console.log('click')}
         onColorChange={handleColorChange}
         onNameChange={handleNameChange}
       />
