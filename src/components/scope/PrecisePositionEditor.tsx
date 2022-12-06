@@ -11,41 +11,33 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 //CATOFFLINE
 import ManagerHeader from '../common/ManagerHeader';
-
 import PrecisePosition from '../icons/PrecisePosition';
 
 //UTILS
-import {Scope} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {Theme} from '@mui/material';
+import {HEXColor} from '../../types/commonTypes';
+import useTheme from '@mui/material/styles/useTheme';
 
 export type PrecisePositionEditorProps = {
-    isAccessibleSize: boolean,
-    isLeftHanded: boolean,
-    scope: Scope,
-    viewport: {
-        latitude: number,
-        longitude: number,
-        zoom: number,
-        bearing: number,
-        pitch: number
-    }
-  onAccept: (coords: Array<number>) => void,
+  isAccessibleSize: boolean,
+  name: string,
+  color?: HEXColor,
+  onAccept: () => void,
   onCancel: () => void,
 }
 
 const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
   isAccessibleSize,
-  isLeftHanded,
-  scope,
-  viewport,
+  name,
+  color,
   onAccept,
   onCancel
 }) => {
-  
   const {t} = useTranslation();
-  const handleAccept = () => onAccept && onAccept([viewport.latitude, viewport.longitude]);
-  const handleCancel = () => onCancel && onCancel();
+  const theme = useTheme();
+  const handleAccept = () => onAccept();
+  const handleCancel = () => onCancel();
 
   const crosshairSize = 80;
 
@@ -53,59 +45,52 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
     pointerEvents: 'none', 
     width: `${crosshairSize}px`,
     height: `${crosshairSize}px`,
-    maxWidth: '100px',
-    maxHeight: '100px',
-    color: 'grey.600'
+    color: 'black',
+    opacity: 0.67
   };
   
   const buttonsContainer = {
     position: 'absolute', 
-    bottom: 40, 
-    left: 0, 
-    py: 2, 
+    bottom: '8px',
+    left: 0,
+    py: 1,
     zIndex: 1000, 
-    width: '100vw', 
-    gap: 2,
-    '@media (min-width: 0px) and (orientation: landscape)': {
-      bottom: 0,
-      px: 2
-    }
+    width: '100vw'
   };
   
   const buttonsPosition = {
     flexDirection: 'row', 
-    justifyContent: 'space-around', 
-    width: '100%',
-    '@media (min-width: 0px) and (orientation: landscape)': {
-      justifyContent: isLeftHanded ? 'flex-end' : 'flex-start',
-    }
+    justifyContent: 'center',
+    gap: 2,
+    width: '100%'
   };
   
   const cancelButton = {
     bgcolor: 'common.white', 
     color: 'error.main', 
-    borderColor: (theme: Theme) => theme.palette.error.main, minWidth: '150px',
+    borderColor: (theme: Theme) => theme.palette.error.main,
+    minWidth: '120px',
     '&:hover': {
       bgcolor: 'common.white',
       borderColor: (theme: Theme) => theme.palette.error.main
-    },
-    '@media (min-width: 0px) and (orientation: landscape)': {
-      mr: 2,
     }
   };
   
   const acceptButton = {
     color: 'common.white', 
     bgcolor: 'success.main', 
-    minWidth: '150px',
+    minWidth: '120px',
     '&:hover': {
       bgcolor: 'success.main',
     }
   };
 
+  const headerName = (name ? `${name.toUpperCase()} - ` : '') + t('actions.addPoint');
+  const headerColor = color ? color : theme.palette.secondary.main;
+
   return <>
     <Stack sx={{position: 'absolute', top: 0, width: '100%'}}>
-      <ManagerHeader name={`${scope.name.toUpperCase()} - ${t('actions.addPoint')}`} color='#ffd300' startIcon={<AddLocationAltIcon/>}/>
+      <ManagerHeader name={headerName} color={headerColor} startIcon={<AddLocationAltIcon/>}/>
     </Stack>
     <Stack sx={{position: 'absolute', top: `calc(50% - ${crosshairSize/2}px)`, left: `calc(50% - ${crosshairSize/2}px)`, width: 0, height: 0}}>
       <PrecisePosition sx={precisePositionIcon}/>
