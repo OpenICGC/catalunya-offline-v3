@@ -18,6 +18,7 @@ import ListItem from './ListItem';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
+import { SxProps } from '@mui/system/styleFunctionSx/styleFunctionSx';
 
 const errorMessageSx = {
   mt: 1,
@@ -25,15 +26,6 @@ const errorMessageSx = {
   color: 'error.main',
   display: 'block'
 };
-
-const searchBoxWrapperSx = {
-  px: 1,
-  pt: 1,
-  pb: 1,
-  bgcolor: 'common.white'
-};
-
-const muiListSx = {ml: 0.75, my: 0, mr: 0};
 
 const normalizeSearchString = (string: string) => string.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
@@ -60,12 +52,14 @@ export type ListProps = {
   isAccessibleSize: boolean,
   items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
   actionIcons?: Array<actionIconType>,
-  contextualMenu: Array<contextualMenuEntry>,
-  onClick: (itemId: UUID) => void,
-  onColorChange: (itemId: UUID, color: HEXColor) => void,
-  onNameChange: (itemId: UUID, name: string) => void
-  onActionClick: (itemId: UUID, actionId: string) => void,
-  onContextualMenuClick: (itemId: UUID, menuId: string) => void
+  contextualMenu?: Array<contextualMenuEntry>,
+  onClick?: (itemId: UUID) => void,
+  onColorChange?: (itemId: UUID, color: HEXColor) => void,
+  onNameChange?: (itemId: UUID, name: string) => void
+  onActionClick?: (itemId: UUID, actionId: string) => void,
+  onContextualMenuClick?: (itemId: UUID, menuId: string) => void
+  searchSx?: SxProps
+  listSx?: SxProps
 };
 
 const List: FC<ListProps> = ({
@@ -73,11 +67,24 @@ const List: FC<ListProps> = ({
   items,
   contextualMenu,
   actionIcons,
-  onActionClick,
-  onClick,
-  onColorChange,
+  onActionClick= () => undefined,
+  onClick= () => undefined,
+  onColorChange= () => undefined,
   onContextualMenuClick = () => undefined,
-  onNameChange}) => {
+  onNameChange= () => undefined,
+  searchSx={},
+  listSx={}
+}) => {
+
+  const muiListSx = {ml: 0.75, my: 0, mr: 0, ...listSx};
+
+  const searchBoxWrapperSx = {
+    px: 1,
+    pt: 1,
+    pb: 1,
+    bgcolor: 'common.white',
+    ...searchSx
+  };
 
   const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',
