@@ -1,7 +1,8 @@
 {
   "actions": {
     "accept": "Accepta",
-    "cancel": "Cancel·La",
+    "addPoint": "Afegir punt",
+    "cancel": "Cancel·la",
     "close": "Tanca",
     "dataSchema": "Esquema de dades",
     "delete": "Esborra",
