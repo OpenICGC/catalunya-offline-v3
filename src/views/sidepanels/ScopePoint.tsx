@@ -47,7 +47,7 @@ const ScopePoint: FC<ScopePointProps> = ({scopeId, pointId, onClose}) => {
 
   return selectedScope && selectedPoint ? <PointPanel
     scope={selectedScope}
-    point={selectedPoint}
+    initialPoint={selectedPoint}
     numPoints={numPoints}
     numPaths={numPaths}
     onBackButtonClick={onClose}
@@ -58,7 +58,7 @@ const ScopePoint: FC<ScopePointProps> = ({scopeId, pointId, onClose}) => {
     onDeleteImage={deleteImage}
     onDownloadImage={downloadImage}
     onAddPrecisePosition={addPrecisePosition}
-  /> :  <div>Error: the selected point does not exist</div>;
+  /> : <div>Error: the selected point does not exist</div>;
 };
 
 export default ScopePoint;

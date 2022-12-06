@@ -7,6 +7,7 @@ import {HEXColor, UUID} from '../../types/commonTypes';
 import {useScopePaths, useScopePoints, useScopes} from '../../hooks/usePersitedCollection';
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
+import ScopePath from './ScopePath';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -157,35 +158,44 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     console.log('Unimplemented Export, path', pathId); // TODO
   };
 
-  return selectedScope ?
-    !selectedPoint ? <FeaturesPanel
-      scope={selectedScope}
-      scopePoints={pointStore.list}
-      scopePaths={pathStore.list}
-      onBackButtonClick={onClose}
+  if (selectedPath) return <ScopePath
+    scopeId={scopeId}
+    pathId={selectedPath}
+    onClose={unselectPath}
+  />;
 
-      onSelectPoint={selectPoint}
-      onAddPoint={pointAdd}
-      onColorChangePoint={pointColorChange}
-      onNameChangePoint={pointRename}
-      onToggleVisibilityPoint={pointToggleVisibility}
-      onDeletePoint={pointDelete}
-      onGoToPoint={pointGoTo}
-      onExportPoint={pointExport}
+  if (selectedPoint) return <ScopePoint
+    scopeId={scopeId}
+    pointId={selectedPoint}
+    onClose={unselectPoint}
+  />;
 
-      onSelectPath={selectPath}
-      onAddPath={pathAdd}
-      onColorChangePath={pathColorChange}
-      onNameChangePath={pathRename}
-      onToggleVisibilityPath={pathToggleVisibility}
-      onDeletePath={pathDelete}
-      onGoToPath={pathGoTo}
-      onExportPath={pathExport}
-    /> : <ScopePoint
-      scopeId={scopeId}
-      pointId={selectedPoint}
-      onClose={unselectPoint}
-    /> : <div>Error: the selected scope does not exist</div>;
+  if (selectedScope) return <FeaturesPanel
+    scope={selectedScope}
+    scopePoints={pointStore.list}
+    scopePaths={pathStore.list}
+    onBackButtonClick={onClose}
+
+    onSelectPoint={selectPoint}
+    onAddPoint={pointAdd}
+    onColorChangePoint={pointColorChange}
+    onNameChangePoint={pointRename}
+    onToggleVisibilityPoint={pointToggleVisibility}
+    onDeletePoint={pointDelete}
+    onGoToPoint={pointGoTo}
+    onExportPoint={pointExport}
+
+    onSelectPath={selectPath}
+    onAddPath={pathAdd}
+    onColorChangePath={pathColorChange}
+    onNameChangePath={pathRename}
+    onToggleVisibilityPath={pathToggleVisibility}
+    onDeletePath={pathDelete}
+    onGoToPath={pathGoTo}
+    onExportPath={pathExport}
+  />;
+
+  return <div>Error: the selected scope does not exist</div>;
 };
 
 export default ScopeFeatures;
