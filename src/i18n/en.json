@@ -26,6 +26,7 @@
     "points": "Points"
   },
   "layerManager": "Layers",
+  "noScopeAlert": "Choose the point's scope",
   "properties": {
     "date": "Date",
     "description": "Description",
