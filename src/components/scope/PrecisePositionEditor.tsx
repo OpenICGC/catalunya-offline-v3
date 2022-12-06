@@ -46,13 +46,15 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
   const {t} = useTranslation();
   const handleAccept = () => onAccept && onAccept([viewport.latitude, viewport.longitude]);
   const handleCancel = () => onCancel && onCancel();
-  
+
+  const crosshairSize = 80;
+
   const precisePositionIcon = {
     pointerEvents: 'none', 
-    width: '20vw', 
-    height: '20vw', 
-    maxWidth: '100px', 
-    maxHeight: '100px', 
+    width: `${crosshairSize}px`,
+    height: `${crosshairSize}px`,
+    maxWidth: '100px',
+    maxHeight: '100px',
     color: 'grey.600'
   };
   
@@ -100,12 +102,12 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
       bgcolor: 'success.main',
     }
   };
-  
+
   return <>
     <Stack sx={{position: 'absolute', top: 0, width: '100%'}}>
       <ManagerHeader name={`${scope.name.toUpperCase()} - ${t('actions.addPoint')}`} color='#ffd300' startIcon={<AddLocationAltIcon/>}/>
     </Stack>
-    <Stack sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+    <Stack sx={{position: 'absolute', top: `calc(50% - ${crosshairSize/2}px)`, left: `calc(50% - ${crosshairSize/2}px)`, width: 0, height: 0}}>
       <PrecisePosition sx={precisePositionIcon}/>
     </Stack>
     <Stack direction='row' sx={buttonsContainer}>

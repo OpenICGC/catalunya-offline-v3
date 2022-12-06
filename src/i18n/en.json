@@ -1,7 +1,7 @@
 {
   "actions": {
-    "addPoint": "Add point",
     "accept": "Accept",
+    "addPoint": "Add point",
     "cancel": "Cancel",
     "close": "Close",
     "dataSchema": "Data Schema",
