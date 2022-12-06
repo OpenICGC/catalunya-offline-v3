@@ -47,9 +47,9 @@ export interface ScopePath extends ScopeFeature {
 }
 
 export type ScopeImage = {
-    id: UUID,
-    url: string,
-    name: string,
-    contentType: string,
-    isLoading: boolean
+  id: UUID,
+  url: string,
+  name: string,
+  contentType: string,
+  isLoading: boolean
 }

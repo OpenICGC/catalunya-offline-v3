@@ -6,6 +6,8 @@ import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useScopePaths, useScopePoints, useScopes} from '../../hooks/usePersitedCollection';
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
+import ScopePoint from './ScopePoint';
+import ScopePath from './ScopePath';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -156,7 +158,19 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     console.log('Unimplemented Export, path', pathId); // TODO
   };
 
-  return selectedScope ? <FeaturesPanel
+  if (selectedPath) return <ScopePath
+    scopeId={scopeId}
+    pathId={selectedPath}
+    onClose={unselectPath}
+  />;
+
+  if (selectedPoint) return <ScopePoint
+    scopeId={scopeId}
+    pointId={selectedPoint}
+    onClose={unselectPoint}
+  />;
+
+  if (selectedScope) return <FeaturesPanel
     scope={selectedScope}
     scopePoints={pointStore.list}
     scopePaths={pathStore.list}
@@ -179,7 +193,9 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     onDeletePath={pathDelete}
     onGoToPath={pathGoTo}
     onExportPath={pathExport}
-  /> : <div>Error: the selected scope does not exist</div>;
+  />;
+
+  return <div>Error: the selected scope does not exist</div>;
 };
 
 export default ScopeFeatures;
