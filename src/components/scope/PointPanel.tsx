@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useCallback, useMemo, useState} from 'react';
+import React, {ChangeEvent, FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 //MUI
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
@@ -164,6 +164,15 @@ const PointPanel: FC<PointPanelProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [point, setPoint] = useState(initialPoint);
 
+  useEffect(() => {
+    setPoint(prevPoint => ({
+      ...prevPoint,
+      geometry: {
+        ...prevPoint.geometry,
+        coordinates: initialPoint.geometry.coordinates
+      }
+    }));
+  }, [initialPoint.geometry.coordinates]);
 
   // STYLED COMPONENTS
   const TextAreaEditable = useMemo(() => styled(TextareaAutosize)({

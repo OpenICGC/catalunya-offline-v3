@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
@@ -6,23 +6,41 @@ import {useTranslation} from 'react-i18next';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 
 import {HEXColor, UUID} from '../../types/commonTypes';
-import {useScopes} from '../../hooks/useLocalStores';
+import {useScopes} from '../../hooks/useStoredCollections';
 import MainPanel from '../../components/scope/MainPanel';
 import ScopeFeatures from './ScopeFeatures';
+import GeoJSON from 'geojson';
 
-const ScopeMain: FC = () => {
+export interface ScopeMainProps {
+  selectedScope?: UUID,
+  onScopeSelected: (scopeId: UUID) => void,
+  selectedPoint?: UUID,
+  onPointSelected: (scopeId?: UUID) => void,
+  selectedPath?: UUID,
+  onPathSelected: (scopeId?: UUID) => void,
+  onPrecisePositionRequested: (request: GeoJSON.Position | boolean) => void
+}
+
+const ScopeMain: FC<ScopeMainProps> = ({
+  selectedScope,
+  onScopeSelected,
+  selectedPoint,
+  onPointSelected,
+  selectedPath,
+  onPathSelected,
+  onPrecisePositionRequested
+}) => {
   const {t} = useTranslation();
   const {hexColors: palette} = useColorRamp('BrewerDark27');
 
   const scopeStore = useScopes();
-  const [selectedScope, selectScope] = useState<UUID>();
-  const unselectScope = () => selectScope(undefined);
+  const unselectScope = () => onScopeSelected('');
 
   const scopeAdd = () => {
     scopeStore.create({
       id: uuid(),
-      name: `${t('scope')} ${scopeStore.list.length + 1}`,
-      color: palette[scopeStore.list.length % palette.length]
+      name: `${t('scope')} ${scopeStore.list().length + 1}`,
+      color: palette[scopeStore.list().length % palette.length]
     });
   };
 
@@ -61,8 +79,8 @@ const ScopeMain: FC = () => {
 
   return !selectedScope ?
     <MainPanel
-      scopes={scopeStore.list}
-      onSelect={selectScope}
+      scopes={scopeStore.list()}
+      onSelect={onScopeSelected}
       onAdd={scopeAdd}
       onColorChange={scopeColorChange}
       onRename={scopeRename}
@@ -75,6 +93,11 @@ const ScopeMain: FC = () => {
     <ScopeFeatures
       scopeId={selectedScope}
       onClose={unselectScope}
+      selectedPoint={selectedPoint}
+      onPointSelected={onPointSelected}
+      selectedPath={selectedPath}
+      onPathSelected={onPathSelected}
+      onPrecisePositionRequested={onPrecisePositionRequested}
     />;
 };
 

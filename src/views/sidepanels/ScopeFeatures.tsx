@@ -1,33 +1,47 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 
 import {HEXColor, UUID} from '../../types/commonTypes';
-import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useLocalStores';
+import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
 import ScopeTrack from './ScopeTrack';
+import GeoJSON from 'geojson';
+import {useViewport} from '../../hooks/useViewport';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
-  onClose: () => void
+  onClose: () => void,
+  selectedPoint?: UUID,
+  onPointSelected: (scopeId?: UUID) => void,
+  selectedPath?: UUID,
+  onPathSelected: (scopeId?: UUID) => void,
+  onPrecisePositionRequested: (request: GeoJSON.Position | boolean) => void
 };
 
-const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
+const ScopeFeatures: FC<ScopeFeaturesProps> = ({
+  scopeId,
+  onClose,
+  selectedPoint,
+  onPointSelected,
+  selectedPath,
+  onPathSelected,
+  onPrecisePositionRequested
+}) => {
   const {t} = useTranslation();
 
   const scopeStore = useScopes();
   const selectedScope = scopeStore.retrieve(scopeId);
 
-  const pointStore = useScopePoints(scopeId)();
-  const trackStore = useScopeTracks(scopeId)();
+  const pointStore = useScopePoints(scopeId);
+  const trackStore = useScopeTracks(scopeId);
 
-  const [selectedPoint, selectPoint] = useState<UUID>();
-  const unselectPoint = () => selectPoint(undefined);
+  const unselectPoint = () => onPointSelected();
+  const unselectPath = () => onPathSelected();
 
-  const [selectedPath, selectPath] = useState<UUID>();
-  const unselectPath = () => selectPath(undefined);
+  const [viewport, setViewport] = useViewport();
 
   const pointAdd = () => {
     pointStore.create({
@@ -35,10 +49,10 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
       id: uuid(),
       geometry: {
         type: 'Point',
-        coordinates: [0, 0] // TODO, coordinates are required for new point to be created
+        coordinates: [viewport.longitude, viewport.latitude] // TODO Ask for a PrecisePosition before creating point
       },
       properties: {
-        name: `${t('point')} ${pointStore.list.length + 1}`,
+        name: `${t('point')} ${pointStore.list().length + 1}`,
         timestamp: Date.now(),
         description: '',
         images: [],
@@ -86,7 +100,12 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   };
 
   const pointGoTo = (pointId: UUID) => {
-    console.log('Unimplemented Go To, Point', pointId); // TODO
+    const targetPosition = pointStore.retrieve(pointId)?.geometry.coordinates;
+    targetPosition && setViewport({
+      ...viewport,
+      longitude: targetPosition[0],
+      latitude: targetPosition[1]
+    });
   };
 
   const pointExport = (pointId: UUID) => {
@@ -103,7 +122,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
         coordinates: [[0, 0], [1, 1]] // TODO, coordinates are required for new path to be created
       },
       properties: {
-        name: `${t('path')} ${trackStore.list.length + 1}`,
+        name: `${t('path')} ${trackStore.list().length + 1}`,
         timestamp: Date.now(),
         description: '',
         images: [],
@@ -172,11 +191,11 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
 
   if (selectedScope) return <FeaturesPanel
     scope={selectedScope}
-    scopePoints={pointStore.list}
-    scopeTracks={trackStore.list}
+    scopePoints={pointStore.list()}
+    scopeTracks={trackStore.list()}
     onBackButtonClick={onClose}
 
-    onSelectPoint={selectPoint}
+    onSelectPoint={onPointSelected}
     onAddPoint={pointAdd}
     onColorChangePoint={pointColorChange}
     onNameChangePoint={pointRename}

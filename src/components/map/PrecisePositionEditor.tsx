@@ -18,15 +18,15 @@ import CancelButton from '../buttons/CancelButton';
 import AcceptButton from '../buttons/AcceptButton';
 
 export type PrecisePositionEditorProps = {
-  isAccessibleSize: boolean,
-  name: string,
+  isAccessibleSize?: boolean,
+  name?: string,
   color?: HEXColor,
   onAccept: () => void,
   onCancel: () => void,
 }
 
 const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
-  isAccessibleSize,
+  isAccessibleSize = false,
   name,
   color,
   onAccept,

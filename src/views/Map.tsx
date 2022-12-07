@@ -3,12 +3,17 @@ import maplibregl from 'maplibre-gl';
 
 import GeocomponentMap from '@geomatico/geocomponents/Map';
 
-import {Manager} from '../types/commonTypes';
+import {Manager, UUID} from '../types/commonTypes';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../utils/mbtiles';
 import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeolocation';
 import FabButton from '../components/buttons/FabButton';
 import useCompass from '../hooks/useCompass';
 import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
+import PrecisePositionEditor from '../components/map/PrecisePositionEditor';
+import GeoJSON from 'geojson';
+import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
+import PointMarkers from '../components/map/PointMarkers';
+import {useViewport} from '../hooks/useViewport';
 
 mbtiles(maplibregl);
 
@@ -85,9 +90,17 @@ export type MainContentProps = {
   onManagerChanged: (newManager: Manager) => void
 };
 
-const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
+const Map: FC<MainContentProps> = ({
+  mapStyle,
+  manager,
+  onManagerChanged,
+  selectedScope,
+  precisePositionRequest = false,
+  onPrecisePositionAccepted,
+  onPrecisePositionCancelled
+}) => {
   const mapRef = useRef<maplibregl.Map>();
-  const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
+  const [viewport, setViewport] = useViewport();
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
 
   const {geolocation, error: geolocationError} = useBackgroundGeolocation();
@@ -100,6 +113,11 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
   const enableTracking = () => setTrackingMode(true);
   const disableTracking = () => setTrackingMode(false);
 
+  const scopeStore = useScopes();
+  const scopeColor = selectedScope ? scopeStore.retrieve(selectedScope)?.color : undefined;
+
+  const pointStore = useScopePoints(selectedScope);
+  const pointList = pointStore.list();
 
   // Effects on offline tileset downloading
   useEffect(() => {
@@ -166,11 +184,6 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
         bearing: isNavigationMode && isTrackingMode ? orientation : 0,
         zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
       };
-      /*mapRef.current ?
-        mapRef.current.easeTo({
-          center: [longitude, latitude],
-          ...bearingZoom
-        }) :*/
       setViewport({
         ...viewport,
         latitude,
@@ -184,29 +197,52 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
     onManagerChanged(clicked === manager ? undefined : clicked);
   };
 
+  useEffect(() => {
+    if (Array.isArray(precisePositionRequest)) {
+      setViewport({
+        ...viewport,
+        longitude: precisePositionRequest[0],
+        latitude: precisePositionRequest[1],
+        zoom: MAP_PROPS.maxZoom
+      });
+    }
+  }, [precisePositionRequest]);
+
+  const handlePrecisePositionAccepted = () => {
+    onPrecisePositionAccepted([viewport.longitude, viewport.latitude]);
+  };
+
   return (mbtilesStatus === READY || OFF_CAT) ?
-    <GeocomponentMap
-      {...MAP_PROPS}
-      reuseMaps
-      ref={mapRef}
-      mapStyle={mapStyle}
-      sources={sources}
-      layers={layers}
-      viewport={viewport}
-      onViewportChange={setViewport}
-      onDrag={disableTracking}
-      onTouchMove={disableTracking}
-      onWheel={disableTracking}
-    >
-      <FabButton
-        isLeftHanded={false} isAccessibleSize={false}
-        bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
-        isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}
-        onLayersClick={() => changeManager('LAYERS')}
-        onBaseMapsClick={() => changeManager('BASEMAPS')}
-        onFoldersClick={() => changeManager('SCOPES')}
-      />
-    </GeocomponentMap> : <div>
+    <>
+      <GeocomponentMap
+        {...MAP_PROPS}
+        reuseMaps
+        ref={mapRef}
+        mapStyle={mapStyle}
+        sources={sources}
+        layers={layers}
+        viewport={viewport}
+        onViewportChange={setViewport}
+        onDrag={disableTracking}
+        onTouchMove={disableTracking}
+        onWheel={disableTracking}
+      >
+        <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor}/>
+        {!precisePositionRequest && <FabButton
+          isLeftHanded={false} isAccessibleSize={false}
+          bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
+          isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}
+          onLayersClick={() => changeManager('LAYERS')}
+          onBaseMapsClick={() => changeManager('BASEMAPS')}
+          onFoldersClick={() => changeManager('SCOPES')}
+        />}
+      </GeocomponentMap>
+      {!!precisePositionRequest && <PrecisePositionEditor
+        // name={} // TODO get selected point's name
+        onAccept={handlePrecisePositionAccepted}
+        onCancel={onPrecisePositionCancelled}
+      />}
+    </>: <div>
       {mbtilesStatusMessages[mbtilesStatus]}
     </div>;
 };
