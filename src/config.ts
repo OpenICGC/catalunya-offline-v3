@@ -48,3 +48,5 @@ export const MAPSTYLES: MapStyles = [{
 export const INITIAL_MAPSTYLE_URL = MAPSTYLES[OFF_CAT ? 2 : 0].id;
 
 export const MIN_TRACKING_ZOOM = 14;
+
+export const USER_COLOR = '#0665e0';
