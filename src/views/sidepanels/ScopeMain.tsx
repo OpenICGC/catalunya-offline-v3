@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 
 import {HEXColor, UUID} from '../../types/commonTypes';
-import {useScopes} from '../../hooks/usePersitedCollection';
+import {useScopes} from '../../hooks/useLocalStores';
 import MainPanel from '../../components/scope/MainPanel';
 import ScopeFeatures from './ScopeFeatures';
 
