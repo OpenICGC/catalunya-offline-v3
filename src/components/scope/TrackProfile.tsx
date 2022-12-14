@@ -6,12 +6,12 @@ import Typography from '@mui/material/Typography';
 import {VegaLite} from 'react-vega';
 import {TopLevelSpec} from 'vega-lite';
 import turfDistance from '@turf/distance';
-import turfNearestPointOnLine from '@turf/nearest-point-on-line';
 
 //UTILS
 import {HEXColor, ScopePath} from '../../types/commonTypes';
 import {USER_COLOR} from '../../config';
 import {useTranslation} from 'react-i18next';
+import {getIndexNearestPointToLine} from '../../utils/getIndexNearestPointToLine';
 
 export interface TrackProfileProps {
     track: ScopePath,
@@ -56,19 +56,14 @@ const TrackProfile: FC<TrackProfileProps> = ({
     } else return [];
   }, [track]);
   
-  const vegaPositionProperties = useMemo(() => {
+  const vegaPositionIndex = useMemo(() => {
     if(track.geometry && currentPosition){
-      return turfNearestPointOnLine(track.geometry, currentPosition, {units: 'meters'}).properties;
-    } else return [];
+      return getIndexNearestPointToLine(track, currentPosition);
+    } else return undefined;
   }, [currentPosition]);
-  const vegaPositionIndex = vegaPositionProperties.index;
-
-  const vegaPosition = vegaPositionIndex && vegaPositionIndex >= 0 && vegaTrack[vegaPositionIndex];
-
-  const travelled = vegaTrack.slice(0, vegaPositionIndex && vegaPositionIndex+1);
   
-  const offTrackDistance = vegaPositionProperties && vegaPositionProperties.dist;
-  console.error('offTrackDistance', `${offTrackDistance?.toFixed(2)}m`);
+  const vegaPosition = vegaPositionIndex && vegaPositionIndex >= 0 && vegaTrack[vegaPositionIndex];
+  const travelled = vegaTrack.slice(0, vegaPositionIndex && vegaPositionIndex+1);
   
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
@@ -89,11 +84,15 @@ const TrackProfile: FC<TrackProfileProps> = ({
             axis: {
               labels: true,
               domain: true,
+              title: null,
               labelPadding: 10,
               labelAngle: 0,
               grid: false,
-              ticks: false,
-              format: '.2f'
+              ticks: true,
+              tickSize: 2,
+              tickWidth: 2,
+              tickCount: 5,
+              labelExpr: 'datum.label+\' km\''
             }
           },
           y: {
@@ -105,7 +104,11 @@ const TrackProfile: FC<TrackProfileProps> = ({
               labelAngle: 0,
               domain: true,
               grid: false,
-              ticks: false,
+              ticks: true,
+              tickSize: 2,
+              tickWidth: 2,
+              tickCount: 5,
+              labelExpr: 'datum.label+\' m\''
             }
           }
         }
@@ -153,7 +156,6 @@ const TrackProfile: FC<TrackProfileProps> = ({
               labelPadding: 10,
               labelAngle: 0,
               grid: false,
-              ticks: false
             }
           },
           y: {
@@ -165,7 +167,6 @@ const TrackProfile: FC<TrackProfileProps> = ({
               labelAngle: 0,
               domain: true,
               grid: false,
-              ticks: false,
             }
           }
         }
@@ -189,7 +190,6 @@ const TrackProfile: FC<TrackProfileProps> = ({
               labelAngle: 0,
               grid: false,
               ticks: false,
-              format: '.2f'
             }
           },
           y: {
@@ -201,7 +201,11 @@ const TrackProfile: FC<TrackProfileProps> = ({
               labelAngle: 0,
               domain: true,
               grid: false,
-              ticks: false,
+              ticks: true,
+              tickSize: 2,
+              tickWidth: 2,
+              tickCount: 5,
+              labelExpr: 'datum.label+\' m\''
             }
           }
         }
