@@ -17,7 +17,6 @@ export interface TrackProfileProps {
     track: ScopePath,
     color: HEXColor,
     currentPosition?: GeoJSON.Position
-    onOffTrackDistance: (distance: number) => void
 }
 
 const errorMessageSx = {
@@ -31,7 +30,6 @@ const TrackProfile: FC<TrackProfileProps> = ({
   track, 
   color, 
   currentPosition,
-  onOffTrackDistance
 }) => {
 
   const {t} = useTranslation();
