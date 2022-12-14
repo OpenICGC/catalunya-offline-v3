@@ -1,6 +1,6 @@
 import {renderHook, act} from '@testing-library/react-hooks/dom';
 import {expect} from 'chai';
-import {useScopes, useScopePoints, useScopePaths} from './usePersitedCollection';
+import {useScopes, useScopePoints, useScopePaths} from './useLocalStores';
 import {Scope, ScopePath, ScopePoint} from '../types/commonTypes';
 import {v4 as uuidv4} from 'uuid';
 
@@ -76,7 +76,7 @@ describe('usePersitedCollection', () => {
         coordinates: [1, 1]
       }
     };
-    const {result} = renderHook(() => useScopePoints(scopeId));
+    const {result} = renderHook(() => useScopePoints(scopeId)());
 
     // WHEN
     act(() => result.current.create(samplePoint));
@@ -84,21 +84,21 @@ describe('usePersitedCollection', () => {
     // THEN
     expect(result.current.list).to.deep.equal([samplePoint]);
     expect(result.current.retrieve(samplePoint.id)).to.deep.equal(samplePoint);
-    expect(localStorage.getItem(`scopePoints_${scopeId}`)).to.deep.equal(JSON.stringify([samplePoint]));
+    expect(localStorage.getItem(`${scopeId}:scopePoints`)).to.deep.equal(JSON.stringify([samplePoint]));
 
     // WHEN
     act(() => result.current.update(modifiedPoint));
 
     // THEN
     expect(result.current.list).to.deep.equal([modifiedPoint]);
-    expect(localStorage.getItem(`scopePoints_${scopeId}`)).to.deep.equal(JSON.stringify([modifiedPoint]));
+    expect(localStorage.getItem(`${scopeId}:scopePoints`)).to.deep.equal(JSON.stringify([modifiedPoint]));
 
     // WHEN
     act(() => result.current.delete(modifiedPoint.id));
 
     // THEN
     expect(result.current.list).to.deep.equal([]);
-    expect(localStorage.getItem(`scopePoints_${scopeId}`)).to.deep.equal(JSON.stringify([]));
+    expect(localStorage.getItem(`${scopeId}:scopePoints`)).to.deep.equal(JSON.stringify([]));
 
   });
 
@@ -133,7 +133,7 @@ describe('usePersitedCollection', () => {
         coordinates: [[2, 2], [3, 3]]
       }
     };
-    const {result} = renderHook(() => useScopePaths(scopeId));
+    const {result} = renderHook(() => useScopePaths(scopeId)());
 
     // WHEN
     act(() => result.current.create(samplePath));
@@ -141,20 +141,20 @@ describe('usePersitedCollection', () => {
     // THEN
     expect(result.current.list).to.deep.equal([samplePath]);
     expect(result.current.retrieve(samplePath.id)).to.deep.equal(samplePath);
-    expect(localStorage.getItem(`scopePaths_${scopeId}`)).to.deep.equal(JSON.stringify([samplePath]));
+    expect(localStorage.getItem(`${scopeId}:scopePaths`)).to.deep.equal(JSON.stringify([samplePath]));
 
     // WHEN
     act(() => result.current.update(modifiedPath));
 
     // THEN
     expect(result.current.list).to.deep.equal([modifiedPath]);
-    expect(localStorage.getItem(`scopePaths_${scopeId}`)).to.deep.equal(JSON.stringify([modifiedPath]));
+    expect(localStorage.getItem(`${scopeId}:scopePaths`)).to.deep.equal(JSON.stringify([modifiedPath]));
 
     // WHEN
     act(() => result.current.delete(modifiedPath.id));
 
     // THEN
     expect(result.current.list).to.deep.equal([]);
-    expect(localStorage.getItem(`scopePaths_${scopeId}`)).to.deep.equal(JSON.stringify([]));
+    expect(localStorage.getItem(`${scopeId}:scopePaths`)).to.deep.equal(JSON.stringify([]));
   });
 });

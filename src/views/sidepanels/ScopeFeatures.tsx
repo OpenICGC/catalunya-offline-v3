@@ -4,7 +4,7 @@ import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 
 import {HEXColor, UUID} from '../../types/commonTypes';
-import {useScopePaths, useScopePoints, useScopes} from '../../hooks/usePersitedCollection';
+import {useScopePaths, useScopePoints, useScopes} from '../../hooks/useLocalStores';
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
 import ScopePath from './ScopePath';
@@ -20,8 +20,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   const scopeStore = useScopes();
   const selectedScope = scopeStore.retrieve(scopeId);
 
-  const pointStore = useScopePoints(scopeId);
-  const pathStore = useScopePaths(scopeId);
+  const pointStore = useScopePoints(scopeId)();
+  const pathStore = useScopePaths(scopeId)();
 
   const [selectedPoint, selectPoint] = useState<UUID>();
   const unselectPoint = () => selectPoint(undefined);

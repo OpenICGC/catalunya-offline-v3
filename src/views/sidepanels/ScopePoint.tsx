@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 
 import {ScopePoint, UUID} from '../../types/commonTypes';
-import {useScopePaths, useScopePoints, useScopes} from '../../hooks/usePersitedCollection';
+import {useScopePaths, useScopePoints, useScopes} from '../../hooks/useLocalStores';
 import PointPanel from '../../components/scope/PointPanel';
 
 export interface ScopePointProps {
@@ -12,8 +12,8 @@ export interface ScopePointProps {
 
 const ScopePoint: FC<ScopePointProps> = ({scopeId, pointId, onClose}) => {
   const scopeStore = useScopes();
-  const pathStore = useScopePaths(scopeId);
-  const pointStore = useScopePoints(scopeId);
+  const pathStore = useScopePaths(scopeId)();
+  const pointStore = useScopePoints(scopeId)();
 
   const selectedScope = scopeStore.retrieve(scopeId);
   const selectedPoint = pointStore.retrieve(pointId);
