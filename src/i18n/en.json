@@ -21,6 +21,9 @@
     "content_03": "Download now the Topographic Map of Catalonia? (350 MB)",
     "title": "Offline data download"
   },
+  "trackAlert": {
+    "noTrack": "It is not possible to show track profile."
+  },
   "features": {
     "paths": "Paths",
     "points": "Points"

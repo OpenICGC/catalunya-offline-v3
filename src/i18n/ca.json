@@ -21,6 +21,9 @@
     "content_03": "Voleu descarregar ara el Mapa topogràfic de Catalunya? (350 MB)",
     "title": "Descàrrega de dades offline"
   },
+  "trackAlert": {
+    "noTrack": "No es pot mostrar el perfil de la traza"
+  },
   "features": {
     "paths": "Traces",
     "points": "Punts"

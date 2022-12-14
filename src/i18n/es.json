@@ -21,6 +21,9 @@
     "content_03": "¿Descargar el Mapa topográfico de Catalunya ahora? (350 MB)",
     "title": "Descarga de datos offline"
   },
+  "trackAlert": {
+    "noTrack": "No es posible mostrar perfil de la ruta."
+  },
   "features": {
     "paths": "Trazas",
     "points": "Puntos"

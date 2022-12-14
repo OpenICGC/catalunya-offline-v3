@@ -1,99 +1,85 @@
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {FC, useMemo} from 'react';
+
+//MUI
+import Typography from '@mui/material/Typography';
 
 import {VegaLite} from 'react-vega';
 import {TopLevelSpec} from 'vega-lite';
+import turfDistance from '@turf/distance';
+import turfNearestPointOnLine from '@turf/nearest-point-on-line';
+
+//UTILS
 import {HEXColor, ScopePath} from '../../types/commonTypes';
 import {USER_COLOR} from '../../config';
-import turfDistance from '@turf/distance';
+import {useTranslation} from 'react-i18next';
 
-export interface PathProfileProps {
-    path: ScopePath,
+export interface TrackProfileProps {
+    track: ScopePath,
     color: HEXColor,
-    currentPosition?: GeoJSON.Position //[x, y, z?] => turf => devuelve el punto de la línea y la separación, a ver que z da, si da
+    currentPosition?: GeoJSON.Position
+    onOffTrackDistance: (distance: number) => void
 }
 
-const PathProfile: FC<PathProfileProps> = ({
-  path, 
+const errorMessageSx = {
+  mt: 1,
+  mx: 2,
+  color: 'error.main',
+  display: 'block'
+};
+
+const TrackProfile: FC<TrackProfileProps> = ({
+  track, 
   color, 
-  currentPosition
+  currentPosition,
+  onOffTrackDistance
 }) => {
 
-  /*const coords = path.geometry?.coordinates;*/
-  /*const vegaData: Array<{ length: number; height: number; }> = [];*/
-  const vegaData2 = [
-    {length: 0, height: 115},
-    {length: 0.08313957091020711, height: 141},
-    {length: 9.049044553437191, height: 141},
-    {length: 30.414549636343995, height: 140},
-    {length: 37.08369443562548, height: 139},
-    {length: 41.78730441919822, height: 119},
-    {length: 51.562370803444054, height: 38},
-    {length: 78.66817229580234, height: 56}
-  ];
-  let travelled = 0;
+  const {t} = useTranslation();
+    
+  //VALIDATORS
+  const isLongitudeValid = track.geometry?.coordinates.some(coord => (coord[0] >= -180 && coord[0] <= 180));
+  const isLatitudeValid = track.geometry?.coordinates.some(coord => (coord[1] >= -90 && coord[1] <= 90));
+  const isHeightValid = track.geometry?.coordinates.some(coord => coord.length >= 3);
+  const isTrackValid = track.geometry && isHeightValid && isLongitudeValid && isLatitudeValid;
 
-  const vegaData = useMemo(() => {
-    const coords = path.geometry?.coordinates;
-    //comprobar que los array al menos 3 elementos
-    //story con coords null o con array vacío
+  const vegaTrack = useMemo(() => {
+    const coords = track.geometry?.coordinates;
+    let cumulativeLength = 0;
     if (coords && coords.length) {
       return coords.map((c, i) => {
         if (i > 0) {
-          travelled += turfDistance(coords[i - 1], coords[i], {units: 'meters'});
+          cumulativeLength += turfDistance(coords[i - 1], coords[i], {units: 'kilometers'});
         }
         return {
-          length: travelled,
+          length: cumulativeLength,
           height: coords[i][2] || 0
         };
       });
     } else return [];
-  }, [path]);
+  }, [track]);
+  
+  const vegaPositionProperties = useMemo(() => {
+    if(track.geometry && currentPosition){
+      return turfNearestPointOnLine(track.geometry, currentPosition, {units: 'meters'}).properties;
+    } else return [];
+  }, [currentPosition]);
+  const vegaPositionIndex = vegaPositionProperties.index;
 
-  console.log('vegaData', vegaData);
-  console.log('vegaData2', vegaData2);
+  const vegaPosition = vegaPositionIndex && vegaPositionIndex >= 0 && vegaTrack[vegaPositionIndex];
 
+  const travelled = vegaTrack.slice(0, vegaPositionIndex && vegaPositionIndex+1);
+  
+  const offTrackDistance = vegaPositionProperties && vegaPositionProperties.dist;
+  console.error('offTrackDistance', `${offTrackDistance?.toFixed(2)}m`);
+  
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     width: 500,
     height: 100,
-    layer: [{
-      mark: 'line',
-      data: { values: vegaData},
-      encoding: {
-        color: {
-          value: color,
-        },
-        x: {
-          field: 'length',
-          type: 'quantitative',
-          title: null,
-          axis: {
-            labels: true,
-            domain: true,
-            labelPadding: 10,
-            labelAngle: 0,
-            grid: false,
-            ticks: false,
-          }
-        },
-        y: {
-          field: 'height',
-          type: 'quantitative',
-          title: null,
-          axis: {
-            labelPadding: 10,
-            labelAngle: 0,
-            domain: true,
-            grid: false,
-            ticks: false,
-          }
-        }
-      }
-    }],
-    /*layer: currentPosition ?  [
+    layer: vegaPosition ? [
       {
         mark: 'line',
-        data: { values: vegaData},
+        data: { values: vegaTrack},
         encoding: {
           color: {
             value: color,
@@ -103,12 +89,13 @@ const PathProfile: FC<PathProfileProps> = ({
             type: 'quantitative',
             title: null,
             axis: {
-              labels: false,
+              labels: true,
               domain: true,
               labelPadding: 10,
               labelAngle: 0,
               grid: false,
               ticks: false,
+              format: '.2f'
             }
           },
           y: {
@@ -129,11 +116,11 @@ const PathProfile: FC<PathProfileProps> = ({
         mark: {
           type: 'point',
           shape: 'circle',
-          size: 100,
+          size: 75,
           filled: true,
           opacity: 1
         },
-        data: { values: currentPosition},
+        data: { values: vegaPosition },
         encoding: {
           color: {
             value: USER_COLOR,
@@ -168,7 +155,7 @@ const PathProfile: FC<PathProfileProps> = ({
               labelPadding: 10,
               labelAngle: 0,
               grid: false,
-              ticks: false,
+              ticks: false
             }
           },
           y: {
@@ -184,17 +171,17 @@ const PathProfile: FC<PathProfileProps> = ({
             }
           }
         }
-      },
-    ] :  [
+      }    
+    ] : [
       {
         mark: 'line',
-        data: { values: vegaData},
+        data: { values: vegaTrack},
         encoding: {
           color: {
             value: color,
           },
           x: {
-            field: 'length', 
+            field: 'length',
             type: 'quantitative',
             title: null,
             axis: {
@@ -204,10 +191,11 @@ const PathProfile: FC<PathProfileProps> = ({
               labelAngle: 0,
               grid: false,
               ticks: false,
+              format: '.2f'
             }
           },
           y: {
-            field: 'height', 
+            field: 'height',
             type: 'quantitative',
             title: null,
             axis: {
@@ -219,8 +207,7 @@ const PathProfile: FC<PathProfileProps> = ({
             }
           }
         }
-      }
-    ],*/
+      }],
     config: {
       view: {
         stroke: null
@@ -228,7 +215,8 @@ const PathProfile: FC<PathProfileProps> = ({
     }
   };
 
-  return <VegaLite spec={spec} actions={false}/>;
+  return isTrackValid ? <VegaLite spec={spec} actions={false}/>
+    : <Typography variant='caption' sx={errorMessageSx}>{t('trackAlert.noTrack')}</Typography>;
 };
 
-export default PathProfile;
+export default TrackProfile;
