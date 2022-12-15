@@ -22,8 +22,8 @@
     "title": "Offline data download"
   },
   "features": {
-    "paths": "Paths",
-    "points": "Points"
+    "points": "Points",
+    "tracks": "Tracks"
   },
   "layerManager": "Layers",
   "noScopeAlert": "Choose the point's scope",

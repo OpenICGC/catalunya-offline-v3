@@ -19,7 +19,7 @@ export type HeaderProps = {
   name: string,
   color: HEXColor,
   numPoints?: number,
-  numPaths?: number,
+  numTracks?: number,
   onBackButtonClick: () => void
 };
 
@@ -47,7 +47,7 @@ const detailsContainerSx = {
   ml: 'auto'
 };
 
-const Header: FC<HeaderProps> = ({name, color, numPoints, numPaths, onBackButtonClick}) => {
+const Header: FC<HeaderProps> = ({name, color, numPoints, numTracks, onBackButtonClick}) => {
 
   const appBarSx = {
     bgcolor: color || 'secondary.main',
@@ -89,7 +89,7 @@ const Header: FC<HeaderProps> = ({name, color, numPoints, numPaths, onBackButton
         <Box sx={detailsContainerSx}>
           <Typography variant="caption" sx={detailTextSx}>{numPoints || 0}</Typography>
           <LocationOnIcon fontSize="small" sx={detailIconSx}/>
-          <Typography variant="caption" sx={detailTextSx}>{numPaths || 0}</Typography>
+          <Typography variant="caption" sx={detailTextSx}>{numTracks || 0}</Typography>
           <RouteIcon fontSize="small" sx={detailIconSx}/>
         </Box>
       </Toolbar>

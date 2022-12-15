@@ -18,7 +18,7 @@ import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import AddPath from '../icons/AddPath';
+import AddTrack from '../icons/AddTrack';
 
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
@@ -26,7 +26,7 @@ import Header from './Header';
 import List, {listItemType} from './List';
 
 //UTILS
-import {HEXColor, Scope, ScopePath, ScopePoint, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, ScopeTrack, ScopePoint, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {lighten} from '@mui/system/colorManipulator';
 import {Theme} from '@mui/material';
@@ -36,7 +36,7 @@ export type FeaturesPanelProps = {
   isLeftHanded?: boolean,
   scope: Scope,
   scopePoints: Array<ScopePoint>,
-  scopePaths: Array<ScopePath>,
+  scopeTracks: Array<ScopeTrack>,
   onBackButtonClick: () => void,
   onAddPoint: () => void,
   onSelectPoint: (pointId: UUID) => void,
@@ -46,14 +46,14 @@ export type FeaturesPanelProps = {
   onExportPoint: (pointId: UUID) => void,
   onNameChangePoint: (pointId: UUID, name: string) => void
   onToggleVisibilityPoint: (pointId: UUID) => void,
-  onAddPath: () => void,
-  onSelectPath: (pathId: UUID) => void,
-  onColorChangePath: (pathId: UUID, color: HEXColor) => void,
-  onGoToPath: (pathId: UUID) => void,
-  onDeletePath: (pathId: UUID) => void,
-  onExportPath: (pathId: UUID) => void,
-  onNameChangePath: (pathId: UUID, name: string) => void
-  onToggleVisibilityPath: (pathId: UUID) => void
+  onAddTrack: () => void,
+  onSelectTrack: (trackId: UUID) => void,
+  onColorChangeTrack: (trackId: UUID, color: HEXColor) => void,
+  onGoToTrack: (trackId: UUID) => void,
+  onDeleteTrack: (trackId: UUID) => void,
+  onExportTrack: (trackId: UUID) => void,
+  onNameChangeTrack: (trackId: UUID, name: string) => void
+  onToggleVisibilityTrack: (trackId: UUID) => void
 };
 
 const FeaturesPanel: FC<FeaturesPanelProps> = ({
@@ -61,7 +61,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   isLeftHanded = false,
   scope,
   scopePoints,
-  scopePaths,
+  scopeTracks,
   onBackButtonClick,
   onAddPoint,
   onSelectPoint,
@@ -71,14 +71,14 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   onExportPoint,
   onNameChangePoint,
   onToggleVisibilityPoint,
-  onAddPath,
-  onSelectPath,
-  onColorChangePath,
-  onGoToPath,
-  onDeletePath,
-  onExportPath,
-  onNameChangePath,
-  onToggleVisibilityPath
+  onAddTrack,
+  onSelectTrack,
+  onColorChangeTrack,
+  onGoToTrack,
+  onDeleteTrack,
+  onExportTrack,
+  onNameChangeTrack,
+  onToggleVisibilityTrack
 }) => {
   const {t} = useTranslation();
   const [tabValue, setTabValue] = useState(0);
@@ -96,12 +96,12 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     }
   };
 
-  const handleActionPathClick = (pathId: UUID) => {
-    onToggleVisibilityPath(pathId);
+  const handleActionTrackClick = (trackId: UUID) => {
+    onToggleVisibilityTrack(trackId);
   };
 
-  const handleContextualMenuPathClick = (itemId: UUID, menuId: string) => {
-    const menuEntry = contextualMenu.path.find(({id}) => id === menuId);
+  const handleContextualMenuTrackClick = (itemId: UUID, menuId: string) => {
+    const menuEntry = contextualMenu.track.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
       menuEntry.callbackProp(itemId);
     }
@@ -134,12 +134,12 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         callbackProp: onExportPoint
       }
     ],
-    path: [
+    track: [
       {
         id: 'goTo',
         label: t('actions.goTo'),
         icon: <SwipeRightAltIcon/>,
-        callbackProp: onGoToPath
+        callbackProp: onGoToTrack
       },
       {
         id: 'edit',
@@ -150,13 +150,13 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         id: 'delete',
         label: t('actions.delete'),
         icon: <DeleteIcon/>,
-        callbackProp: onDeletePath
+        callbackProp: onDeleteTrack
       },
       {
         id: 'export',
         label: t('actions.export'),
         icon: <FileUploadIcon/>,
-        callbackProp: onExportPath
+        callbackProp: onExportTrack
       }
     ]
   };
@@ -179,11 +179,11 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     isActive: scopePoint.properties.isVisible
   }));
 
-  const pathItems: Array<listItemType> = scopePaths.map(scopePath => ({
-    id: scopePath.id,
-    name: scopePath.properties.name,
-    color: scopePath.properties.color || scope.color, // Inherits color from scope
-    isActive: scopePath.properties.isVisible
+  const trackItems: Array<listItemType> = scopeTracks.map(scopeTrack => ({
+    id: scopeTrack.id,
+    name: scopeTrack.properties.name,
+    color: scopeTrack.properties.color || scope.color, // Inherits color from scope
+    isActive: scopeTrack.properties.isVisible
   }));
 
   const actionIcons = [{id: 'visibility', activeIcon: <VisibilityIcon/>, inactiveIcon: <VisibilityOffIcon/>}];
@@ -193,7 +193,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       name={scope.name}
       color={scope.color}
       numPoints={scopePoints.length}
-      numPaths={scopePaths.length}
+      numTracks={scopeTracks.length}
       onBackButtonClick={onBackButtonClick}
     />
     <Tabs
@@ -215,7 +215,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       <Tab label={
         <Stack sx={{flexDirection: 'row', gap: 1}}>
           <RouteIcon/>
-          <Typography>{t('features.paths')}</Typography>
+          <Typography>{t('features.tracks')}</Typography>
         </Stack>
       } value={1}/>
     </Tabs>
@@ -245,22 +245,22 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       tabValue === 1 && <>
         <List
           isAccessibleSize={isAccessibleSize}
-          items={pathItems}
-          contextualMenu={contextualMenu.path}
+          items={trackItems}
+          contextualMenu={contextualMenu.track}
           actionIcons={actionIcons}
-          onActionClick={handleActionPathClick}
-          onClick={onSelectPath}
-          onColorChange={onColorChangePath}
-          onContextualMenuClick={handleContextualMenuPathClick}
-          onNameChange={onNameChangePath}
+          onActionClick={handleActionTrackClick}
+          onClick={onSelectTrack}
+          onColorChange={onColorChangeTrack}
+          onContextualMenuClick={handleContextualMenuTrackClick}
+          onNameChange={onNameChangeTrack}
         />
         <Box sx={{width: '100%', height: 0}}>
           <AddButton
             isAccessibleSize={isAccessibleSize}
             isLeftHanded={isLeftHanded}
-            onClick={onAddPath}
+            onClick={onAddTrack}
           >
-            <AddPath/>
+            <AddTrack/>
           </AddButton>
         </Box>
       </>

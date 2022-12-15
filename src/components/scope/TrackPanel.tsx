@@ -1,20 +1,20 @@
 import React, {FC} from 'react';
-import {Scope, ScopePath} from '../../types/commonTypes';
+import {Scope, ScopeTrack} from '../../types/commonTypes';
 import Header from './Header';
 
-export type PathPanelProps = {
+export type TrackPanelProps = {
   scope: Scope,
-  initialPath: ScopePath,
+  initialTrack: ScopeTrack,
   numPoints: number,
-  numPaths: number,
+  numTracks: number,
   onBackButtonClick: () => void
 };
 
-const PathPanel: FC<PathPanelProps> = ({
+const TrackPanel: FC<TrackPanelProps> = ({
   scope,
-  initialPath,
+  initialTrack,
   numPoints,
-  numPaths,
+  numTracks,
   onBackButtonClick
 }) => {
   return <>
@@ -22,12 +22,12 @@ const PathPanel: FC<PathPanelProps> = ({
       name={scope.name}
       color={scope.color}
       numPoints={numPoints}
-      numPaths={numPaths}
+      numTracks={numTracks}
       onBackButtonClick={onBackButtonClick}
     />
-    <p>PathPanel - TODO</p>
-    <pre>{JSON.stringify(initialPath, null, 2)}</pre>
+    <p>TrackPanel - TODO</p>
+    <pre>{JSON.stringify(initialTrack, null, 2)}</pre>
   </>;
 };
 
-export default PathPanel;
+export default TrackPanel;

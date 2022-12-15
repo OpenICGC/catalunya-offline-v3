@@ -6,7 +6,7 @@ import {Meta, Story} from '@storybook/react';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 
-import AddPath from '../icons/AddPath';
+import AddTrack from '../icons/AddTrack';
 
 export default {
   title: 'Buttons/AddButton',
@@ -28,9 +28,9 @@ Point.args = {
   children: <AddLocationAltIcon/>
 };
 
-export const Path = Template.bind({});
-Path.args = {
+export const Track = Template.bind({});
+Track.args = {
   ...Scope.args,
-  children: <AddPath/>
+  children: <AddTrack/>
 };
 

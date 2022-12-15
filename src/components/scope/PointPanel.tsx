@@ -136,7 +136,7 @@ export type PointPanelProps = {
     scope: Scope,
     initialPoint: ScopePoint,
     numPoints: number,
-    numPaths: number,
+    numTracks: number,
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void,
@@ -150,7 +150,7 @@ const PointPanel: FC<PointPanelProps> = ({
   scope,
   initialPoint,
   numPoints,
-  numPaths,
+  numTracks,
   onBackButtonClick,
   onPointChange,
   onGoTo,
@@ -276,7 +276,7 @@ const PointPanel: FC<PointPanelProps> = ({
       name={scope.name}
       color={scope.color}
       numPoints={numPoints}
-      numPaths={numPaths}
+      numTracks={numTracks}
       onBackButtonClick={onBackButtonClick}
     />
     <Box>{/*makes up&down margin*/}

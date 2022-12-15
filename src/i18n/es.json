@@ -22,8 +22,8 @@
     "title": "Descarga de datos offline"
   },
   "features": {
-    "paths": "Trazas",
-    "points": "Puntos"
+    "points": "Puntos",
+    "tracks": "Rutas"
   },
   "layerManager": "Capas",
   "noScopeAlert": "Elige un ámbito para el punto",

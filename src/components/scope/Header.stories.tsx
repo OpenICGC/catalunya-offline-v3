@@ -28,7 +28,7 @@ Default.args = {
   name: 'Montseny',
   color: '#ccf598',
   numPoints: 15,
-  numPaths: 7
+  numTracks: 7
 };
 
 export const Long = DeviceTemplate.bind({});
@@ -36,5 +36,5 @@ Long.args = {
   name: 'Artesa de Segre con amigos',
   color: '#ccf598',
   numPoints: 15,
-  numPaths: 7
+  numTracks: 7
 };
