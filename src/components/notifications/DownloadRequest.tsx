@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 
 //MUI
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,9 +9,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 
 //MUI-ICONS
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
 import MapIcon from '@mui/icons-material/Map';
+
+//CATOFFLINE
+import CancelButton from '../buttons/CancelButton';
+import AcceptButton from '../buttons/AcceptButton';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
@@ -43,8 +44,8 @@ const DownloadRequest: FC<DownloadRequestProps> = ({isOpen=false, onClose, onDow
       </DialogContentText>
     </DialogContent>
     <DialogActions>
-      <Button startIcon={<CancelIcon/>} onClick={onClose} sx={{color: 'text.secondary'}}>{t('actions.cancel')}</Button>
-      <Button startIcon={<CheckCircleIcon/>} onClick={onDownload}>{t('actions.accept')}</Button>
+      <CancelButton isAccessibleSize={false} onCancel={onDownload}/>
+      <AcceptButton isAccessibleSize={false} onAccept={onClose}/>
     </DialogActions>
   </Dialog>;
 };

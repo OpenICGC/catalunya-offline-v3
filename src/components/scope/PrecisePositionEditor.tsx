@@ -18,6 +18,8 @@ import {useTranslation} from 'react-i18next';
 import {Theme} from '@mui/material';
 import {HEXColor} from '../../types/commonTypes';
 import useTheme from '@mui/material/styles/useTheme';
+import CancelButton from '../buttons/CancelButton';
+import AcceptButton from '../buttons/AcceptButton';
 
 export type PrecisePositionEditorProps = {
   isAccessibleSize: boolean,
@@ -97,13 +99,8 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
     </Stack>
     <Stack direction='row' sx={buttonsContainer}>
       <Stack sx={buttonsPosition}>
-        <Button size={isAccessibleSize ? 'large' : 'medium'} startIcon={<CancelIcon/>} variant='outlined' 
-          sx={cancelButton}
-          onClick={handleCancel}>{t('actions.cancel')}</Button>
-        <Button size={isAccessibleSize ? 'large' : 'medium'} startIcon={<CheckCircleIcon/>} variant='contained' 
-          sx={acceptButton}
-          onClick={handleAccept}
-        >{t('actions.accept')}</Button>
+        <CancelButton isAccessibleSize={isAccessibleSize} onCancel={handleCancel} variant='contained'/>
+        <AcceptButton isAccessibleSize={isAccessibleSize} onAccept={handleAccept} variant='contained'/>
       </Stack>
     </Stack>
   </>;

@@ -33,6 +33,8 @@ import i18n from 'i18next';
 import moment, {Moment} from 'moment';
 import {Theme} from '@mui/material';
 import Box from '@mui/material/Box';
+import CancelButton from '../buttons/CancelButton';
+import AcceptButton from '../buttons/AcceptButton';
 
 //STYLES
 const sectionTitleSx = {
@@ -393,15 +395,9 @@ const PointPanel: FC<PointPanelProps> = ({
       </SectionContent>
     </ScrollableContent>
     { isEditing &&
-      <Stack direction="row" justifyContent="center">
-        <Button startIcon={<CancelIcon/>} color="error"
-          onClick={handleCancel}>{t('actions.cancel')}</Button>
-        <Button
-          startIcon={<CheckCircleIcon/>}
-          disabled={!isFormValid}
-          color="success"
-          onClick={handleAccept}
-        >{t('actions.accept')}</Button>
+      <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>
+        <CancelButton isAccessibleSize={false} onCancel={handleCancel}/>
+        <AcceptButton isAccessibleSize={false} onAccept={handleAccept}/>
       </Stack>
     }
   </>;
