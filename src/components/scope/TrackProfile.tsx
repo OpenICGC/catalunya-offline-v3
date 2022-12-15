@@ -9,15 +9,19 @@ import turfDistance from '@turf/distance';
 
 //UTILS
 import {HEXColor, ScopePath} from '../../types/commonTypes';
-import {USER_COLOR} from '../../config';
+import {GPS_POSITION_COLOR} from '../../config';
 import {useTranslation} from 'react-i18next';
-import {getIndexNearestPointToLine} from '../../utils/getIndexNearestPointToLine';
 
 export interface TrackProfileProps {
     track: ScopePath,
     color: HEXColor,
-    currentPosition?: GeoJSON.Position
+    currentPositionIndex?: number
 }
+        
+export type vegaTrackType = Array<{
+    length: number,
+    height: number
+}>
 
 const errorMessageSx = {
   mt: 1,
@@ -29,7 +33,7 @@ const errorMessageSx = {
 const TrackProfile: FC<TrackProfileProps> = ({
   track, 
   color, 
-  currentPosition,
+  currentPositionIndex,
 }) => {
 
   const {t} = useTranslation();
@@ -40,7 +44,11 @@ const TrackProfile: FC<TrackProfileProps> = ({
   const isHeightValid = track.geometry?.coordinates.some(coord => coord.length >= 3);
   const isTrackValid = track.geometry && isHeightValid && isLongitudeValid && isLatitudeValid;
 
-  const vegaTrack = useMemo(() => {
+  const isNavigateMode: boolean = track.geometry ?
+    (currentPositionIndex !== undefined && currentPositionIndex >= 0 && currentPositionIndex < track.geometry.coordinates.length)
+    : false;
+
+  const vegaTrack: vegaTrackType = useMemo(() => {
     const coords = track.geometry?.coordinates;
     let cumulativeLength = 0;
     if (coords && coords.length) {
@@ -55,21 +63,21 @@ const TrackProfile: FC<TrackProfileProps> = ({
       });
     } else return [];
   }, [track]);
-  
-  const vegaPositionIndex = useMemo(() => {
-    if(track.geometry && currentPosition){
-      return getIndexNearestPointToLine(track, currentPosition);
-    } else return undefined;
-  }, [currentPosition]);
-  
-  const vegaPosition = vegaPositionIndex && vegaPositionIndex >= 0 && vegaTrack[vegaPositionIndex];
-  const travelled = vegaTrack.slice(0, vegaPositionIndex && vegaPositionIndex+1);
+
+  const arrayHeightsTrack: Array<number> = vegaTrack && vegaTrack.map(coord => coord.height);
+  const minHeight: number = Math.min(...arrayHeightsTrack);
+  const maxHeight: number = Math.max(...arrayHeightsTrack);
+
+  const arrayLengthsTrack: Array<number> = vegaTrack && vegaTrack.map(coord => coord.length);
+  const maxLength: number = Math.max(...arrayLengthsTrack);
+
+  const travelled: vegaTrackType = isNavigateMode && currentPositionIndex !== undefined ? vegaTrack.slice(0, currentPositionIndex + 1) : [];
   
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     width: 500,
     height: 100,
-    layer: vegaPosition ? [
+    layer: isNavigateMode ? [
       {
         mark: 'line',
         data: { values: vegaTrack},
@@ -81,6 +89,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
             field: 'length', 
             type: 'quantitative',
             title: null,
+            scale: { domain: [0, maxLength] },
             axis: {
               labels: true,
               domain: true,
@@ -99,6 +108,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
             field: 'height', 
             type: 'quantitative',
             title: null,
+            scale: { domain: [minHeight-5, maxHeight+5] },
             axis: {
               labelPadding: 10,
               labelAngle: 0,
@@ -121,18 +131,20 @@ const TrackProfile: FC<TrackProfileProps> = ({
           filled: true,
           opacity: 1
         },
-        data: { values: vegaPosition },
+        data: { values: currentPositionIndex? vegaTrack[currentPositionIndex] : [] },
         encoding: {
           color: {
-            value: USER_COLOR,
+            value: GPS_POSITION_COLOR,
           },
           x: {
             field: 'length',
             type: 'quantitative',
+            scale: { domain: [0, maxLength] },
           },
           y: {
             field: 'height',
             type: 'quantitative',
+            scale: { domain: [minHeight-5, maxHeight+5] },
           }
         }
       },
@@ -149,25 +161,12 @@ const TrackProfile: FC<TrackProfileProps> = ({
           x: {
             field: 'length',
             type: 'quantitative',
-            title: null,
-            axis: {
-              labels: false,
-              domain: true,
-              labelPadding: 10,
-              labelAngle: 0,
-              grid: false,
-            }
+            scale: { domain: [0, maxLength] },
           },
           y: {
             field: 'height',
             type: 'quantitative',
-            title: null,
-            axis: {
-              labelPadding: 10,
-              labelAngle: 0,
-              domain: true,
-              grid: false,
-            }
+            scale: { domain: [minHeight-5, maxHeight+5] },
           }
         }
       }    
@@ -183,19 +182,26 @@ const TrackProfile: FC<TrackProfileProps> = ({
             field: 'length',
             type: 'quantitative',
             title: null,
+            scale: { domain: [0, maxLength] },
             axis: {
               labels: false,
               domain: true,
+              title: null,
               labelPadding: 10,
               labelAngle: 0,
               grid: false,
-              ticks: false,
+              ticks: true,
+              tickSize: 2,
+              tickWidth: 2,
+              tickCount: 5,
+              labelExpr: 'datum.label+\' km\''
             }
           },
           y: {
             field: 'height',
             type: 'quantitative',
             title: null,
+            scale: { domain: [minHeight-5, maxHeight+5] },
             axis: {
               labelPadding: 10,
               labelAngle: 0,

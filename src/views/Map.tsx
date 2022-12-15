@@ -8,7 +8,7 @@ import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../uti
 import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeolocation';
 import FabButton from '../components/buttons/FabButton';
 import useCompass from '../hooks/useCompass';
-import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
+import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
 
 mbtiles(maplibregl);
 
@@ -27,7 +27,7 @@ const layers = [{
   source: 'geolocation',
   type: 'circle',
   paint: {
-    'circle-color': '#4286f5',
+    'circle-color': GPS_POSITION_COLOR,
     'circle-opacity': 0.33,
     'circle-radius': [
       'interpolate',
@@ -38,7 +38,7 @@ const layers = [{
       15,
       ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI / 180))]
     ],
-    'circle-stroke-color': '#4286f5',
+    'circle-stroke-color': GPS_POSITION_COLOR,
     'circle-stroke-opacity': 0.67,
     'circle-stroke-width': 1,
     'circle-pitch-alignment': 'map'
