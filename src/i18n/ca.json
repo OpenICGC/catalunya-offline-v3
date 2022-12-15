@@ -43,5 +43,8 @@
     "notFound": "No s'hi han trobat elements coincidents amb la cerca"
   },
   "scopeManager": "Àmbits",
-  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000"
+  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
+  "trackAlert": {
+    "noTrack": "No es pot mostrar el perfil de la traza"
+  }
 }
