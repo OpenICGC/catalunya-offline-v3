@@ -1,21 +1,26 @@
 import React from 'react';
 import {Meta, Story} from '@storybook/react';
 
-import TrackThumbnail, {TrackThumbnailProps} from './TrackThumbnail';
+import GeometryThumbnail, {GeometryThumbnailProps} from './GeometryThumbnail';
 
 export default {
-  title: 'Scope/TrackThumbnail',
-  component: TrackThumbnail,
+  title: 'Scope/GeometryThumbnail',
+  component: GeometryThumbnail,
   argTypes: {
-    color: {control: 'color'}
+    color: {
+      control: 'color'
+    },
+    size: {
+      control: { type: 'range', min: 16, max: 512, step: 1}
+    }
   }
 } as Meta;
 
-const Template: Story<TrackThumbnailProps> = args => <TrackThumbnail {...args}/>;
+const Template: Story<GeometryThumbnailProps> = args => <GeometryThumbnail {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  track: {
+  geometry: {
     type: 'LineString',
     coordinates:  [
       [
