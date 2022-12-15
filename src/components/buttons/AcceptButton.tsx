@@ -6,12 +6,14 @@ import {useTranslation} from 'react-i18next';
 export interface AcceptButtonProps {
   isAccessibleSize: boolean,
     variant?: 'text' | 'outlined' | 'contained',
-    onAccept: () => void
+    disabled?: boolean
+    onAccept: () => void,
 }
 
 const AcceptButton: FC<AcceptButtonProps> = ({
   isAccessibleSize,
   variant = 'text',
+  disabled= false,
   onAccept
 }) => {
     
@@ -25,10 +27,16 @@ const AcceptButton: FC<AcceptButtonProps> = ({
     }
   };
   
-  return <Button size={isAccessibleSize ? 'large' : 'medium'} startIcon={<CheckCircleIcon/>} variant={variant}
+  return <Button 
+    size={isAccessibleSize ? 'large' : 'medium'} 
+    startIcon={<CheckCircleIcon/>} 
+    variant={variant}
+    disabled={disabled}
     sx={acceptButton}
     onClick={() => onAccept()}
-  >{t('actions.accept')}</Button>;
+  >
+    {t('actions.accept')}
+  </Button>;
 };
 
 export default AcceptButton;

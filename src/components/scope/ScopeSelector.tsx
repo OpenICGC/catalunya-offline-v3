@@ -5,21 +5,18 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 //MUI-ICONS
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 //CATOFFLINE
+import CancelButton from '../buttons/CancelButton';
+import AcceptButton from '../buttons/AcceptButton';
 import List from './List';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {Scope} from '../../types/commonTypes';
-import CancelButton from '../buttons/CancelButton';
-import AcceptButton from '../buttons/AcceptButton';
 
 export interface ScopeSelectorProps {
     isAccesibleSize: boolean;

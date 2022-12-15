@@ -19,5 +19,6 @@ const Template: Story<AcceptButtonProps> = args => <AcceptButton {...args}/>;
 export const Default = Template.bind({});
 Default.args = {
   variant: 'text',
-  isAccessibleSize: false
+  isAccessibleSize: false,
+  disabled: false
 };
