@@ -18,6 +18,7 @@
     "content_03": "Download now the Topographic Map of Catalonia? (350 MB)",
     "title": "Offline data download"
   },
+  "downloadingError": "Error downloading cartography",
   "layerManager": "Layers",
   "scope": "Scope",
   "scopeListItem": {

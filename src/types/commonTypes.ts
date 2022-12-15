@@ -1,9 +1,15 @@
 import GeoJSON from 'geojson';
 
 export type MapStyle = {
-  label: string,
-  thumbnail: string,
   id: string
+  labels: {
+    ca: string,
+    en: string,
+    es: string
+  },
+  thumbnail: string,
+  onlineStyle: string,
+  offlineAssets: string | undefined
 }
 
 export type MapStyles = Array<MapStyle>

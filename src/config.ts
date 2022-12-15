@@ -1,5 +1,5 @@
 import {MapStyles} from './types/commonTypes';
-export const OFF_CAT = false;
+export const OFF_CAT = true;
 
 export const DRAWER_WIDTH = 240;
 export const SM_BREAKPOINT = 850;
@@ -28,19 +28,27 @@ export const MBTILES = {
 };
 
 export const MAPSTYLES: MapStyles = [{
-  label: 'mtc25m Offline',
+  id: 'mtc25m',
+  labels: {
+    ca: 'Mapa Topogràfic 1:25 000',
+    en: 'Topographic Map 1:25 000',
+    es: 'Mapa Topográfico 1:25 000'
+  },
   thumbnail: 'images/mtc25m.png',
-  id: 'mapstyles/mtc25m-offline.json',
-}, {
-  label: 'mtc25m Online',
-  thumbnail: 'images/mtc25m.png',
-  id: 'mapstyles/mtc25m-online.json'
-}, {
-  label: 'ContextMaps',
+  onlineStyle: 'mapstyles/mtc25m-online.json',
+  offlineAssets: 'icgc_api/mtc25m/assets.json'
+},{
+  id: 'contextmaps',
+  labels: {
+    ca: 'ContextMaps',
+    en: 'ContextMaps',
+    es: 'ContextMaps'
+  },
   thumbnail: 'https://visors.icgc.cat/contextmaps/imatges_estil/icgc_mapa_estandard.png',
-  id: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json'
+  onlineStyle: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json',
+  offlineAssets: undefined
 }];
 
-export const INITIAL_MAPSTYLE_URL = MAPSTYLES[OFF_CAT ? 2 : 0].id;
+export const INITIAL_MAPSTYLE_URL = MAPSTYLES[OFF_CAT ? 1 : 0]?.onlineStyle;
 
 export const MIN_TRACKING_ZOOM = 14;

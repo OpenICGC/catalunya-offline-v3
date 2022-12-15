@@ -18,6 +18,7 @@
     "content_03": "¿Descargar el Mapa topográfico de Catalunya ahora? (350 MB)",
     "title": "Descarga de datos offline"
   },
+  "downloadingError": "Error descargando cartografía",
   "layerManager": "Capas",
   "scope": "Ámbito",
   "scopeListItem": {

@@ -7,19 +7,17 @@ import {CatOfflineError} from '../types/commonTypes';
 import {downloadMbtiles} from '../utils/mbtiles';
 
 interface fileTransferDownload {
+  download: (url: string) => void;
   uri: string | undefined;
-  progress: number | undefined;
+  progress: number;
   cancel: () => void;
   error: CatOfflineError | undefined
 }
 
-const useFileTransferDownload = (
-  url: string
-): fileTransferDownload  => {
+const useFileTransferDownload = (): fileTransferDownload  => {
   
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<CatOfflineError|undefined>(undefined);
-  const [filename] = useState<string>(url.split('/').pop() || '');
   const [uri, setUri] = useState<string|undefined>();
   
   const fileTransfer = useRef(FileTransfer.create());
@@ -31,55 +29,42 @@ const useFileTransferDownload = (
 
   });
   
-  const download = async (url: string) => {
+  const downloadMobile = async (url: string) => {
+    const filename = url.split('/').pop() || '';
     const directory = await Filesystem.getUri({directory: Directory.Data, path: ''});
-    let fileExists = false;
-
-    const files = await Filesystem.readdir({path: '', directory: Directory.Data});
-
-    files.files.map(({name}) => {
-      if (name === filename && !fileExists) fileExists = true;
-    });
-
-    console.log('files: ', files);
 
     const path = directory.uri.replace('file://', '') + '/' + filename;
     setUri(path);
 
-    if (!fileExists) {
-      fileTransfer.current
-        .download(url, path, true)
-        .then(() => {
-          console.log('[useFileTransfer] Download complete!');
-        })
-        .catch((error) => {
-          setError({
-            code: '99',
-            message: error
-          });
+    fileTransfer.current
+      .download(url, path, true)
+      .then(() => {
+        console.log('[useFileTransfer] Download complete!');
+      })
+      .catch((error) => {
+        setError({
+          code: '99',
+          message: error
         });
-    } else {
-      setProgress(100);
-      console.log('[useFileTransfer] File exists. Download ommited!');
-    }
+      });
   };
   
-  useEffect(() => {
+  const download = (url: string) => {
     const platform = Capacitor.getPlatform();
     if (platform === 'web') {
       console.log('[useFileTransfer] Using web implementation.');
       downloadMbtiles(url);
-      setUri(filename.split('.')[0]);
       setProgress(100);
     } else {
       console.log('[useFileTransfer] Using Cordova implementation.');
-      download(url);
+      downloadMobile(url);
     }
-  }, []);
+  };
 
   useEffect(() => console.log(error), [error]);
   
   return {
+    download,
     uri,
     progress,
     cancel: fileTransfer.current.abort,

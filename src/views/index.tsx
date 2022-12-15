@@ -7,6 +7,7 @@ import Map from './Map';
 import {INITIAL_MANAGER, INITIAL_MAPSTYLE_URL, SM_BREAKPOINT} from '../config';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {Manager} from '../types/commonTypes';
+import DownloadsManager from '../components/downloads/DownloadsManager';
 
 const Index: FC = () => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
@@ -39,12 +40,15 @@ const Index: FC = () => {
     onManagerChanged={setManager}
   />;
 
-  return <Layout
-    sidePanelContent={sidePanelContent}
-    mainContent={mainContent}
-    isSidePanelOpen={isSidePanelOpen}
-    onToggleSidePanel={toggleSidePanel}
-  />;
+  return <>
+    <DownloadsManager manager={manager} />
+    <Layout
+      sidePanelContent={sidePanelContent}
+      mainContent={mainContent}
+      isSidePanelOpen={isSidePanelOpen}
+      onToggleSidePanel={toggleSidePanel}
+    />
+  </>;
 };
 
 export default Index;

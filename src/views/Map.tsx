@@ -4,12 +4,12 @@ import maplibregl from 'maplibre-gl';
 import GeocomponentMap from '@geomatico/geocomponents/Map';
 
 import {Manager} from '../types/commonTypes';
-import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../utils/mbtiles';
+import {mbtiles, isMbtilesDownloaded} from '../utils/mbtiles';
 import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeolocation';
 import FabButton from '../components/buttons/FabButton';
 import useCompass from '../hooks/useCompass';
 import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
-import useFileTransferDownload from '../hooks/useFileTransfer';
+import DownloadsManager from '../components/downloads/DownloadsManager';
 
 mbtiles(maplibregl);
 
@@ -101,22 +101,6 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
   const enableTracking = () => setTrackingMode(true);
   const disableTracking = () => setTrackingMode(false);
 
-  const {
-    uri,
-    progress,
-    error,
-    cancel
-  } = useFileTransferDownload(MBTILES.downloadMbtilesUrl);
-
-  useEffect(() => console.log({uri, progress, error}), [uri, progress, error]);
-
-  useEffect(() => {
-    if (progress === 100) {
-      setMbtilesStatus(AVAILABLE);
-    }
-  }, [uri, progress]);
-
-
   // Effects on offline tileset downloading
   useEffect(() => {
     if (OFF_CAT) {
@@ -136,12 +120,12 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
     });
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (mbtilesStatus === AVAILABLE && uri) {
       getDatabase(uri).then(() => setMbtilesStatus(READY));
       setMbtilesStatus(OPENING);
     }
-  }, [mbtilesStatus]);
+  }, [mbtilesStatus]);*/
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -203,31 +187,28 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
     onManagerChanged(clicked === manager ? undefined : clicked);
   };
 
-  return (mbtilesStatus === READY || OFF_CAT) ?
-    <GeocomponentMap
-      {...MAP_PROPS}
-      reuseMaps
-      ref={mapRef}
-      mapStyle={mapStyle}
-      sources={sources}
-      layers={layers}
-      viewport={viewport}
-      onViewportChange={setViewport}
-      onDrag={disableTracking}
-      onTouchMove={disableTracking}
-      onWheel={disableTracking}
-    >
-      <FabButton
-        isLeftHanded={false} isAccessibleSize={false}
-        bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
-        isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}
-        onLayersClick={() => changeManager('LAYERS')}
-        onBaseMapsClick={() => changeManager('BASEMAPS')}
-        onFoldersClick={() => changeManager('SCOPES')}
-      />
-    </GeocomponentMap> : <div>
-      {mbtilesStatusMessages[mbtilesStatus] + progress + '%'}
-    </div>;
+  return <GeocomponentMap
+    {...MAP_PROPS}
+    reuseMaps
+    ref={mapRef}
+    mapStyle={mapStyle}
+    sources={sources}
+    layers={layers}
+    viewport={viewport}
+    onViewportChange={setViewport}
+    onDrag={disableTracking}
+    onTouchMove={disableTracking}
+    onWheel={disableTracking}
+  >
+    <FabButton
+      isLeftHanded={false} isAccessibleSize={false}
+      bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
+      isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}
+      onLayersClick={() => changeManager('LAYERS')}
+      onBaseMapsClick={() => changeManager('BASEMAPS')}
+      onFoldersClick={() => changeManager('SCOPES')}
+    />
+  </GeocomponentMap>;
 };
 
 export default Map;
