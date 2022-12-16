@@ -1,13 +1,10 @@
 import React, {FC} from 'react';
 
 //MUI
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 //MUI-ICONS
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 //CATOFFLINE
 import ManagerHeader from '../common/ManagerHeader';
@@ -15,9 +12,10 @@ import PrecisePosition from '../icons/PrecisePosition';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {Theme} from '@mui/material';
 import {HEXColor} from '../../types/commonTypes';
 import useTheme from '@mui/material/styles/useTheme';
+import CancelButton from '../buttons/CancelButton';
+import AcceptButton from '../buttons/AcceptButton';
 
 export type PrecisePositionEditorProps = {
   isAccessibleSize: boolean,
@@ -65,26 +63,6 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
     width: '100%'
   };
   
-  const cancelButton = {
-    bgcolor: 'common.white', 
-    color: 'error.main', 
-    borderColor: (theme: Theme) => theme.palette.error.main,
-    minWidth: '120px',
-    '&:hover': {
-      bgcolor: 'common.white',
-      borderColor: (theme: Theme) => theme.palette.error.main
-    }
-  };
-  
-  const acceptButton = {
-    color: 'common.white', 
-    bgcolor: 'success.main', 
-    minWidth: '120px',
-    '&:hover': {
-      bgcolor: 'success.main',
-    }
-  };
-
   const headerName = (name ? `${name.toUpperCase()} - ` : '') + t('actions.addPoint');
   const headerColor = color ? color : theme.palette.secondary.main;
 
@@ -97,13 +75,8 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
     </Stack>
     <Stack direction='row' sx={buttonsContainer}>
       <Stack sx={buttonsPosition}>
-        <Button size={isAccessibleSize ? 'large' : 'medium'} startIcon={<CancelIcon/>} variant='outlined' 
-          sx={cancelButton}
-          onClick={handleCancel}>{t('actions.cancel')}</Button>
-        <Button size={isAccessibleSize ? 'large' : 'medium'} startIcon={<CheckCircleIcon/>} variant='contained' 
-          sx={acceptButton}
-          onClick={handleAccept}
-        >{t('actions.accept')}</Button>
+        <CancelButton isAccessibleSize={isAccessibleSize} onCancel={handleCancel} variant='contained'/>
+        <AcceptButton isAccessibleSize={isAccessibleSize} onAccept={handleAccept} variant='contained'/>
       </Stack>
     </Stack>
   </>;

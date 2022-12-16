@@ -51,7 +51,7 @@ Default.args = {
       isVisible: Math.random() < 0.5
     }
   })),
-  scopePaths: [...Array(20).keys()].map(i => ({
+  scopeTracks: [...Array(20).keys()].map(i => ({
     type: 'Feature',
     id: uuidv4(),
     geometry: {

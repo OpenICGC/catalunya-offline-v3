@@ -4,10 +4,10 @@ import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 
 import {HEXColor, UUID} from '../../types/commonTypes';
-import {useScopePaths, useScopePoints, useScopes} from '../../hooks/useLocalStores';
+import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useLocalStores';
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
-import ScopePath from './ScopePath';
+import ScopeTrack from './ScopeTrack';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -21,7 +21,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   const selectedScope = scopeStore.retrieve(scopeId);
 
   const pointStore = useScopePoints(scopeId)();
-  const pathStore = useScopePaths(scopeId)();
+  const trackStore = useScopeTracks(scopeId)();
 
   const [selectedPoint, selectPoint] = useState<UUID>();
   const unselectPoint = () => selectPoint(undefined);
@@ -95,7 +95,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   
   
   const pathAdd = () => {
-    pathStore.create({
+    trackStore.create({
       type: 'Feature',
       id: uuid(),
       geometry: {
@@ -103,7 +103,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
         coordinates: [[0, 0], [1, 1]] // TODO, coordinates are required for new path to be created
       },
       properties: {
-        name: `${t('path')} ${pathStore.list.length + 1}`,
+        name: `${t('path')} ${trackStore.list.length + 1}`,
         timestamp: Date.now(),
         description: '',
         images: [],
@@ -113,8 +113,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   };
 
   const pathColorChange = (pathId: UUID, newColor: HEXColor) => {
-    const existing = pathStore.retrieve(pathId);
-    existing && pathStore.update({
+    const existing = trackStore.retrieve(pathId);
+    existing && trackStore.update({
       ...existing,
       properties: {
         ...existing.properties,
@@ -124,8 +124,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   };
 
   const pathRename = (pathId: UUID, newName: string) => {
-    const existing = pathStore.retrieve(pathId);
-    existing && pathStore.update({
+    const existing = trackStore.retrieve(pathId);
+    existing && trackStore.update({
       ...existing,
       properties: {
         ...existing.properties,
@@ -135,8 +135,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   };
 
   const pathToggleVisibility = (pathId: UUID) => {
-    const existing = pathStore.retrieve(pathId);
-    existing && pathStore.update({
+    const existing = trackStore.retrieve(pathId);
+    existing && trackStore.update({
       ...existing,
       properties: {
         ...existing.properties,
@@ -146,8 +146,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   };
 
   const pathDelete = (pathId: UUID) => {
-    const existing = pathStore.retrieve(pathId);
-    existing && pathStore.delete(pathId);
+    const existing = trackStore.retrieve(pathId);
+    existing && trackStore.delete(pathId);
   };
 
   const pathGoTo = (pathId: UUID) => {
@@ -158,7 +158,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     console.log('Unimplemented Export, path', pathId); // TODO
   };
 
-  if (selectedPath) return <ScopePath
+  if (selectedPath) return <ScopeTrack
     scopeId={scopeId}
     pathId={selectedPath}
     onClose={unselectPath}
@@ -173,7 +173,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
   if (selectedScope) return <FeaturesPanel
     scope={selectedScope}
     scopePoints={pointStore.list}
-    scopePaths={pathStore.list}
+    scopeTracks={trackStore.list}
     onBackButtonClick={onClose}
 
     onSelectPoint={selectPoint}
@@ -185,14 +185,14 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({scopeId, onClose}) => {
     onGoToPoint={pointGoTo}
     onExportPoint={pointExport}
 
-    onSelectPath={selectPath}
-    onAddPath={pathAdd}
-    onColorChangePath={pathColorChange}
-    onNameChangePath={pathRename}
-    onToggleVisibilityPath={pathToggleVisibility}
-    onDeletePath={pathDelete}
-    onGoToPath={pathGoTo}
-    onExportPath={pathExport}
+    onSelectTrack={selectPath}
+    onAddTrack={pathAdd}
+    onColorChangeTrack={pathColorChange}
+    onNameChangeTrack={pathRename}
+    onToggleVisibilityTrack={pathToggleVisibility}
+    onDeleteTrack={pathDelete}
+    onGoToTrack={pathGoTo}
+    onExportTrack={pathExport}
   />;
 
   return <div>Error: the selected scope does not exist</div>;

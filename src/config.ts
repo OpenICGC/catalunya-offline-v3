@@ -1,7 +1,7 @@
 import {MapStyles} from './types/commonTypes';
 export const OFF_CAT = false;
 
-export const DRAWER_WIDTH = 240;
+export const DRAWER_WIDTH = 270;
 export const SM_BREAKPOINT = 850;
 
 export const INITIAL_MANAGER = 'SCOPES';

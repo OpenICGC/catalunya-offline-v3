@@ -64,7 +64,7 @@ Default.args = {
     }
   },
   numPoints: 13,
-  numPaths: 5
+  numTracks: 5
 };
 
 export const Device = DeviceTemplate.bind({});

@@ -5,14 +5,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 //MUI-ICONS
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 //CATOFFLINE
+import CancelButton from '../buttons/CancelButton';
+import AcceptButton from '../buttons/AcceptButton';
 import List from './List';
 
 //UTILS
@@ -53,8 +52,8 @@ const ScopeSelector: FC<ScopeSelectorProps> = ({
       listSx={{pb: 2.5, px: 2.5, m: 0}}
     />
     <DialogActions sx={{position: 'absolute', bottom: 0, right: 0}}>
-      <Button startIcon={<CancelIcon/>} onClick={onClose} sx={{color: 'text.secondary'}}>{t('actions.cancel')}</Button>
-      <Button startIcon={<CheckCircleIcon/>} onClick={onAccept}>{t('actions.accept')}</Button>
+      <CancelButton isAccessibleSize={false} onCancel={onClose}/>
+      <AcceptButton isAccessibleSize={false} onAccept={onAccept}/>
     </DialogActions>
   </Dialog>;
 };

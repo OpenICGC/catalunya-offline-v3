@@ -22,8 +22,8 @@
     "title": "Descàrrega de dades offline"
   },
   "features": {
-    "paths": "Traces",
-    "points": "Punts"
+    "points": "Punts",
+    "tracks": "Traces"
   },
   "layerManager": "Capes",
   "noScopeAlert": "Trieu un àmbit per al punt",

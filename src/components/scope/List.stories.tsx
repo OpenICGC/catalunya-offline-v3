@@ -121,8 +121,8 @@ Empty.args = {
   items: []
 };
 
-export const PointOrPath = Template.bind({});
-PointOrPath.args = {
+export const PointOrTrack = Template.bind({});
+PointOrTrack.args = {
   items: [...Array(20).keys()].map(i => ({
     id: uuidv4(),
     name: `Mi punto o traza ${i}`,

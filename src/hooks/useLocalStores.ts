@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import { singletonHook } from 'react-singleton-hook';
 
-import {Scope, ScopePath, ScopePoint, UUID} from '../types/commonTypes';
+import {Scope, ScopeTrack, ScopePoint, UUID} from '../types/commonTypes';
 
 type CollectionItem = {
   id: UUID
@@ -74,4 +74,4 @@ const getHookFactory = <ItemType extends CollectionItem>(namespace: string) => {
 
 export const useScopes = singletonHook(nullStore, useLocalCollectionStore<Scope>('scopes'));
 export const useScopePoints = getHookFactory<ScopePoint>('scopePoints');
-export const useScopePaths = getHookFactory<ScopePath>('scopePaths');
+export const useScopeTracks = getHookFactory<ScopeTrack>('scopeTracks');

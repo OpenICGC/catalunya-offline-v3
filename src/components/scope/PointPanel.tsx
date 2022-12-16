@@ -2,7 +2,6 @@ import React, {ChangeEvent, FC, useCallback, useMemo, useState} from 'react';
 
 //MUI
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
-import Button from '@mui/material/Button';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
@@ -13,8 +12,6 @@ import Typography from '@mui/material/Typography';
 import {LocalizationProvider} from '@mui/x-date-pickers';
 
 //MUI-ICONS
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
@@ -33,6 +30,8 @@ import i18n from 'i18next';
 import moment, {Moment} from 'moment';
 import {Theme} from '@mui/material';
 import Box from '@mui/material/Box';
+import CancelButton from '../buttons/CancelButton';
+import AcceptButton from '../buttons/AcceptButton';
 
 //STYLES
 const sectionTitleSx = {
@@ -137,7 +136,7 @@ export type PointPanelProps = {
     scope: Scope,
     initialPoint: ScopePoint,
     numPoints: number,
-    numPaths: number,
+    numTracks: number,
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void,
@@ -151,7 +150,7 @@ const PointPanel: FC<PointPanelProps> = ({
   scope,
   initialPoint,
   numPoints,
-  numPaths,
+  numTracks,
   onBackButtonClick,
   onPointChange,
   onGoTo,
@@ -277,7 +276,7 @@ const PointPanel: FC<PointPanelProps> = ({
       name={scope.name}
       color={scope.color}
       numPoints={numPoints}
-      numPaths={numPaths}
+      numTracks={numTracks}
       onBackButtonClick={onBackButtonClick}
     />
     <Box>{/*makes up&down margin*/}
@@ -393,15 +392,9 @@ const PointPanel: FC<PointPanelProps> = ({
       </SectionContent>
     </ScrollableContent>
     { isEditing &&
-      <Stack direction="row" justifyContent="center">
-        <Button startIcon={<CancelIcon/>} color="error"
-          onClick={handleCancel}>{t('actions.cancel')}</Button>
-        <Button
-          startIcon={<CheckCircleIcon/>}
-          disabled={!isFormValid}
-          color="success"
-          onClick={handleAccept}
-        >{t('actions.accept')}</Button>
+      <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>
+        <CancelButton isAccessibleSize={false} onCancel={handleCancel}/>
+        <AcceptButton isAccessibleSize={false} disabled={!isFormValid} onAccept={handleAccept}/>
       </Stack>
     }
   </>;
