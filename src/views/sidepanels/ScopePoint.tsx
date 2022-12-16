@@ -1,19 +1,29 @@
 import React, {FC} from 'react';
 
 import {ScopePoint, UUID} from '../../types/commonTypes';
-import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useLocalStores';
+import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import PointPanel from '../../components/scope/PointPanel';
+import GeoJSON from 'geojson';
+import {useViewport} from '../../hooks/useViewport';
+import {MAP_PROPS} from '../../config';
 
 export interface ScopePointProps {
   scopeId: UUID,
   pointId: UUID,
-  onClose: () => void
+  onClose: () => void,
+  onPrecisePositionRequested: (request: GeoJSON.Position | boolean) => void
 }
 
-const ScopePoint: FC<ScopePointProps> = ({scopeId, pointId, onClose}) => {
+const ScopePoint: FC<ScopePointProps> = ({
+  scopeId,
+  pointId,
+  onClose,
+  onPrecisePositionRequested
+}) => {
   const scopeStore = useScopes();
-  const trackStore = useScopeTracks(scopeId)();
-  const pointStore = useScopePoints(scopeId)();
+  const trackStore = useScopeTracks(scopeId);
+  const pointStore = useScopePoints(scopeId);
+  const [viewport, setViewport] = useViewport();
 
   const selectedScope = scopeStore.retrieve(scopeId);
   const selectedPoint = pointStore.retrieve(pointId);
@@ -26,7 +36,13 @@ const ScopePoint: FC<ScopePointProps> = ({scopeId, pointId, onClose}) => {
   };
 
   const goTo = (pointId: UUID) => {
-    console.log('Unimplemented Go To, Point', pointId); // TODO
+    const targetPosition = pointStore.retrieve(pointId)?.geometry.coordinates;
+    targetPosition && setViewport({
+      ...viewport,
+      longitude: targetPosition[0],
+      latitude: targetPosition[1],
+      zoom: MAP_PROPS.maxZoom - 1
+    });
   };
 
   const addImage = () => {
@@ -42,7 +58,7 @@ const ScopePoint: FC<ScopePointProps> = ({scopeId, pointId, onClose}) => {
   };
 
   const addPrecisePosition = () => {
-    console.log('Unimplemented Add Precise Position'); // TODO
+    onPrecisePositionRequested(selectedPoint?.geometry.coordinates || true);
   };
 
   return selectedScope && selectedPoint ? <PointPanel

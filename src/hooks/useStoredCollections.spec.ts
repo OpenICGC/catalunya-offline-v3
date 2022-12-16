@@ -1,6 +1,6 @@
 import {renderHook, act} from '@testing-library/react-hooks/dom';
 import {expect} from 'chai';
-import {useScopes, useScopePoints, useScopeTracks} from './useLocalStores';
+import {useScopes, useScopePoints, useScopeTracks} from './useStoredCollections';
 import {Scope, ScopeTrack, ScopePoint} from '../types/commonTypes';
 import {v4 as uuidv4} from 'uuid';
 
@@ -26,7 +26,7 @@ describe('usePersitedCollection', () => {
     act(() => result.current.create(sampleScope));
 
     // THEN
-    expect(result.current.list).to.deep.equal([sampleScope]);
+    expect(result.current.list()).to.deep.equal([sampleScope]);
     expect(result.current.retrieve(sampleScope.id)).to.deep.equal(sampleScope);
     expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([sampleScope]));
 
@@ -34,14 +34,14 @@ describe('usePersitedCollection', () => {
     act(() => result.current.update(modifiedScope));
 
     // THEN
-    expect(result.current.list).to.deep.equal([modifiedScope]);
+    expect(result.current.list()).to.deep.equal([modifiedScope]);
     expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([modifiedScope]));
 
     // WHEN
     act(() => result.current.delete(modifiedScope.id));
 
     // THEN
-    expect(result.current.list).to.deep.equal([]);
+    expect(result.current.list()).to.deep.equal([]);
     expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([]));
   });
 
@@ -76,29 +76,29 @@ describe('usePersitedCollection', () => {
         coordinates: [1, 1]
       }
     };
-    const {result} = renderHook(() => useScopePoints(scopeId)());
+    const {result} = renderHook(() => useScopePoints(scopeId));
 
     // WHEN
     act(() => result.current.create(samplePoint));
 
     // THEN
-    expect(result.current.list).to.deep.equal([samplePoint]);
+    expect(result.current.list()).to.deep.equal([samplePoint]);
     expect(result.current.retrieve(samplePoint.id)).to.deep.equal(samplePoint);
-    expect(localStorage.getItem(`${scopeId}:scopePoints`)).to.deep.equal(JSON.stringify([samplePoint]));
+    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([samplePoint]));
 
     // WHEN
     act(() => result.current.update(modifiedPoint));
 
     // THEN
-    expect(result.current.list).to.deep.equal([modifiedPoint]);
-    expect(localStorage.getItem(`${scopeId}:scopePoints`)).to.deep.equal(JSON.stringify([modifiedPoint]));
+    expect(result.current.list()).to.deep.equal([modifiedPoint]);
+    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([modifiedPoint]));
 
     // WHEN
     act(() => result.current.delete(modifiedPoint.id));
 
     // THEN
-    expect(result.current.list).to.deep.equal([]);
-    expect(localStorage.getItem(`${scopeId}:scopePoints`)).to.deep.equal(JSON.stringify([]));
+    expect(result.current.list()).to.deep.equal([]);
+    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([]));
 
   });
 
@@ -133,28 +133,28 @@ describe('usePersitedCollection', () => {
         coordinates: [[2, 2], [3, 3]]
       }
     };
-    const {result} = renderHook(() => useScopeTracks(scopeId)());
+    const {result} = renderHook(() => useScopeTracks(scopeId));
 
     // WHEN
     act(() => result.current.create(sampleTrack));
 
     // THEN
-    expect(result.current.list).to.deep.equal([sampleTrack]);
+    expect(result.current.list()).to.deep.equal([sampleTrack]);
     expect(result.current.retrieve(sampleTrack.id)).to.deep.equal(sampleTrack);
-    expect(localStorage.getItem(`${scopeId}:scopeTracks`)).to.deep.equal(JSON.stringify([sampleTrack]));
+    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([sampleTrack]));
 
     // WHEN
     act(() => result.current.update(modifiedTrack));
 
     // THEN
-    expect(result.current.list).to.deep.equal([modifiedTrack]);
-    expect(localStorage.getItem(`${scopeId}:scopeTracks`)).to.deep.equal(JSON.stringify([modifiedTrack]));
+    expect(result.current.list()).to.deep.equal([modifiedTrack]);
+    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([modifiedTrack]));
 
     // WHEN
     act(() => result.current.delete(modifiedTrack.id));
 
     // THEN
-    expect(result.current.list).to.deep.equal([]);
-    expect(localStorage.getItem(`${scopeId}:scopeTracks`)).to.deep.equal(JSON.stringify([]));
+    expect(result.current.list()).to.deep.equal([]);
+    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([]));
   });
 });

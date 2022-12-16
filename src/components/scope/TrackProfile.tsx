@@ -8,12 +8,12 @@ import {TopLevelSpec} from 'vega-lite';
 import turfDistance from '@turf/distance';
 
 //UTILS
-import {HEXColor, ScopePath} from '../../types/commonTypes';
+import {HEXColor, ScopeTrack} from '../../types/commonTypes';
 import {GPS_POSITION_COLOR} from '../../config';
 import {useTranslation} from 'react-i18next';
 
 export interface TrackProfileProps {
-    track: ScopePath,
+    track: ScopeTrack,
     color: HEXColor,
     currentPositionIndex?: number
 }

@@ -3,11 +3,11 @@ import {Meta, Story} from '@storybook/react';
 
 import PrecisePositionEditor, {PrecisePositionEditorProps} from './PrecisePositionEditor';
 import Box from '@mui/material/Box';
-import GeocomponentMap from '@geomatico/geocomponents/Map';
+import Map from '@geomatico/geocomponents/Map';
 import {INITIAL_VIEWPORT, MAPSTYLES} from '../../config';
 
 export default {
-  title: 'Scope/PrecisePositionEditor',
+  title: 'Map/PrecisePositionEditor',
   component: PrecisePositionEditor,
   argTypes: {
     color: {control: 'color'}
@@ -16,11 +16,10 @@ export default {
 
 const Template: Story<PrecisePositionEditorProps> = args => <PrecisePositionEditor {...args}/>;
 
-// eslint-disable-next-line react/prop-types,no-unused-vars
 const IntegrationTemplate: Story<PrecisePositionEditorProps> = args => {
   const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
   return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
-    <GeocomponentMap mapStyle={MAPSTYLES[1].id} onViewportChange={setViewport} viewport={getViewport}/>
+    <Map mapStyle={MAPSTYLES[1].id} onViewportChange={setViewport} viewport={getViewport}/>
     <PrecisePositionEditor {...args}/>
   </Box>;
 };

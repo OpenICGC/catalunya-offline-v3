@@ -1,4 +1,5 @@
 import {MapStyles} from './types/commonTypes';
+import {ViewportType} from './hooks/useViewport';
 export const OFF_CAT = false;
 
 export const DRAWER_WIDTH = 270;
@@ -6,7 +7,7 @@ export const SM_BREAKPOINT = 850;
 
 export const INITIAL_MANAGER = 'SCOPES';
 
-export const INITIAL_VIEWPORT = {
+export const INITIAL_VIEWPORT: ViewportType = {
   latitude: 42.1094,
   longitude: 1.3705,
   zoom: 9,
