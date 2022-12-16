@@ -10,14 +10,15 @@ import ScopePoint from './ScopePoint';
 import ScopeTrack from './ScopeTrack';
 import GeoJSON from 'geojson';
 import {useViewport} from '../../hooks/useViewport';
+import {MAP_PROPS} from '../../config';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
   onClose: () => void,
   selectedPoint?: UUID,
   onPointSelected: (scopeId?: UUID) => void,
-  selectedPath?: UUID,
-  onPathSelected: (scopeId?: UUID) => void,
+  selectedTrack?: UUID,
+  onTrackSelected: (scopeId?: UUID) => void,
   onPrecisePositionRequested: (request: GeoJSON.Position | boolean) => void
 };
 
@@ -26,8 +27,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   onClose,
   selectedPoint,
   onPointSelected,
-  selectedPath,
-  onPathSelected,
+  selectedTrack,
+  onTrackSelected,
   onPrecisePositionRequested
 }) => {
   const {t} = useTranslation();
@@ -39,7 +40,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const trackStore = useScopeTracks(scopeId);
 
   const unselectPoint = () => onPointSelected();
-  const unselectPath = () => onPathSelected();
+  const unselectTrack = () => onTrackSelected();
 
   const [viewport, setViewport] = useViewport();
 
@@ -104,7 +105,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     targetPosition && setViewport({
       ...viewport,
       longitude: targetPosition[0],
-      latitude: targetPosition[1]
+      latitude: targetPosition[1],
+      zoom: MAP_PROPS.maxZoom - 1
     });
   };
 
@@ -113,16 +115,16 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   };
   
   
-  const pathAdd = () => {
+  const trackAdd = () => {
     trackStore.create({
       type: 'Feature',
       id: uuid(),
       geometry: {
         type: 'LineString',
-        coordinates: [[0, 0], [1, 1]] // TODO, coordinates are required for new path to be created
+        coordinates: [[0, 0], [1, 1]] // TODO, coordinates are required for new track to be created
       },
       properties: {
-        name: `${t('path')} ${trackStore.list().length + 1}`,
+        name: `${t('track')} ${trackStore.list().length + 1}`,
         timestamp: Date.now(),
         description: '',
         images: [],
@@ -131,8 +133,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     });
   };
 
-  const pathColorChange = (pathId: UUID, newColor: HEXColor) => {
-    const existing = trackStore.retrieve(pathId);
+  const trackColorChange = (trackId: UUID, newColor: HEXColor) => {
+    const existing = trackStore.retrieve(trackId);
     existing && trackStore.update({
       ...existing,
       properties: {
@@ -142,8 +144,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     });
   };
 
-  const pathRename = (pathId: UUID, newName: string) => {
-    const existing = trackStore.retrieve(pathId);
+  const trackRename = (trackId: UUID, newName: string) => {
+    const existing = trackStore.retrieve(trackId);
     existing && trackStore.update({
       ...existing,
       properties: {
@@ -153,8 +155,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     });
   };
 
-  const pathToggleVisibility = (pathId: UUID) => {
-    const existing = trackStore.retrieve(pathId);
+  const trackToggleVisibility = (trackId: UUID) => {
+    const existing = trackStore.retrieve(trackId);
     existing && trackStore.update({
       ...existing,
       properties: {
@@ -164,29 +166,30 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     });
   };
 
-  const pathDelete = (pathId: UUID) => {
-    const existing = trackStore.retrieve(pathId);
-    existing && trackStore.delete(pathId);
+  const trackDelete = (trackId: UUID) => {
+    const existing = trackStore.retrieve(trackId);
+    existing && trackStore.delete(trackId);
   };
 
-  const pathGoTo = (pathId: UUID) => {
-    console.log('Unimplemented Go To, path', pathId); // TODO
+  const trackGoTo = (trackId: UUID) => {
+    console.log('Unimplemented Go To, track', trackId); // TODO
   };
 
-  const pathExport = (pathId: UUID) => {
-    console.log('Unimplemented Export, path', pathId); // TODO
+  const trackExport = (trackId: UUID) => {
+    console.log('Unimplemented Export, track', trackId); // TODO
   };
 
-  if (selectedPath) return <ScopeTrack
+  if (selectedTrack) return <ScopeTrack
     scopeId={scopeId}
-    pathId={selectedPath}
-    onClose={unselectPath}
+    trackId={selectedTrack}
+    onClose={unselectTrack}
   />;
 
   if (selectedPoint) return <ScopePoint
     scopeId={scopeId}
     pointId={selectedPoint}
     onClose={unselectPoint}
+    onPrecisePositionRequested={onPrecisePositionRequested}
   />;
 
   if (selectedScope) return <FeaturesPanel
@@ -204,14 +207,14 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     onGoToPoint={pointGoTo}
     onExportPoint={pointExport}
 
-    onSelectTrack={selectPath}
-    onAddTrack={pathAdd}
-    onColorChangeTrack={pathColorChange}
-    onNameChangeTrack={pathRename}
-    onToggleVisibilityTrack={pathToggleVisibility}
-    onDeleteTrack={pathDelete}
-    onGoToTrack={pathGoTo}
-    onExportTrack={pathExport}
+    onSelectTrack={onTrackSelected}
+    onAddTrack={trackAdd}
+    onColorChangeTrack={trackColorChange}
+    onNameChangeTrack={trackRename}
+    onToggleVisibilityTrack={trackToggleVisibility}
+    onDeleteTrack={trackDelete}
+    onGoToTrack={trackGoTo}
+    onExportTrack={trackExport}
   />;
 
   return <div>Error: the selected scope does not exist</div>;

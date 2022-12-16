@@ -1,4 +1,4 @@
-import {Scope, ScopePath, ScopePoint, UUID} from '../types/commonTypes';
+import {Scope, ScopeTrack, ScopePoint, UUID} from '../types/commonTypes';
 import useLocalStorage from './useLocalStorage';
 
 type CollectionItem = {
@@ -27,4 +27,4 @@ export const useLocalCollectionStore = <ItemType extends CollectionItem>(collect
 
 export const useScopes = () => useLocalCollectionStore<Scope>('scopes');
 export const useScopePoints = (scopeId?: UUID) => useLocalCollectionStore<ScopePoint>(scopeId ? `scopes/${scopeId}/points` : '');
-export const useScopePaths = (scopeId?: UUID) => useLocalCollectionStore<ScopePath>(scopeId ? `scopes/${scopeId}/paths` : '');
+export const useScopeTracks = (scopeId?: UUID) => useLocalCollectionStore<ScopeTrack>(scopeId ? `scopes/${scopeId}/tracks` : '');

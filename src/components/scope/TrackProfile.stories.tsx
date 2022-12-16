@@ -3,9 +3,9 @@ import {Meta, Story} from '@storybook/react';
 
 import TrackProfile, {TrackProfileProps} from './TrackProfile';
 import {v4 as uuid} from 'uuid';
-import {ScopePath} from '../../types/commonTypes';
+import {ScopeTrack} from '../../types/commonTypes';
 
-const track: ScopePath = {
+const track: ScopeTrack = {
   type: 'Feature',
   id: uuid(),
   properties: {

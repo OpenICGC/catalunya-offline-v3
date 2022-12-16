@@ -27,7 +27,7 @@ const Index: FC = () => {
   const [manager, setManager] = useState<Manager>(widescreen ? INITIAL_MANAGER : undefined);
   const [scope, setScope] = useState<UUID>();
   const [point, setPoint] = useState<UUID>();
-  const [path, setPath] = useState<UUID>();
+  const [track, setTrack] = useState<UUID>();
   const [precisePositionRequest, setPrecisePositionRequest] = useState<boolean | GeoJSON.Position>(false);
   const pointStore = useScopePoints(scope);
 
@@ -71,8 +71,8 @@ const Index: FC = () => {
         onScopeSelected={setScope}
         selectedPoint={point}
         onPointSelected={setPoint}
-        selectedPath={path}
-        onPathSelected={setPath}
+        selectedTrack={track}
+        onTrackSelected={setTrack}
         onPrecisePositionRequested={setPrecisePositionRequest}
       />}
     </Stack>

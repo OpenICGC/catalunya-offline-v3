@@ -1,6 +1,6 @@
 import {renderHook, act} from '@testing-library/react-hooks/dom';
 import {expect} from 'chai';
-import {useScopes, useScopePoints, useScopeTracks} from './useLocalStores';
+import {useScopes, useScopePoints, useScopeTracks} from './useStoredCollections';
 import {Scope, ScopeTrack, ScopePoint} from '../types/commonTypes';
 import {v4 as uuidv4} from 'uuid';
 
@@ -141,7 +141,7 @@ describe('usePersitedCollection', () => {
     // THEN
     expect(result.current.list()).to.deep.equal([sampleTrack]);
     expect(result.current.retrieve(sampleTrack.id)).to.deep.equal(sampleTrack);
-    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([samplePath]));
+    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([sampleTrack]));
 
     // WHEN
     act(() => result.current.update(modifiedTrack));

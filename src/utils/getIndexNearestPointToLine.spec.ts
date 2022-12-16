@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {getIndexNearestPointToLine} from './getIndexNearestPointToLine';
 import {v4 as uuid} from 'uuid';
-import {ScopePath} from '../types/commonTypes';
+import {ScopeTrack} from '../types/commonTypes';
 
 describe('getIndexNearestPointToLine', () => {
   const scopeId = uuid();
@@ -9,7 +9,7 @@ describe('getIndexNearestPointToLine', () => {
   it('getIndexNearestPointToLine should get nearest Point to Line', () => {
 
     // GIVEN
-    const sampleScopePath: ScopePath = {
+    const sampleScopeTrack: ScopeTrack = {
       type: 'Feature',
       id: scopeId,
       properties: {
@@ -33,7 +33,7 @@ describe('getIndexNearestPointToLine', () => {
     const samplePoint: GeoJSON.Position = [ 4, 4 ];
 
     // WHEN
-    const computedIndex = getIndexNearestPointToLine(sampleScopePath, samplePoint);
+    const computedIndex = getIndexNearestPointToLine(sampleScopeTrack, samplePoint);
 
     // THEN
     const expectedIndex = 1;

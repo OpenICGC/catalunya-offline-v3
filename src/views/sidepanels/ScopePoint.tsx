@@ -5,6 +5,7 @@ import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCo
 import PointPanel from '../../components/scope/PointPanel';
 import GeoJSON from 'geojson';
 import {useViewport} from '../../hooks/useViewport';
+import {MAP_PROPS} from '../../config';
 
 export interface ScopePointProps {
   scopeId: UUID,
@@ -39,7 +40,8 @@ const ScopePoint: FC<ScopePointProps> = ({
     targetPosition && setViewport({
       ...viewport,
       longitude: targetPosition[0],
-      latitude: targetPosition[1]
+      latitude: targetPosition[1],
+      zoom: MAP_PROPS.maxZoom - 1
     });
   };
 

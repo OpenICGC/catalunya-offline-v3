@@ -87,7 +87,11 @@ const mbtilesStatusMessages = [
 export type MainContentProps = {
   mapStyle: string,
   manager: Manager,
-  onManagerChanged: (newManager: Manager) => void
+  onManagerChanged: (newManager: Manager) => void,
+  selectedScope?: UUID,
+  precisePositionRequest?: boolean | GeoJSON.Position,
+  onPrecisePositionAccepted: (position: GeoJSON.Position) => void
+  onPrecisePositionCancelled: () => void
 };
 
 const Map: FC<MainContentProps> = ({

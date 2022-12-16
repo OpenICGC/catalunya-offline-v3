@@ -16,8 +16,8 @@ export interface ScopeMainProps {
   onScopeSelected: (scopeId: UUID) => void,
   selectedPoint?: UUID,
   onPointSelected: (scopeId?: UUID) => void,
-  selectedPath?: UUID,
-  onPathSelected: (scopeId?: UUID) => void,
+  selectedTrack?: UUID,
+  onTrackSelected: (scopeId?: UUID) => void,
   onPrecisePositionRequested: (request: GeoJSON.Position | boolean) => void
 }
 
@@ -26,8 +26,8 @@ const ScopeMain: FC<ScopeMainProps> = ({
   onScopeSelected,
   selectedPoint,
   onPointSelected,
-  selectedPath,
-  onPathSelected,
+  selectedTrack,
+  onTrackSelected,
   onPrecisePositionRequested
 }) => {
   const {t} = useTranslation();
@@ -95,8 +95,8 @@ const ScopeMain: FC<ScopeMainProps> = ({
       onClose={unselectScope}
       selectedPoint={selectedPoint}
       onPointSelected={onPointSelected}
-      selectedPath={selectedPath}
-      onPathSelected={onPathSelected}
+      selectedTrack={selectedTrack}
+      onTrackSelected={onTrackSelected}
       onPrecisePositionRequested={onPrecisePositionRequested}
     />;
 };
