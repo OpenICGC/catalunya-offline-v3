@@ -3,7 +3,7 @@ import maplibregl from 'maplibre-gl';
 
 import GeocomponentMap from '@geomatico/geocomponents/Map';
 
-import {Manager, UUID} from '../types/commonTypes';
+import {Manager, ScopePoint, UUID} from '../types/commonTypes';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../utils/mbtiles';
 import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeolocation';
 import FabButton from '../components/buttons/FabButton';
@@ -89,6 +89,7 @@ export type MainContentProps = {
   manager: Manager,
   onManagerChanged: (newManager: Manager) => void,
   selectedScope?: UUID,
+  setSelectedPoint: (pointId: UUID) => void,
   precisePositionRequest?: boolean | GeoJSON.Position,
   onPrecisePositionAccepted: (position: GeoJSON.Position) => void
   onPrecisePositionCancelled: () => void
@@ -99,6 +100,7 @@ const Map: FC<MainContentProps> = ({
   manager,
   onManagerChanged,
   selectedScope,
+  setSelectedPoint,
   precisePositionRequest = false,
   onPrecisePositionAccepted,
   onPrecisePositionCancelled
@@ -216,6 +218,16 @@ const Map: FC<MainContentProps> = ({
     onPrecisePositionAccepted([viewport.longitude, viewport.latitude]);
   };
 
+  const selectPoint = (point: ScopePoint) => {
+    setViewport({
+      ...viewport,
+      longitude: point.geometry.coordinates[0],
+      latitude: point.geometry.coordinates[1],
+      zoom: MAP_PROPS.maxZoom
+    });
+    setSelectedPoint(point.id);
+  };
+
   return (mbtilesStatus === READY || OFF_CAT) ?
     <>
       <GeocomponentMap
@@ -231,7 +243,12 @@ const Map: FC<MainContentProps> = ({
         onTouchMove={disableTracking}
         onWheel={disableTracking}
       >
-        <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor}/>
+        <PointMarkers
+          isAccessibleSize={false}
+          points={pointList}
+          defaultColor={scopeColor}
+          onClick={selectPoint}
+        />
         {!precisePositionRequest && <FabButton
           isLeftHanded={false} isAccessibleSize={false}
           bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}

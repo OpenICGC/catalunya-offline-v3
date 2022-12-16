@@ -19,7 +19,6 @@ export const MAP_PROPS = {
   minZoom: 7,
   maxZoom: 14.99, // 17,
   maxPitch: 60,
-  ...(OFF_CAT ? {} : {maxBounds: [0.055047, 40.434881, 3.420395, 42.956628]}),
   hash: false
 };
 

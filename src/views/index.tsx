@@ -84,6 +84,7 @@ const Index: FC = () => {
     manager={manager}
     onManagerChanged={setManager}
     selectedScope={scope}
+    setSelectedPoint={setPoint}
     precisePositionRequest={precisePositionRequest}
     onPrecisePositionAccepted={acceptPrecisePosition}
     onPrecisePositionCancelled={cancelPrecisePosition}
