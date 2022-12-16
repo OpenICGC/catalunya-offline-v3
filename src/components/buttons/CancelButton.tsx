@@ -35,7 +35,7 @@ const CancelButton: FC<CancelButtonProps> = ({
   
   return <Button 
     size={isAccessibleSize ? 'large' : 'medium'} 
-    startIcon={<CancelIcon sx={{color: `grey.${greyColor}`}}/>}
+    startIcon={<CancelIcon sx={{color: disabled ? 'action.disabled' : `grey.${greyColor}`}}/>}
     variant={variant}
     disabled={disabled}
     sx={cancelButton}
