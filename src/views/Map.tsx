@@ -3,7 +3,7 @@ import maplibregl from 'maplibre-gl';
 
 import GeocomponentMap from '@geomatico/geocomponents/Map';
 
-import {Manager, UUID} from '../types/commonTypes';
+import {Manager, ScopePoint, UUID} from '../types/commonTypes';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../utils/mbtiles';
 import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeolocation';
 import FabButton from '../components/buttons/FabButton';
@@ -216,6 +216,15 @@ const Map: FC<MainContentProps> = ({
     onPrecisePositionAccepted([viewport.longitude, viewport.latitude]);
   };
 
+  const goToPoint = (point: ScopePoint) => {
+    setViewport({
+      ...viewport,
+      longitude: point.geometry.coordinates[0],
+      latitude: point.geometry.coordinates[1],
+      zoom: MAP_PROPS.maxZoom
+    });
+  };
+
   return (mbtilesStatus === READY || OFF_CAT) ?
     <>
       <GeocomponentMap
@@ -231,7 +240,12 @@ const Map: FC<MainContentProps> = ({
         onTouchMove={disableTracking}
         onWheel={disableTracking}
       >
-        <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor}/>
+        <PointMarkers
+          isAccessibleSize={false}
+          points={pointList}
+          defaultColor={scopeColor}
+          onClick={goToPoint}
+        />
         {!precisePositionRequest && <FabButton
           isLeftHanded={false} isAccessibleSize={false}
           bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
