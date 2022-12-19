@@ -19,18 +19,18 @@ const stackSx = {
 
 export type SidePanelContentProps = {
   manager: Manager,
-  mapStyle: string,
+  baseMapId: string,
   onMapStyleChanged: (newStyle: string) => void
 };
 
-const SidePanelContent: FC<SidePanelContentProps> = ({manager, mapStyle, onMapStyleChanged}) => {
+const SidePanelContent: FC<SidePanelContentProps> = ({manager, baseMapId, onMapStyleChanged}) => {
   return <Stack sx={stackSx}>
     {manager === 'LAYERS' &&
       <Layers/>
     }
     {manager === 'BASEMAPS' &&
       <BaseMaps
-        mapStyle={mapStyle}
+        baseMapId={baseMapId}
         onMapStyleChanged={onMapStyleChanged}
       />
     }

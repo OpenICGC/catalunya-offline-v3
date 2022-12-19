@@ -1,5 +1,5 @@
-import {MapStyles} from './types/commonTypes';
-export const OFF_CAT = true;
+import {BaseMaps} from './types/commonTypes';
+export const OFF_CAT = false;
 
 export const DRAWER_WIDTH = 240;
 export const SM_BREAKPOINT = 850;
@@ -27,7 +27,7 @@ export const MBTILES = {
   dbName: 'mtc25mcatoff_7a13'
 };
 
-export const MAPSTYLES: MapStyles = [{
+export const BASEMAPS: BaseMaps = [{
   id: 'mtc25m',
   labels: {
     ca: 'Mapa Topogràfic 1:25 000',
@@ -36,7 +36,7 @@ export const MAPSTYLES: MapStyles = [{
   },
   thumbnail: 'images/mtc25m.png',
   onlineStyle: 'mapstyles/mtc25m-online.json',
-  offlineAssets: 'icgc_api/mtc25m/assets.json'
+  offlineAssets: 'https://cdn.geomatico.es/datasets/mtc25m/assets.json'
 },{
   id: 'contextmaps',
   labels: {
@@ -45,10 +45,11 @@ export const MAPSTYLES: MapStyles = [{
     es: 'ContextMaps'
   },
   thumbnail: 'https://visors.icgc.cat/contextmaps/imatges_estil/icgc_mapa_estandard.png',
-  onlineStyle: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json',
-  offlineAssets: undefined
+  onlineStyle: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json'
 }];
 
-export const INITIAL_MAPSTYLE_URL = MAPSTYLES[OFF_CAT ? 1 : 0]?.onlineStyle;
+export const INITIAL_BASEMAP = BASEMAPS[OFF_CAT ? 1 : 0];
 
 export const MIN_TRACKING_ZOOM = 14;
+
+export const OFFLINE_DATADIR_NAME = 'offlineData';

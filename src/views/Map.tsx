@@ -1,15 +1,14 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import maplibregl from 'maplibre-gl';
+
+import maplibregl, {StyleSpecification} from 'maplibre-gl';
 
 import GeocomponentMap from '@geomatico/geocomponents/Map';
-
 import {Manager} from '../types/commonTypes';
-import {mbtiles, isMbtilesDownloaded} from '../utils/mbtiles';
+import {mbtiles} from '../utils/mbtiles';
 import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeolocation';
 import FabButton from '../components/buttons/FabButton';
 import useCompass from '../hooks/useCompass';
-import {INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
-import DownloadsManager from '../components/downloads/DownloadsManager';
+import {INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 
 mbtiles(maplibregl);
 
@@ -66,22 +65,9 @@ const layers = [{
   }
 }];
 
-const CHECKING = 0,
-  DOWNLOADING = 1,
-  AVAILABLE = 2,
-  OPENING = 3,
-  READY = 4;
-
-const mbtilesStatusMessages = [
-  'Checking mbtiles availability...',
-  'Downloading mbtiles...',
-  'Mbtiles downloaded',
-  'Opening mbtiles...',
-  'mbtiles ready'
-];
 
 export type MainContentProps = {
-  mapStyle: string,
+  mapStyle: string | StyleSpecification,
   manager: Manager,
   onManagerChanged: (newManager: Manager) => void
 };
@@ -89,7 +75,6 @@ export type MainContentProps = {
 const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
   const mapRef = useRef<maplibregl.Map>();
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
-  const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
 
   const {geolocation, error: geolocationError} = useBackgroundGeolocation();
   const orientation = useCompass();
@@ -100,32 +85,6 @@ const Map: FC<MainContentProps> = ({mapStyle, manager, onManagerChanged}) => {
   const [isTrackingMode, setTrackingMode] = useState(true);
   const enableTracking = () => setTrackingMode(true);
   const disableTracking = () => setTrackingMode(false);
-
-  // Effects on offline tileset downloading
-  useEffect(() => {
-    if (OFF_CAT) {
-      setMbtilesStatus(READY);
-      return;
-    }
-    isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
-      if (isDownloaded) {
-        setMbtilesStatus(AVAILABLE);
-      } else {
-        //downloadMbtiles(MBTILES.downloadMbtilesUrl).then(() => setMbtilesStatus(AVAILABLE));
-        //downloadMbtilesBetter(MBTILES.downloadMbtilesUrl, (progress) => console.log(progress))
-        //  .then(() => setMbtilesStatus(AVAILABLE));
-
-        setMbtilesStatus(DOWNLOADING);
-      }
-    });
-  }, []);
-
-  /*useEffect(() => {
-    if (mbtilesStatus === AVAILABLE && uri) {
-      getDatabase(uri).then(() => setMbtilesStatus(READY));
-      setMbtilesStatus(OPENING);
-    }
-  }, [mbtilesStatus]);*/
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {

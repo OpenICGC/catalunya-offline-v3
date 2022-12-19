@@ -4,16 +4,16 @@ import Layout from '../components/Layout';
 import SidePanelContent from './SidePanelContent';
 import Map from './Map';
 
-import {INITIAL_MANAGER, INITIAL_MAPSTYLE_URL, SM_BREAKPOINT} from '../config';
+import {INITIAL_MANAGER, SM_BREAKPOINT} from '../config';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {Manager} from '../types/commonTypes';
-import DownloadsManager from '../components/downloads/DownloadsManager';
+import useMapStyle from '../hooks/useMapStyle';
 
 const Index: FC = () => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
   const [isSidePanelOpen, setSidePanelOpen] = useState(widescreen);
 
-  const [mapStyle, setMapStyle] = useState(INITIAL_MAPSTYLE_URL);
+  const {baseMapId, mapStyle, setBaseMapId, StyleOfflineDownloaderComponent} = useMapStyle();
   const [manager, setManager] = useState<Manager>(widescreen ? INITIAL_MANAGER : undefined);
 
   const toggleSidePanel = () => {
@@ -27,8 +27,8 @@ const Index: FC = () => {
 
   const sidePanelContent = manager
     ? <SidePanelContent
-      mapStyle={mapStyle}
-      onMapStyleChanged={setMapStyle}
+      baseMapId={baseMapId}
+      onMapStyleChanged={setBaseMapId}
       manager={manager}
     />
     : <></>
@@ -41,7 +41,7 @@ const Index: FC = () => {
   />;
 
   return <>
-    <DownloadsManager manager={manager} />
+    {StyleOfflineDownloaderComponent}
     <Layout
       sidePanelContent={sidePanelContent}
       mainContent={mainContent}

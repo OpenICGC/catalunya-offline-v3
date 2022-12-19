@@ -1,29 +1,38 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Manager} from '../../types/commonTypes';
+
+import {FileInfo} from '@capacitor/filesystem';
+import {Capacitor} from '@capacitor/core';
+import {useTranslation} from 'react-i18next';
+import useFetch from '@geomatico/geocomponents/hooks/useFetch';
+import {StyleSpecification} from 'maplibre-gl';
+
+import {BaseMap} from '../../types/commonTypes';
 import DownloadRequest from '../notifications/DownloadRequest';
 import useFileTransferDownload from '../../hooks/useFileTransfer';
-import {MAPSTYLES, MBTILES} from '../../config';
 import DownloadProgress from '../notifications/DownloadProgress';
 import {getDatabase} from '../../utils/mbtiles';
 import Notification from '../notifications/Notification';
-import {Directory, Filesystem, ReaddirResult} from '@capacitor/filesystem';
-import {useTranslation} from 'react-i18next';
-import useFetch from '@geomatico/geocomponents/hooks/useFetch';
+import {readFiles} from '../../utils/filesystem';
 
 
 export type DownloadsManagerProps = {
-  manager: Manager
+  mapstyle: BaseMap,
+  onStyleDownloaded: (mapStyle: StyleSpecification | string) => void
 };
 
+export type MbTilesMetadata = {
+  id: string,
+  url: string
+}
 
+const DownloadsManager: FC<DownloadsManagerProps> = ({mapstyle, onStyleDownloaded}) => {
+  const {t} = useTranslation();
 
-const DownloadsManager: FC<DownloadsManagerProps> = ({manager}) => {
   const [open, setOpen] = useState<boolean>(false);
   const [accepted, setAccepted] = useState<boolean|undefined>(undefined);
   const [errorOpen, setErrorOpen] = useState<boolean>(false);
-  const [existingFiles, setExistingFiles] = useState<ReaddirResult | undefined>(undefined);
-
-  const {t} = useTranslation();
+  const [existingFilesOnDevice, setExistingFilesOnDevice] = useState<Array<FileInfo> | undefined>(undefined);
+  const {data} = useFetch(mapstyle.offlineAssets);
 
   const {
     download,
@@ -32,51 +41,71 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({manager}) => {
     error,
     cancel
   } = useFileTransferDownload();
-  
-  const readFiles = async () => {
-    const files = await Filesystem.readdir({path: '', directory: Directory.Data});
-    
-    setExistingFiles(files);
-  };
+
   
   useEffect(() => {
-    readFiles();
-  }, []);
+    if (mapstyle){
+      readFiles(mapstyle.id).then(files => setExistingFilesOnDevice(files));
+    }
+  }, [mapstyle]);
 
   useEffect(() => {
-    /*if (existingFiles) {
-      MAPSTYLES
-        .filter(({offlineAssets}) => offlineAssets)
-        .map(mapstyle => {
-          const {data} = useFetch(mapstyle.offlineAssets);
-          console.log(data);
-        });
-    }*/
-    if (existingFiles){
-      const filename = MBTILES.downloadMbtilesUrl.split('/').pop() || '';
-      const existingFile = existingFiles?.files.find(({name}) => name === filename)?.uri;
+    if (existingFilesOnDevice && data){
 
-      if (existingFile) {
-        getDatabase(existingFile.replace('file://', ''));
-      } else {
+      //Style
+      let isStyleOnDevice = false;
+      const styleFileName = data['style'].split('/').pop() || '';
+      const existingStyle = existingFilesOnDevice.find(({name}) => name === styleFileName);
+
+      if (existingStyle) {
+        isStyleOnDevice = true;
+        const url = Capacitor.convertFileSrc(existingStyle.uri);
+        onStyleDownloaded(url);
+      }
+
+      //MBTILES
+      let isAllMbtilesOnDevice = false;
+      data['mbtiles'].map((mbtiles:MbTilesMetadata) => {
+        const mbtilesFileName = mbtiles.url.split('/').pop() || '';
+        const existingMbtiles = existingFilesOnDevice.find(({name}) => name === mbtilesFileName);
+        if (existingMbtiles) {
+          isAllMbtilesOnDevice = true;
+          getDatabase(existingMbtiles.uri.replace('file://', ''));
+        }
+      });
+
+      if (!isAllMbtilesOnDevice || !isStyleOnDevice) {
         setOpen(true);
-      }  
+      }
     }
-  }, [existingFiles]);
+  }, [existingFilesOnDevice, data]);
+
+  const handleDownloads = async () => {
+    //style
+    await download(data.style, mapstyle.id);
+    //mbtiles
+    data.mbtiles
+      .map(async (mbtiles: MbTilesMetadata) => mbtiles.url && await download(mbtiles.url, mapstyle.id));
+  };
 
 
   useEffect(() => {
-    if (accepted){
+    if (accepted && data){
       setOpen(false);
-      download(MBTILES.downloadMbtilesUrl);
+      handleDownloads();
     }
-  }, [accepted]);
+  }, [accepted, data]);
 
   useEffect(() => {
     if (accepted && progress === 100 && uri) {
-      getDatabase(uri);
+      if (uri.endsWith('.json')) {
+        const url = Capacitor.convertFileSrc(uri);
+        onStyleDownloaded(url);
+      } else {
+        getDatabase(uri.replace('file://', ''));
+      }
     }
-  }, [accepted, progress]);
+  }, [accepted, progress, uri]);
 
   useEffect(() => {
     setErrorOpen(true);
