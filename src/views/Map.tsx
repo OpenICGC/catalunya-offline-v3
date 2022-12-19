@@ -5,7 +5,7 @@ import GeocomponentMap from '@geomatico/geocomponents/Map';
 
 import {Manager, ScopePoint, UUID} from '../types/commonTypes';
 import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../utils/mbtiles';
-import useBackgroundGeolocation, { Geolocation } from '../hooks/useBackgroundGeolocation';
+import useGeolocation, { Geolocation } from '../hooks/useGeolocation';
 import FabButton from '../components/buttons/FabButton';
 import useCompass from '../hooks/useCompass';
 import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
@@ -109,14 +109,18 @@ const Map: FC<MainContentProps> = ({
   const [viewport, setViewport] = useViewport();
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
 
-  const {geolocation, error: geolocationError} = useBackgroundGeolocation();
+  const {geolocation, error: geolocationError} = useGeolocation();
   const orientation = useCompass();
 
   const [isNavigationMode, setNavigationMode] = useState(false);
   const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
 
   const [isTrackingMode, setTrackingMode] = useState(true);
-  const enableTracking = () => setTrackingMode(true);
+  const handleTrackingClick = () => {
+    if (!geolocationError) {
+      setTrackingMode(true);
+    }
+  };
   const disableTracking = () => setTrackingMode(false);
 
   const scopeStore = useScopes();
@@ -252,7 +256,7 @@ const Map: FC<MainContentProps> = ({
         {!precisePositionRequest && <FabButton
           isLeftHanded={false} isAccessibleSize={false}
           bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
-          isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={enableTracking}
+          isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={handleTrackingClick}
           onLayersClick={() => changeManager('LAYERS')}
           onBaseMapsClick={() => changeManager('BASEMAPS')}
           onFoldersClick={() => changeManager('SCOPES')}

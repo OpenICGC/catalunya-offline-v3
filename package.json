@@ -110,6 +110,7 @@
     "@capacitor-community/background-geolocation": "^1.2.6",
     "@capacitor-community/sqlite": "^4.2.2",
     "@capacitor/android": "^4.4.0",
+    "@capacitor/app": "^4.1.1",
     "@capacitor/assets": "^1.0.14",
     "@capacitor/core": "^4.4.0",
     "@capacitor/ios": "^4.4.0",
