@@ -1,13 +1,25 @@
 import React, {FC, useEffect, useState} from 'react';
 
 import Layout from '../components/Layout';
-import SidePanelContent from './SidePanelContent';
 import Map from './Map';
 
 import {INITIAL_MANAGER, SM_BREAKPOINT} from '../config';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import {Manager} from '../types/commonTypes';
+import {Manager, UUID} from '../types/commonTypes';
+import Layers from './sidepanels/Layers';
+import BaseMaps from './sidepanels/BaseMaps';
+import ScopeMain from './sidepanels/ScopeMain';
+import Stack from '@mui/material/Stack';
+import GeoJSON from 'geojson';
+import {useScopePoints} from '../hooks/useStoredCollections';
 import useMapStyle from '../hooks/useMapStyle';
+
+const stackSx = {
+  height: '100%',
+  overflow: 'hidden',
+  m: 0,
+  p: 0
+};
 
 const Index: FC = () => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
@@ -15,6 +27,29 @@ const Index: FC = () => {
 
   const {baseMapId, mapStyle, setBaseMapId, StyleOfflineDownloaderComponent} = useMapStyle();
   const [manager, setManager] = useState<Manager>(widescreen ? INITIAL_MANAGER : undefined);
+  const [scope, setScope] = useState<UUID>();
+  const [point, setPoint] = useState<UUID>();
+  const [track, setTrack] = useState<UUID>();
+  const [precisePositionRequest, setPrecisePositionRequest] = useState<boolean | GeoJSON.Position>(false);
+  const pointStore = useScopePoints(scope);
+
+  const acceptPrecisePosition = (position: GeoJSON.Position) => {
+    const prevPoint = point && pointStore.retrieve(point);
+    if (prevPoint) {
+      pointStore.update({
+        ...prevPoint,
+        geometry: {
+          ...prevPoint.geometry,
+          coordinates: position
+        }
+      });
+    }
+    setPrecisePositionRequest(false);
+  };
+
+  const cancelPrecisePosition = () => {
+    setPrecisePositionRequest(false);
+  };
 
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);
@@ -26,11 +61,23 @@ const Index: FC = () => {
   }, [manager]);
 
   const sidePanelContent = manager
-    ? <SidePanelContent
-      baseMapId={baseMapId}
-      onMapStyleChanged={setBaseMapId}
-      manager={manager}
-    />
+    ? <Stack sx={stackSx}>
+      {manager === 'LAYERS' && <Layers
+      />}
+      {manager === 'BASEMAPS' && <BaseMaps
+        baseMapId={baseMapId}
+        onMapStyleChanged={setBaseMapId}
+      />}
+      {manager === 'SCOPES' && <ScopeMain
+        selectedScope={scope}
+        onScopeSelected={setScope}
+        selectedPoint={point}
+        onPointSelected={setPoint}
+        selectedTrack={track}
+        onTrackSelected={setTrack}
+        onPrecisePositionRequested={setPrecisePositionRequest}
+      />}
+    </Stack>
     : <></>
   ;
 
@@ -38,6 +85,11 @@ const Index: FC = () => {
     mapStyle={mapStyle}
     manager={manager}
     onManagerChanged={setManager}
+    selectedScope={scope}
+    setSelectedPoint={setPoint}
+    precisePositionRequest={precisePositionRequest}
+    onPrecisePositionAccepted={acceptPrecisePosition}
+    onPrecisePositionCancelled={cancelPrecisePosition}
   />;
 
   return <>

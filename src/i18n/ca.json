@@ -1,14 +1,17 @@
 {
   "actions": {
     "accept": "Accepta",
-    "cancel": "Cancel·La",
+    "addPoint": "Afegir punt",
+    "cancel": "Cancel·la",
     "close": "Tanca",
     "dataSchema": "Esquema de dades",
     "delete": "Esborra",
     "download": "Descarrega",
     "downloading": "Descarregant...",
+    "edit": "Edita",
+    "export": "Exporta",
+    "goTo": "Anar a",
     "instamaps": "Instamaps",
-    "rename": "Reanomena",
     "search": "Cerca..."
   },
   "baseMapManager": "Mapes Base",
@@ -18,12 +21,31 @@
     "content_03": "Voleu descarregar ara el Mapa topogràfic de Catalunya? (350 MB)",
     "title": "Descàrrega de dades offline"
   },
+  "features": {
+    "points": "Punts",
+    "tracks": "Traces"
+  },
   "downloadingError": "Error descarregant cartografia",
   "layerManager": "Capes",
-  "scope": "Àmbit",
-  "scopeListItem": {
+  "noScopeAlert": "Trieu un àmbit per al punt",
+  "properties": {
+    "date": "Data",
+    "description": "Descripció",
+    "height": "altura",
+    "images": "Imatges",
+    "latitude": "latitud",
+    "location": "Ubicació",
+    "longitude": "longitud",
     "name": "Nom"
   },
+  "scope": "Àmbit",
+  "scopeList": {
+    "empty": "Encara no s'ha creat cap element",
+    "notFound": "No s'hi han trobat elements coincidents amb la cerca"
+  },
   "scopeManager": "Àmbits",
-  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000"
+  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
+  "trackAlert": {
+    "noTrack": "No es pot mostrar el perfil de la traza"
+  }
 }

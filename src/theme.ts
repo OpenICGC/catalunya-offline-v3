@@ -1,5 +1,4 @@
 import createTheme from '@mui/material/styles/createTheme';
-import {lighten} from '@mui/system/colorManipulator';
 import {PaletteMode} from '@mui/material';
 
 const primaryColor = '#f59d21';
@@ -29,7 +28,7 @@ const theme = (mode?: PaletteMode) => createTheme({
       styleOverrides: {
         /* Firefox Scrollbar */
         'body': {
-          scrollbarColor: `${lighten(primaryColor, 0.5)} transparent`, /* scroll thumb and track */
+          scrollbarColor: 'lightgrey', /* scroll thumb and track */
           scrollbarWidth: '2px'
         },
         /* Chrome Scrollbar */
@@ -41,7 +40,7 @@ const theme = (mode?: PaletteMode) => createTheme({
           WebkitBoxShadow: 'inset 0 0 2px rgba(0,0,0,0.00)'
         },
         '*::-webkit-scrollbar-thumb': {
-          backgroundColor: lighten(primaryColor, 0.5),
+          backgroundColor: 'lightgrey',
           opacity: 0.2,
           outline: '0px solid slategrey'
         },

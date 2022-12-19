@@ -1,9 +1,9 @@
-import React from 'react';
-import List, {ListProps} from './List';
+import React, {useCallback, useState} from 'react';
+import List, {listItemType, ListProps} from './List';
 import {Meta, Story} from '@storybook/react';
 
 //MUI
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 //MUI-ICONS
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -22,6 +22,17 @@ import ManagerHeader from '../common/ManagerHeader';
 //UTILS
 import {DRAWER_WIDTH} from '../../config';
 import {v4 as uuidv4} from 'uuid';
+import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
+import {HEXColor, UUID} from '../../types/commonTypes';
+
+const stackSx = {
+  height: '500px',
+  width: DRAWER_WIDTH,
+  boxShadow: 3,
+  overflow: 'hidden',
+  m: 0,
+  p: 0
+};
 
 export default {
   title: 'Scope/List',
@@ -30,41 +41,48 @@ export default {
 
 const Template: Story<ListProps> = args => <List {...args}/>;
 
-const DeviceTemplate: Story<ListProps> = args => <Box
-  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><List {...args}/></Box>;
-    
-const DeviceWithHeaderTemplate: Story<ListProps> = args => <Box
-  sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}>
-  <ManagerHeader name='Ámbitos' color='#1b718c' startIcon={<FolderIcon/>}/>
-  <List {...args}/>
-</Box>;
+const DeviceTemplate: Story<ListProps> = args => <Stack sx={stackSx}><List {...args}/></Stack>;
 
-export const Scope = Template.bind({});
-Scope.args = {
-  items: [
-    {
-      id: uuidv4(),
-      name: 'Mi Ámbito 01',
-      color: '#247a44',
-      isActive: true,
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Ámbito 02',
-      color: '#fc5252',
-      isActive: true,
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Ámbito 03',
-      color: '#f5017a',
-      isActive: true,
-    },
-  ],
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ManagedTemplate: Story<ListProps> = ({items, onNameChange, onColorChange, ...args}) => {
+  const [getItems, setItems] = useState<Array<listItemType>>(items);
+
+  const handleColorChange = useCallback((itemId: UUID, color: HEXColor) => setItems(
+    prevItems => prevItems.map(item => item.id === itemId ? {...item, color} : item)
+  ), []);
+
+  const handleNameChange = useCallback((itemId: UUID, name: string) => setItems(
+    prevItems => prevItems.map(item => item.id === itemId ? {...item, name} : item)
+  ), []);
+
+  return <Stack sx={stackSx}>
+    <List
+      items={getItems}
+      onColorChange={handleColorChange}
+      onNameChange={handleNameChange}
+      {...args}
+    />
+  </Stack>;
+};
+
+const DeviceWithHeaderTemplate: Story<ListProps> = args => <Stack sx={stackSx}>
+  <ManagerHeader name="Ámbitos" color="#1b718c" startIcon={<FolderIcon/>}/>
+  <List {...args}/>
+</Stack>;
+
+const palette = useColorRamp('BrewerDark27').hexColors;
+
+export const Default = Template.bind({});
+Default.args = {
+  items: [...Array(20).keys()].map(i => ({
+    id: uuidv4(),
+    name: `Mi ámbito ${i}`,
+    color: palette[i % palette.length]
+  })),
   contextualMenu: [
     {
-      id: 'rename',
-      label: 'Renombrar',
+      id: 'edit',
+      label: 'Editar',
       icon: <EditIcon/>
     },
     {
@@ -83,37 +101,34 @@ Scope.args = {
       icon: <DashboardIcon/>
     }
   ],
-  activeActionIcon: <FileUploadIcon/>,
+  actionIcons: [
+    {
+      id: 'export',
+      activeIcon: <FileUploadIcon/>
+    }
+  ],
+  isAccessibleSize: false
+};
+
+export const Managed = ManagedTemplate.bind({});
+Managed.args = {
+  ...Default.args
 };
 
 export const Empty = Template.bind({});
 Empty.args = {
-  ...Scope.args,
-  items: [],
+  ...Default.args,
+  items: []
 };
 
-export const Point_Path = Template.bind({});
-Point_Path.args = {
-  items: [
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 01',
-      color: '#247a44',
-      isActive: true
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 02',
-      color: '#fc5252',
-      isActive: false
-    },
-    {
-      id: uuidv4(),
-      name: 'Mi Punto o Traza 03',
-      color: '#f5017a',
-      isActive: true
-    },
-  ],
+export const PointOrTrack = Template.bind({});
+PointOrTrack.args = {
+  items: [...Array(20).keys()].map(i => ({
+    id: uuidv4(),
+    name: `Mi punto o traza ${i}`,
+    color: palette[Math.floor(Math.random() * palette.length)], // Color asignado la mitad de las veces
+    isActive: Math.random() < 0.5
+  })),
   contextualMenu: [
     {
       id: 'goTo',
@@ -136,16 +151,22 @@ Point_Path.args = {
       icon: <FileUploadIcon/>
     }
   ],
-  activeActionIcon:  <VisibilityIcon/>,
-  inactiveActionIcon:  <VisibilityOffIcon/>,
+  actionIcons: [
+    {
+      id: 'visibility',
+      activeIcon: <VisibilityIcon/>,
+      inactiveIcon: <VisibilityOffIcon color='disabled'/>,
+    }
+  ],
+  isAccessibleSize: false
 };
 
 export const Device = DeviceTemplate.bind({});
 Device.args = {
-  ...Scope.args
+  ...Default.args
 };
 
 export const DeviceWithHeader = DeviceWithHeaderTemplate.bind({});
 DeviceWithHeader.args = {
-  ...Scope.args
+  ...Default.args
 };

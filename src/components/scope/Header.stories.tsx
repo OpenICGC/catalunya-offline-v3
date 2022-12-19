@@ -1,27 +1,34 @@
 import React from 'react';
 import Header, {HeaderProps} from './Header';
 
-import Box from '@mui/material/Box';
 import {DRAWER_WIDTH} from '../../config';
 import {Meta, Story} from '@storybook/react';
+import Stack from '@mui/material/Stack';
 
 export default {
   title: 'Scope/Header',
   component: Header,
   argTypes: {
-    color: { control: 'color' },
-  },
+    color: {control: 'color'}
+  }
 } as Meta;
 
 /*const Template = args => <Header {...args}/>;*/
-const DeviceTemplate: Story<HeaderProps> = args => <Box sx={{width: DRAWER_WIDTH, height: 844, boxShadow: 3}}><Header {...args}/></Box>;
+const DeviceTemplate: Story<HeaderProps> = args => <Stack sx={{
+  height: '500px',
+  width: DRAWER_WIDTH,
+  boxShadow: 3,
+  overflow: 'hidden',
+  m: 0,
+  p: 0
+}}><Header {...args}/></Stack>;
 
 export const Default = DeviceTemplate.bind({});
 Default.args = {
   name: 'Montseny',
   color: '#ccf598',
   numPoints: 15,
-  numPaths: 7
+  numTracks: 7
 };
 
 export const Long = DeviceTemplate.bind({});
@@ -29,5 +36,5 @@ Long.args = {
   name: 'Artesa de Segre con amigos',
   color: '#ccf598',
   numPoints: 15,
-  numPaths: 7
+  numTracks: 7
 };

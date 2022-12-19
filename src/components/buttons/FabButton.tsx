@@ -12,10 +12,10 @@ import AddIcon from '@mui/icons-material/Add';
 import CompassIcon from '../icons/Compass';
 import FolderIcon from '@mui/icons-material/Folder';
 import LayersIcon from '@mui/icons-material/Layers';
-import LocationDisabledIcon from '@mui/icons-material/LocationDisabled';
-import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import MapIcon from '@mui/icons-material/Map';
-import MyLocationIcon from '@mui/icons-material/MyLocation';
+import TrackingIcon from '@mui/icons-material/MyLocation';
+import NoTrackingIcon from '@mui/icons-material/LocationSearching';
+import LocationDisabledIcon from '@mui/icons-material/LocationDisabled';
 
 //STYLES
 const fabTransition = 'transform 360ms linear';
@@ -104,7 +104,7 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
     ...location,
     bgcolor: isLocationAvailable ? isTrackingOn ? 'primary.main' : 'grey.800' : 'grey.400',
     '&:hover': {
-      bgcolor: isTrackingOn ? 'primary.main' : 'grey.800',
+      bgcolor: isLocationAvailable ? isTrackingOn ? 'primary.main' : 'grey.800' : 'grey.400',
     },
     transform: isLeftHanded ? `translate(${radius * 0.707}px, -${radius * 0.707}px)` : `translate(-${radius * 0.707}px, -${radius * 0.707}px)`,
     transitionDelay: `${3 * delay}ms`
@@ -189,8 +189,8 @@ const FabButton: FC<FabButtonProps> = ({isLeftHanded= false, isAccessibleSize=fa
     <IconButton sx={isMenuOpen ? locationOpen : location} onClick={onTrackingClick}>
       {
         isLocationAvailable ?
-          isTrackingOn ? <MyLocationIcon sx={{color: 'grey.800'}}/>
-            : <LocationSearchingIcon sx={{color: 'common.white'}}/>
+          isTrackingOn ? <TrackingIcon sx={{color: 'grey.800'}}/>
+            : <NoTrackingIcon sx={{color: 'common.white'}}/>
           : <LocationDisabledIcon sx={{color: 'common.white'}}/>
       }
     </IconButton>

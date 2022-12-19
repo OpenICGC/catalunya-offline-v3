@@ -1,14 +1,17 @@
 {
   "actions": {
     "accept": "Aceptar",
+    "addPoint": "Añadir punto",
     "cancel": "Cancelar",
     "close": "Cerrar",
     "dataSchema": "Esquema de datos",
     "delete": "Borrar",
     "download": "Descargar",
     "downloading": "Descargando...",
+    "edit": "Edita",
+    "export": "Exportar",
+    "goTo": "Ir a",
     "instamaps": "Instamaps",
-    "rename": "Renombrar",
     "search": "Buscar..."
   },
   "baseMapManager": "Mapas Base",
@@ -19,11 +22,30 @@
     "title": "Descarga de datos offline"
   },
   "downloadingError": "Error descargando cartografía",
+  "features": {
+    "points": "Puntos",
+    "tracks": "Rutas"
+  },
   "layerManager": "Capas",
-  "scope": "Ámbito",
-  "scopeListItem": {
+  "noScopeAlert": "Elige un ámbito para el punto",
+  "properties": {
+    "date": "Fecha",
+    "description": "Descripción",
+    "height": "altura",
+    "images": "Imágenes",
+    "latitude": "latitud",
+    "location": "Ubicación",
+    "longitude": "longitud",
     "name": "Nombre"
   },
+  "scope": "Ámbito",
+  "scopeList": {
+    "empty": "No existe ningún elemento",
+    "notFound": "No coincide ningún elemento con la búsqueda"
+  },
   "scopeManager": "Ámbitos",
-  "topographicMap": "Mapa topográfico de Catalunya 1:25 000"
+  "topographicMap": "Mapa topográfico de Catalunya 1:25 000",
+  "trackAlert": {
+    "noTrack": "No es posible mostrar perfil de la ruta."
+  }
 }

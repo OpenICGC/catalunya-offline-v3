@@ -1,4 +1,7 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback, useMemo} from 'react';
+
+//MUI
+import Box from '@mui/material/Box';
 
 //MUI-ICONS
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
@@ -13,31 +16,32 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddButton from '../buttons/AddButton';
 import List from './List';
 import ManagerHeader from '../common/ManagerHeader';
-import {listItemType} from './ListItem';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {HEXColor, UUID} from '../../types/commonTypes';
+import {HEXColor, UUID, Scope} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
+
+const boxSx = {width: '100%', height: 0};
 
 export type MainPanelProps = {
   isAccessibleSize?: boolean,
   isLeftHanded?: boolean,
-  items: Array<listItemType>,
+  scopes: Array<Scope>,
   onAdd: () => void,
-  onSelect: (itemId: UUID) => void,
-  onColorChange: (color: HEXColor, itemId: UUID) => void,
-  onRename: (name: string, itemId: UUID) => void,
-  onShare: (itemId: UUID) => void,
-  onDelete: (itemId: UUID) => void,
-  onInstamaps: (itemId: UUID) => void,
-  onDataSchema: (itemId: UUID) => void
+  onSelect: (scopeId: UUID) => void,
+  onColorChange: (scopeId: UUID, color: HEXColor) => void,
+  onRename: (scopeId: UUID, name: string) => void,
+  onShare: (scopeId: UUID) => void,
+  onDelete: (scopeId: UUID) => void,
+  onInstamaps: (scopeId: UUID) => void,
+  onDataSchema: (scopeId: UUID) => void
 };
 
 const MainPanel: FC<MainPanelProps> = ({
   isAccessibleSize = false,
   isLeftHanded = false,
-  items,
+  scopes,
   onAdd,
   onSelect,
   onColorChange,
@@ -50,10 +54,10 @@ const MainPanel: FC<MainPanelProps> = ({
   const {t} = useTranslation();
   const theme = useTheme();
 
-  const contextualMenu = [
+  const contextualMenu = useMemo(() => ([
     {
-      id: 'rename',
-      label: t('actions.rename'),
+      id: 'edit',
+      label: t('actions.edit'),
       icon: <EditIcon/>
     },
     {
@@ -74,14 +78,16 @@ const MainPanel: FC<MainPanelProps> = ({
       icon: <DashboardIcon/>,
       callbackProp: onDataSchema
     }
-  ];
+  ]), [onDelete, onInstamaps, onDataSchema, t]);
 
-  const handleContextualMenuClick = (menuId: string, itemId: UUID) => {
+  const handleContextualMenuClick = useCallback((scopeId: UUID, menuId: string) => {
     const menuEntry = contextualMenu.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
-      menuEntry.callbackProp(itemId);
+      menuEntry.callbackProp(scopeId);
     }
-  };
+  }, [contextualMenu]);
+
+  const actionIcons = useMemo(() => ([{id: 'export', activeIcon: <FileUploadIcon/>}]), []);
 
   return <>
     <ManagerHeader
@@ -90,16 +96,17 @@ const MainPanel: FC<MainPanelProps> = ({
       startIcon={<FolderIcon/>}
     />
     <List
-      items={items}
+      isAccessibleSize={isAccessibleSize}
+      items={scopes}
       contextualMenu={contextualMenu}
-      activeActionIcon={<FileUploadIcon/>}
+      actionIcons={actionIcons}
       onActionClick={onShare}
       onClick={onSelect}
       onColorChange={onColorChange}
       onContextualMenuClick={handleContextualMenuClick}
       onNameChange={onRename}
     />
-    <div style={{width: '100%', height: 0}}>
+    <Box sx={boxSx}>
       <AddButton
         isAccessibleSize={isAccessibleSize}
         isLeftHanded={isLeftHanded}
@@ -107,7 +114,7 @@ const MainPanel: FC<MainPanelProps> = ({
       >
         <CreateNewFolderIcon/>
       </AddButton>
-    </div>
+    </Box>
   </>;
 };
 

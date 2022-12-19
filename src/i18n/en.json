@@ -1,14 +1,17 @@
 {
   "actions": {
     "accept": "Accept",
+    "addPoint": "Add point",
     "cancel": "Cancel",
     "close": "Close",
     "dataSchema": "Data Schema",
     "delete": "Delete",
     "download": "Download",
     "downloading": "Downloading...",
+    "edit": "Edit",
+    "export": "Export",
+    "goTo": "Go to",
     "instamaps": "Instamaps",
-    "rename": "Rename",
     "search": "Search..."
   },
   "baseMapManager": "Base Maps",
@@ -19,11 +22,30 @@
     "title": "Offline data download"
   },
   "downloadingError": "Error downloading cartography",
+  "features": {
+    "points": "Points",
+    "tracks": "Tracks"
+  },
   "layerManager": "Layers",
-  "scope": "Scope",
-  "scopeListItem": {
+  "noScopeAlert": "Choose the point's scope",
+  "properties": {
+    "date": "Date",
+    "description": "Description",
+    "height": "height",
+    "images": "Images",
+    "latitude": "latitude",
+    "location": "Location",
+    "longitude": "longitude",
     "name": "Name"
   },
+  "scope": "Scope",
+  "scopeList": {
+    "empty": "No elements available",
+    "notFound": "No elements found matching the search criteria"
+  },
   "scopeManager": "Scopes",
-  "topographicMap": "Topographic Map of Catalonia 1:25 000"
+  "topographicMap": "Topographic Map of Catalonia 1:25 000",
+  "trackAlert": {
+    "noTrack": "It is not possible to show track profile."
+  }
 }
