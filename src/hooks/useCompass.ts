@@ -6,8 +6,13 @@ declare interface CompassError {
   code: 0 | 20;
 }
 
+export type Orientation = {
+  heading: number,
+  accuracy?: number
+}
+
 const useCompass = () => {
-  const [heading, setHeading] = useState(0);
+  const [orientation, setOrientation] = useState<Orientation>();
 
   useEffect(() => {
     const platform = Capacitor.getPlatform();
@@ -16,16 +21,17 @@ const useCompass = () => {
         console.error('[Compass] Not available on this device');
       } else {
         window.addEventListener('deviceorientation', (event) => {
-          if (event.alpha && Math.round(360 - event.alpha) !== heading) {
-            setHeading(Math.round(360 - event.alpha));
+          if (event.alpha && Math.round(360 - event.alpha) !== orientation?.heading) {
+            setOrientation({heading: Math.round(360 - event.alpha)});
           }
         });
       }
     } else {
-      const onSuccess = ({magneticHeading}: DeviceOrientationCompassHeading) => {
+      const onSuccess = ({magneticHeading, headingAccuracy}: DeviceOrientationCompassHeading) => {
         const newValue = Math.round(magneticHeading);
-        if (heading !== newValue) {
-          setHeading(newValue);
+        const newAccuracy = Math.round(headingAccuracy);
+        if (orientation?.heading !== newValue || orientation?.accuracy !== newAccuracy) {
+          setOrientation({heading: newValue, accuracy: newAccuracy});
         }
       };
 
@@ -43,10 +49,10 @@ const useCompass = () => {
   }, []);
 
   useEffect(() => {
-    console.debug('[compass] Got Heading: ', heading);
-  }, [heading]);
+    console.debug('[compass] Got Heading: ', orientation);
+  }, [orientation]);
 
-  return heading;
+  return orientation;
 };
 
 export default useCompass;
