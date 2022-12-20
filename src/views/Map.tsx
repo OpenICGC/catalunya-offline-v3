@@ -14,6 +14,7 @@ import GeoJSON from 'geojson';
 import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
 import {useViewport} from '../hooks/useViewport';
+import LocationMarker from '../components/map/LocationMarker';
 
 mbtiles(maplibregl);
 
@@ -47,26 +48,6 @@ const layers = [{
     'circle-stroke-opacity': 0.67,
     'circle-stroke-width': 1,
     'circle-pitch-alignment': 'map'
-  }
-}, {
-  id: 'geolocation-shadow',
-  source: 'geolocation',
-  type: 'circle',
-  paint: {
-    'circle-radius': 17,
-    'circle-blur': 0.7,
-    'circle-translate': [1, 1],
-    'circle-translate-anchor': 'viewport'
-  }
-}, {
-  id: 'geolocation',
-  source: 'geolocation',
-  type: 'circle',
-  paint: {
-    'circle-color': '#4285f4',
-    'circle-radius': 10,
-    'circle-stroke-color': '#FFF',
-    'circle-stroke-width': 2
   }
 }];
 
@@ -181,7 +162,7 @@ const Map: FC<MainContentProps> = ({
   useEffect(() => {
     mapRef.current?.easeTo({
       pitch: isNavigationMode ? 60 : 0,
-      bearing: isNavigationMode && isTrackingMode ? orientation : 0,
+      bearing: isNavigationMode && isTrackingMode && orientation?.heading ? orientation.heading : 0,
     });
   }, [isNavigationMode]);
 
@@ -191,7 +172,7 @@ const Map: FC<MainContentProps> = ({
     const {latitude, longitude} = geolocation;
     if (isTrackingMode && latitude && longitude) {
       const bearingZoom = {
-        bearing: isNavigationMode && isTrackingMode ? orientation : 0,
+        bearing: isNavigationMode && isTrackingMode && orientation?.heading ? orientation.heading : 0,
         zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
       };
       setViewport({
@@ -201,7 +182,7 @@ const Map: FC<MainContentProps> = ({
         ...bearingZoom
       });
     }
-  }, [isTrackingMode, geolocation, orientation]);
+  }, [isTrackingMode, geolocation, orientation?.heading]);
 
   const changeManager = (clicked: Manager) => {
     onManagerChanged(clicked === manager ? undefined : clicked);
@@ -247,6 +228,7 @@ const Map: FC<MainContentProps> = ({
         onTouchMove={disableTracking}
         onWheel={disableTracking}
       >
+        <LocationMarker geolocation={geolocation} orientation={orientation}/>
         <PointMarkers
           isAccessibleSize={false}
           points={pointList}
