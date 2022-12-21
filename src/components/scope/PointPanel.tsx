@@ -18,7 +18,7 @@ import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 
 //CATOFFLINE
 import AddImageButton from '../buttons/AddImageButton';
-import Header from './Header';
+import Header from '../common/Header';
 import ListItem from './ListItem';
 import Thumbnail from '../common/Thumbnail';
 
@@ -32,6 +32,8 @@ import {Theme} from '@mui/material';
 import Box from '@mui/material/Box';
 import CancelButton from '../buttons/CancelButton';
 import AcceptButton from '../buttons/AcceptButton';
+import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
+import FeaturesSummary from './FeaturesSummary';
 
 //STYLES
 const sectionTitleSx = {
@@ -282,12 +284,13 @@ const PointPanel: FC<PointPanelProps> = ({
 
   return <>
     <Header
+      startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
       name={scope.name}
       color={scope.color}
-      numPoints={numPoints}
-      numTracks={numTracks}
-      onBackButtonClick={onBackButtonClick}
-    />
+      onStartIconClick={onBackButtonClick}
+    >
+      <FeaturesSummary numPoints={numPoints} numTracks={numTracks} colorContrastFrom={scope.color}/>
+    </Header>
     <Box>{/*makes up&down margin*/}
       <ListItem
         itemId={point.id}

@@ -17,13 +17,14 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 //CATOFFLINE
-import ManagerHeader from '../common/ManagerHeader';
+import Header from '../common/Header';
 
 //UTILS
 import {DRAWER_WIDTH} from '../../config';
 import {v4 as uuidv4} from 'uuid';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 import {HEXColor, UUID} from '../../types/commonTypes';
+
 
 const stackSx = {
   height: '500px',
@@ -66,7 +67,7 @@ const ManagedTemplate: Story<ListProps> = ({items, onNameChange, onColorChange, 
 };
 
 const DeviceWithHeaderTemplate: Story<ListProps> = args => <Stack sx={stackSx}>
-  <ManagerHeader name="Ámbitos" color="#1b718c" startIcon={<FolderIcon/>}/>
+  <Header name="Ámbitos" color="#1b718c" startIcon={<FolderIcon/>}/>
   <List {...args}/>
 </Stack>;
 

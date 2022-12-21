@@ -1,6 +1,12 @@
 import React, {FC} from 'react';
+
+import Header from '../common/Header';
+
+import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
+
+import FeaturesSummary from './FeaturesSummary';
+
 import {Scope, ScopeTrack} from '../../types/commonTypes';
-import Header from './Header';
 
 export type TrackPanelProps = {
   scope: Scope,
@@ -19,12 +25,13 @@ const TrackPanel: FC<TrackPanelProps> = ({
 }) => {
   return <>
     <Header
+      startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
       name={scope.name}
       color={scope.color}
-      numPoints={numPoints}
-      numTracks={numTracks}
-      onBackButtonClick={onBackButtonClick}
-    />
+      onStartIconClick={onBackButtonClick}
+    >
+      <FeaturesSummary numPoints={numPoints} numTracks={numTracks} colorContrastFrom={scope.color}/>
+    </Header>
     <p>TrackPanel - TODO</p>
     <pre>{JSON.stringify(initialTrack, null, 2)}</pre>
   </>;

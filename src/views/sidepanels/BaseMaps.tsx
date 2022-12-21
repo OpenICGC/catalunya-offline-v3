@@ -6,7 +6,8 @@ import MapIcon from '@mui/icons-material/Map';
 import BaseMapList from '@geomatico/geocomponents/BaseMapList';
 
 import {MAPSTYLES} from '../../config';
-import ManagerHeader from '../../components/common/ManagerHeader';
+import Header from '../../components/common/Header';
+import {useTranslation} from 'react-i18next';
 
 export type BaseMapsProps = {
   mapStyle: string,
@@ -14,13 +15,15 @@ export type BaseMapsProps = {
 };
 
 const BaseMaps: FC<BaseMapsProps> = ({mapStyle, onMapStyleChanged}) => {
+  const {t} = useTranslation();
   const theme = useTheme();
   return <>
-    <ManagerHeader
-      name="baseMapManager"
-      color={theme.palette.secondary.main}
+    <Header
       startIcon={<MapIcon/>}
+      name={t('baseMapManager')}
+      color={`#${theme.palette.secondary.main}`}
     />
+    
     <BaseMapList
       styles={MAPSTYLES}
       selectedStyleId={mapStyle}
