@@ -17,22 +17,38 @@ const useCompass = () => {
   useEffect(() => {
     const platform = Capacitor.getPlatform();
     if (platform === 'web') { // Actually should test for cordova avail
+      const onSuccess = (event: DeviceOrientationEvent) => {
+        const newHeading = event.alpha !== null ? Math.round(360 - event.alpha) : undefined;
+        setOrientation(prevOrientation => {
+          if (newHeading && newHeading !== prevOrientation?.heading) {
+            return {heading: newHeading};
+          } else {
+            return prevOrientation;
+          }
+        });
+      };
+
       if (!window.DeviceOrientationEvent) {
         console.error('[Compass] Not available on this device');
       } else {
-        window.addEventListener('deviceorientation', (event) => {
-          if (event.alpha && Math.round(360 - event.alpha) !== orientation?.heading) {
-            setOrientation({heading: Math.round(360 - event.alpha)});
-          }
-        });
+        window.addEventListener('deviceorientation', onSuccess);
       }
+
+      return () => {
+        window.removeEventListener('deviceorientation', onSuccess);
+      };
     } else {
       const onSuccess = ({magneticHeading, headingAccuracy}: DeviceOrientationCompassHeading) => {
-        const newValue = Math.round(magneticHeading);
+        const newHeading = Math.round(magneticHeading);
         const newAccuracy = Math.round(headingAccuracy);
-        if (orientation?.heading !== newValue || orientation?.accuracy !== newAccuracy) {
-          setOrientation({heading: newValue, accuracy: newAccuracy});
-        }
+        setOrientation(prevOrientation => {
+          if (prevOrientation?.heading !== newHeading || prevOrientation?.accuracy !== newAccuracy) {
+            console.log('GG', prevOrientation, newHeading, newAccuracy);
+            return {heading: newHeading, accuracy: newAccuracy};
+          } else {
+            return prevOrientation;
+          }
+        });
       };
 
       const onError = (error: CompassError) => console.error(error);
