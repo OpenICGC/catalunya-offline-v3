@@ -12,6 +12,8 @@
     "export": "Export",
     "goTo": "Go to",
     "instamaps": "Instamaps",
+    "rec": "Rec",
+    "recording": "Recording...",
     "search": "Search..."
   },
   "baseMapManager": "Base Maps",

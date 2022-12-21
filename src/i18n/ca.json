@@ -8,10 +8,12 @@
     "delete": "Esborra",
     "download": "Descarrega",
     "downloading": "Descarregant...",
-    "edit": "Edita",
+    "edit": "Editar",
     "export": "Exporta",
     "goTo": "Anar a",
     "instamaps": "Instamaps",
+    "rec": "Gravar",
+    "recording": "Gravant...",
     "search": "Cerca..."
   },
   "baseMapManager": "Mapes Base",
