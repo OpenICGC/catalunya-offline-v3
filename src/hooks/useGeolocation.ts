@@ -23,7 +23,7 @@ const webConfig = {
   maximumAge: 10000, // Maximum age of cached position in ms
 };
 
-const POSITION_TIMEOUT = 180; // Seconds
+const POSITION_TIMEOUT = 300; // Seconds
 
 const handleCapacitorPermission = (error: CallbackError) => {
   if (error.code === 'NOT_AUTHORIZED') {
@@ -81,7 +81,7 @@ const useGeolocation = (watchInBackground= false) => {
   useEffect( () => {
     positionTimeout && clearTimeout(positionTimeout);
     setPositionTimeout(window.setTimeout(() => {
-      setError({code: 'NO_FRESH_LOCATION', message: 'No new location set in 10 seconds'});
+      setError({code: 'NO_FRESH_LOCATION', message: `No new location set in ${POSITION_TIMEOUT} seconds`});
       setGeolocation(nullGeolocation());
     }, POSITION_TIMEOUT * 1000));
     return () => window.clearTimeout(positionTimeout);

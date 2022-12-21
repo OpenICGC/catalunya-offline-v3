@@ -1,5 +1,5 @@
 import React from 'react';
-import FabButton, {FabButtonProps} from './FabButton';
+import FabButton, {FabButtonProps, LOCATION_STATUS} from './FabButton';
 import {Meta, Story} from '@storybook/react';
 
 export default {
@@ -13,6 +13,22 @@ export default {
         max: 359,
         step: 1
       }
+    },
+    pitch: {
+      control: {
+        type: 'range',
+        min: 0,
+        max: 80,
+        step: 1
+      }
+    },
+    locationStatus: {
+      options: {
+        DISABLED: 0,
+        NOT_TRACKING: 1,
+        TRACKING: 2,
+        NAVIGATING: 3
+      }
     }
   }
 } as Meta;
@@ -21,31 +37,35 @@ const Template: Story<FabButtonProps> = args => <FabButton {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  bearing: 0,
-  isLocationAvailable: true,
-  isCompassOn: false,
-  isTrackingOn: false,
   isLeftHanded: false,
   isAccessibleSize: false,
+  bearing: 0,
+  pitch: 0,
+  locationStatus: LOCATION_STATUS.NOT_TRACKING
 };
 
 export const Bearing30 = Template.bind({});
 Bearing30.args = {
   ...Default.args,
   bearing: 30,
-  isCompassOn: true
 };
 
-export const LocationUnavailable = Template.bind({});
-LocationUnavailable.args = {
+export const LocationDisabled = Template.bind({});
+LocationDisabled.args = {
   ...Default.args,
-  isLocationAvailable: false,
+  locationStatus: LOCATION_STATUS.DISABLED
 };
 
-export const LocationOn = Template.bind({});
-LocationOn.args = {
+export const Tracking = Template.bind({});
+Tracking.args = {
   ...Default.args,
-  isTrackingOn: true
+  locationStatus: LOCATION_STATUS.TRACKING
+};
+
+export const Navigating = Template.bind({});
+Navigating.args = {
+  ...Default.args,
+  locationStatus: LOCATION_STATUS.NAVIGATING
 };
 
 export const LeftHanded = Template.bind({});
