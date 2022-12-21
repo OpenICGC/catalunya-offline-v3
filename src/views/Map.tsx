@@ -90,7 +90,7 @@ const Map: FC<MainContentProps> = ({
   const [viewport, setViewport] = useViewport();
   const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
   const {geolocation, error: geolocationError} = useGeolocation();
-  const orientation = useCompass();
+  const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
 
   const scopeStore = useScopes();
@@ -194,7 +194,7 @@ const Map: FC<MainContentProps> = ({
     } else if (locationStatus === LOCATION_STATUS.NAVIGATING) {
       mapRef.current?.easeTo({
         pitch: 60,
-        bearing: orientation?.heading
+        bearing: heading || 0
       });
     }
   }, [locationStatus]);
@@ -217,14 +217,14 @@ const Map: FC<MainContentProps> = ({
 
   useEffect(() => {
     if (locationStatus === LOCATION_STATUS.NAVIGATING) {
-      if (orientation?.heading !== undefined) {
+      if (heading !== undefined) {
         setViewport({
           ...viewport,
-          bearing: orientation.heading
+          bearing: heading
         });
       }
     }
-  }, [orientation?.heading]);
+  }, [heading]);
 
   const changeManager = (clicked: Manager) => {
     onManagerChanged(clicked === manager ? undefined : clicked);
@@ -270,7 +270,7 @@ const Map: FC<MainContentProps> = ({
         onTouchMove={disableTracking}
         onWheel={disableTracking}
       >
-        <LocationMarker geolocation={geolocation} orientation={orientation}/>
+        <LocationMarker geolocation={geolocation} heading={heading}/>
         <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
         {!precisePositionRequest && <FabButton
           isLeftHanded={false} isAccessibleSize={false}
