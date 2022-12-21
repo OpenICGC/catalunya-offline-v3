@@ -109,7 +109,7 @@ const FabButton: FC<FabButtonProps> = ({
     },
     '& .MuiSvgIcon-root': {
       fontSize: iconSize,
-      transform: `rotate(${-45 + bearing}deg)`, // `rotateX(${pitch}deg) rotate(${-45 + bearing}deg)`,
+      transform: `rotate(${-45 - bearing}deg)`, // `rotateX(${pitch}deg) rotate(${-45 - bearing}deg)`,
       color: orientationIconColor
     },
   };

@@ -32,8 +32,5 @@ Default.args = {
     speed: null,
     timestamp: Date.now()
   },
-  orientation: {
-    heading: 45,
-    accuracy: 45
-  }
+  heading: 45
 };

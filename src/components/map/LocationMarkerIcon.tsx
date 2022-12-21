@@ -47,8 +47,7 @@ const DOT_STYLE = {
 export const SIZE = 100;
 const DOT_RADIUS = 10;
 const CENTER = SIZE / 2;
-
-const DEFAULT_BEARING_ACCURACY = 45;
+const DEFAULT_HEADING_ACCURACY = 45;
 
 export interface LocationMarkerIconProps {
   heading?: number,
@@ -58,7 +57,7 @@ export interface LocationMarkerIconProps {
 
 const LocationMarkerIcon: FC<LocationMarkerIconProps> = ({
   heading,
-  headingAccuracy= DEFAULT_BEARING_ACCURACY,
+  headingAccuracy= DEFAULT_HEADING_ACCURACY,
   isStale = false
 }) => {
   const dotColor: HEXColor = isStale ? GPS_POSITION_INACTIVE_COLOR : GPS_POSITION_COLOR;
