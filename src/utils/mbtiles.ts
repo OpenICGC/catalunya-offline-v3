@@ -1,5 +1,5 @@
 import { Capacitor } from '@capacitor/core';
-import {CapacitorSQLite, SQLiteConnection} from '@capacitor-community/sqlite';
+import {CapacitorSQLite, SQLiteConnection} from '@geomatico/capacitor-community-sqlite';
 import { defineCustomElements as jeepSqlite, applyPolyfills} from 'jeep-sqlite/loader';
 import {inflate} from 'pako';
 import maplibregl from 'maplibre-gl';

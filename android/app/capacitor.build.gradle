@@ -10,9 +10,9 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-background-geolocation')
-    implementation project(':capacitor-community-sqlite')
     implementation project(':capacitor-app')
     implementation project(':capacitor-filesystem')
+    implementation project(':geomatico-capacitor-community-sqlite')
     implementation "androidx.webkit:webkit:1.4.0"
 }
 
