@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
-import RecordingPanel, {RecordingPanelProps} from './RecordingPanel';
+import RecordingPanel, {RECORDING_STATUS, RecordingPanelProps} from './RecordingPanel';
 import {INITIAL_VIEWPORT, MAPSTYLES} from '../../config';
 import Box from '@mui/material/Box';
 import GeocomponentMap from '@geomatico/geocomponents/Map';
@@ -10,8 +10,13 @@ export default {
   title: 'Map/RecordingPanel',
   component: RecordingPanel,
   argTypes: {
-    recordingStatus: {
-      options: ['rec', 'pause', 'stop'],
+    recordingStatusId: {
+      options: {
+        INITIAL: RECORDING_STATUS.INITIAL,
+        RECORDING: RECORDING_STATUS.RECORDING,
+        PAUSE: RECORDING_STATUS.PAUSE,
+        STOP: RECORDING_STATUS.STOP
+      },
       control: { type: 'inline-radio' },
     },
     time: {
@@ -31,13 +36,26 @@ const IntegrationTemplate: Story<RecordingPanelProps> = args => {
   </Box>;
 };
 
+// eslint-disable-next-line react/prop-types,no-unused-vars
+const ManagedTemplate: Story<RecordingPanelProps> = ({recordingStatusId, onClick, ...args}) => {
+  const [getValue, setValue] = useState(recordingStatusId);
+  return <>
+    <RecordingPanel recordingStatusId={getValue} onClick={setValue} {...args} />
+  </>;
+};
+
 export const Default = Template.bind({});
 Default.args = {
   isAccessibleSize: false,
-  name: 'Montseny',
+  name: 'Traza 01',
   color: '#973572',
-  recordingStatus: 'rec',
+  recordingStatusId: RECORDING_STATUS.INITIAL,
   time: 10
+};
+
+export const Managed = ManagedTemplate.bind({});
+Managed.args = {
+  ...Default.args
 };
 
 export const WithMap = IntegrationTemplate.bind({});

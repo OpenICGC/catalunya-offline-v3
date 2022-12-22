@@ -1,17 +1,22 @@
 import React, {FC} from 'react';
 
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+//MUI
 import Button from '@mui/material/Button';
+
+//MUI-ICONS
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+
+//UTILS
 import {useTranslation} from 'react-i18next';
 
-export interface TrackRecButtonProps {
+export interface RecordButtonProps {
     isAccessibleSize: boolean,
-    onRecStart: () => void,
+    onClick: () => void
 }
 
-const TrackRecButton: FC<TrackRecButtonProps> = ({
+const RecordButton: FC<RecordButtonProps> = ({
   isAccessibleSize,
-  onRecStart
+  onClick
 }) => {
 
   const {t} = useTranslation();
@@ -27,11 +32,11 @@ const TrackRecButton: FC<TrackRecButtonProps> = ({
     variant='contained'
     size={isAccessibleSize ? 'large' : 'medium'}
     startIcon={<FiberManualRecordIcon sx={{color: '#d32f2f'}}/>}
-    onClick={() => onRecStart()}
+    onClick={onClick}
     sx={recButtonSx}
   >
     {t('actions.rec')}
   </Button>;
 };
 
-export default TrackRecButton;
+export default RecordButton;

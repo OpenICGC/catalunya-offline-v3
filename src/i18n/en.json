@@ -12,9 +12,11 @@
     "export": "Export",
     "goTo": "Go to",
     "instamaps": "Instamaps",
+    "pause": "Pause",
     "rec": "Rec",
     "recording": "Recording...",
-    "search": "Search..."
+    "search": "Search...",
+    "stop": "Finalized"
   },
   "baseMapManager": "Base Maps",
   "downloadingAlert": {

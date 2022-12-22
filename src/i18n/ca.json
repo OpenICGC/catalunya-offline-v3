@@ -12,9 +12,11 @@
     "export": "Exporta",
     "goTo": "Anar a",
     "instamaps": "Instamaps",
+    "pause": "Pausat",
     "rec": "Gravar",
     "recording": "Gravant...",
-    "search": "Cerca..."
+    "search": "Cerca...",
+    "stop": "Finalizat"
   },
   "baseMapManager": "Mapes Base",
   "downloadingAlert": {

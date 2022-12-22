@@ -1,17 +1,17 @@
 import React, {FC} from 'react';
 
 //MUI
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
 import CloseIcon from '@mui/icons-material/Close';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
 
 export type NotificationProps = {
   message: string,
@@ -39,7 +39,7 @@ const Notification: FC<NotificationProps> = ({
     top: variant === 'bottom' ? '8px' : '50%',
     transform: variant === 'bottom' ? 'none' : 'translate(-50%, -50%)',
     zIndex: 5000,
-    //pointerEvents: 'none'
+    pointerEvents: 'none'
   };
 
   const snackBarSx = {

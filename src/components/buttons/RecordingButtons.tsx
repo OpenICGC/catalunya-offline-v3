@@ -1,33 +1,40 @@
 import React, {FC} from 'react';
 
-import ButtonGroup from '@geomatico/geocomponents/ButtonGroup';
+//MUI-ICONS
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
+
+//OTHERS
+import ButtonGroup from '@geomatico/geocomponents/ButtonGroup';
+
+//UTILS
 import {Theme} from '@mui/material';
-export interface TrackRecordingButtonProps {
+import {RECORDING_STATUS} from '../map/RecordingPanel';
+
+export interface RecordingButtonsProps {
     isAccessibleSize: boolean,
-  selectedControlId: string,
-    onControlClick: () => void,
+  selectedButtonId: RECORDING_STATUS,
+    onStatusClick: (id: RECORDING_STATUS) => void,
 }
 
-const TrackRecordingButton: FC<TrackRecordingButtonProps> = ({
+const RecordingButtons: FC<RecordingButtonsProps> = ({
   isAccessibleSize,
-  selectedControlId,
-  onControlClick
+  selectedButtonId,
+  onStatusClick
 }) => {
   const controls = [
     {
-      id: 'rec',
+      id: RECORDING_STATUS.RECORDING,
       content: <FiberManualRecordIcon sx={{color: '#d32f2f'}}/>
     },
     {
-      id: 'pause',
-      content: <PauseIcon sx={{color: selectedControlId === 'pause' ? 'white': 'grey.700'}}/>
+      id: RECORDING_STATUS.PAUSE,
+      content: <PauseIcon sx={{color: selectedButtonId === RECORDING_STATUS.PAUSE ? 'white': 'grey.700'}}/>
     },
     {
-      id: 'stop',
-      content: <StopIcon sx={{color: selectedControlId === 'stop' ? 'white': 'grey.700'}}/>
+      id: RECORDING_STATUS.STOP,
+      content: <StopIcon sx={{color: selectedButtonId === RECORDING_STATUS.STOP ? 'white': 'grey.700'}}/>
     },
   ];
   const recordingButtonSx = {
@@ -62,11 +69,11 @@ const TrackRecordingButton: FC<TrackRecordingButtonProps> = ({
   return <ButtonGroup
     color='#616161'
     items={controls}
-    selectedItemId={selectedControlId}
-    onItemClick={onControlClick}
+    selectedItemId={selectedButtonId}
+    onItemClick={onStatusClick}
     variant='contained'
     sx={recordingButtonSx}
   />;
 };
 
-export default TrackRecordingButton;
+export default RecordingButtons;
