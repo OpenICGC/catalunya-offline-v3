@@ -27,7 +27,7 @@ export default {
 
 const Template: Story<RecordingPanelProps> = args => <RecordingPanel {...args}/>;
 
-// eslint-disable-next-line react/prop-types,no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ManagedTemplate: Story<RecordingPanelProps> = ({recordingStatus, onStatusChange, ...args}) => {
   const [getValue, setValue] = useState(recordingStatus);
   return <>
@@ -35,7 +35,7 @@ const ManagedTemplate: Story<RecordingPanelProps> = ({recordingStatus, onStatusC
   </>;
 };
 
-// eslint-disable-next-line react/prop-types,no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const WithMapTemplate: Story<RecordingPanelProps> = ({recordingStatus, onStatusChange, ...args}) => {
   const [getValue, setValue] = useState(recordingStatus);
   const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
