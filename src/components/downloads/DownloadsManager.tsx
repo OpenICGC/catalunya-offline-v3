@@ -50,7 +50,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({mapstyle, onStyleDownloade
   }, [mapstyle]);
 
   useEffect(() => {
-    if (existingFilesOnDevice && data){
+    if (existingFilesOnDevice && data) {
 
       //Style
       let isStyleOnDevice = false;
@@ -65,10 +65,11 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({mapstyle, onStyleDownloade
 
       //MBTILES
       let isAllMbtilesOnDevice = false;
-      data['mbtiles'].map((mbtiles:MbTilesMetadata) => {
+      data['mbtiles'].map((mbtiles: MbTilesMetadata) => {
         const mbtilesFileName = mbtiles.url.split('/').pop() || '';
         const existingMbtiles = existingFilesOnDevice.find(({name}) => name === mbtilesFileName);
         if (existingMbtiles) {
+          //TODO: comprobar todos!!
           isAllMbtilesOnDevice = true;
           getDatabase(existingMbtiles.uri.replace('file://', ''));
         }

@@ -5,11 +5,11 @@ import maplibregl, {StyleSpecification} from 'maplibre-gl';
 import GeocomponentMap from '@geomatico/geocomponents/Map';
 
 import {Manager, ScopePoint, UUID} from '../types/commonTypes';
-import {mbtiles, isMbtilesDownloaded, downloadMbtiles, getDatabase} from '../utils/mbtiles';
+import {mbtiles} from '../utils/mbtiles';
 import useGeolocation, { Geolocation } from '../hooks/useGeolocation';
 import FabButton from '../components/buttons/FabButton';
 import useCompass from '../hooks/useCompass';
-import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
+import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import PrecisePositionEditor from '../components/map/PrecisePositionEditor';
 import GeoJSON from 'geojson';
 import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
