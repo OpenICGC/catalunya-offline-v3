@@ -64,16 +64,16 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({mapstyle, onStyleDownloade
       }
 
       //MBTILES
-      let isAllMbtilesOnDevice = false;
-      data['mbtiles'].map((mbtiles: MbTilesMetadata) => {
+      const isAllMbtilesOnDevice = !data['mbtiles'].map((mbtiles: MbTilesMetadata) => {
         const mbtilesFileName = mbtiles.url.split('/').pop() || '';
         const existingMbtiles = existingFilesOnDevice.find(({name}) => name === mbtilesFileName);
         if (existingMbtiles) {
-          //TODO: comprobar todos!!
-          isAllMbtilesOnDevice = true;
           getDatabase(existingMbtiles.uri.replace('file://', ''));
+          return true;
+        } else {
+          return false;
         }
-      });
+      }).includes(false);
 
       if (!isAllMbtilesOnDevice || !isStyleOnDevice) {
         setOpen(true);
