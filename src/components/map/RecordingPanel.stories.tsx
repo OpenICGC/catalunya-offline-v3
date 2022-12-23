@@ -10,7 +10,7 @@ export default {
   title: 'Map/RecordingPanel',
   component: RecordingPanel,
   argTypes: {
-    recordingStatusId: {
+    recordingStatus: {
       options: {
         INITIAL: RECORDING_STATUS.INITIAL,
         RECORDING: RECORDING_STATUS.RECORDING,
@@ -28,20 +28,21 @@ export default {
 const Template: Story<RecordingPanelProps> = args => <RecordingPanel {...args}/>;
 
 // eslint-disable-next-line react/prop-types,no-unused-vars
-const IntegrationTemplate: Story<RecordingPanelProps> = args => {
-  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
-  return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
-    <GeocomponentMap mapStyle={MAPSTYLES[1].id} onViewportChange={setViewport} viewport={getViewport}/>
-    <RecordingPanel {...args}/>
-  </Box>;
+const ManagedTemplate: Story<RecordingPanelProps> = ({recordingStatus, onStatusChange, ...args}) => {
+  const [getValue, setValue] = useState(recordingStatus);
+  return <>
+    <RecordingPanel recordingStatus={getValue} onStatusChange={setValue} {...args} />
+  </>;
 };
 
 // eslint-disable-next-line react/prop-types,no-unused-vars
-const ManagedTemplate: Story<RecordingPanelProps> = ({recordingStatusId, onClick, ...args}) => {
-  const [getValue, setValue] = useState(recordingStatusId);
-  return <>
-    <RecordingPanel recordingStatusId={getValue} onClick={setValue} {...args} />
-  </>;
+const WithMapTemplate: Story<RecordingPanelProps> = ({recordingStatus, onStatusChange, ...args}) => {
+  const [getValue, setValue] = useState(recordingStatus);
+  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
+  return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
+    <GeocomponentMap mapStyle={MAPSTYLES[1].id} onViewportChange={setViewport} viewport={getViewport}/>
+    <RecordingPanel recordingStatus={getValue} onStatusChange={setValue} {...args}/>
+  </Box>;
 };
 
 export const Default = Template.bind({});
@@ -49,7 +50,7 @@ Default.args = {
   isAccessibleSize: false,
   name: 'Traza 01',
   color: '#973572',
-  recordingStatusId: RECORDING_STATUS.INITIAL,
+  recordingStatus: RECORDING_STATUS.INITIAL,
   time: 10
 };
 
@@ -58,7 +59,7 @@ Managed.args = {
   ...Default.args
 };
 
-export const WithMap = IntegrationTemplate.bind({});
+export const WithMap = WithMapTemplate.bind({});
 WithMap.args = {
   ...Default.args,
   isAccessibleSize: false,

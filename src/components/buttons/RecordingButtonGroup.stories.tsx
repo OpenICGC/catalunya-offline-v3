@@ -1,15 +1,15 @@
 import React from 'react';
 import {Meta, Story} from '@storybook/react';
-import RecordingButtons, {RecordingButtonsProps} from './RecordingButtons';
+import RecordingButtonGroup, {RecordingButtonGroupProps} from './RecordingButtonGroup';
 
 //UTILS
 import {RECORDING_STATUS} from '../map/RecordingPanel';
 
 export default {
-  title: 'Buttons/RecordingButtons',
-  component: RecordingButtons,
+  title: 'Buttons/RecordingButtonGroup',
+  component: RecordingButtonGroup,
   argTypes: {
-    selectedButtonId: {
+    recordingStatus: {
       options: {
         RECORDING: RECORDING_STATUS.RECORDING,
         PAUSE: RECORDING_STATUS.PAUSE, 
@@ -20,10 +20,10 @@ export default {
   }
 } as Meta;
 
-const Template: Story<RecordingButtonsProps> = args => <RecordingButtons {...args}/>;
+const Template: Story<RecordingButtonGroupProps> = args => <RecordingButtonGroup {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
   isAccessibleSize: false,
-  selectedButtonId: RECORDING_STATUS.RECORDING
+  recordingStatus: RECORDING_STATUS.RECORDING
 };
