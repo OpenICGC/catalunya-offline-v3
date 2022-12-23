@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 
 //CATOFFLINE
-import ManagerHeader from '../common/ManagerHeader';
+import Header from '../common/Header';
 import PrecisePosition from '../icons/PrecisePosition';
 
 //UTILS
@@ -16,6 +16,7 @@ import {HEXColor} from '../../types/commonTypes';
 import useTheme from '@mui/material/styles/useTheme';
 import CancelButton from '../buttons/CancelButton';
 import AcceptButton from '../buttons/AcceptButton';
+
 
 export type PrecisePositionEditorProps = {
   isAccessibleSize?: boolean,
@@ -68,7 +69,7 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
 
   return <>
     <Stack sx={{position: 'absolute', top: 0, width: '100%'}}>
-      <ManagerHeader name={headerName} color={headerColor} startIcon={<AddLocationAltIcon/>}/>
+      <Header name={headerName} color={`#${headerColor}`} startIcon={<AddLocationAltIcon/>}/>
     </Stack>
     <Stack sx={{position: 'absolute', top: `calc(50% - ${crosshairSize/2}px)`, left: `calc(50% - ${crosshairSize/2}px)`, width: 0, height: 0}}>
       <PrecisePosition sx={precisePositionIcon}/>
