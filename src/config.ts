@@ -50,3 +50,4 @@ export const INITIAL_MAPSTYLE_URL = MAPSTYLES[OFF_CAT ? 2 : 0].id;
 export const MIN_TRACKING_ZOOM = 14;
 
 export const GPS_POSITION_COLOR = '#4286f5';
+export const GPS_POSITION_INACTIVE_COLOR = '#9b9b9b';

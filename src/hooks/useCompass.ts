@@ -7,26 +7,31 @@ declare interface CompassError {
 }
 
 const useCompass = () => {
-  const [heading, setHeading] = useState(0);
+  const [heading, setHeading] = useState<number>();
 
   useEffect(() => {
     const platform = Capacitor.getPlatform();
     if (platform === 'web') { // Actually should test for cordova avail
+      const listener = (event: DeviceOrientationEvent) => {
+        if (event.alpha !== null) {
+          const newHeading = Math.round(360 - event.alpha + screen.orientation.angle);
+          newHeading && setHeading(prevHeading => prevHeading === newHeading ? prevHeading : newHeading);
+        }
+      };
+
       if (!window.DeviceOrientationEvent) {
         console.error('[Compass] Not available on this device');
       } else {
-        window.addEventListener('deviceorientation', (event) => {
-          if (event.alpha && Math.round(360 - event.alpha) !== heading) {
-            setHeading(Math.round(360 - event.alpha));
-          }
-        });
+        window.addEventListener('deviceorientation', listener);
       }
+
+      return () => {
+        window.removeEventListener('deviceorientation', listener);
+      };
     } else {
       const onSuccess = ({magneticHeading}: DeviceOrientationCompassHeading) => {
-        const newValue = Math.round(magneticHeading);
-        if (heading !== newValue) {
-          setHeading(newValue);
-        }
+        const newHeading = Math.round(magneticHeading + screen.orientation.angle);
+        setHeading(prevHeading => prevHeading === newHeading ? prevHeading : newHeading);
       };
 
       const onError = (error: CompassError) => console.error(error);
