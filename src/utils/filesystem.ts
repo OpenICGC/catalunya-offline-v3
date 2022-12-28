@@ -1,7 +1,9 @@
 import {Directory, Filesystem} from '@capacitor/filesystem';
 import {OFFLINE_DATADIR_NAME} from '../config';
+import {BaseMap} from '../types/commonTypes';
+import {Zip} from '@awesome-cordova-plugins/zip';
 
-export const readFiles = async (directory?:string) => {
+export const listOfflineDir = async (directory?:string) => {
   try {
     const files = await Filesystem.readdir({
       path: OFFLINE_DATADIR_NAME + '/' + directory,
@@ -41,9 +43,45 @@ export const getUri = async (directory: string) => {
 };
 
 export const readFile = async (uri: string) => {
-  const file = await Filesystem.readFile({
+  return await Filesystem.readFile({
     path: uri
   });
-  return file;
+};
+
+export const getLastVersionOfBasemap = async (basemap: BaseMap) => {
+  const files = await listOfflineDir(basemap.id);
+  if (files.length) {
+    const lastVersionFileInfo = files.sort().pop();
+    if (lastVersionFileInfo){
+      return lastVersionFileInfo.name;
+    }
+  } else {
+    return undefined;
+  }
+};
+
+
+export const getLastMetadataFileForBaseMap = async (basemap: BaseMap) => {
+  const lastVersion = await getLastVersionOfBasemap(basemap);
+  const filesOnBasemapVersionDir = await listOfflineDir(basemap.id + '/' + lastVersion);
+  const assetsFileInfo = filesOnBasemapVersionDir.find(fileinfo => fileinfo.name === 'assets.json');
+  if (assetsFileInfo) {
+    return assetsFileInfo.uri;
+  } else {
+    return undefined;
+  }
+};
+
+export const unZipOnSameFolder = async (uri: string) => {
+  const unzipComplete = (resultCode: number) => {
+    if (resultCode === 0){
+      Filesystem.deleteFile({path: uri});
+    } else {
+      throw 'Error unzipping zip!';
+    }
+  };
+  const filename = uri.split('/').pop() || '';
+  const directoryUri = uri.replace(filename, '');
+  Zip.unzip(uri, directoryUri, unzipComplete);
 };
 

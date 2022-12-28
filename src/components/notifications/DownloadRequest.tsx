@@ -44,8 +44,8 @@ const DownloadRequest: FC<DownloadRequestProps> = ({isOpen=false, onClose, onDow
       </DialogContentText>
     </DialogContent>
     <DialogActions>
-      <CancelButton isAccessibleSize={false} onCancel={onDownload}/>
-      <AcceptButton isAccessibleSize={false} onAccept={onClose}/>
+      <CancelButton isAccessibleSize={false} onCancel={onClose}/>
+      <AcceptButton isAccessibleSize={false} onAccept={onDownload}/>
     </DialogActions>
   </Dialog>;
 };

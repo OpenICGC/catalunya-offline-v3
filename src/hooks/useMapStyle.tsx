@@ -36,7 +36,7 @@ const useMapStyle = (): useMapStyle => {
   
   const StyleOfflineDownloaderComponent = useMemo(() =>
     baseMap.offlineAssets && !isWeb ?
-      <DownloadsManager mapstyle={baseMap} onStyleDownloaded={handleStyleDownloaded}/>
+      <DownloadsManager baseMap={baseMap} onStyleReady={handleStyleDownloaded}/>
       : 
       <></>
   , [baseMap]);

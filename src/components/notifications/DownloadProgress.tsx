@@ -51,9 +51,10 @@ export type DownloadProgressProps = {
   progress: number,
   isOpen?: boolean,
   onClose: () => void,
+  description: string
 };
 
-const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, onClose}) => {
+const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, onClose, description}) => {
   const {t} = useTranslation();
   return <Snackbar
     open={isOpen}
@@ -69,7 +70,7 @@ const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, o
             <CloseIcon sx={{color: 'common.white'}}/>
           </IconButton>*/}
         </Box>
-        <Typography variant='body2' sx={{mb: 0.5, color: 'primary.contrastText'}}>{t('topographicMap')}</Typography>
+        <Typography variant='body2' sx={{mb: 0.5, color: 'primary.contrastText'}}>{description}</Typography>
         <Box sx={progressContainer}>
           <Box sx={{ width: '100%', mr: 1 }}>
             <LinearProgress variant="determinate" value={progress}/>
