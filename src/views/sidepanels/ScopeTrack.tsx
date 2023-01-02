@@ -44,9 +44,13 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   const downloadImage = (imageId: UUID, contentType: string) => {
     console.log('Unimplemented Download Image', imageId, contentType); // TODO
   };
-  
+
+  const startRecording = () => {
+    console.log('Unimplemented Start Recording'); // TODO
+  };
 
   return selectedScope && selectedTrack ? <TrackPanel
+    isAccessibleSize={false}
     scope={selectedScope}
     initialTrack={selectedTrack}
     numPoints={numPoints}
@@ -58,6 +62,8 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     onAddImage={addImage}
     onDeleteImage={deleteImage}
     onDownloadImage={downloadImage}
+
+    onRecordStart={startRecording}
   /> : <div>Error: the selected track does not exist</div>;
 };
 

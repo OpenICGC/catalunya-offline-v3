@@ -99,7 +99,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
     {
       id: 'goTo',
       activeIcon: <SwipeRightAltIcon/>,
-      disabled: track.geometry?.coordinates.length === 0
+      disabled: !track.geometry
     }
   ];
 
@@ -185,10 +185,10 @@ const TrackPanel: FC<TrackPanelProps> = ({
     <ScrollableContent>
       <Stack sx={sectionWrapperSx}>
         <Typography sx={sectionTitleSx} variant='caption'>
-          {track.geometry?.coordinates.length === 0 ? t('properties.recordingTrack') : t('properties.detailsTrack')}
+          {!track.geometry ? t('properties.recordingTrack') : t('properties.detailsTrack')}
         </Typography>
         {
-          track.geometry?.coordinates.length === 0 ? 
+          !track.geometry ?
             <Box>
               <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/> 
             </Box> :
