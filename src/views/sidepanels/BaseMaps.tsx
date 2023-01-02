@@ -2,11 +2,12 @@ import React, {FC, useMemo} from 'react';
 
 import useTheme from '@mui/material/styles/useTheme';
 import MapIcon from '@mui/icons-material/Map';
-import {useTranslation} from 'react-i18next';
 
 import BaseMapList from '@geomatico/geocomponents/BaseMapList';
+
+import Header from '../../components/common/Header';
+import {useTranslation} from 'react-i18next';
 import {BASEMAPS} from '../../config';
-import ManagerHeader from '../../components/common/ManagerHeader';
 
 export type BaseMapsProps = {
   baseMapId: string,
@@ -14,8 +15,8 @@ export type BaseMapsProps = {
 };
 
 const BaseMaps: FC<BaseMapsProps> = ({baseMapId, onMapStyleChanged}) => {
+  const {t, i18n} = useTranslation();
   const theme = useTheme();
-  const { i18n } = useTranslation();
   const basemaps = useMemo(() =>
     BASEMAPS.map((basemap) => ({
       ...basemap,
@@ -24,11 +25,12 @@ const BaseMaps: FC<BaseMapsProps> = ({baseMapId, onMapStyleChanged}) => {
   , []);
 
   return <>
-    <ManagerHeader
-      name="baseMapManager"
-      color={theme.palette.secondary.main}
+    <Header
       startIcon={<MapIcon/>}
+      name={t('baseMapManager')}
+      color={`#${theme.palette.secondary.main}`}
     />
+
     <BaseMapList
       styles={basemaps}
       selectedStyleId={baseMapId}

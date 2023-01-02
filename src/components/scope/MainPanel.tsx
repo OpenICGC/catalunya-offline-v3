@@ -15,12 +15,12 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
 import List from './List';
-import ManagerHeader from '../common/ManagerHeader';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID, Scope} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
+import Header from '../common/Header';
 
 const boxSx = {width: '100%', height: 0};
 
@@ -90,10 +90,10 @@ const MainPanel: FC<MainPanelProps> = ({
   const actionIcons = useMemo(() => ([{id: 'export', activeIcon: <FileUploadIcon/>}]), []);
 
   return <>
-    <ManagerHeader
-      name={t('scopeManager')}
-      color={theme.palette.secondary.main}
+    <Header
       startIcon={<FolderIcon/>}
+      name={t('scopeManager')}
+      color={`#${theme.palette.secondary.main}`}
     />
     <List
       isAccessibleSize={isAccessibleSize}

@@ -22,7 +22,7 @@ import AddTrack from '../icons/AddTrack';
 
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
-import Header from './Header';
+import Header from '../common/Header';
 import List, {listItemType} from './List';
 
 //UTILS
@@ -30,6 +30,8 @@ import {HEXColor, Scope, ScopeTrack, ScopePoint, UUID} from '../../types/commonT
 import {useTranslation} from 'react-i18next';
 import {lighten} from '@mui/system/colorManipulator';
 import {Theme} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
+import FeaturesSummary from './FeaturesSummary';
 
 export type FeaturesPanelProps = {
   isAccessibleSize?: boolean,
@@ -190,12 +192,14 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
 
   return <>
     <Header
+      startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
       name={scope.name}
       color={scope.color}
-      numPoints={scopePoints.length}
-      numTracks={scopeTracks.length}
-      onBackButtonClick={onBackButtonClick}
-    />
+      onStartIconClick={onBackButtonClick}
+    >
+      <FeaturesSummary numPoints={scopePoints.length} numTracks={scopeTracks.length} colorContrastFrom={scope.color}/>
+    </Header>
+      
     <Tabs
       value={tabValue}
       onChange={handleTabChange}

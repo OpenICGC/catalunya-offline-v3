@@ -1,19 +1,20 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-
 import maplibregl, {StyleSpecification} from 'maplibre-gl';
 
 import GeocomponentMap from '@geomatico/geocomponents/Map';
 
 import {Manager, ScopePoint, UUID} from '../types/commonTypes';
+import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
+import FabButton, {LOCATION_STATUS} from '../components/buttons/FabButton';
 import {mbtiles} from '../utils/mbtiles';
-import useGeolocation, { Geolocation } from '../hooks/useGeolocation';
-import FabButton from '../components/buttons/FabButton';
 import useCompass from '../hooks/useCompass';
 import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import PrecisePositionEditor from '../components/map/PrecisePositionEditor';
 import GeoJSON from 'geojson';
 import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
+import {useViewport} from '../hooks/useViewport';
+import LocationMarker from '../components/map/LocationMarker';
 
 mbtiles(maplibregl);
 
@@ -48,26 +49,6 @@ const layers = [{
     'circle-stroke-width': 1,
     'circle-pitch-alignment': 'map'
   }
-}, {
-  id: 'geolocation-shadow',
-  source: 'geolocation',
-  type: 'circle',
-  paint: {
-    'circle-radius': 17,
-    'circle-blur': 0.7,
-    'circle-translate': [1, 1],
-    'circle-translate-anchor': 'viewport'
-  }
-}, {
-  id: 'geolocation',
-  source: 'geolocation',
-  type: 'circle',
-  paint: {
-    'circle-color': '#4285f4',
-    'circle-radius': 10,
-    'circle-stroke-color': '#FFF',
-    'circle-stroke-width': 2
-  }
 }];
 
 
@@ -93,25 +74,13 @@ const Map: FC<MainContentProps> = ({
   onPrecisePositionCancelled
 }) => {
   const mapRef = useRef<maplibregl.Map>();
-  const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
-
+  const [viewport, setViewport] = useViewport();
   const {geolocation, error: geolocationError} = useGeolocation();
-  const orientation = useCompass();
-
-  const [isNavigationMode, setNavigationMode] = useState(false);
-  const toggleNavigationMode = () => setNavigationMode(!isNavigationMode);
-
-  const [isTrackingMode, setTrackingMode] = useState(true);
-  const handleTrackingClick = () => {
-    if (!geolocationError) {
-      setTrackingMode(true);
-    }
-  };
-  const disableTracking = () => setTrackingMode(false);
+  const heading = useCompass();
+  const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
 
   const scopeStore = useScopes();
   const scopeColor = selectedScope ? scopeStore.retrieve(selectedScope)?.color : undefined;
-
   const pointStore = useScopePoints(selectedScope);
   const pointList = pointStore.list();
 
@@ -140,31 +109,85 @@ const Map: FC<MainContentProps> = ({
     mapRef.current?.once('styledata', () => setMapGeolocation(mapRef.current, geolocation));
   }, [mapStyle]);
 
-  // Pitch & rotate map when switching navigation mode on/off
-  useEffect(() => {
-    mapRef.current?.easeTo({
-      pitch: isNavigationMode ? 60 : 0,
-      bearing: isNavigationMode && isTrackingMode ? orientation : 0,
-    });
-  }, [isNavigationMode]);
-
-  // On tracking mode on, update viewport on location and orientation updates:
-  // center, minimal zoom, and bearing if navigation mode is also on
-  useEffect(() => {
-    const {latitude, longitude} = geolocation;
-    if (isTrackingMode && latitude && longitude) {
-      const bearingZoom = {
-        bearing: isNavigationMode && isTrackingMode ? orientation : 0,
-        zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
-      };
-      setViewport({
-        ...viewport,
-        latitude,
-        longitude,
-        ...bearingZoom
+  ////// Handle orientation & navigation state transitions
+  const handleOrientationClick = () => {
+    if (locationStatus === LOCATION_STATUS.NAVIGATING) {
+      setLocationStatus(LOCATION_STATUS.TRACKING);
+    } else {
+      mapRef.current?.easeTo({
+        bearing: 0,
+        pitch: 0
       });
     }
-  }, [isTrackingMode, geolocation, orientation]);
+  };
+
+  const handleLocationClick = () => {
+    if (locationStatus === LOCATION_STATUS.NOT_TRACKING) {
+      setLocationStatus(LOCATION_STATUS.TRACKING);
+    } else if (locationStatus === LOCATION_STATUS.TRACKING) {
+      setLocationStatus(LOCATION_STATUS.NAVIGATING);
+    } else if (locationStatus === LOCATION_STATUS.NAVIGATING) {
+      setLocationStatus(LOCATION_STATUS.TRACKING);
+    }
+  };
+
+  const disableTracking = () => {
+    if(locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
+      setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
+    }
+  };
+
+  useEffect(() => {
+    if (geolocationError) {
+      setLocationStatus(LOCATION_STATUS.DISABLED);
+    }
+  }, [geolocationError]);
+
+
+  useEffect(() => {
+    if (locationStatus === LOCATION_STATUS.TRACKING) {
+      if (geolocation?.latitude && geolocation?.longitude) {
+        mapRef.current?.easeTo({
+          bearing: 0,
+          pitch: 0,
+          center: [geolocation.longitude, geolocation.latitude],
+          zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
+        });
+      }
+    } else if (locationStatus === LOCATION_STATUS.NAVIGATING) {
+      mapRef.current?.easeTo({
+        pitch: 60,
+        bearing: heading || 0
+      });
+    }
+  }, [locationStatus]);
+
+  useEffect( () => {
+    const {latitude, longitude} = geolocation;
+    if (latitude && longitude) {
+      if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
+        setViewport({
+          ...viewport,
+          latitude,
+          longitude,
+          zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
+        });
+      } else if (locationStatus === LOCATION_STATUS.DISABLED) {
+        setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
+      }
+    }
+  }, [geolocation]);
+
+  useEffect(() => {
+    if (locationStatus === LOCATION_STATUS.NAVIGATING) {
+      if (heading !== undefined) {
+        setViewport({
+          ...viewport,
+          bearing: heading
+        });
+      }
+    }
+  }, [heading]);
 
   const changeManager = (clicked: Manager) => {
     onManagerChanged(clicked === manager ? undefined : clicked);
@@ -209,19 +232,17 @@ const Map: FC<MainContentProps> = ({
       onTouchMove={disableTracking}
       onWheel={disableTracking}
     >
-      <PointMarkers
-        isAccessibleSize={false}
-        points={pointList}
-        defaultColor={scopeColor}
-        onClick={selectPoint}
-      />
+      <LocationMarker geolocation={geolocation} heading={heading}/>
+      <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
       {!precisePositionRequest && <FabButton
         isLeftHanded={false} isAccessibleSize={false}
-        bearing={viewport.bearing} isCompassOn={isNavigationMode} onCompassClick={toggleNavigationMode}
-        isLocationAvailable={!geolocationError} isTrackingOn={isTrackingMode} onTrackingClick={handleTrackingClick}
+        bearing={viewport.bearing} pitch={viewport.pitch}
+        locationStatus={locationStatus}
+        onOrientationClick={handleOrientationClick}
+        onLocationClick={handleLocationClick}
         onLayersClick={() => changeManager('LAYERS')}
         onBaseMapsClick={() => changeManager('BASEMAPS')}
-        onFoldersClick={() => changeManager('SCOPES')}
+        onScopesClick={() => changeManager('SCOPES')}
       />}
     </GeocomponentMap>
     {!!precisePositionRequest && <PrecisePositionEditor
