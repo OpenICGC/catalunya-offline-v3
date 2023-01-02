@@ -2,7 +2,6 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import Thumbnail, {ThumbnailProps} from './Thumbnail';
-import {v4 as uuidv4} from 'uuid';
 
 export default {
   title: 'Common/Thumbnail',
@@ -14,11 +13,8 @@ const Template: Story<ThumbnailProps> = args => <Thumbnail {...args}/>;
 export const Default = Template.bind({});
 Default.args = {
   image: {
-    id: uuidv4(),
-    url: 'https://picsum.photos/300/200',
-    name: 'image.jpg',
-    contentType: 'image/jpg',
-    isLoading: false,
+    path: 'https://picsum.photos/300/200',
+    name: 'image.jpg'
   },
   isDeletable: false
 };
@@ -26,11 +22,8 @@ Default.args = {
 export const Loading = Template.bind({});
 Loading.args = {
   image: {
-    id: uuidv4(),
-    url: 'https://picsum.photos/300/200',
+    path: 'https://picsum.photos/300/200',
     name: 'image.jpg',
-    contentType: 'image/jpg',
-    isLoading: true,
   },
   isDeletable: false
 };
@@ -38,11 +31,8 @@ Loading.args = {
 export const Deletable = Template.bind({});
 Deletable.args = {
   image: {
-    id: uuidv4(),
-    url: 'https://picsum.photos/300/200',
-    name: 'image.jpg',
-    contentType: 'image/jpg',
-    isLoading: false
+    path: 'https://picsum.photos/300/200',
+    name: 'image.jpg'
   },
   isDeletable: true
 };

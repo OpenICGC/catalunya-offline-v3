@@ -6,6 +6,7 @@ import PointPanel from '../../components/scope/PointPanel';
 import GeoJSON from 'geojson';
 import {useViewport} from '../../hooks/useViewport';
 import {MAP_PROPS} from '../../config';
+import {openPhoto, takePhoto} from '../../utils/camera';
 
 export interface ScopePointProps {
   scopeId: UUID,
@@ -45,16 +46,12 @@ const ScopePoint: FC<ScopePointProps> = ({
     });
   };
 
-  const addImage = () => {
-    console.log('Unimplemented Add Image'); // TODO
-  };
-
   const deleteImage = (imageId: UUID) => {
     console.log('Unimplemented Delete Image', imageId); // TODO
   };
 
-  const downloadImage = (imageId: UUID, contentType: string) => {
-    console.log('Unimplemented Download Image', imageId, contentType); // TODO
+  const downloadImage = (url: string, title: string) => {
+    openPhoto(url, title);
   };
 
   const addPrecisePosition = () => {
@@ -70,7 +67,6 @@ const ScopePoint: FC<ScopePointProps> = ({
 
     onPointChange={pointChange}
     onGoTo={goTo}
-    onAddImage={addImage}
     onDeleteImage={deleteImage}
     onDownloadImage={downloadImage}
     onAddPrecisePosition={addPrecisePosition}

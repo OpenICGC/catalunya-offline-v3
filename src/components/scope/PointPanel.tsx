@@ -34,6 +34,7 @@ import CancelButton from '../buttons/CancelButton';
 import AcceptButton from '../buttons/AcceptButton';
 import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import FeaturesSummary from './FeaturesSummary';
+import {takePhoto} from '../../utils/camera';
 
 //STYLES
 const sectionTitleSx = {
@@ -142,9 +143,8 @@ export type PointPanelProps = {
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void,
-    onAddImage: () => void,
     onDeleteImage: (imageId: UUID) => void,
-    onDownloadImage: (imageId: UUID, contentType: string) => void,
+    onDownloadImage: (url: string, title: string) => void,
     onAddPrecisePosition: () => void
 };
 
@@ -156,7 +156,6 @@ const PointPanel: FC<PointPanelProps> = ({
   onBackButtonClick,
   onPointChange,
   onGoTo,
-  onAddImage,
   onDeleteImage,
   onDownloadImage,
   onAddPrecisePosition
@@ -271,6 +270,26 @@ const PointPanel: FC<PointPanelProps> = ({
         }
       };
     }), []);
+
+  const handleAddImage = async () => {
+    const path = await takePhoto();
+    if (path && point) {
+      const name = path.split('/').pop() || '';
+      console.log(path);
+      point && setPoint({
+        ...point,
+        properties: {
+          ...point.properties,
+          images: [
+            ...point.properties.images,
+            {
+              path,
+              name
+            }
+          ]
+        }});
+    }
+  };
   
   const handleAccept = () => {
     onPointChange(point);
@@ -392,14 +411,14 @@ const PointPanel: FC<PointPanelProps> = ({
         <Stack direction='row' flexWrap='wrap'>
           { point.properties.images.map(image =>
             <Thumbnail
-              key={image.id}
+              key={image.path}
               image={image}
               onDelete={onDeleteImage}
               onDownloadImage={onDownloadImage}
               isDeletable={isEditing}
             />)
           }
-          {isEditing && <AddImageButton onAddImage={onAddImage}/>}
+          {isEditing && <AddImageButton onAddImage={handleAddImage}/>}
         </Stack>
       </SectionContent>
     </ScrollableContent>
