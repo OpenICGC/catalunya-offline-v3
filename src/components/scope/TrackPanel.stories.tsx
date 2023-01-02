@@ -35,6 +35,7 @@ const SmallDeviceTemplate: Story<TrackPanelProps> = args => <Stack sx={{
 
 export const Default = Template.bind({});
 Default.args = {
+  isAccessibleSize: false,
   scope: {
     id: uuidv4(),
     name: 'Montseny',

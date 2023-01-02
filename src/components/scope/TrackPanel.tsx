@@ -22,6 +22,7 @@ import GeometryThumbnail from './inputs/GeometryThumbnail';
 import Header from '../common/Header';
 import ImageInput from './inputs/ImageInput';
 import ListItem from './ListItem';
+import RecordButton from '../buttons/RecordButton';
 import TextAreaInput from './inputs/TextAreaInput';
 import TrackProfile from './inputs/TrackProfile';
 import TrackProperty from './inputs/TrackProperty';
@@ -50,6 +51,7 @@ const sxInput = {
 };
 
 export type TrackPanelProps = {
+    isAccessibleSize: boolean,
   scope: Scope,
   initialTrack: ScopeTrack,
   numPoints: number,
@@ -57,12 +59,14 @@ export type TrackPanelProps = {
     onAddImage: () => void,
     onDeleteImage: (imageId: UUID) => void,
     onDownloadImage: (imageId: UUID, contentType: string) => void,
+    onRecordStart: () => void,
     onTrackChange: (newPoint: ScopeTrack) => void,
   onBackButtonClick: () => void,
     onGoTo: (pointId: UUID) => void,
 };
 
 const TrackPanel: FC<TrackPanelProps> = ({
+  isAccessibleSize,
   scope,
   initialTrack,
   numPoints,
@@ -70,6 +74,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
   onAddImage,
   onDeleteImage,
   onDownloadImage,
+  onRecordStart,
   onTrackChange,
   onBackButtonClick,
   onGoTo
@@ -183,22 +188,26 @@ const TrackPanel: FC<TrackPanelProps> = ({
           {track.geometry?.coordinates.length === 0 ? t('properties.recordingTrack') : t('properties.detailsTrack')}
         </Typography>
         {
-          track.geometry?.coordinates.length === 0 ? 'Boton grabar' : <Stack>
-            <Stack direction='row' sx={{justifyContent: 'space-between'}}>
-              { track.geometry && <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/> }
-              <Stack direction='row' justifyContent='space-between' gap={1} sx={{flexGrow: 1}}>
-                <Stack direction='column' sx={{justifyContent: 'space-between'}}>
-                  <TrackProperty icon={<StraightenIcon/>} value={distance}/>
-                  <TrackProperty icon={<AvTimerIcon/>} value={formattedTime}/>
-                </Stack>
-                <Stack direction='column' sx={{justifyContent: 'space-between'}}>
-                  <TrackProperty icon={<LandscapeIcon/>} value={ascent}/>
-                  <TrackProperty icon={<LandscapeIcon/>} value={descent}/>
+          track.geometry?.coordinates.length === 0 ? 
+            <Box>
+              <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/> 
+            </Box> :
+            <Stack>
+              <Stack direction='row' sx={{justifyContent: 'space-between'}}>
+                { track.geometry && <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/> }
+                <Stack direction='row' justifyContent='space-between' gap={1} sx={{flexGrow: 1}}>
+                  <Stack direction='column' sx={{justifyContent: 'space-between'}}>
+                    <TrackProperty icon={<StraightenIcon/>} value={distance}/>
+                    <TrackProperty icon={<AvTimerIcon/>} value={formattedTime}/>
+                  </Stack>
+                  <Stack direction='column' sx={{justifyContent: 'space-between'}}>
+                    <TrackProperty icon={<LandscapeIcon/>} value={ascent}/>
+                    <TrackProperty icon={<LandscapeIcon/>} value={descent}/>
+                  </Stack>
                 </Stack>
               </Stack>
+              <TrackProfile track={track} color={track.properties.color}/>
             </Stack>
-            <TrackProfile track={track} color={track.properties.color}/>
-          </Stack>
         }
       </Stack>
       <DateInput isEditing={isEditing} onChange={handleDateChange} feature={track} sx={sxInput}/>
