@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {UUID} from '../../types/commonTypes';
+import {ScopeTrack, UUID} from '../../types/commonTypes';
 
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import TrackPanel from '../../components/scope/TrackPanel';
@@ -10,7 +10,11 @@ export interface ScopeTrackProps {
   onClose: () => void
 }
 
-const ScopeTrack: FC<ScopeTrackProps> = ({scopeId, trackId, onClose}) => {
+const ScopeTrack: FC<ScopeTrackProps> = ({
+  scopeId, 
+  trackId, 
+  onClose
+}) => {
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
@@ -20,12 +24,40 @@ const ScopeTrack: FC<ScopeTrackProps> = ({scopeId, trackId, onClose}) => {
   const numPoints = pointStore.list.length;
   const numTracks = trackStore.list.length;
 
+  const trackChange = (newTrack: ScopeTrack) => {
+    const existing = trackStore.retrieve(newTrack.id);
+    existing && trackStore.update(newTrack);
+  };
+  
+  const goTo = () => {
+    console.log('Unimplemented go to Track'); // TODO
+  };
+  
+  const addImage = () => {
+    console.log('Unimplemented Add Image'); // TODO
+  };
+
+  const deleteImage = (imageId: UUID) => {
+    console.log('Unimplemented Delete Image', imageId); // TODO
+  };
+
+  const downloadImage = (imageId: UUID, contentType: string) => {
+    console.log('Unimplemented Download Image', imageId, contentType); // TODO
+  };
+  
+
   return selectedScope && selectedTrack ? <TrackPanel
     scope={selectedScope}
     initialTrack={selectedTrack}
     numPoints={numPoints}
     numTracks={numTracks}
     onBackButtonClick={onClose}
+
+    onTrackChange={trackChange}
+    onGoTo={goTo}
+    onAddImage={addImage}
+    onDeleteImage={deleteImage}
+    onDownloadImage={downloadImage}
   /> : <div>Error: the selected track does not exist</div>;
 };
 

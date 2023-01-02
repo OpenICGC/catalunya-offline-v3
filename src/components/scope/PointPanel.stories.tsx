@@ -49,7 +49,7 @@ Default.args = {
       coordinates: [40.4125, -3.6897, 1225]
     },
     properties: {
-      name: 'C',
+      name: 'Masía',
       color: undefined,
       timestamp: Date.now(),
       description: 'Había un árbol con el tronco torcido en medio del camino.',

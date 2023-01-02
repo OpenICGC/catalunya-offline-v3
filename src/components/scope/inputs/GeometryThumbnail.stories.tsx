@@ -4,7 +4,7 @@ import {Meta, Story} from '@storybook/react';
 import GeometryThumbnail, {GeometryThumbnailProps} from './GeometryThumbnail';
 
 export default {
-  title: 'Scope/GeometryThumbnail',
+  title: 'Scope/Inputs/GeometryThumbnail',
   component: GeometryThumbnail,
   argTypes: {
     color: {

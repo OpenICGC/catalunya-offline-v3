@@ -3,7 +3,7 @@ import {Meta, Story} from '@storybook/react';
 
 import TrackProfile, {TrackProfileProps} from './TrackProfile';
 import {v4 as uuid} from 'uuid';
-import {ScopeTrack} from '../../types/commonTypes';
+import {ScopeTrack} from '../../../types/commonTypes';
 
 const track: ScopeTrack = {
   type: 'Feature',
@@ -25,9 +25,9 @@ const track: ScopeTrack = {
 };
 
 export default {
-  title: 'Scope/TrackProfile',
+  title: 'Scope/Inputs/TrackProfile',
   component: TrackProfile,
-  argTypes: {
+  /*argTypes: {
     color: {control: 'color'},
     currentPositionIndex: {
       control: {
@@ -37,7 +37,7 @@ export default {
         step: 1
       }
     }
-  }
+  }*/
 } as Meta;
 
 const Template: Story<TrackProfileProps> = args => <TrackProfile {...args}/>;

@@ -34,12 +34,14 @@
   "properties": {
     "date": "Fecha",
     "description": "Descripción",
+    "detailsTrack": "Detalles de la ruta",
     "height": "altura",
     "images": "Imágenes",
     "latitude": "latitud",
     "location": "Ubicación",
     "longitude": "longitud",
-    "name": "Nombre"
+    "name": "Nombre",
+    "recordingTrack": "Grabación de la ruta"
   },
   "scope": "Ámbito",
   "scopeList": {

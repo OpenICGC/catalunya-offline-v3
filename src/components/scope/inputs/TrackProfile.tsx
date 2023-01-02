@@ -8,13 +8,13 @@ import {TopLevelSpec} from 'vega-lite';
 import turfDistance from '@turf/distance';
 
 //UTILS
-import {HEXColor, ScopeTrack} from '../../types/commonTypes';
-import {GPS_POSITION_COLOR} from '../../config';
+import {HEXColor, ScopeTrack} from '../../../types/commonTypes';
+import {GPS_POSITION_COLOR} from '../../../config';
 import {useTranslation} from 'react-i18next';
 
 export interface TrackProfileProps {
     track: ScopeTrack,
-    color: HEXColor,
+    color?: HEXColor,
     currentPositionIndex?: number
 }
         
@@ -32,7 +32,7 @@ const errorMessageSx = {
 
 const TrackProfile: FC<TrackProfileProps> = ({
   track, 
-  color, 
+  color = '#2f2f2f',
   currentPositionIndex,
 }) => {
 
@@ -75,7 +75,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
   
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    width: 500,
+    width: 'container',
     height: 100,
     layer: isNavigateMode ? [
       {
@@ -185,12 +185,12 @@ const TrackProfile: FC<TrackProfileProps> = ({
             scale: { domain: [0, maxLength] },
             axis: {
               labels: false,
-              domain: true,
+              domain: false,
               title: null,
               labelPadding: 10,
               labelAngle: 0,
               grid: false,
-              ticks: true,
+              ticks: false,
               tickSize: 2,
               tickWidth: 2,
               tickCount: 5,
@@ -203,11 +203,12 @@ const TrackProfile: FC<TrackProfileProps> = ({
             title: null,
             scale: { domain: [minHeight-5, maxHeight+5] },
             axis: {
+              labels: false,
               labelPadding: 10,
               labelAngle: 0,
-              domain: true,
+              domain: false,
               grid: false,
-              ticks: true,
+              ticks: false,
               tickSize: 2,
               tickWidth: 2,
               tickCount: 5,
@@ -215,7 +216,29 @@ const TrackProfile: FC<TrackProfileProps> = ({
             }
           }
         }
-      }],
+      },
+      {
+        mark: {
+          type: 'area',
+          opacity: 0.25
+        },
+        data: { values: travelled},
+        encoding: {
+          color: {
+            value: color,
+          },
+          x: {
+            field: 'length',
+            type: 'quantitative',
+            scale: { domain: [0, maxLength] },
+          },
+          y: {
+            field: 'height',
+            type: 'quantitative',
+            scale: { domain: [minHeight-5, maxHeight+5] },
+          }
+        }
+      }   ],
     config: {
       view: {
         stroke: null

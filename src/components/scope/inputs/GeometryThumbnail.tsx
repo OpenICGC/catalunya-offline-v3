@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 
 import {VegaLite} from 'react-vega';
 import {TopLevelSpec} from 'vega-lite';
-import {HEXColor} from '../../types/commonTypes';
+import {HEXColor} from '../../../types/commonTypes';
 
 export interface GeometryThumbnailProps {
   size?: number,
@@ -26,7 +26,7 @@ const GeometryThumbnail: FC<GeometryThumbnailProps> = ({
           type: 'geoshape',
           filled: false,
           color: color,
-          strokeWidth: 1
+          strokeWidth: 2
         },
         data: {
           values: [

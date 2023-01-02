@@ -128,6 +128,7 @@ PointDetail.args = {
     {
       id: 'goTo',
       activeIcon: <SwipeRightAltIcon/>,
+      disabled: true
     }
   ],
 };
