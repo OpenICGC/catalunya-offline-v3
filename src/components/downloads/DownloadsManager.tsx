@@ -6,9 +6,8 @@ import {useTranslation} from 'react-i18next';
 import i18n from 'i18next';
 import useFetch from '@geomatico/geocomponents/hooks/useFetch';
 import {StyleSpecification} from 'maplibre-gl';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import {gt} from '@storybook/semver';
+
+import { compareVersions } from 'compare-versions';
 
 import {BaseMap} from '../../types/commonTypes';
 import DownloadRequest from '../notifications/DownloadRequest';
@@ -44,7 +43,7 @@ export type AssetsMetadata = {
 }
 
 type AssetsDownloadUnit = {
-  type: 'mbtile' | 'style' | 'glyphs' | 'sprites' | 'assets',
+  type: 'mbtiles' | 'style' | 'glyphs' | 'sprites' | 'metadata',
   url: string,
   uri?: string,
   status: 'REQUEST' | 'SUCCESS' | 'DONE'
@@ -81,6 +80,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
   const [open, setOpen] = useState<boolean>(false);
   const [accepted, setAccepted] = useState<boolean|undefined>(undefined);
   const [errorOpen, setErrorOpen] = useState<boolean>(false);
+  const [cancelDownload, setCancelDownload] = useState<boolean>(false);
   const [existingFilesOnDevice, setExistingFilesOnDevice] = useState<Array<FileInfo> | undefined>(undefined);
   const [offlineMetadata, setOfflineMetadata] = useState<AssetsMetadata | undefined>(undefined);
   const [metadata, setMetadata] = useState<AssetsMetadata | undefined>(undefined);
@@ -132,7 +132,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
       const offlineVersion = offlineMetadata?.version;
 
       if (onlineVersion && offlineVersion){
-        if (gt(onlineVersion, offlineVersion)) {
+        if (compareVersions(onlineVersion, offlineVersion)) {
           setMetadata(onlineMetadata);
         } else {
           setMetadata(offlineMetadata);
@@ -163,7 +163,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
         const mbtilesFileName = mbtiles.url.split('/').pop() || '';
         const existingMbtiles = existingFilesOnDevice.find(({name}) => name === mbtilesFileName);
         if (existingMbtiles) {
-          dispatch({type: 'SUCCESS', payload: {type: 'mbtile', url: mbtiles.url, uri: existingMbtiles.uri, status: 'SUCCESS'}});
+          dispatch({type: 'SUCCESS', payload: {type: 'mbtiles', url: mbtiles.url, uri: existingMbtiles.uri, status: 'SUCCESS'}});
           return true;
         } else {
           return false;
@@ -203,45 +203,24 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
   }, [existingFilesOnDevice, metadata]);
 
   const handleDownloads = async (metadata: AssetsMetadata) => {
-    const directory = baseMap.id + '/' + metadata.version;
     //assets
     if (baseMap.offlineAssets){
-      dispatch({type: 'REQUEST', payload: {type: 'assets', url: baseMap.offlineAssets, status: 'REQUEST'}});
-      setDownloadDescription(baseMap.labels[i18n.language.split('-')[0]] + ' | ' + t('downloadingAlert.metadata'));
-      const uri = await download(baseMap.offlineAssets, directory);
-      dispatch({type: 'SUCCESS', payload: {type: 'assets', url: baseMap.offlineAssets, uri, status: 'SUCCESS'}});
+      dispatch({type: 'REQUEST', payload: {type: 'metadata', url: baseMap.offlineAssets, status: 'REQUEST'}});
     }
     //mbtiles
     for (const mbtiles of metadata.mbtiles) {
-      dispatch({type: 'REQUEST', payload: {type: 'mbtile', url: mbtiles.url, status: 'REQUEST'}});
-      setDownloadDescription(baseMap.labels[i18n.language.split('-')[0]] + ' | ' + t('downloadingAlert.mbtiles'));
-      const uri = await download(mbtiles.url, directory);
-      dispatch({type: 'SUCCESS', payload: {type: 'mbtile', url: mbtiles.url, uri, status: 'SUCCESS'}});
+      dispatch({type: 'REQUEST', payload: {type: 'mbtiles', url: mbtiles.url, status: 'REQUEST'}});
     }
-
     //glyphs
     if (metadata.glyphs) {
       dispatch({type: 'REQUEST', payload: {type: 'glyphs', url: metadata.glyphs, status: 'REQUEST'}});
-      setDownloadDescription(baseMap.labels[i18n.language.split('-')[0]] + ' | ' + t('downloadingAlert.glyphs'));
-      const uri = await download(metadata.glyphs, directory);
-      uri && await unZipOnSameFolder(uri);
-      dispatch({type: 'SUCCESS', payload: {type: 'glyphs', url: metadata.glyphs, uri, status: 'SUCCESS'}});
     }
-
     //sprites
     if (metadata.sprites) {
       dispatch({type: 'REQUEST', payload: {type: 'sprites', url: metadata.sprites, status: 'REQUEST'}});
-      setDownloadDescription(baseMap.labels[i18n.language.split('-')[0]] + ' | ' + t('downloadingAlert.sprites'));
-      const uri = await download(metadata.sprites, directory);
-      uri && await unZipOnSameFolder(uri);
-      dispatch({type: 'SUCCESS', payload: {type: 'sprites', url: metadata.sprites, uri, status: 'SUCCESS'}});
     }
-
     //style
     dispatch({type: 'REQUEST', payload: {type: 'style', url: metadata.style, status: 'REQUEST'}});
-    setDownloadDescription(baseMap.labels[i18n.language.split('-')[0]] + ' | ' + t('downloadingAlert.style'));
-    const uri = await download(metadata.style, directory);
-    dispatch({type: 'SUCCESS', payload: {type: 'style', url: metadata.style, uri, status: 'SUCCESS'}});
   };
 
 
@@ -252,20 +231,48 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
     }
   }, [accepted, metadata]);
 
+  const downloadAsset = (asset: AssetsDownloadUnit, directory: string) => {
+    setDownloadDescription(baseMap.labels[i18n.language.split('-')[0]] + ' | ' + t(`downloadingAlert.${asset.type}`));
+    download(asset.url, directory)
+      .then(uri => {
+        if (typeof uri === 'string') {
+          if (['glyphs', 'sprites'].includes(asset.type)) {
+            unZipOnSameFolder(uri)
+              .then(() => {
+                dispatch({type: 'SUCCESS', payload: {...asset, uri, status: 'SUCCESS'}});
+              });
+          } else {
+            dispatch({type: 'SUCCESS', payload: {...asset, uri, status: 'SUCCESS'}});
+          }
+        }
+      });
+  };
+
   useEffect(() => {
     console.log(assetsDownloads);
+    // Descarga de assets pendientes
+    if (metadata){
+      const directory = baseMap.id + '/' + metadata.version;
+      const assetToDownload = assetsDownloads.find(asset => asset.status === 'REQUEST');
+
+      if (assetToDownload && !cancelDownload) {
+        downloadAsset(assetToDownload, directory);
+      }
+    }
+
+    // Carga de mbtiles
     assetsDownloads
       .filter(asset => asset.status === 'SUCCESS')
       .map(asset => {
         switch (asset.type) {
-        case 'mbtile':
+        case 'mbtiles':
           asset.uri && getDatabase(asset.uri.replace('file://', ''));
           break;
         case 'glyphs':
           break;
         case 'sprites':
           break;
-        case 'assets':
+        case 'metadata':
           break;
         default:
           break;
@@ -277,7 +284,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
 
     const glyphsAsset = assetsDownloads.find(asset => asset.type === 'glyphs');
     const spritesAssets = assetsDownloads.find(asset => asset.type === 'sprites');
-    const mbtilesAssets = assetsDownloads.filter(asset => asset.type === 'mbtile');
+    const mbtilesAssets = assetsDownloads.filter(asset => asset.type === 'mbtiles');
     const styleAsset = assetsDownloads.find(asset => asset.type === 'style');
 
     if (glyphsAsset) arrayToCheck.push(glyphsAsset);
@@ -291,7 +298,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
       parseStyle(styleAsset, glyphsAsset, spritesAssets)
         .then(() => dispatch({...styleAsset, status: 'DONE'} as AssetsDownloadUnit));
     }
-  }, [assetsDownloads, metadata]);
+  }, [assetsDownloads, metadata, cancelDownload]);
   
   
   const parseStyle = async (styleAsset: AssetsDownloadUnit, glyphsAsset?: AssetsDownloadUnit, spritesAssets?: AssetsDownloadUnit) => {
@@ -312,6 +319,11 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
     setErrorOpen(true);
   }, [error]);
 
+  const handleCancel = () => {
+    setCancelDownload(true);
+    cancel();
+  };
+
   return <div>
     <DownloadRequest
       isOpen={open}
@@ -321,13 +333,13 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
     {error ?
       <Notification
         isOpen={errorOpen}
-        message={t('downloadingError')}
+        message={cancelDownload ? t('downloadingAlert.cancel') : t('downloadingAlert.error')}
         onClose={() => setErrorOpen(false)}
         isPersistent={false}
       /> :
       <DownloadProgress
         progress={progress}
-        onClose={cancel}
+        onCancel={handleCancel}
         isOpen={accepted && progress < 100}
         description={downloadDescription}
       />

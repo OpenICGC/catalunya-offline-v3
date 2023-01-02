@@ -1,11 +1,11 @@
 import {useRef, useState} from 'react';
-import {FileTransfer} from '@awesome-cordova-plugins/file-transfer';
+import {FileTransfer, FileTransferError} from '@awesome-cordova-plugins/file-transfer';
 
 import {CatOfflineError} from '../types/commonTypes';
 import {createDirectory, getUri, offlineDirExists} from '../utils/filesystem';
 
 interface fileTransferDownload {
-  download: (url: string, directory: string) => Promise<string>;
+  download: (url: string, directory: string) => Promise<string|FileTransferError>;
   url: string | undefined;
   progress: number;
   cancel: () => void;
@@ -27,7 +27,7 @@ const useFileTransferDownload = (): fileTransferDownload  => {
 
   });
 
-  const downloadMobile = async (url: string, newDirectory: string): Promise<string> => {
+  const downloadMobile = async (url: string, newDirectory: string): Promise<string|FileTransferError> => {
     const filename = url.split('/').pop() || '';
     if (!(await offlineDirExists(newDirectory))){
       await createDirectory(newDirectory);
@@ -61,7 +61,7 @@ const useFileTransferDownload = (): fileTransferDownload  => {
     download,
     url,
     progress,
-    cancel: fileTransfer.current.abort,
+    cancel: () => fileTransfer.current.abort(),
     error
   };
 };

@@ -2,16 +2,16 @@ import React, {FC} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
-/*import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';*/
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Snackbar, {SnackbarOrigin} from '@mui/material/Snackbar';
 import SnackbarContent from '@mui/material/SnackbarContent';
 
 //MUI-ICONS
-/*import CancelIcon from '@mui/icons-material/Cancel';
-import CloseIcon from '@mui/icons-material/Close';*/
+import CancelIcon from '@mui/icons-material/Cancel';
+import CloseIcon from '@mui/icons-material/Close';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
@@ -50,11 +50,12 @@ const anchorOrigin: SnackbarOrigin = {vertical: 'bottom', horizontal: 'right'};
 export type DownloadProgressProps = {
   progress: number,
   isOpen?: boolean,
-  onClose: () => void,
+  onClose?: () => void,
+  onCancel?: () => void,
   description: string
 };
 
-const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, onClose, description}) => {
+const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, onClose, description, onCancel}) => {
   const {t} = useTranslation();
   return <Snackbar
     open={isOpen}
@@ -66,9 +67,9 @@ const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, o
       message={<>
         <Box sx={container}>
           <Typography variant='body1' sx={{color: 'primary.contrastText'}}>{t('actions.downloading')}</Typography>
-          {/*<IconButton onClick={onClose}>
+          {onClose && <IconButton onClick={onClose}>
             <CloseIcon sx={{color: 'common.white'}}/>
-          </IconButton>*/}
+          </IconButton>}
         </Box>
         <Typography variant='body2' sx={{mb: 0.5, color: 'primary.contrastText'}}>{description}</Typography>
         <Box sx={progressContainer}>
@@ -77,9 +78,9 @@ const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, o
           </Box>
           <Typography variant="body2" color="primary.contrastText">{progress}%</Typography>
         </Box>
-        {/*<Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2}}>
+        { onCancel && <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2}}>
           <Button startIcon={<CancelIcon sx={{color: 'primary.contrastText', float: 'left'}}/>} onClick={onCancel} sx={{color: 'primary.contrastText', pb: 0}}>{t('actions.cancel')}</Button>
-        </Box>*/}
+        </Box>}
       </>}
     />
   </Snackbar>;
