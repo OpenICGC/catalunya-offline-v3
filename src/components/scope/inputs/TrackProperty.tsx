@@ -17,8 +17,8 @@ const TrackProperty: FC<TrackPropertyProps> = ({
       {icon}
     </IconButton>
     {value ? 
-      <Typography variant="caption" sx={{px: 0, color: undefined }}>{value}</Typography> :
-      <Typography variant="caption" sx={{px: 2, color: 'action.disabled'}}>{'-'}</Typography>
+      <Typography noWrap variant="caption" sx={{px: 0, color: undefined }}>{value}</Typography> :
+      <Typography noWrap variant="caption" sx={{px: 2, color: 'action.disabled'}}>{'-'}</Typography>
     }
   </Stack>;
 };

@@ -40,10 +40,10 @@ import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProp
 //STYLES
 const sectionWrapperSx = {
   padding: '8px',
-  marginBottom: '0px',
+  marginBottom: '0px'
 };
 const sectionTitleSx = {
-  color: 'grey.600',
+  color: 'grey.600'
 };
 const sxInput = {
   '&.GenericInput-wrapper': sectionWrapperSx,
@@ -51,18 +51,18 @@ const sxInput = {
 };
 
 export type TrackPanelProps = {
-    isAccessibleSize: boolean,
+  isAccessibleSize: boolean,
   scope: Scope,
   initialTrack: ScopeTrack,
   numPoints: number,
   numTracks: number,
-    onAddImage: () => void,
-    onDeleteImage: (imageId: UUID) => void,
-    onDownloadImage: (imageId: UUID, contentType: string) => void,
-    onRecordStart: () => void,
-    onTrackChange: (newPoint: ScopeTrack) => void,
+  onAddImage: () => void,
+  onDeleteImage: (imageId: UUID) => void,
+  onDownloadImage: (imageId: UUID, contentType: string) => void,
+  onRecordStart: () => void,
+  onTrackChange: (newPoint: ScopeTrack) => void,
   onBackButtonClick: () => void,
-    onGoTo: (pointId: UUID) => void,
+  onGoTo: (pointId: UUID) => void,
 };
 
 const TrackPanel: FC<TrackPanelProps> = ({
@@ -84,21 +84,20 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [track, setTrack] = useState(initialTrack);
 
-  const distance: string | undefined = getAccumulatedTrackProperties(track)?.distance.toFixed(2)+'km';
-  const ascent: string | undefined = getAccumulatedTrackProperties(track)?.ascent+'m';
-  const descent: string | undefined = getAccumulatedTrackProperties(track)?.descent+'m';
-  const time: number | undefined = getAccumulatedTrackProperties(track)?.time;
-  const durationTime = moment.duration(time, 'seconds');
-  const formattedTime = durationTime.format('h[h] mm[m] ss[s]');
-  
+  const accums = getAccumulatedTrackProperties(track);
+  const distance: string | undefined = accums ? (accums.distance / 1000).toFixed(2) + 'km' : undefined;
+  const ascent: string | undefined = accums?.ascent + 'm';
+  const descent: string | undefined = accums?.descent + 'm';
+  const formattedTime = accums?.time ? moment.duration(accums?.time, 'seconds').format('h[h] mm[m] ss[s]') : undefined;
+
   const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
-  const hasTimestamp = !!track.geometry?.coordinates[track.geometry.coordinates.length-1][3] || false;
+  const hasTimestamp = !!track.geometry?.coordinates[track.geometry.coordinates.length - 1][3] || false;
 
   console.log('hasTimestamp', hasTimestamp);
   const actionIcons = [
     {
       id: 'rename',
-      activeIcon: <EditIcon/>,
+      activeIcon: <EditIcon/>
     },
     {
       id: 'goTo',
@@ -110,7 +109,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',
     padding: '0px',
-    marginBottom: isEditing ? '32px' : '16px',
+    marginBottom: isEditing ? '32px' : '16px'
   }), [isEditing]);
 
   // HANDLERS
@@ -189,19 +188,20 @@ const TrackPanel: FC<TrackPanelProps> = ({
     </Box>
     <ScrollableContent>
       <Stack sx={sectionWrapperSx}>
-        <Typography sx={sectionTitleSx} variant='caption'>
+        <Typography sx={sectionTitleSx} variant="caption">
           {!track.geometry ? t('properties.recordingTrack') : t('properties.detailsTrack')}
         </Typography>
         {
           !track.geometry ?
             <Box>
-              <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/> 
+              <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/>
             </Box> :
             <Stack>
-              <Stack direction='row' sx={{justifyContent: 'space-between'}}>
-                { track.geometry && <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/> }
-                <Stack direction='row' justifyContent='space-between' gap={0.5} sx={{flexGrow: 1}}>
-                  <Stack direction='column' sx={{justifyContent: 'space-between'}}>
+              <Stack direction="row" sx={{justifyContent: 'space-between'}}>
+                {track.geometry &&
+                  <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/>}
+                <Stack direction="row" justifyContent="space-between" gap={0.5} sx={{flexGrow: 1}}>
+                  <Stack direction="column" sx={{justifyContent: 'space-between'}}>
                     <TrackProperty icon={<StraightenIcon/>} value={distance}/>
                     {/*if it does not have elevation, it does not have time either*/}
                     <TrackProperty icon={<AvTimerIcon/>} value={hasTimestamp && formattedTime}/>
@@ -218,13 +218,15 @@ const TrackPanel: FC<TrackPanelProps> = ({
       </Stack>
       <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={track.properties.timestamp} sx={sxInput}/>
       <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={track.properties.description} sx={sxInput}/>
-      <ImageInput isEditing={isEditing} images={track.properties.images} sx={sxInput}
+      <ImageInput isEditing={isEditing}
+        images={track.properties.images}
+        sx={sxInput}
         onAddImage={onAddImage}
         onDeleteImage={onDeleteImage}
         onDownloadImage={onDownloadImage}
       />
     </ScrollableContent>
-    { isEditing &&
+    {isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>
         <CancelButton isAccessibleSize={false} onCancel={handleCancel}/>
         <AcceptButton isAccessibleSize={false} disabled={false} onAccept={handleAccept}/>

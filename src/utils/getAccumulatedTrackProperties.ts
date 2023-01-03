@@ -3,25 +3,29 @@ import turfDistance from '@turf/distance';
 
 export const getAccumulatedTrackProperties = (track: ScopeTrack) => {
   const coords = track.geometry?.coordinates;
-  if(coords){
+  if (coords) {
     return coords.reduce(
       (accum, actualPosition, i, coordinates) => {
-        if(i > 0){
-          const [prevLong, prevLat, prevHeight] = coordinates[i-1];
-          const [actualLong, actualLat, actualHeight] = coordinates[i];
-          if(actualHeight !== undefined && prevHeight !== undefined){
+        if (i > 0) {
+          const prevPosition = coordinates[i - 1];
+          const prevHeight = prevPosition[2];
+          const actualHeight = actualPosition[2];
+          accum.distance += turfDistance(prevPosition, actualPosition, {units: 'meters'});
+          if (actualHeight !== undefined && prevHeight !== undefined) {
             const heightDiff = actualHeight - prevHeight;
-            accum.distance += turfDistance(coords[i-1], coords[1], {units:'kilometers'});
-            if(heightDiff > 0){
+            if (heightDiff > 0) {
               accum.ascent += heightDiff;
             } else {
               accum.descent += heightDiff;
             }
-          } else {
-            accum.distance += turfDistance(coords[i-1], coords[1], {units:'kilometers'});
           }
         }
         return accum;
-      }, { ascent: 0, descent: 0, distance: 0, time: coords.length !== 0 && coords[coords.length-1][3] ? coords[coords.length-1][3] : undefined});
+      }, {
+        ascent: 0,
+        descent: 0,
+        distance: 0,
+        time: coords.length > 0 && coords[coords.length - 1][3] ? coords[coords.length - 1][3] : undefined
+      });
   } else return undefined;
 };
