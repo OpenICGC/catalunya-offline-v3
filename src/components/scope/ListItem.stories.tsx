@@ -33,7 +33,6 @@ const ManagedTemplate: Story<ListItemProps> = ({isEditing, color, name, isActive
   const [getActive, setActive] = useState(isActive);
 
   const handleContextualMenuClick = (id: UUID, action: string) => {
-    console.log(id, action);
     if (action == 'edit') {
       setEditing(true);
     }
@@ -128,6 +127,7 @@ PointDetail.args = {
     {
       id: 'goTo',
       activeIcon: <SwipeRightAltIcon/>,
+      disabled: true
     }
   ],
 };

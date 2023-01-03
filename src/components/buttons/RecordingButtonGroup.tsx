@@ -72,7 +72,6 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
 
   const handleItemClick = (itemId: number) => {
     if (itemId !== null) {
-      console.log(itemId, recordingStatus);
       onButtonClick(itemId);
     }
   };

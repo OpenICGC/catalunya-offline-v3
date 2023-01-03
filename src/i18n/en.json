@@ -34,12 +34,14 @@
   "properties": {
     "date": "Date",
     "description": "Description",
+    "detailsTrack": "Route details",
     "height": "height",
     "images": "Images",
     "latitude": "latitude",
     "location": "Location",
     "longitude": "longitude",
-    "name": "Name"
+    "name": "Name",
+    "recordingTrack": "Track recording"
   },
   "scope": "Scope",
   "scopeList": {

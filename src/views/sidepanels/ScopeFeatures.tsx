@@ -119,10 +119,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     trackStore.create({
       type: 'Feature',
       id: uuid(),
-      geometry: {
-        type: 'LineString',
-        coordinates: [[0, 0], [1, 1]] // TODO, coordinates are required for new track to be created
-      },
+      geometry: null,
       properties: {
         name: `${t('track')} ${trackStore.list().length + 1}`,
         timestamp: Date.now(),
