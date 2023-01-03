@@ -50,8 +50,8 @@ export const BASEMAPS: BaseMaps = [{
   id: 'bt5m',
   labels: {
     ca: 'bt5m Complert',
-    en: 'bt5m Complert',
-    es: 'bt5m Complert'
+    en: 'bt5m Completed',
+    es: 'bt5m Cumplido'
   },
   thumbnail: 'https://betaportal.icgc.cat/wordpress/wp-content/uploads/2017/03/bt5mnicetopo-150x150.png',
   onlineStyle: 'mapstyles/bt5m-nice-alti.json'
