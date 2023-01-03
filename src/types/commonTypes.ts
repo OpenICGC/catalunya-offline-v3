@@ -1,12 +1,20 @@
 import GeoJSON from 'geojson';
+import {StyleSpecification} from 'maplibre-gl';
 
-export type MapStyle = {
-  label: string,
-  thumbnail: string,
+export type BaseMap = {
   id: string
+  labels: {
+    [index: string]: string;
+    ca: string;
+    en: string;
+    es: string;
+  },
+  thumbnail: string,
+  onlineStyle: string | StyleSpecification,
+  offlineAssets?: string
 }
 
-export type MapStyles = Array<MapStyle>
+export type BaseMaps = Array<BaseMap>
 
 export type Manager = 'LAYERS' | 'BASEMAPS' | 'SCOPES' | undefined;
 

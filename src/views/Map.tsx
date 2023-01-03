@@ -1,14 +1,14 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import maplibregl from 'maplibre-gl';
+import maplibregl, {StyleSpecification} from 'maplibre-gl';
 
 import GeocomponentMap from '@geomatico/geocomponents/Map';
 
 import {Manager, ScopePoint, UUID} from '../types/commonTypes';
-import {downloadMbtiles, getDatabase, isMbtilesDownloaded, mbtiles} from '../utils/mbtiles';
 import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
 import FabButton, {LOCATION_STATUS} from '../components/buttons/FabButton';
+import {mbtiles} from '../utils/mbtiles';
 import useCompass from '../hooks/useCompass';
-import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MBTILES, MIN_TRACKING_ZOOM, OFF_CAT} from '../config';
+import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import PrecisePositionEditor from '../components/map/PrecisePositionEditor';
 import GeoJSON from 'geojson';
 import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
@@ -51,22 +51,9 @@ const layers = [{
   }
 }];
 
-const CHECKING = 0,
-  DOWNLOADING = 1,
-  AVAILABLE = 2,
-  OPENING = 3,
-  READY = 4;
-
-const mbtilesStatusMessages = [
-  'Checking mbtiles availability...',
-  'Downloading mbtiles...',
-  'Mbtiles downloaded',
-  'Opening mbtiles...',
-  'mbtiles ready'
-];
 
 export type MainContentProps = {
-  mapStyle: string,
+  mapStyle: string | StyleSpecification,
   manager: Manager,
   onManagerChanged: (newManager: Manager) => void,
   selectedScope?: UUID,
@@ -88,7 +75,6 @@ const Map: FC<MainContentProps> = ({
 }) => {
   const mapRef = useRef<maplibregl.Map>();
   const [viewport, setViewport] = useViewport();
-  const [mbtilesStatus, setMbtilesStatus] = useState(CHECKING);
   const {geolocation, error: geolocationError} = useGeolocation();
   const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
@@ -97,29 +83,6 @@ const Map: FC<MainContentProps> = ({
   const scopeColor = selectedScope ? scopeStore.retrieve(selectedScope)?.color : undefined;
   const pointStore = useScopePoints(selectedScope);
   const pointList = pointStore.list();
-
-  // Effects on offline tileset downloading
-  useEffect(() => {
-    if (OFF_CAT) {
-      setMbtilesStatus(READY);
-      return;
-    }
-    isMbtilesDownloaded(MBTILES.dbName).then(isDownloaded => {
-      if (isDownloaded) {
-        setMbtilesStatus(AVAILABLE);
-      } else {
-        downloadMbtiles(MBTILES.downloadMbtilesUrl).then(() => setMbtilesStatus(AVAILABLE));
-        setMbtilesStatus(DOWNLOADING);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (mbtilesStatus === AVAILABLE) {
-      getDatabase(MBTILES.dbName).then(() => setMbtilesStatus(READY));
-      setMbtilesStatus(OPENING);
-    }
-  }, [mbtilesStatus]);
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -255,42 +218,39 @@ const Map: FC<MainContentProps> = ({
     setSelectedPoint(point.id);
   };
 
-  return (mbtilesStatus === READY || OFF_CAT) ?
-    <>
-      <GeocomponentMap
-        {...MAP_PROPS}
-        reuseMaps
-        ref={mapRef}
-        mapStyle={mapStyle}
-        sources={sources}
-        layers={layers}
-        viewport={viewport}
-        onViewportChange={setViewport}
-        onDrag={disableTracking}
-        onTouchMove={disableTracking}
-        onWheel={disableTracking}
-      >
-        <LocationMarker geolocation={geolocation} heading={heading}/>
-        <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
-        {!precisePositionRequest && <FabButton
-          isLeftHanded={false} isAccessibleSize={false}
-          bearing={viewport.bearing} pitch={viewport.pitch}
-          locationStatus={locationStatus}
-          onOrientationClick={handleOrientationClick}
-          onLocationClick={handleLocationClick}
-          onLayersClick={() => changeManager('LAYERS')}
-          onBaseMapsClick={() => changeManager('BASEMAPS')}
-          onScopesClick={() => changeManager('SCOPES')}
-        />}
-      </GeocomponentMap>
-      {!!precisePositionRequest && <PrecisePositionEditor
-        // name={} // TODO get selected point's name
-        onAccept={handlePrecisePositionAccepted}
-        onCancel={onPrecisePositionCancelled}
+  return <>
+    <GeocomponentMap
+      {...MAP_PROPS}
+      reuseMaps
+      ref={mapRef}
+      mapStyle={mapStyle}
+      sources={sources}
+      layers={layers}
+      viewport={viewport}
+      onViewportChange={setViewport}
+      onDrag={disableTracking}
+      onTouchMove={disableTracking}
+      onWheel={disableTracking}
+    >
+      <LocationMarker geolocation={geolocation} heading={heading}/>
+      <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
+      {!precisePositionRequest && <FabButton
+        isLeftHanded={false} isAccessibleSize={false}
+        bearing={viewport.bearing} pitch={viewport.pitch}
+        locationStatus={locationStatus}
+        onOrientationClick={handleOrientationClick}
+        onLocationClick={handleLocationClick}
+        onLayersClick={() => changeManager('LAYERS')}
+        onBaseMapsClick={() => changeManager('BASEMAPS')}
+        onScopesClick={() => changeManager('SCOPES')}
       />}
-    </>: <div>
-      {mbtilesStatusMessages[mbtilesStatus]}
-    </div>;
+    </GeocomponentMap>
+    {!!precisePositionRequest && <PrecisePositionEditor
+      // name={} // TODO get selected point's name
+      onAccept={handlePrecisePositionAccepted}
+      onCancel={onPrecisePositionCancelled}
+    />}
+  </>;
 };
 
 export default Map;

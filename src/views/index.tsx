@@ -3,7 +3,7 @@ import React, {FC, useEffect, useState} from 'react';
 import Layout from '../components/Layout';
 import Map from './Map';
 
-import {INITIAL_MANAGER, INITIAL_MAPSTYLE_URL, SM_BREAKPOINT} from '../config';
+import {INITIAL_MANAGER, SM_BREAKPOINT} from '../config';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {Manager, UUID} from '../types/commonTypes';
 import Layers from './sidepanels/Layers';
@@ -12,6 +12,7 @@ import ScopeMain from './sidepanels/ScopeMain';
 import Stack from '@mui/material/Stack';
 import GeoJSON from 'geojson';
 import {useScopePoints} from '../hooks/useStoredCollections';
+import useMapStyle from '../hooks/useMapStyle';
 
 const stackSx = {
   height: '100%',
@@ -23,7 +24,8 @@ const stackSx = {
 const Index: FC = () => {
   const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
   const [isSidePanelOpen, setSidePanelOpen] = useState(widescreen);
-  const [mapStyle, setMapStyle] = useState(INITIAL_MAPSTYLE_URL);
+
+  const {baseMapId, mapStyle, setBaseMapId, StyleOfflineDownloaderComponent} = useMapStyle();
   const [manager, setManager] = useState<Manager>(widescreen ? INITIAL_MANAGER : undefined);
   const [scope, setScope] = useState<UUID>();
   const [point, setPoint] = useState<UUID>();
@@ -63,8 +65,8 @@ const Index: FC = () => {
       {manager === 'LAYERS' && <Layers
       />}
       {manager === 'BASEMAPS' && <BaseMaps
-        mapStyle={mapStyle}
-        onMapStyleChanged={setMapStyle}
+        baseMapId={baseMapId}
+        onMapStyleChanged={setBaseMapId}
       />}
       {manager === 'SCOPES' && <ScopeMain
         selectedScope={scope}
@@ -90,12 +92,15 @@ const Index: FC = () => {
     onPrecisePositionCancelled={cancelPrecisePosition}
   />;
 
-  return <Layout
-    sidePanelContent={sidePanelContent}
-    mainContent={mainContent}
-    isSidePanelOpen={isSidePanelOpen}
-    onToggleSidePanel={toggleSidePanel}
-  />;
+  return <>
+    {StyleOfflineDownloaderComponent}
+    <Layout
+      sidePanelContent={sidePanelContent}
+      mainContent={mainContent}
+      isSidePanelOpen={isSidePanelOpen}
+      onToggleSidePanel={toggleSidePanel}
+    />
+  </>;
 };
 
 export default Index;

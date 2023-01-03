@@ -17,7 +17,7 @@ export type NotificationProps = {
   message: string,
   isPersistent?: boolean,
   isOpen?: boolean,
-    variant: 'bottom' | 'center'
+    variant?: 'bottom' | 'center'
     onClose: () => void,
 };
 
