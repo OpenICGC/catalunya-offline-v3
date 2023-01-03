@@ -51,7 +51,7 @@ type AssetsDownloadUnit = {
   status: downloadUnitStatus
 }
 
-const initialState = [] as AssetsDownloadUnit[];
+const initialState: Array<AssetsDownloadUnit> = [];
 
 const initState = () => initialState;
 
