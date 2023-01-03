@@ -123,7 +123,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
           filled: true,
           opacity: 1
         },
-        data: { values: currentPositionIndex? vegaTrack[currentPositionIndex] : [] },
+        data: { values: currentPositionIndex !== undefined ? vegaTrack[currentPositionIndex] : [] },
         encoding: {
           color: {
             value: GPS_POSITION_COLOR,

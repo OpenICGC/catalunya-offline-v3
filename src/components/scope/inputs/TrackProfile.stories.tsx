@@ -19,7 +19,7 @@ export default {
     currentPositionIndex: {
       control: {
         type: 'range',
-        min: 1,
+        min: 0,
         max: geometry && geometry.coordinates.length - 1,
         step: 1
       }
