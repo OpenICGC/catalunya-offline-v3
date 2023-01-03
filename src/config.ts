@@ -44,11 +44,31 @@ export const BASEMAPS: BaseMaps = [{
   id: 'bt5m',
   labels: {
     ca: 'bt5m Complert',
-    en: 'bt5m Completed',
-    es: 'bt5m Cumplido'
+    en: 'bt5m Complete',
+    es: 'bt5m Completo'
   },
   thumbnail: 'https://betaportal.icgc.cat/wordpress/wp-content/uploads/2017/03/bt5mnicetopo-150x150.png',
   onlineStyle: 'mapstyles/bt5m-nice-alti.json'
+},{
+  id: 'galicia-osmbright',
+  labels: {
+    ca: 'OSM Bright Galicia',
+    en: 'OSM Bright Galicia',
+    es: 'OSM Bright Galicia'
+  },
+  thumbnail: 'https://tileserver.geomatico.es/styles/osm-bright/7/63/48.png',
+  onlineStyle: 'https://tileserver.geomatico.es/styles/osm-bright/style.json',
+  offlineAssets: 'https://cdn.geomatico.es/datasets/galicia/assets.json'
+},{
+  id: 'madrid-osmbright',
+  labels: {
+    ca: 'OSM Bright Madrid',
+    en: 'OSM Bright Madrid',
+    es: 'OSM Bright Madrid'
+  },
+  thumbnail: 'https://tileserver.geomatico.es/styles/osm-bright/7/63/48.png',
+  onlineStyle: 'https://tileserver.geomatico.es/styles/osm-bright/style.json',
+  offlineAssets: 'https://cdn.geomatico.es/datasets/madrid/assets.json'
 }];
 
 export const INITIAL_BASEMAP = BASEMAPS[0];

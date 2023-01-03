@@ -121,6 +121,9 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
   
   useEffect(() => {
     if (baseMap){
+      setOfflineMetadata(undefined);
+      setMetadata(undefined);
+      setExistingFilesOnDevice(undefined);
       getLastVersionOfBasemap(baseMap).then(versionString => {
         listOfflineDir(baseMap.id + '/' + versionString).then(files => setExistingFilesOnDevice(files));
       });
@@ -317,7 +320,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
 
       let newStyle = {...style} as StyleSpecification;
       if (glyphsAsset?.uri) newStyle = {...newStyle, glyphs: Capacitor.convertFileSrc(glyphsAsset.uri) + '/{fontstack}/{range}.pbf'};
-      if (spritesAssets?.uri) newStyle = {...newStyle, sprite: Capacitor.convertFileSrc(spritesAssets.uri)};
+      if (spritesAssets?.uri) newStyle = {...newStyle, sprite: Capacitor.convertFileSrc(spritesAssets.uri) + '/sprites'};
 
       onStyleReady(newStyle);
     }
