@@ -93,7 +93,6 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
   const hasTimestamp = !!track.geometry?.coordinates[track.geometry.coordinates.length - 1][3] || false;
 
-  console.log('hasTimestamp', hasTimestamp);
   const actionIcons = [
     {
       id: 'rename',
