@@ -41,11 +41,14 @@ export type AssetsMetadata = {
   sprites: string
 }
 
+enum downloadUnitType { mbtiles, style, glyphs, sprites, metadata}
+enum downloadUnitStatus { REQUEST, SUCCESS, DONE}
+
 type AssetsDownloadUnit = {
-  type: 'mbtiles' | 'style' | 'glyphs' | 'sprites' | 'metadata',
+  type: downloadUnitType,
   url: string,
   uri?: string,
-  status: 'REQUEST' | 'SUCCESS' | 'DONE'
+  status: downloadUnitStatus
 }
 
 const initialState = [] as AssetsDownloadUnit[];
@@ -154,7 +157,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
 
       if (existingStyle) {
         isStyleOnDevice = true;
-        dispatch({type: 'SUCCESS', payload: {type: 'style', url: metadata.style, uri: existingStyle.uri, status: 'SUCCESS'}});
+        dispatch({type: 'SUCCESS', payload: {type: downloadUnitType.style, url: metadata.style, uri: existingStyle.uri, status: downloadUnitStatus.SUCCESS}});
       }
 
       //MBTILES
@@ -162,7 +165,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
         const mbtilesFileName = mbtiles.url.split('/').pop() || '';
         const existingMbtiles = existingFilesOnDevice.find(({name}) => name === mbtilesFileName);
         if (existingMbtiles) {
-          dispatch({type: 'SUCCESS', payload: {type: 'mbtiles', url: mbtiles.url, uri: existingMbtiles.uri, status: 'SUCCESS'}});
+          dispatch({type: 'SUCCESS', payload: {type: downloadUnitType.mbtiles, url: mbtiles.url, uri: existingMbtiles.uri, status: downloadUnitStatus.SUCCESS}});
           return true;
         } else {
           return false;
@@ -176,7 +179,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
 
         if (existingGlyphs) {
           isGlyphsOnDevice = true;
-          dispatch({type: 'SUCCESS', payload: {type: 'glyphs', url: metadata.glyphs, uri: existingGlyphs.uri, status: 'SUCCESS'}});
+          dispatch({type: 'SUCCESS', payload: {type: downloadUnitType.glyphs, url: metadata.glyphs, uri: existingGlyphs.uri, status: downloadUnitStatus.SUCCESS}});
         }
       } else {
         isGlyphsOnDevice = true;
@@ -189,7 +192,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
 
         if (existingSprites) {
           isSpritesOnDevice = true;
-          dispatch({type: 'SUCCESS', payload: {type: 'sprites', url: metadata.sprites, uri: existingSprites.uri, status: 'SUCCESS'}});
+          dispatch({type: 'SUCCESS', payload: {type: downloadUnitType.sprites, url: metadata.sprites, uri: existingSprites.uri, status: downloadUnitStatus.SUCCESS}});
         }
       } else {
         isSpritesOnDevice = true;
@@ -204,22 +207,22 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
   const handleDownloads = async (metadata: AssetsMetadata) => {
     //assets
     if (baseMap.offlineAssets){
-      dispatch({type: 'REQUEST', payload: {type: 'metadata', url: baseMap.offlineAssets, status: 'REQUEST'}});
+      dispatch({type: 'REQUEST', payload: {type: downloadUnitType.metadata, url: baseMap.offlineAssets, status: downloadUnitStatus.REQUEST}});
     }
     //mbtiles
     for (const mbtiles of metadata.mbtiles) {
-      dispatch({type: 'REQUEST', payload: {type: 'mbtiles', url: mbtiles.url, status: 'REQUEST'}});
+      dispatch({type: 'REQUEST', payload: {type: downloadUnitType.mbtiles, url: mbtiles.url, status: downloadUnitStatus.REQUEST}});
     }
     //glyphs
     if (metadata.glyphs) {
-      dispatch({type: 'REQUEST', payload: {type: 'glyphs', url: metadata.glyphs, status: 'REQUEST'}});
+      dispatch({type: 'REQUEST', payload: {type: downloadUnitType.glyphs, url: metadata.glyphs, status: downloadUnitStatus.REQUEST}});
     }
     //sprites
     if (metadata.sprites) {
-      dispatch({type: 'REQUEST', payload: {type: 'sprites', url: metadata.sprites, status: 'REQUEST'}});
+      dispatch({type: 'REQUEST', payload: {type: downloadUnitType.sprites, url: metadata.sprites, status: downloadUnitStatus.REQUEST}});
     }
     //style
-    dispatch({type: 'REQUEST', payload: {type: 'style', url: metadata.style, status: 'REQUEST'}});
+    dispatch({type: 'REQUEST', payload: {type: downloadUnitType.style, url: metadata.style, status: downloadUnitStatus.REQUEST}});
   };
 
 
@@ -235,13 +238,13 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
     download(asset.url, directory)
       .then(uri => {
         if (typeof uri === 'string') {
-          if (['glyphs', 'sprites'].includes(asset.type)) {
+          if ([downloadUnitType.glyphs, downloadUnitType.sprites].includes(asset.type)) {
             unZipOnSameFolder(uri)
               .then(() => {
-                dispatch({type: 'SUCCESS', payload: {...asset, uri, status: 'SUCCESS'}});
+                dispatch({type: 'SUCCESS', payload: {...asset, uri, status: downloadUnitStatus.SUCCESS}});
               });
           } else {
-            dispatch({type: 'SUCCESS', payload: {...asset, uri, status: 'SUCCESS'}});
+            dispatch({type: 'SUCCESS', payload: {...asset, uri, status: downloadUnitStatus.SUCCESS}});
           }
         }
       });
@@ -252,7 +255,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
     // Descarga de assets pendientes
     if (metadata){
       const directory = baseMap.id + '/' + metadata.version;
-      const assetToDownload = assetsDownloads.find(asset => asset.status === 'REQUEST');
+      const assetToDownload = assetsDownloads.find(asset => asset.status === downloadUnitStatus.REQUEST);
 
       if (assetToDownload && !cancelDownload) {
         downloadAsset(assetToDownload, directory);
@@ -261,41 +264,41 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
 
     // Carga de mbtiles
     assetsDownloads
-      .filter(asset => asset.status === 'SUCCESS')
+      .filter(asset => asset.status === downloadUnitStatus.SUCCESS)
       .map(asset => {
         switch (asset.type) {
-        case 'mbtiles':
+        case downloadUnitType.mbtiles:
           asset.uri && getDatabase(asset.uri.replace('file://', ''));
           break;
-        case 'glyphs':
+        case downloadUnitType.glyphs:
           break;
-        case 'sprites':
+        case downloadUnitType.sprites:
           break;
-        case 'metadata':
+        case downloadUnitType.metadata:
           break;
         default:
           break;
         }
-        dispatch({type: 'DONE', payload: {...asset, status: 'DONE'}});
+        dispatch({type: 'DONE', payload: {...asset, status: downloadUnitStatus.DONE}});
       });
 
     const arrayToCheck = [];
 
-    const glyphsAsset = assetsDownloads.find(asset => asset.type === 'glyphs');
-    const spritesAssets = assetsDownloads.find(asset => asset.type === 'sprites');
-    const mbtilesAssets = assetsDownloads.filter(asset => asset.type === 'mbtiles');
-    const styleAsset = assetsDownloads.find(asset => asset.type === 'style');
+    const glyphsAsset = assetsDownloads.find(asset => asset.type === downloadUnitType.glyphs);
+    const spritesAssets = assetsDownloads.find(asset => asset.type === downloadUnitType.sprites);
+    const mbtilesAssets = assetsDownloads.filter(asset => asset.type === downloadUnitType.mbtiles);
+    const styleAsset = assetsDownloads.find(asset => asset.type === downloadUnitType.style);
 
     if (glyphsAsset) arrayToCheck.push(glyphsAsset);
     if (spritesAssets) arrayToCheck.push(spritesAssets);
     if (mbtilesAssets.length) arrayToCheck.push(...mbtilesAssets);
 
     if (
-      arrayToCheck.every(asset => asset.status === 'DONE') &&
+      arrayToCheck.every(asset => asset.status === downloadUnitStatus.DONE) &&
       styleAsset
     ) {
       parseStyle(styleAsset, glyphsAsset, spritesAssets)
-        .then(() => dispatch({...styleAsset, status: 'DONE'} as AssetsDownloadUnit));
+        .then(() => dispatch({type: 'DONE', payload: {...styleAsset, status: downloadUnitStatus.DONE}}));
     }
   }, [assetsDownloads, metadata, cancelDownload]);
   
