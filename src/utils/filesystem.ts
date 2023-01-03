@@ -73,7 +73,9 @@ export const getLastMetadataFileForBaseMap = async (basemap: BaseMap) => {
 };
 
 export const unZipOnSameFolder = async (uri: string) => {
+  let result;
   const unzipComplete = (resultCode: number) => {
+    result = resultCode;
     if (resultCode === 0){
       Filesystem.deleteFile({path: uri});
     } else {
@@ -82,6 +84,7 @@ export const unZipOnSameFolder = async (uri: string) => {
   };
   const filename = uri.split('/').pop() || '';
   const directoryUri = uri.replace(filename, '');
-  Zip.unzip(uri, directoryUri, unzipComplete);
+  await Zip.unzip(uri, directoryUri, unzipComplete);
+  return result === 0 ? uri.replace('.zip', '') : '';
 };
 

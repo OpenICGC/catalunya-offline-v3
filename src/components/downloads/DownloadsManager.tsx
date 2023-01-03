@@ -240,8 +240,8 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
         if (typeof uri === 'string') {
           if ([downloadUnitType.glyphs, downloadUnitType.sprites].includes(asset.type)) {
             unZipOnSameFolder(uri)
-              .then(() => {
-                dispatch({type: 'SUCCESS', payload: {...asset, uri, status: downloadUnitStatus.SUCCESS}});
+              .then((newUri) => {
+                dispatch({type: 'SUCCESS', payload: {...asset, uri: newUri, status: downloadUnitStatus.SUCCESS}});
               });
           } else {
             dispatch({type: 'SUCCESS', payload: {...asset, uri, status: downloadUnitStatus.SUCCESS}});
@@ -251,7 +251,6 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
   };
 
   useEffect(() => {
-    console.log(assetsDownloads);
     // Descarga de assets pendientes
     if (metadata){
       const directory = baseMap.id + '/' + metadata.version;
