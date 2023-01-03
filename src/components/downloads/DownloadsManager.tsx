@@ -3,7 +3,6 @@ import React, {FC, useEffect, useReducer, useState} from 'react';
 import {FileInfo} from '@capacitor/filesystem';
 import {Capacitor} from '@capacitor/core';
 import {useTranslation} from 'react-i18next';
-import i18n from 'i18next';
 import useFetch from '@geomatico/geocomponents/hooks/useFetch';
 import {StyleSpecification} from 'maplibre-gl';
 
@@ -75,7 +74,7 @@ const reducer = (state: Array<AssetsDownloadUnit>, action: {type: string, payloa
 };
 
 const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) => {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
 
   const [open, setOpen] = useState<boolean>(false);
   const [accepted, setAccepted] = useState<boolean|undefined>(undefined);

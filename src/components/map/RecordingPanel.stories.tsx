@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import RecordingPanel, {RECORDING_STATUS, RecordingPanelProps} from './RecordingPanel';
-import {INITIAL_VIEWPORT, MAPSTYLES} from '../../config';
+import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
 import Box from '@mui/material/Box';
 import GeocomponentMap from '@geomatico/geocomponents/Map';
 
@@ -40,7 +40,7 @@ const WithMapTemplate: Story<RecordingPanelProps> = ({recordingStatus, onStatusC
   const [getValue, setValue] = useState(recordingStatus);
   const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
   return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
-    <GeocomponentMap mapStyle={MAPSTYLES[1].id} onViewportChange={setViewport} viewport={getViewport}/>
+    <GeocomponentMap mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}/>
     <RecordingPanel recordingStatus={getValue} onStatusChange={setValue} {...args}/>
   </Box>;
 };
