@@ -1,6 +1,5 @@
 import {BaseMaps} from './types/commonTypes';
 import {ViewportType} from './hooks/useViewport';
-export const OFF_CAT = false;
 
 export const DRAWER_WIDTH = 270;
 export const SM_BREAKPOINT = 850;
@@ -20,11 +19,6 @@ export const MAP_PROPS = {
   maxZoom: 14.99, // 17,
   maxPitch: 60,
   hash: false
-};
-
-export const MBTILES = {
-  downloadMbtilesUrl: 'https://cdn.geomatico.es/datasets/mtc25mcatoff_7a13SQLite.db',
-  dbName: 'mtc25mcatoff_7a13'
 };
 
 export const BASEMAPS: BaseMaps = [{
@@ -57,7 +51,7 @@ export const BASEMAPS: BaseMaps = [{
   onlineStyle: 'mapstyles/bt5m-nice-alti.json'
 }];
 
-export const INITIAL_BASEMAP = BASEMAPS[OFF_CAT ? 1 : 0];
+export const INITIAL_BASEMAP = BASEMAPS[0];
 
 export const MIN_TRACKING_ZOOM = 14;
 

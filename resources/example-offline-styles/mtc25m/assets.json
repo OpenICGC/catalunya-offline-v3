@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "date": "2022-12-14T10:57:32Z",
+  "style": "https://cdn.geomatico.es/datasets/mtc25m/mtc25m-offline.json",
+  "mbtiles": [{
+    "id": "mtc25mcatoff",
+    "url": "https://cdn.geomatico.es/datasets/mtc25m/mtc25mcat.mbtiles"
+  }],
+  "glyphs": "https://cdn.geomatico.es/datasets/mtc25m/glyphs.zip"
+}

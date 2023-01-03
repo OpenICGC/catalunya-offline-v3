@@ -77,7 +77,7 @@ export const unZipOnSameFolder = async (uri: string) => {
     if (resultCode === 0){
       Filesystem.deleteFile({path: uri});
     } else {
-      throw 'Error unzipping zip!';
+      throw `Error unzipping zip! Path: ${uri}`;
     }
   };
   const filename = uri.split('/').pop() || '';

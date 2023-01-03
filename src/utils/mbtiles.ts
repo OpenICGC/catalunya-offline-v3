@@ -33,8 +33,8 @@ const sourceDatabases = new Map();
 
 const getTile = (url: string) => {
   const splitUrl = url.split('/');
-  const dbName = splitUrl[2];
-  const uri = Array.from(sourceDatabases.keys()).find(db => db.includes(dbName));
+  const dbName = splitUrl[2] + '.mbtiles';
+  const uri = Array.from(sourceDatabases.keys()).find(db => db.endsWith(dbName));
   const z = +splitUrl[splitUrl.length - 3];
   const x = +splitUrl[splitUrl.length - 2];
   const y = +(splitUrl[splitUrl.length - 1].split('.')[0]);

@@ -41,7 +41,7 @@ export type AssetsMetadata = {
   sprites: string
 }
 
-enum downloadUnitType { mbtiles, style, glyphs, sprites, metadata}
+enum downloadUnitType { mbtiles = 'mbtiles', style = 'style', glyphs = 'glyphs', sprites = 'sprites', metadata = 'metadata'}
 enum downloadUnitStatus { REQUEST, SUCCESS, DONE}
 
 type AssetsDownloadUnit = {
@@ -262,43 +262,50 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
       }
     }
 
-    // Carga de mbtiles
-    assetsDownloads
-      .filter(asset => asset.status === downloadUnitStatus.SUCCESS)
-      .map(asset => {
-        switch (asset.type) {
-        case downloadUnitType.mbtiles:
-          asset.uri && getDatabase(asset.uri.replace('file://', ''));
-          break;
-        case downloadUnitType.glyphs:
-          break;
-        case downloadUnitType.sprites:
-          break;
-        case downloadUnitType.metadata:
-          break;
-        default:
-          break;
-        }
-        dispatch({type: 'DONE', payload: {...asset, status: downloadUnitStatus.DONE}});
-      });
-
-    const arrayToCheck = [];
-
-    const glyphsAsset = assetsDownloads.find(asset => asset.type === downloadUnitType.glyphs);
-    const spritesAssets = assetsDownloads.find(asset => asset.type === downloadUnitType.sprites);
-    const mbtilesAssets = assetsDownloads.filter(asset => asset.type === downloadUnitType.mbtiles);
     const styleAsset = assetsDownloads.find(asset => asset.type === downloadUnitType.style);
 
-    if (glyphsAsset) arrayToCheck.push(glyphsAsset);
-    if (spritesAssets) arrayToCheck.push(spritesAssets);
-    if (mbtilesAssets.length) arrayToCheck.push(...mbtilesAssets);
+    if (styleAsset && styleAsset.status !== downloadUnitStatus.DONE) {
+      // Carga de mbtiles
+      assetsDownloads
+        .filter(asset => asset.status === downloadUnitStatus.SUCCESS)
+        .map(asset => {
+          switch (asset.type) {
+          case downloadUnitType.mbtiles:
+            asset.uri && getDatabase(asset.uri.replace('file://', ''));
+            dispatch({type: 'DONE', payload: {...asset, status: downloadUnitStatus.DONE}});
+            break;
+          case downloadUnitType.glyphs:
+            dispatch({type: 'DONE', payload: {...asset, status: downloadUnitStatus.DONE}});
+            break;
+          case downloadUnitType.sprites:
+            dispatch({type: 'DONE', payload: {...asset, status: downloadUnitStatus.DONE}});
+            break;
+          case downloadUnitType.metadata:
+            dispatch({type: 'DONE', payload: {...asset, status: downloadUnitStatus.DONE}});
+            break;
+          default:
+            break;
+          }
+        });
 
-    if (
-      arrayToCheck.every(asset => asset.status === downloadUnitStatus.DONE) &&
-      styleAsset
-    ) {
-      parseStyle(styleAsset, glyphsAsset, spritesAssets)
-        .then(() => dispatch({type: 'DONE', payload: {...styleAsset, status: downloadUnitStatus.DONE}}));
+      const arrayToCheck = [];
+
+      const glyphsAsset = assetsDownloads.find(asset => asset.type === downloadUnitType.glyphs);
+      const spritesAssets = assetsDownloads.find(asset => asset.type === downloadUnitType.sprites);
+      const mbtilesAssets = assetsDownloads.filter(asset => asset.type === downloadUnitType.mbtiles);
+      const styleAsset = assetsDownloads.find(asset => asset.type === downloadUnitType.style);
+
+      if (glyphsAsset) arrayToCheck.push(glyphsAsset);
+      if (spritesAssets) arrayToCheck.push(spritesAssets);
+      if (mbtilesAssets.length) arrayToCheck.push(...mbtilesAssets);
+
+      if (
+        arrayToCheck.every(asset => asset.status === downloadUnitStatus.DONE) &&
+        styleAsset
+      ) {
+        parseStyle(styleAsset, glyphsAsset, spritesAssets)
+          .then(() => dispatch({type: 'DONE', payload: {...styleAsset, status: downloadUnitStatus.DONE}}));
+      }
     }
   }, [assetsDownloads, metadata, cancelDownload]);
   
