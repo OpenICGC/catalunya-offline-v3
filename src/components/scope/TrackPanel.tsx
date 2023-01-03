@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useCallback, useMemo, useState} from 'react';
+import React, {FC, useCallback, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -28,7 +28,7 @@ import TrackProfile from './inputs/TrackProfile';
 import TrackProperty from './inputs/TrackProperty';
 
 //OTHERS
-import moment, {Moment} from 'moment/moment';
+import moment from 'moment/moment';
 import 'moment-duration-format';
 
 //UTILS
@@ -84,13 +84,17 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [track, setTrack] = useState(initialTrack);
 
-  const distance: string | undefined = getAccumulatedTrackProperties(track)?.distance.toFixed(2)+' km';
-  const ascent: string | undefined = getAccumulatedTrackProperties(track)?.ascent+' m';
-  const descent: string | undefined = getAccumulatedTrackProperties(track)?.descent+' m';
+  const distance: string | undefined = getAccumulatedTrackProperties(track)?.distance.toFixed(2)+'km';
+  const ascent: string | undefined = getAccumulatedTrackProperties(track)?.ascent+'m';
+  const descent: string | undefined = getAccumulatedTrackProperties(track)?.descent+'m';
   const time: number | undefined = getAccumulatedTrackProperties(track)?.time;
   const durationTime = moment.duration(time, 'seconds');
-  const formattedTime = durationTime.format('hh[h] mm[m] ss[s]');
+  const formattedTime = durationTime.format('h[h] mm[m] ss[s]');
+  
+  const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
+  const hasTimestamp = !!track.geometry?.coordinates[track.geometry.coordinates.length-1][3] || false;
 
+  console.log('hasTimestamp', hasTimestamp);
   const actionIcons = [
     {
       id: 'rename',
@@ -132,21 +136,22 @@ const TrackPanel: FC<TrackPanelProps> = ({
       }
     })), []);
 
-  const handleDateChange = useCallback((value: Moment | null) =>
+
+  const handleDateChange = useCallback((value: number) =>
     value && setTrack(prevTrack => ({
       ...prevTrack,
       properties: {
         ...prevTrack.properties,
-        timestamp: value.toDate().getTime()
+        timestamp: value
       }
     })), []);
 
-  const handleDescriptionChange = useCallback((value: ChangeEvent<HTMLTextAreaElement>) =>
+  const handleDescriptionChange = useCallback((value: string) =>
     setTrack(prevTrack => ({
       ...prevTrack,
       properties: {
         ...prevTrack.properties,
-        description: value.target.value
+        description: value
       }
     })), []);
 
@@ -195,24 +200,25 @@ const TrackPanel: FC<TrackPanelProps> = ({
             <Stack>
               <Stack direction='row' sx={{justifyContent: 'space-between'}}>
                 { track.geometry && <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/> }
-                <Stack direction='row' justifyContent='space-between' gap={1} sx={{flexGrow: 1}}>
+                <Stack direction='row' justifyContent='space-between' gap={0.5} sx={{flexGrow: 1}}>
                   <Stack direction='column' sx={{justifyContent: 'space-between'}}>
                     <TrackProperty icon={<StraightenIcon/>} value={distance}/>
-                    <TrackProperty icon={<AvTimerIcon/>} value={formattedTime}/>
+                    {/*if it does not have elevation, it does not have time either*/}
+                    <TrackProperty icon={<AvTimerIcon/>} value={hasTimestamp && formattedTime}/>
                   </Stack>
-                  <Stack direction='column' sx={{justifyContent: 'space-between'}}>
-                    <TrackProperty icon={<LandscapeIcon/>} value={ascent}/>
-                    <TrackProperty icon={<LandscapeIcon/>} value={descent}/>
+                  <Stack direction="column" sx={{justifyContent: 'space-between'}}>
+                    <TrackProperty icon={<LandscapeIcon/>} value={hasElevation && ascent}/>
+                    <TrackProperty icon={<LandscapeIcon/>} value={hasElevation && descent}/>
                   </Stack>
                 </Stack>
               </Stack>
-              <TrackProfile track={track} color={track.properties.color}/>
+              <TrackProfile geometry={track.geometry} color={track.properties.color}/>
             </Stack>
         }
       </Stack>
-      <DateInput isEditing={isEditing} onChange={handleDateChange} feature={track} sx={sxInput}/>
-      <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} feature={track} sx={sxInput}/>
-      <ImageInput isEditing={isEditing} feature={track} sx={sxInput}
+      <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={track.properties.timestamp} sx={sxInput}/>
+      <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={track.properties.description} sx={sxInput}/>
+      <ImageInput isEditing={isEditing} images={track.properties.images} sx={sxInput}
         onAddImage={onAddImage}
         onDeleteImage={onDeleteImage}
         onDownloadImage={onDownloadImage}

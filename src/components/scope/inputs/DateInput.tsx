@@ -17,12 +17,11 @@ import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
 import {Theme} from '@mui/material';
-import {ScopePoint, ScopeTrack} from '../../../types/commonTypes';
 
 export interface DateInputProps {
     isEditing: boolean,
-    feature: ScopePoint | ScopeTrack,
-    onChange: (value: Moment | null) => void,
+    timestamp: number,
+    onChange: (value: number) => void,
     sx?: SxProps
 }
 
@@ -78,19 +77,25 @@ const DateTimeFieldNoEditable = styled(TextField)<Theme>(({theme}) => {
 const DateInput: FC<DateInputProps> = ({
   isEditing,
   onChange,
-  feature,
+  timestamp,
   sx
 }) => {
   const {t} = useTranslation();
-    
+
+  const handleChange = (value: Moment | null) => {
+    if(value !== null) {
+      onChange(value.toDate().getTime());
+    }
+  };
+  
   return <Stack className={classes.root} sx={sx}>
     <Typography className={classes.title} variant='caption'>{t('properties.date')}</Typography>
     <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
       <DateTimePicker
         key='dateTime'
         readOnly={!isEditing}
-        onChange={onChange}
-        value={moment(feature.properties.timestamp, 'x')}
+        onChange={handleChange}
+        value={moment(timestamp)}
         renderInput={(params) => isEditing ?
           <DateTimeFieldEditable {...params} size="small" /> :
           <DateTimeFieldNoEditable {...params} />}

@@ -37,7 +37,8 @@ describe('getAccumulatedAscent', () => {
     const computedIndex = getAccumulatedTrackProperties(sampleScopeTrack);
 
     // THEN
-    const expectedAccumulatedTrackProperties = { ascent: 11, descent: -5, distance: 1365079.8625570554, time: 90 };
+    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
+    const expectedAccumulatedTrackProperties = { ascent: 11, descent: -5, distance: 1365.0798625570555, time: 90 };
     expect(computedIndex).to.deep.equal(expectedAccumulatedTrackProperties);
   });
 });

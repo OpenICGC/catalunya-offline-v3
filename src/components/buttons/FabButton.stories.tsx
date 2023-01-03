@@ -28,7 +28,8 @@ export default {
         NOT_TRACKING: 1,
         TRACKING: 2,
         NAVIGATING: 3
-      }
+      },
+      type: 'inline-radio'
     }
   }
 } as Meta;

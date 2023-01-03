@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 
 export interface TrackPropertyProps {
   icon: ReactNode,
-    value?: string | number
+    value?: string | number | false
 }
 
 const TrackProperty: FC<TrackPropertyProps> = ({
@@ -17,8 +17,8 @@ const TrackProperty: FC<TrackPropertyProps> = ({
       {icon}
     </IconButton>
     {value ? 
-      <Typography variant="subtitle2" sx={{px: 0, color: undefined }}>{value}</Typography> :
-      <Typography variant="subtitle2" sx={{px: 2, color: 'action.disabled'}}>{'-'}</Typography>
+      <Typography variant="caption" sx={{px: 0, color: undefined }}>{value}</Typography> :
+      <Typography variant="caption" sx={{px: 2, color: 'action.disabled'}}>{'-'}</Typography>
     }
   </Stack>;
 };

@@ -27,7 +27,6 @@ import ImageInput from './inputs/ImageInput';
 import {useTranslation} from 'react-i18next';
 import {HEXColor, Scope, ScopePoint, UUID} from '../../types/commonTypes';
 import styled from '@mui/styles/styled';
-import {Moment} from 'moment';
 
 import FeaturesSummary from './FeaturesSummary';
 
@@ -175,21 +174,21 @@ const PointPanel: FC<PointPanelProps> = ({
       }
     })), []);
 
-  const handleDateChange = useCallback((value: Moment | null) =>
+  const handleDateChange = useCallback((value: number) =>
     value && setPoint(prevPoint => ({
       ...prevPoint,
       properties: {
         ...prevPoint.properties,
-        timestamp: value.toDate().getTime()
+        timestamp: value
       }
     })), []);
 
-  const handleDescriptionChange = useCallback((value: ChangeEvent<HTMLTextAreaElement>) =>
+  const handleDescriptionChange = useCallback((value: string) =>
     setPoint(prevPoint => ({
       ...prevPoint,
       properties: {
         ...prevPoint.properties,
-        description: value.target.value
+        description: value
       }
     })), []);
 
@@ -299,9 +298,9 @@ const PointPanel: FC<PointPanelProps> = ({
           </Stack>
         </Location>
       </Stack>
-      <DateInput isEditing={isEditing} onChange={handleDateChange} feature={point} sx={sxInput}/>
-      <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} feature={point} sx={sxInput}/>
-      <ImageInput isEditing={isEditing} feature={point} sx={sxInput}
+      <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={point.properties.timestamp} sx={sxInput}/>
+      <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={point.properties.description} sx={sxInput}/>
+      <ImageInput isEditing={isEditing} images={point.properties.images} sx={sxInput}
         onAddImage={onAddImage}
         onDeleteImage={onDeleteImage}
         onDownloadImage={onDownloadImage}

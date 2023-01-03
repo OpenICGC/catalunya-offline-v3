@@ -1,10 +1,9 @@
-import React, {ChangeEvent, FC, useMemo} from 'react';
+import React, {FC, useMemo} from 'react';
 import Typography from '@mui/material/Typography';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
 import Stack from '@mui/material/Stack';
 import styled from '@mui/styles/styled';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
-import {ScopePoint, ScopeTrack} from '../../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 
 const classes = {
@@ -14,19 +13,19 @@ const classes = {
 
 export interface TextAreaInputProps {
   isEditing: boolean,
-    feature: ScopePoint | ScopeTrack,
-    onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void,
+    text: string,
+    onChange: (text: string) => void,
     sx?: SxProps
 }
 
 const TextAreaInput: FC<TextAreaInputProps> = ({
   isEditing,  
-  feature,
+  text,
   onChange,
   sx
 }) => {
   const {t} = useTranslation();
-      
+
   const TextAreaEditable = useMemo(() => styled(TextareaAutosize)({
     cursor: 'default',
     padding: '8px',
@@ -49,8 +48,8 @@ const TextAreaInput: FC<TextAreaInputProps> = ({
     <TextAreaEditable
       key='description'
       readOnly={!isEditing}
-      defaultValue={feature.properties.description || ''}
-      onChange={onChange}
+      value={text || ''}
+      onChange={(e) => onChange(e.target.value)}
     />
   </Stack>;
 };

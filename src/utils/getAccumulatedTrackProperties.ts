@@ -11,15 +11,17 @@ export const getAccumulatedTrackProperties = (track: ScopeTrack) => {
           const [actualLong, actualLat, actualHeight] = coordinates[i];
           if(actualHeight !== undefined && prevHeight !== undefined){
             const heightDiff = actualHeight - prevHeight;
-            accum.distance += turfDistance(coords[i-1], coords[1], {units:'meters'});
+            accum.distance += turfDistance(coords[i-1], coords[1], {units:'kilometers'});
             if(heightDiff > 0){
               accum.ascent += heightDiff;
             } else {
               accum.descent += heightDiff;
             }
+          } else {
+            accum.distance += turfDistance(coords[i-1], coords[1], {units:'kilometers'});
           }
         }
         return accum;
-      }, { ascent: 0, descent: 0, distance: 0, time: coords.length !== 0 ? coords[coords.length-1][3] : 0 });
+      }, { ascent: 0, descent: 0, distance: 0, time: coords.length !== 0 && coords[coords.length-1][3] ? coords[coords.length-1][3] : undefined});
   } else return undefined;
 };
