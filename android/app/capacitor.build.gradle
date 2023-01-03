@@ -13,6 +13,8 @@ dependencies {
     implementation project(':capacitor-community-photoviewer')
     implementation project(':capacitor-community-sqlite')
     implementation project(':capacitor-app')
+    implementation project(':capacitor-filesystem')
+    implementation "androidx.webkit:webkit:1.4.0"
     implementation project(':capacitor-camera')
 
 }

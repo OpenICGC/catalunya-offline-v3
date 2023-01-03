@@ -20,9 +20,16 @@
   },
   "baseMapManager": "Mapes Base",
   "downloadingAlert": {
+    "cancel": "S'ha cancel·lat la descàrrega",
     "content_01": "Per poder treballar en zones amb mala cobertura, és necessari descarregar-se les dades del Mapa topogràfic de Catalunya 1:25 000.",
     "content_02": "Si no voleu decarregar-les ara, podeu continuar navegant amb una versió online, i se us tornarà a oferir més endavant.",
     "content_03": "Voleu descarregar ara el Mapa topogràfic de Catalunya? (350 MB)",
+    "error": "Error descarregant cartografia",
+    "glyphs": "Tipografies",
+    "mbtiles": "Cartografia",
+    "metadata": "Metadades",
+    "sprites": "Icones",
+    "style": "Estil",
     "title": "Descàrrega de dades offline"
   },
   "features": {
@@ -34,12 +41,14 @@
   "properties": {
     "date": "Data",
     "description": "Descripció",
+    "detailsTrack": "Detalls de la ruta",
     "height": "altura",
     "images": "Imatges",
     "latitude": "latitud",
     "location": "Ubicació",
     "longitude": "longitud",
-    "name": "Nom"
+    "name": "Nom",
+    "recordingTrack": "Enregistrament de la ruta"
   },
   "scope": "Àmbit",
   "scopeList": {

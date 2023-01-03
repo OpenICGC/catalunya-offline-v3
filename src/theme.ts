@@ -44,6 +44,9 @@ const theme = (mode?: PaletteMode) => createTheme({
           opacity: 0.2,
           outline: '0px solid slategrey'
         },
+        '.vega-embed': {
+          width: '100%'
+        }
       },
     },
     MuiTypography: {

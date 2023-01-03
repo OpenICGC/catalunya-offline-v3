@@ -1,32 +1,39 @@
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 
 import useTheme from '@mui/material/styles/useTheme';
 import MapIcon from '@mui/icons-material/Map';
 
 import BaseMapList from '@geomatico/geocomponents/BaseMapList';
 
-import {MAPSTYLES} from '../../config';
 import Header from '../../components/common/Header';
 import {useTranslation} from 'react-i18next';
+import {BASEMAPS} from '../../config';
 
 export type BaseMapsProps = {
-  mapStyle: string,
+  baseMapId: string,
   onMapStyleChanged: (newStyle: string) => void
 };
 
-const BaseMaps: FC<BaseMapsProps> = ({mapStyle, onMapStyleChanged}) => {
-  const {t} = useTranslation();
+const BaseMaps: FC<BaseMapsProps> = ({baseMapId, onMapStyleChanged}) => {
+  const {t, i18n} = useTranslation();
   const theme = useTheme();
+  const basemaps = useMemo(() =>
+    BASEMAPS.map((basemap) => ({
+      ...basemap,
+      label: basemap.labels[i18n.language.split('-')[0]]
+    }))
+  , []);
+
   return <>
     <Header
       startIcon={<MapIcon/>}
       name={t('baseMapManager')}
       color={`#${theme.palette.secondary.main}`}
     />
-    
+
     <BaseMapList
-      styles={MAPSTYLES}
-      selectedStyleId={mapStyle}
+      styles={basemaps}
+      selectedStyleId={baseMapId}
       onStyleChange={onMapStyleChanged}
       variant="list"
     />

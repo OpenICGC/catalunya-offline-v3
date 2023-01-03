@@ -47,7 +47,7 @@ export type ListItemProps = {
   color: HEXColor,
   isActive?: boolean,
   isEditing?: boolean,
-  actionIcons?: Array<{ id: string, activeIcon: ReactNode, inactiveIcon?: ReactNode }>,
+  actionIcons?: Array<{ id: string, activeIcon: ReactNode, inactiveIcon?: ReactNode, disabled?: boolean }>,
   contextualMenu?: Array<{ id: string, label: string, icon?: ReactNode }>,
   onActionClick: (itemId: UUID, actionId: string) => void,
   onClick?: (itemId: UUID) => void,
@@ -79,7 +79,8 @@ const ListItem: FC<ListItemProps> = memo(({
   const actionIconSx = useMemo(() => ({
     m: 0,
     p: 0.5,
-    '& .MuiSvgIcon-root': { color: isActive ? 'action.active' : 'action.disabled' }
+    '& ..MuiIconButton-root': { color: isActive ? 'action.active' : 'action.disabled' },
+    '&.Mui-disabled': {color: 'action.disabled'}
   }), [isActive]);
 
   const colorBoxSx = useMemo(() => ({
@@ -140,7 +141,7 @@ const ListItem: FC<ListItemProps> = memo(({
           />
           {
             actionIcons?.map(actionIcon =>
-              <IconButton key={actionIcon.id} onClick={() => onActionClick(itemId, actionIcon?.id)} sx={actionIconSx}>
+              <IconButton key={actionIcon.id} onClick={() => onActionClick(itemId, actionIcon?.id)} sx={actionIconSx} disabled={actionIcon.disabled}>
                 {isActive ? actionIcon.activeIcon : actionIcon.inactiveIcon}
               </IconButton>
             )

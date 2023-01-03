@@ -20,9 +20,16 @@
   },
   "baseMapManager": "Mapas Base",
   "downloadingAlert": {
+    "cancel": "Se ha cancelado la descarga",
     "content_01": "Para poder trabajar en zonas con mala cobertura, es necesario descargarse los datos del Mapa topográfico de Catalunya 1:25.000.",
     "content_02": "Si no quieres descargarlos ahora, puedes continuar navegando con una versión online, y se te ofrecerá descargarlos más adelante.",
     "content_03": "¿Descargar el Mapa topográfico de Catalunya ahora? (350 MB)",
+    "error": "Error descargando cartografía",
+    "glyphs": "Tipografías",
+    "mbtiles": "Cartografía",
+    "metadata": "Metadatos",
+    "sprites": "Iconos",
+    "style": "Estilo",
     "title": "Descarga de datos offline"
   },
   "features": {
@@ -34,12 +41,14 @@
   "properties": {
     "date": "Fecha",
     "description": "Descripción",
+    "detailsTrack": "Detalles de la ruta",
     "height": "altura",
     "images": "Imágenes",
     "latitude": "latitud",
     "location": "Ubicación",
     "longitude": "longitud",
-    "name": "Nombre"
+    "name": "Nombre",
+    "recordingTrack": "Grabación de la ruta"
   },
   "scope": "Ámbito",
   "scopeList": {

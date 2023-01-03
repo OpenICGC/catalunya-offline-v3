@@ -87,7 +87,7 @@ const RecordingPanel: FC<RecordingPanelProps> = ({
   };
   
   const durationTime = moment.duration(time, 'seconds');
-  const formattedTime = durationTime.format('hh[h] mm[m] ss[s]');
+  const formattedTime = durationTime.format('h[h] mm[m] ss[s]');
 
   return <>
     <Header startIcon={!!iconActive[recordingStatus] && iconActive[recordingStatus]} name={name} color={color} sx={headerSx}>

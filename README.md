@@ -38,12 +38,17 @@ Some relevant dependencies are:
 [TBD]
 
 
-## Offline sample dataset
+## Offline datasets
 
 Offline dataset was downloaded from `http://betaserver.icgc.cat/mapicc/catoff_vt.zip`.
 
-* `mbtiles` was uploaded to `https://cdn.geomatico.es/datasets/mtc25mcatoff_7a13SQLite.db`.
-* `glyphs` were added to this repo, under `static/glyphs`.
+Offline asset publishing and setup is explained in `GENERAR_ESTILO_OFFLINE.md`.
+
+The ADB command to explore the App filesystem in Android is:
+
+```bash
+adb shell run-as cat.icgc.catofflinev2 ls -lha /data/user/0/cat.icgc.catofflinev2/files/offlineData/mtc25m/1.0.0
+```
 
 ## Run in develompment mode
 

@@ -1,54 +1,51 @@
 import React, {ChangeEvent, FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 //MUI
-import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
-import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Typography from '@mui/material/Typography';
-import {LocalizationProvider} from '@mui/x-date-pickers';
 
 //MUI-ICONS
+import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import EditIcon from '@mui/icons-material/Edit';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 
 //CATOFFLINE
-import AddImageButton from '../buttons/AddImageButton';
 import Header from '../common/Header';
 import ListItem from './ListItem';
-import Thumbnail from '../common/Thumbnail';
+import CancelButton from '../buttons/CancelButton';
+import AcceptButton from '../buttons/AcceptButton';
+import DateInput from './inputs/DateInput';
+import TextAreaInput from './inputs/TextAreaInput';
+import ImageInput from './inputs/ImageInput';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor, Scope, ScopePoint, UUID} from '../../types/commonTypes';
 import styled from '@mui/styles/styled';
-import i18n from 'i18next';
-import moment, {Moment} from 'moment';
-import {Theme} from '@mui/material';
-import Box from '@mui/material/Box';
-import CancelButton from '../buttons/CancelButton';
-import AcceptButton from '../buttons/AcceptButton';
-import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
+
 import FeaturesSummary from './FeaturesSummary';
 import {takePhoto} from '../../utils/camera';
 
 //STYLES
+const sectionWrapperSx = {
+  padding: '8px',
+  marginBottom: '0px',
+};
 const sectionTitleSx = {
   color: 'grey.600',
 };
-
 const coordTitle = {
   color: 'grey.500'
 };
-
-const SectionContent = styled(Stack)({
-  padding: '8px',
-  marginBottom: '0px',
-});
+const sxInput = {
+  '&.GenericInput-wrapper': sectionWrapperSx,
+  '& .GenericInput-title': sectionTitleSx
+};
 
 const CoordsFieldEditable = styled(TextField)({
   flexGrow: 1,
@@ -73,50 +70,6 @@ const CoordsFieldNoEditable = styled(InputBase)({
     minWidth: '25px',
     cursor: 'default'
   }
-});
-
-const DateTimeFieldEditable = styled(TextField)({
-  flexGrow: 1,
-  fontSize: '0.875rem',
-  '& .MuiInputBase-input': {
-    outline: '0px solid white',
-    padding: '4px',
-    fontSize: '0.875rem',
-    minWidth: '30px'
-  },
-  '& .MuiButtonBase-root': {
-    paddingRight: '2px'
-  }
-});
-
-const DateTimeFieldNoEditable = styled(TextField)<Theme>(({theme}) => {
-  return {
-    borderRadius: '4px',
-    flexGrow: 1,
-    fontSize: '0.875rem',
-    '& .MuiInputBase-input': { //text
-      padding: '4px',
-      fontSize: '0.875rem',
-      minWidth: '25px',
-      cursor: 'default',
-    },
-    '&:hover': {
-      borderColor: 'transparent',
-    },
-    '& fieldset.MuiOutlinedInput-notchedOutline': {
-      borderColor: 'transparent',
-    },
-    '&:hover fieldset.MuiOutlinedInput-notchedOutline': {
-      borderColor: 'transparent',
-    },
-    '& fieldset.MuiOutlinedInput-notchedOutline:hover': {
-      borderColor: 'transparent',
-    },
-    '& .MuiButtonBase-root': { //icon
-      paddingRight: '2px',
-      color: theme.palette.action.active
-    }
-  };
 });
 
 const Location = styled(Stack)({
@@ -175,24 +128,6 @@ const PointPanel: FC<PointPanelProps> = ({
     }));
   }, [initialPoint.geometry.coordinates]);
 
-  // STYLED COMPONENTS
-  const TextAreaEditable = useMemo(() => styled(TextareaAutosize)({
-    cursor: 'default',
-    padding: '8px',
-    fontFamily: '\'Roboto\',\'Helvetica\',\'Arial\'',
-    fontSize: '1rem',
-    letterSpacing: '0.00938em',
-    fontWeight: 400,
-    lineHeight: 1.5,
-    border: '0px solid white',
-    borderRadius: '4px',
-    resize: 'none',
-    outline: isEditing ? '1px solid rgba(0,0,0,0.23)' : 'none',
-    '&:focus': {
-      outline: isEditing ? '2px solid orange' : 'none',
-    }
-  }), [isEditing]);
-
   const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',
     padding: '0px',
@@ -238,21 +173,21 @@ const PointPanel: FC<PointPanelProps> = ({
       }
     })), []);
 
-  const handleDateChange = useCallback((value: Moment | null) =>
+  const handleDateChange = useCallback((value: number) =>
     value && setPoint(prevPoint => ({
       ...prevPoint,
       properties: {
         ...prevPoint.properties,
-        timestamp: value.toDate().getTime()
+        timestamp: value
       }
     })), []);
 
-  const handleDescriptionChange = useCallback((value: ChangeEvent<HTMLTextAreaElement>) =>
+  const handleDescriptionChange = useCallback((value: string) =>
     setPoint(prevPoint => ({
       ...prevPoint,
       properties: {
         ...prevPoint.properties,
-        description: value.target.value
+        description: value
       }
     })), []);
 
@@ -290,7 +225,7 @@ const PointPanel: FC<PointPanelProps> = ({
         }});
     }
   };
-  
+
   const handleAccept = () => {
     onPointChange(point);
     setIsEditing(false);
@@ -324,7 +259,7 @@ const PointPanel: FC<PointPanelProps> = ({
       />
     </Box>
     <ScrollableContent>
-      <SectionContent id='location'>
+      <Stack sx={sectionWrapperSx} id='location'>
         <Typography sx={sectionTitleSx} variant='caption'>{t('properties.location')}</Typography>
         <Location gap={0.5}>
           <Stack alignItems='center' sx={{m: 0, p: 0}}>
@@ -381,46 +316,14 @@ const PointPanel: FC<PointPanelProps> = ({
             </IconButton>
           </Stack>
         </Location>
-      </SectionContent>
-      <SectionContent id='date'>
-        <Typography sx={sectionTitleSx} variant='caption'>{t('properties.date')}</Typography>
-        <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
-          <DateTimePicker
-            key='dateTime'
-            readOnly={!isEditing}
-            onChange={handleDateChange}
-            value={moment(point.properties.timestamp, 'x')}
-            renderInput={(params) => isEditing ?
-              <DateTimeFieldEditable {...params} size="small" /> :
-              <DateTimeFieldNoEditable {...params} />}
-          />
-        </LocalizationProvider>
-      </SectionContent>
-      <SectionContent id='description'>
-        <Typography sx={sectionTitleSx} variant='caption'>{t('properties.description')}</Typography>
-        <TextAreaEditable
-          key='description'
-          readOnly={!isEditing}
-          defaultValue={point.properties.description || ''}
-          minRows={3}
-          onChange={handleDescriptionChange}
-        />
-      </SectionContent>
-      <SectionContent id='images'>
-        <Typography sx={sectionTitleSx} variant='caption'>{t('properties.images')}</Typography>
-        <Stack direction='row' flexWrap='wrap'>
-          { point.properties.images.map(image =>
-            <Thumbnail
-              key={image.path}
-              image={image}
-              onDelete={onDeleteImage}
-              onDownloadImage={onDownloadImage}
-              isDeletable={isEditing}
-            />)
-          }
-          {isEditing && <AddImageButton onAddImage={handleAddImage}/>}
-        </Stack>
-      </SectionContent>
+      </Stack>
+      <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={point.properties.timestamp} sx={sxInput}/>
+      <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={point.properties.description} sx={sxInput}/>
+      <ImageInput isEditing={isEditing} images={point.properties.images} sx={sxInput}
+        onAddImage={onAddImage}
+        onDeleteImage={onDeleteImage}
+        onDownloadImage={onDownloadImage}
+      />
     </ScrollableContent>
     { isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>
