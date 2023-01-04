@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {ImagePath, ScopeTrack, UUID} from '../../types/commonTypes';
+import {ScopeTrack, UUID} from '../../types/commonTypes';
 
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import TrackPanel from '../../components/scope/TrackPanel';

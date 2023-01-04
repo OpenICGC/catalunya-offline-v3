@@ -155,7 +155,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const handleDeleteImage = (image: ImagePath) => remove(image);
 
-  const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
+  const handleOpenImage = (image: ImagePath) => openPhoto(images, image);
 
   const handleAccept = () => {
     save();

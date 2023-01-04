@@ -52,10 +52,7 @@ Default.args = {
       name: 'Mi traza 15',
       timestamp: Date.now(),
       description: 'Excursión con amigos de la infancia',
-      images: [...Array(3).keys()].map(i => ({
-        path: `https://picsum.photos/300/20${i}`,
-        name: `Imagen ${i}`
-      })),
+      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
       color: '#973572',
       isVisible: true
     },
@@ -85,10 +82,7 @@ DeviceWithoutTimestamp.args = {
       name: 'Mi traza 15',
       timestamp: Date.now(),
       description: 'Excursión con amigos de la infancia',
-      images: [...Array(3).keys()].map(i => ({
-        path: `https://picsum.photos/300/20${i}`,
-        name: `Imagen ${i}`
-      })),
+      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
       color: '#973572',
       isVisible: true
     },
@@ -106,10 +100,7 @@ DeviceWithoutHeight.args = {
       name: 'Mi traza 15',
       timestamp: Date.now(),
       description: 'Excursión con amigos de la infancia',
-      images: [...Array(3).keys()].map(i => ({
-        path: `https://picsum.photos/300/20${i}`,
-        name: `Imagen ${i}`
-      })),
+      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
       color: '#973572',
       isVisible: true
     },
@@ -127,10 +118,7 @@ DeviceWithoutGeom.args = {
       name: 'Mi traza 15',
       timestamp: Date.now(),
       description: 'Excursión con amigos de la infancia',
-      images: [...Array(3).keys()].map(i => ({
-        path: `https://picsum.photos/300/20${i}`,
-        name: `Imagen ${i}`
-      })),
+      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
       color: '#973572',
       isVisible: true
     },

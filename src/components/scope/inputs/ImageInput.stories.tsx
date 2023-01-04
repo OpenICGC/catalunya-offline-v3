@@ -12,8 +12,5 @@ const Template: Story<ImageInputProps> = args => <ImageInput {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  images: [...Array(3).keys()].map(i => ({
-    path: 'https://picsum.photos/300/200',
-    name: `Imagen ${i}`
-  }))
+  images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`)
 };

@@ -59,7 +59,7 @@ const CoordsFieldEditable = styled(TextField)({
     padding: '4px',
     fontSize: '0.875rem',
     minWidth: '30px'
-  }  const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
+  }
 });
 
 const CoordsFieldNoEditable = styled(InputBase)({
@@ -99,7 +99,6 @@ export type PointPanelProps = {
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void,
-    onDownloadImage: (image: ImagePath) => void,
     onAddPrecisePosition: () => void
 };
 
@@ -111,7 +110,6 @@ const PointPanel: FC<PointPanelProps> = ({
   onBackButtonClick,
   onPointChange,
   onGoTo,
-  onDownloadImage,
   onAddPrecisePosition
 }) => {
   const {t} = useTranslation();
@@ -132,7 +130,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',
-    padding: '0px',  const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
+    padding: '0px',
     marginBottom: isEditing ? '32px' : '16px',
   }), [isEditing]);
 
@@ -212,7 +210,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const handleDeleteImage = (image: ImagePath) => remove(image);
 
-  const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
+  const handleOpenImage = (image: ImagePath) => openPhoto(images, image);
 
   const handleAccept = () => {
     save();

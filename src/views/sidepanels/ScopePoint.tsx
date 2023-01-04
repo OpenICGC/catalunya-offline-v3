@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {ImagePath, ScopePoint, UUID} from '../../types/commonTypes';
+import {ScopePoint, UUID} from '../../types/commonTypes';
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import PointPanel from '../../components/scope/PointPanel';
 import GeoJSON from 'geojson';
@@ -58,8 +58,7 @@ const ScopePoint: FC<ScopePointProps> = ({
 
     onPointChange={pointChange}
     onGoTo={goTo}
-    onAddPrecisePosition={addPrecisePosition}
-  /> : <div>Error: the selected point does not exist</div>;
+    onAddPrecisePosition={addPrecisePosition}/> : <div>Error: the selected point does not exist</div>;
 };
 
 export default ScopePoint;

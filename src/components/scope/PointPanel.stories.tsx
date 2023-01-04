@@ -53,10 +53,7 @@ Default.args = {
       color: undefined,
       timestamp: Date.now(),
       description: 'Había un árbol con el tronco torcido en medio del camino.',
-      images: [...Array(3).keys()].map(i => ({
-        path: `https://picsum.photos/300/20${i}`,
-        name: `Imagen ${i}`
-      })),
+      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
       isVisible: true
     }
   },
