@@ -1,5 +1,6 @@
 import {BaseMaps} from './types/commonTypes';
 import {ViewportType} from './hooks/useViewport';
+import {Capacitor} from '@capacitor/core';
 
 export const DRAWER_WIDTH = 270;
 export const SM_BREAKPOINT = 850;
@@ -79,3 +80,5 @@ export const GPS_POSITION_COLOR = '#4286f5';
 export const GPS_POSITION_INACTIVE_COLOR = '#9b9b9b';
 
 export const OFFLINE_DATADIR_NAME = 'offlineData';
+
+export const IS_WEB = Capacitor.getPlatform() === 'web';

@@ -1,10 +1,10 @@
-import { Capacitor } from '@capacitor/core';
 import {CapacitorSQLite, SQLiteConnection} from '@capacitor-community/sqlite';
 import { defineCustomElements as jeepSqlite, applyPolyfills} from 'jeep-sqlite/loader';
 import {inflate} from 'pako';
 import maplibregl from 'maplibre-gl';
 
 import hex2dec from './hex2dec';
+import {IS_WEB} from '../config';
 
 applyPolyfills().then(() => {
   jeepSqlite(window);
@@ -14,8 +14,7 @@ const sqlite = new SQLiteConnection(CapacitorSQLite);
 const query = 'SELECT HEX(tile_data) as tile_data_hex FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ? limit 1';
 
 const init = (async () => {
-  const platform = Capacitor.getPlatform();
-  if (platform === 'web') {
+  if (IS_WEB) {
     try {
       console.debug('[mbtiles] Initializing Offline Web Storage');
       const jeepEl = document.createElement('jeep-sqlite');
@@ -57,8 +56,7 @@ const getTileFromDatabase = async (dbName: string, z: number, x: number, y: numb
 
 const getDatabase = async (dbName: string) => {
   await init;
-  const platform = Capacitor.getPlatform();
-  if (platform === 'web') {
+  if (IS_WEB) {
     if (!sourceDatabases.has(dbName)) {
       try {
         await sqlite.closeConnection(dbName, true);

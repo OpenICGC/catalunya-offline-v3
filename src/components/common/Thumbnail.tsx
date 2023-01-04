@@ -10,14 +10,15 @@ import CloseIcon from '@mui/icons-material/Close';
 //UTILS
 import {styled} from '@mui/styles';
 import {grey} from '@mui/material/colors';
-import {ScopeImage, UUID} from '../../types/commonTypes';
+import {ScopeImage} from '../../types/commonTypes';
 import {Capacitor} from '@capacitor/core';
+import {IS_WEB} from '../../config';
 
 export type ThumbnailProps = {
   image: ScopeImage,
   isDeletable: boolean,
-  onDelete: (imageId: UUID) => void,
-  onDownloadImage: (url: string, title: string) => void
+  onDelete: (image: ScopeImage) => void,
+  onDownloadImage: (image: ScopeImage) => void
 };
 
 const Thumbnail : FC<ThumbnailProps> = ({
@@ -48,19 +49,19 @@ const Thumbnail : FC<ThumbnailProps> = ({
       color: 'primary.main',
     }
   };
-  
-  const url = Capacitor.convertFileSrc(image.path);
+
+  const url = IS_WEB ? image.path : Capacitor.convertFileSrc(image.path);
 
   return <Box display='flex' alignItems='flex-start' sx={{p: 0, my: 1, width: 110}}>
     <Image
       alt={image.name}
       height={68}
       src={url}
-      onClick={() => onDownloadImage(url, image.name)}
+      onClick={() => onDownloadImage(image)}
     />
     {
       isDeletable &&
-          <IconButton size='small' onClick={() => onDelete(image.path)} sx={deleteIconSx}>
+          <IconButton size='small' onClick={() => onDelete(image)} sx={deleteIconSx}>
             <CloseIcon style={{fontSize: 14}} color='inherit'/>
           </IconButton>
     }

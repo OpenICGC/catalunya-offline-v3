@@ -1,8 +1,9 @@
 import React, {FC} from 'react';
-import {ScopeTrack, UUID} from '../../types/commonTypes';
+import {ScopeImage, ScopeTrack, UUID} from '../../types/commonTypes';
 
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import TrackPanel from '../../components/scope/TrackPanel';
+import {openPhoto} from '../../utils/camera';
 
 export interface ScopeTrackProps {
   scopeId: UUID,
@@ -32,17 +33,11 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   const goTo = () => {
     console.log('Unimplemented go to Track'); // TODO
   };
-  
-  const addImage = () => {
-    console.log('Unimplemented Add Image'); // TODO
-  };
 
-  const deleteImage = (imageId: UUID) => {
-    console.log('Unimplemented Delete Image', imageId); // TODO
-  };
-
-  const downloadImage = (imageId: UUID, contentType: string) => {
-    console.log('Unimplemented Download Image', imageId, contentType); // TODO
+  const downloadImage = (image: ScopeImage) => {
+    if (selectedTrack?.properties.images) {
+      openPhoto(selectedTrack.properties.images, image);
+    }
   };
 
   const startRecording = () => {
@@ -59,8 +54,6 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
 
     onTrackChange={trackChange}
     onGoTo={goTo}
-    onAddImage={addImage}
-    onDeleteImage={deleteImage}
     onDownloadImage={downloadImage}
 
     onRecordStart={startRecording}

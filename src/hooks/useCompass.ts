@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {DeviceOrientation, DeviceOrientationCompassHeading} from '@awesome-cordova-plugins/device-orientation';
-import {Capacitor} from '@capacitor/core';
+import {IS_WEB} from '../config';
 
 declare interface CompassError {
   code: 0 | 20;
@@ -10,8 +10,7 @@ const useCompass = () => {
   const [heading, setHeading] = useState<number>();
 
   useEffect(() => {
-    const platform = Capacitor.getPlatform();
-    if (platform === 'web') { // Actually should test for cordova avail
+    if (IS_WEB) { // Actually should test for cordova avail
       const listener = (event: DeviceOrientationEvent) => {
         if (event.alpha !== null) {
           const newHeading = Math.round(360 - event.alpha + screen.orientation.angle);

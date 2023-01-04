@@ -16,8 +16,8 @@ export interface ImageInputProps {
   isEditing: boolean,
     images: ScopeImage[],
     onAddImage: () => void,
-    onDeleteImage: (imageId: string) => void,
-    onDownloadImage: (imageId: string, contentType: string) => void,
+    onDeleteImage: (image: ScopeImage) => void,
+    onDownloadImage: (image: ScopeImage) => void,
     sx?: SxProps
 }
 
@@ -36,7 +36,7 @@ const ImageInput: FC<ImageInputProps> = ({
     <Stack direction='row' flexWrap='wrap'>
       {images.map(image =>
         <Thumbnail
-          key={image.id}
+          key={image.path}
           image={image}
           onDelete={onDeleteImage}
           onDownloadImage={onDownloadImage}

@@ -54,7 +54,7 @@ Default.args = {
       timestamp: Date.now(),
       description: 'Había un árbol con el tronco torcido en medio del camino.',
       images: [...Array(3).keys()].map(i => ({
-        path: 'https://picsum.photos/300/200',
+        path: `https://picsum.photos/300/20${i}`,
         name: `Imagen ${i}`
       })),
       isVisible: true

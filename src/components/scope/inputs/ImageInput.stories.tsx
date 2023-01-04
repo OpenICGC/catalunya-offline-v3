@@ -14,10 +14,7 @@ const Template: Story<ImageInputProps> = args => <ImageInput {...args}/>;
 export const Default = Template.bind({});
 Default.args = {
   images: [...Array(3).keys()].map(i => ({
-    id: uuidv4(),
-    url: 'https://picsum.photos/300/200',
-    name: `Imagen ${i}`,
-    contentType: 'image/jpg',
-    isLoading: Math.random() < 0.1,
+    path: 'https://picsum.photos/300/200',
+    name: `Imagen ${i}`
   }))
 };

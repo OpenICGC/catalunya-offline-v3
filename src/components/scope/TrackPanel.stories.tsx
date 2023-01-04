@@ -53,11 +53,8 @@ Default.args = {
       timestamp: Date.now(),
       description: 'Excursión con amigos de la infancia',
       images: [...Array(3).keys()].map(i => ({
-        id: uuidv4(),
-        url: 'https://picsum.photos/300/200',
-        name: `Imagen ${i}`,
-        contentType: 'image/jpg',
-        isLoading: Math.random() < 0.1,
+        path: `https://picsum.photos/300/20${i}`,
+        name: `Imagen ${i}`
       })),
       color: '#973572',
       isVisible: true
@@ -89,11 +86,8 @@ DeviceWithoutTimestamp.args = {
       timestamp: Date.now(),
       description: 'Excursión con amigos de la infancia',
       images: [...Array(3).keys()].map(i => ({
-        id: uuidv4(),
-        url: 'https://picsum.photos/300/200',
-        name: `Imagen ${i}`,
-        contentType: 'image/jpg',
-        isLoading: Math.random() < 0.1,
+        path: `https://picsum.photos/300/20${i}`,
+        name: `Imagen ${i}`
       })),
       color: '#973572',
       isVisible: true
@@ -113,11 +107,8 @@ DeviceWithoutHeight.args = {
       timestamp: Date.now(),
       description: 'Excursión con amigos de la infancia',
       images: [...Array(3).keys()].map(i => ({
-        id: uuidv4(),
-        url: 'https://picsum.photos/300/200',
-        name: `Imagen ${i}`,
-        contentType: 'image/jpg',
-        isLoading: Math.random() < 0.1,
+        path: `https://picsum.photos/300/20${i}`,
+        name: `Imagen ${i}`
       })),
       color: '#973572',
       isVisible: true
@@ -137,11 +128,8 @@ DeviceWithoutGeom.args = {
       timestamp: Date.now(),
       description: 'Excursión con amigos de la infancia',
       images: [...Array(3).keys()].map(i => ({
-        id: uuidv4(),
-        url: 'https://picsum.photos/300/200',
-        name: `Imagen ${i}`,
-        contentType: 'image/jpg',
-        isLoading: Math.random() < 0.1,
+        path: `https://picsum.photos/300/20${i}`,
+        name: `Imagen ${i}`
       })),
       color: '#973572',
       isVisible: true

@@ -3,7 +3,7 @@ import React, {FC, useEffect, useMemo, useState} from 'react';
 import {StyleSpecification} from 'maplibre-gl';
 
 import {BaseMap} from '../types/commonTypes';
-import {BASEMAPS, INITIAL_BASEMAP} from '../config';
+import {BASEMAPS, INITIAL_BASEMAP, IS_WEB} from '../config';
 import DownloadsManager from '../components/downloads/DownloadsManager';
 import {Capacitor} from '@capacitor/core';
 
@@ -13,8 +13,6 @@ interface useMapStyle {
   setBaseMapId: (baseMapId: string ) => void;
   StyleOfflineDownloaderComponent: FC | JSX.Element
 }
-
-const isWeb = Capacitor.getPlatform() === 'web';
 
 const useMapStyle = (): useMapStyle => {
   
@@ -35,7 +33,7 @@ const useMapStyle = (): useMapStyle => {
   }, [baseMap]);
   
   const StyleOfflineDownloaderComponent = useMemo(() =>
-    baseMap.offlineAssets && !isWeb ?
+    baseMap.offlineAssets && !IS_WEB ?
       <DownloadsManager baseMap={baseMap} onStyleReady={handleStyleDownloaded}/>
       : 
       <></>
