@@ -81,4 +81,5 @@ export const GPS_POSITION_INACTIVE_COLOR = '#9b9b9b';
 
 export const OFFLINE_DATADIR_NAME = 'offlineData';
 
-export const IS_WEB = Capacitor.getPlatform() === 'web';
+export const PLATFORM = Capacitor.getPlatform();
+export const IS_WEB = PLATFORM === 'web';
