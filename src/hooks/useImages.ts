@@ -1,47 +1,44 @@
-import {ScopeImage} from '../types/commonTypes';
+import {ImagePath} from '../types/commonTypes';
 import {useMemo, useState} from 'react';
 import {deletePhoto, takePhoto} from '../utils/camera';
 
-
-
-type ScopeImagesState = {
-  initial: Array<ScopeImage>,
-  created: Array<ScopeImage>,
-  deleted: Array<ScopeImage>,
+type ImagesState = {
+  initial: Array<ImagePath>,
+  created: Array<ImagePath>,
+  deleted: Array<ImagePath>,
 }
 
-interface ScopeImagesInterface {
-  images: Array<ScopeImage>;
+interface ImagesInterface {
+  images: Array<ImagePath>;
   create: () => void;
-  remove: (image: ScopeImage) => void;
+  remove: (image: ImagePath) => void;
   discard: () => void;
   save: () => void;
 }
 
-export const useScopeImages = (images: Array<ScopeImage>): ScopeImagesInterface => {
+const useImages = (images: Array<ImagePath>): ImagesInterface => {
   
-  const [state, setState] = useState<ScopeImagesState>({initial: images, created: [], deleted: []});
+  const [state, setState] = useState<ImagesState>({initial: images, created: [], deleted: []});
 
   const currentImages = useMemo(() => [
     ...state.initial,
     ...state.created
-  ].filter(image => !state.deleted.map(({path}) => path).includes(image.path)), [state]);
+  ].filter(image => !state.deleted.includes(image)), [state]);
   
   const create = async () => {
     const path = await takePhoto();
-    if (path){
-      const name = path.split('/').pop() || '';
+    if (path) {
       setState({
         ...state,
         created: [
           ...state.created,
-          {path, name}
+          path
         ]
       });
     }
   };
   
-  const remove = (image: ScopeImage) => {
+  const remove = (image: ImagePath) => {
     setState({
       ...state,
       deleted: [
@@ -51,7 +48,7 @@ export const useScopeImages = (images: Array<ScopeImage>): ScopeImagesInterface 
     });
   };
   
-  const _deleteImages = async (images: Array<ScopeImage>) => {
+  const _deleteImages = async (images: Array<ImagePath>) => {
     for (const image of images) {
       await deletePhoto(image);
     }
@@ -77,3 +74,5 @@ export const useScopeImages = (images: Array<ScopeImage>): ScopeImagesInterface 
     save
   };
 };
+
+export default useImages;

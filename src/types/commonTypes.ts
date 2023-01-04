@@ -41,7 +41,7 @@ export interface ScopeFeature extends GeoJSON.Feature<GeoJSON.Geometry | null> {
     color?: HEXColor, // Optional, inherits Scope's color
     timestamp: EpochTimeStamp, // In milliseconds https://w3c.github.io/hr-time/#the-epochtimestamp-typedef
     description: string,
-    images: Array<ScopeImage>,
+    images: Array<ImagePath>,
     isVisible: boolean
   }
 }
@@ -54,7 +54,4 @@ export interface ScopeTrack extends ScopeFeature {
   geometry: GeoJSON.LineString | null // Track geometry is nullable
 }
 
-export type ScopeImage = {
-  path: string,
-  name: string
-}
+export type ImagePath = string

@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Thumbnail from '../../common/Thumbnail';
 import AddImageButton from '../../buttons/AddImageButton';
 import {useTranslation} from 'react-i18next';
-import {ScopeImage} from '../../../types/commonTypes';
+import {ImagePath} from '../../../types/commonTypes';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
 
 const classes = {
@@ -14,10 +14,10 @@ const classes = {
 
 export interface ImageInputProps {
   isEditing: boolean,
-    images: ScopeImage[],
+    images: Array<ImagePath>,
     onAddImage: () => void,
-    onDeleteImage: (image: ScopeImage) => void,
-    onDownloadImage: (image: ScopeImage) => void,
+    onDeleteImage: (image: ImagePath) => void,
+    onDownloadImage: (image: ImagePath) => void,
     sx?: SxProps
 }
 
@@ -36,7 +36,7 @@ const ImageInput: FC<ImageInputProps> = ({
     <Stack direction='row' flexWrap='wrap'>
       {images.map(image =>
         <Thumbnail
-          key={image.path}
+          key={image}
           image={image}
           onDelete={onDeleteImage}
           onDownloadImage={onDownloadImage}

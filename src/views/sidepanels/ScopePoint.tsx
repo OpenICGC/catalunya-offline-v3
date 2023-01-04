@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {ScopePoint, UUID} from '../../types/commonTypes';
+import {ImagePath, ScopePoint, UUID} from '../../types/commonTypes';
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import PointPanel from '../../components/scope/PointPanel';
 import GeoJSON from 'geojson';

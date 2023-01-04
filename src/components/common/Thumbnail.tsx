@@ -10,15 +10,15 @@ import CloseIcon from '@mui/icons-material/Close';
 //UTILS
 import {styled} from '@mui/styles';
 import {grey} from '@mui/material/colors';
-import {ScopeImage} from '../../types/commonTypes';
+import {ImagePath} from '../../types/commonTypes';
 import {Capacitor} from '@capacitor/core';
 import {IS_WEB} from '../../config';
 
 export type ThumbnailProps = {
-  image: ScopeImage,
+  image: ImagePath,
   isDeletable: boolean,
-  onDelete: (image: ScopeImage) => void,
-  onDownloadImage: (image: ScopeImage) => void
+  onDelete: (image: ImagePath) => void,
+  onDownloadImage: (image: ImagePath) => void
 };
 
 const Thumbnail : FC<ThumbnailProps> = ({
@@ -50,11 +50,11 @@ const Thumbnail : FC<ThumbnailProps> = ({
     }
   };
 
-  const url = IS_WEB ? image.path : Capacitor.convertFileSrc(image.path);
+  const url = IS_WEB ? image : Capacitor.convertFileSrc(image); // Convert a File path to URL so it can be accessed by JS
 
   return <Box display='flex' alignItems='flex-start' sx={{p: 0, my: 1, width: 110}}>
     <Image
-      alt={image.name}
+      alt={''}
       height={68}
       src={url}
       onClick={() => onDownloadImage(image)}

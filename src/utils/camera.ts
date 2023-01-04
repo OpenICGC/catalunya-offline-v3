@@ -1,7 +1,7 @@
 import {Camera, CameraResultType, ImageOptions} from '@capacitor/camera';
 import {Image, PhotoViewer} from '@capacitor-community/photoviewer';
 import {deleteFile} from './filesystem';
-import {ScopeImage} from '../types/commonTypes';
+import {ImagePath} from '../types/commonTypes';
 import {Capacitor} from '@capacitor/core';
 
 export const takePhoto = () => {
@@ -15,14 +15,13 @@ export const takePhoto = () => {
     .then(photo => photo.path);
 };
 
-export const deletePhoto = (image: ScopeImage) => deleteFile(image.path);
+export const deletePhoto = (image: ImagePath) => deleteFile(image);
 
-export const openPhoto = (images: Array<ScopeImage>, selectedImage: ScopeImage) => {
-  const index = images.findIndex(({path}) => path === selectedImage.path);
+export const openPhoto = (images: Array<ImagePath>, selectedImage: ImagePath) => {
+  const index = images.findIndex(image => image === selectedImage);
 
   const viewerImages: Array<Image> = images.map(image => ({
-    url: Capacitor.convertFileSrc(image.path),
-    title: image.name
+    url: Capacitor.convertFileSrc(image)
   }));
 
   PhotoViewer.show({

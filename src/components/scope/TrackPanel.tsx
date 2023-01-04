@@ -32,11 +32,11 @@ import moment from 'moment/moment';
 import 'moment-duration-format';
 
 //UTILS
-import {HEXColor, Scope, ScopeImage, ScopeTrack, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, ImagePath, ScopeTrack, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
 import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProperties';
-import {useScopeImages} from '../../hooks/useScopeImages';
+import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';
 import {openPhoto} from '../../utils/camera';
 
@@ -80,7 +80,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const [isEditing, setIsEditing] = useState(false);
   const [track, setTrack] = useState(initialTrack);
-  const {images, create, remove, save, discard} = useScopeImages(initialTrack.properties.images);
+  const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
 
   const accums = getAccumulatedTrackProperties(track);
   const distance: string | undefined = accums ? (accums.distance / 1000).toFixed(2) + 'km' : undefined;
@@ -153,7 +153,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const handleAddImage = () => create();
 
-  const handleDeleteImage = (image: ScopeImage) => remove(image);
+  const handleDeleteImage = (image: ImagePath) => remove(image);
 
   const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
 

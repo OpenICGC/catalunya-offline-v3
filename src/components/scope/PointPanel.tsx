@@ -25,12 +25,13 @@ import ImageInput from './inputs/ImageInput';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {HEXColor, Scope, ScopeImage, ScopePoint, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, ImagePath, ScopePoint, UUID} from '../../types/commonTypes';
 import styled from '@mui/styles/styled';
 
 import FeaturesSummary from './FeaturesSummary';
-import {useScopeImages} from '../../hooks/useScopeImages';
+
 import {IS_WEB} from '../../config';
+import useImages from '../../hooks/useImages';
 import {openPhoto} from '../../utils/camera';
 
 //STYLES
@@ -58,7 +59,7 @@ const CoordsFieldEditable = styled(TextField)({
     padding: '4px',
     fontSize: '0.875rem',
     minWidth: '30px'
-  }
+  }  const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
 });
 
 const CoordsFieldNoEditable = styled(InputBase)({
@@ -98,6 +99,7 @@ export type PointPanelProps = {
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void,
+    onDownloadImage: (image: ImagePath) => void,
     onAddPrecisePosition: () => void
 };
 
@@ -109,13 +111,14 @@ const PointPanel: FC<PointPanelProps> = ({
   onBackButtonClick,
   onPointChange,
   onGoTo,
+  onDownloadImage,
   onAddPrecisePosition
 }) => {
   const {t} = useTranslation();
 
   const [isEditing, setIsEditing] = useState(false);
   const [point, setPoint] = useState(initialPoint);
-  const {images, create, remove, save, discard} = useScopeImages(initialPoint.properties.images);
+  const {images, create, remove, save, discard} = useImages(initialPoint.properties.images);
 
   useEffect(() => {
     setPoint(prevPoint => ({
@@ -129,7 +132,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',
-    padding: '0px',
+    padding: '0px',  const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
     marginBottom: isEditing ? '32px' : '16px',
   }), [isEditing]);
 
@@ -207,7 +210,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const handleAddImage = () => create();
 
-  const handleDeleteImage = (image: ScopeImage) => remove(image);
+  const handleDeleteImage = (image: ImagePath) => remove(image);
 
   const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
 
