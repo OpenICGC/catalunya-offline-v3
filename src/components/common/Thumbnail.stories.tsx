@@ -12,27 +12,18 @@ const Template: Story<ThumbnailProps> = args => <Thumbnail {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  image: {
-    path: 'https://picsum.photos/300/200',
-    name: 'image.jpg'
-  },
+  image: 'https://picsum.photos/300/200',
   isDeletable: false
 };
 
 export const Loading = Template.bind({});
 Loading.args = {
-  image: {
-    path: 'https://picsum.photos/300/200',
-    name: 'image.jpg',
-  },
+  image: 'https://picsum.photos/300/200',
   isDeletable: false
 };
 
 export const Deletable = Template.bind({});
 Deletable.args = {
-  image: {
-    path: 'https://picsum.photos/300/200',
-    name: 'image.jpg'
-  },
+  image: 'https://picsum.photos/300/200',
   isDeletable: true
 };
