@@ -36,7 +36,6 @@ import {HEXColor, Scope, ScopeImage, ScopeTrack, UUID} from '../../types/commonT
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
 import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProperties';
-import {deletePhoto, takePhoto} from '../../utils/camera';
 import {useScopeImages} from '../../hooks/useScopeImages';
 import {IS_WEB} from '../../config';
 

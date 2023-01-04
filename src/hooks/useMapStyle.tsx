@@ -5,7 +5,6 @@ import {StyleSpecification} from 'maplibre-gl';
 import {BaseMap} from '../types/commonTypes';
 import {BASEMAPS, INITIAL_BASEMAP, IS_WEB} from '../config';
 import DownloadsManager from '../components/downloads/DownloadsManager';
-import {Capacitor} from '@capacitor/core';
 
 interface useMapStyle {
   baseMapId: string;

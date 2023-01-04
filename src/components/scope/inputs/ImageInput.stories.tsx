@@ -2,7 +2,6 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import ImageInput, {ImageInputProps} from './ImageInput';
-import {v4 as uuidv4} from 'uuid';
 
 export default {
   title: 'Scope/Inputs/ImageInput',
