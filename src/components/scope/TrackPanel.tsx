@@ -32,10 +32,13 @@ import moment from 'moment/moment';
 import 'moment-duration-format';
 
 //UTILS
-import {HEXColor, Scope, ScopeTrack, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, ImagePath, ScopeTrack, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
 import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProperties';
+import useImages from '../../hooks/useImages';
+import {IS_WEB} from '../../config';
+import {openPhoto} from '../../utils/camera';
 
 //STYLES
 const sectionWrapperSx = {
@@ -56,11 +59,8 @@ export type TrackPanelProps = {
   initialTrack: ScopeTrack,
   numPoints: number,
   numTracks: number,
-  onAddImage: () => void,
-  onDeleteImage: (imageId: UUID) => void,
-  onDownloadImage: (imageId: UUID, contentType: string) => void,
   onRecordStart: () => void,
-  onTrackChange: (newPoint: ScopeTrack) => void,
+  onTrackChange: (newTrack: ScopeTrack) => void,
   onBackButtonClick: () => void,
   onGoTo: (pointId: UUID) => void,
 };
@@ -71,9 +71,6 @@ const TrackPanel: FC<TrackPanelProps> = ({
   initialTrack,
   numPoints,
   numTracks,
-  onAddImage,
-  onDeleteImage,
-  onDownloadImage,
   onRecordStart,
   onTrackChange,
   onBackButtonClick,
@@ -83,6 +80,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const [isEditing, setIsEditing] = useState(false);
   const [track, setTrack] = useState(initialTrack);
+  const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
 
   const accums = getAccumulatedTrackProperties(track);
   const distance: string | undefined = accums ? (accums.distance / 1000).toFixed(2) + 'km' : undefined;
@@ -153,12 +151,26 @@ const TrackPanel: FC<TrackPanelProps> = ({
       }
     })), []);
 
+  const handleAddImage = () => create();
+
+  const handleDeleteImage = (image: ImagePath) => remove(image);
+
+  const handleOpenImage = (image: ImagePath) => openPhoto(images, image);
+
   const handleAccept = () => {
-    onTrackChange(track);
+    save();
+    onTrackChange({
+      ...track,
+      properties: {
+        ...track.properties,
+        images
+      }
+    });
     setIsEditing(false);
   };
 
   const handleCancel = () => {
+    discard();
     setTrack(initialTrack);
     setIsEditing(false);
   };
@@ -217,13 +229,13 @@ const TrackPanel: FC<TrackPanelProps> = ({
       </Stack>
       <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={track.properties.timestamp} sx={sxInput}/>
       <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={track.properties.description} sx={sxInput}/>
-      <ImageInput isEditing={isEditing}
+      {!IS_WEB && <ImageInput isEditing={isEditing}
         images={track.properties.images}
         sx={sxInput}
-        onAddImage={onAddImage}
-        onDeleteImage={onDeleteImage}
-        onDownloadImage={onDownloadImage}
-      />
+        onAddImage={handleAddImage}
+        onDeleteImage={handleDeleteImage}
+        onDownloadImage={handleOpenImage}
+      />}
     </ScrollableContent>
     {isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>

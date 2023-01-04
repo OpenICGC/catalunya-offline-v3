@@ -25,10 +25,14 @@ import ImageInput from './inputs/ImageInput';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {HEXColor, Scope, ScopePoint, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, ImagePath, ScopePoint, UUID} from '../../types/commonTypes';
 import styled from '@mui/styles/styled';
 
 import FeaturesSummary from './FeaturesSummary';
+
+import {IS_WEB} from '../../config';
+import useImages from '../../hooks/useImages';
+import {openPhoto} from '../../utils/camera';
 
 //STYLES
 const sectionWrapperSx = {
@@ -95,9 +99,6 @@ export type PointPanelProps = {
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void,
-    onAddImage: () => void,
-    onDeleteImage: (imageId: UUID) => void,
-    onDownloadImage: (imageId: UUID, contentType: string) => void,
     onAddPrecisePosition: () => void
 };
 
@@ -109,15 +110,13 @@ const PointPanel: FC<PointPanelProps> = ({
   onBackButtonClick,
   onPointChange,
   onGoTo,
-  onAddImage,
-  onDeleteImage,
-  onDownloadImage,
   onAddPrecisePosition
 }) => {
   const {t} = useTranslation();
 
   const [isEditing, setIsEditing] = useState(false);
   const [point, setPoint] = useState(initialPoint);
+  const {images, create, remove, save, discard} = useImages(initialPoint.properties.images);
 
   useEffect(() => {
     setPoint(prevPoint => ({
@@ -206,13 +205,27 @@ const PointPanel: FC<PointPanelProps> = ({
         }
       };
     }), []);
-  
+
+  const handleAddImage = () => create();
+
+  const handleDeleteImage = (image: ImagePath) => remove(image);
+
+  const handleOpenImage = (image: ImagePath) => openPhoto(images, image);
+
   const handleAccept = () => {
-    onPointChange(point);
+    save();
+    onPointChange({
+      ...point,
+      properties: {
+        ...point.properties,
+        images
+      }
+    });
     setIsEditing(false);
   };
 
   const handleCancel = () => {
+    discard();
     setPoint(initialPoint);
     setIsEditing(false);
   };
@@ -300,11 +313,11 @@ const PointPanel: FC<PointPanelProps> = ({
       </Stack>
       <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={point.properties.timestamp} sx={sxInput}/>
       <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={point.properties.description} sx={sxInput}/>
-      <ImageInput isEditing={isEditing} images={point.properties.images} sx={sxInput}
-        onAddImage={onAddImage}
-        onDeleteImage={onDeleteImage}
-        onDownloadImage={onDownloadImage}
-      />
+      {!IS_WEB && <ImageInput isEditing={isEditing} images={images} sx={sxInput}
+        onAddImage={handleAddImage}
+        onDeleteImage={handleDeleteImage}
+        onDownloadImage={handleOpenImage}
+      />}
     </ScrollableContent>
     { isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>

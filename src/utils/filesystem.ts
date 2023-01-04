@@ -88,3 +88,13 @@ export const unZipOnSameFolder = async (uri: string) => {
   return result === 0 ? uri.replace('.zip', '') : '';
 };
 
+export const deleteFile = async (path:string) => {
+  try {
+    await Filesystem.deleteFile({
+      path
+    });
+    return true;
+  } catch (e) {
+    return false;
+  }
+};

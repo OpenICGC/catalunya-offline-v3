@@ -1,8 +1,9 @@
-import {Capacitor, registerPlugin} from '@capacitor/core';
+import {registerPlugin} from '@capacitor/core';
 import {useEffect, useState} from 'react';
 import {CatOfflineError} from '../types/commonTypes';
 import {BackgroundGeolocationPlugin, CallbackError, Location} from '@capacitor-community/background-geolocation';
 import useAppState, {AppState} from './useAppState';
+import {IS_WEB} from '../config';
 
 const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>('BackgroundGeolocation');
 
@@ -56,7 +57,6 @@ const useGeolocation = (watchInBackground= false) => {
   const [error, setError] = useState<CatOfflineError>();
   const [geolocation, setGeolocation] = useState<Geolocation>(nullGeolocation);
   const appState = useAppState();
-  const isWeb = Capacitor.getPlatform() === 'web';
 
   const capacitorConfig = {
     // backgroundMessage is required to guarantee a background location
@@ -141,7 +141,7 @@ const useGeolocation = (watchInBackground= false) => {
 
   const startWatching = () => {
     stopWatching();
-    if (isWeb) {
+    if (IS_WEB) {
       navigator.geolocation.getCurrentPosition(handleWebGeolocation, handleWebError, webConfig);
       const id = navigator.geolocation.watchPosition(handleWebGeolocation, handleWebError, webConfig);
       setWatcherId(id.toString());
@@ -163,7 +163,7 @@ const useGeolocation = (watchInBackground= false) => {
 
   const stopWatching = () => {
     if (watcherId) {
-      if (isWeb) {
+      if (IS_WEB) {
         navigator.geolocation.clearWatch(Number(watcherId));
         setWatcherId(undefined);
         console.debug('[Geolocation] Stopped Web watching', watcherId);

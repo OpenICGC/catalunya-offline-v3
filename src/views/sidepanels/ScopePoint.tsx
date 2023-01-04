@@ -45,18 +45,6 @@ const ScopePoint: FC<ScopePointProps> = ({
     });
   };
 
-  const addImage = () => {
-    console.log('Unimplemented Add Image'); // TODO
-  };
-
-  const deleteImage = (imageId: UUID) => {
-    console.log('Unimplemented Delete Image', imageId); // TODO
-  };
-
-  const downloadImage = (imageId: UUID, contentType: string) => {
-    console.log('Unimplemented Download Image', imageId, contentType); // TODO
-  };
-
   const addPrecisePosition = () => {
     onPrecisePositionRequested(selectedPoint?.geometry.coordinates || true);
   };
@@ -70,11 +58,7 @@ const ScopePoint: FC<ScopePointProps> = ({
 
     onPointChange={pointChange}
     onGoTo={goTo}
-    onAddImage={addImage}
-    onDeleteImage={deleteImage}
-    onDownloadImage={downloadImage}
-    onAddPrecisePosition={addPrecisePosition}
-  /> : <div>Error: the selected point does not exist</div>;
+    onAddPrecisePosition={addPrecisePosition}/> : <div>Error: the selected point does not exist</div>;
 };
 
 export default ScopePoint;
