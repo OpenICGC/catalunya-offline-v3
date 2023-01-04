@@ -1,9 +1,8 @@
 import React, {FC} from 'react';
-import {ScopeImage, ScopeTrack, UUID} from '../../types/commonTypes';
+import {ScopeTrack, UUID} from '../../types/commonTypes';
 
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import TrackPanel from '../../components/scope/TrackPanel';
-import {openPhoto} from '../../utils/camera';
 
 export interface ScopeTrackProps {
   scopeId: UUID,
@@ -34,12 +33,6 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     console.log('Unimplemented go to Track'); // TODO
   };
 
-  const downloadImage = (image: ScopeImage) => {
-    if (selectedTrack?.properties.images) {
-      openPhoto(selectedTrack.properties.images, image);
-    }
-  };
-
   const startRecording = () => {
     console.log('Unimplemented Start Recording'); // TODO
   };
@@ -54,7 +47,6 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
 
     onTrackChange={trackChange}
     onGoTo={goTo}
-    onDownloadImage={downloadImage}
 
     onRecordStart={startRecording}
   /> : <div>Error: the selected track does not exist</div>;

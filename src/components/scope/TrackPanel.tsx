@@ -38,6 +38,7 @@ import styled from '@mui/styles/styled';
 import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProperties';
 import {useScopeImages} from '../../hooks/useScopeImages';
 import {IS_WEB} from '../../config';
+import {openPhoto} from '../../utils/camera';
 
 //STYLES
 const sectionWrapperSx = {
@@ -58,7 +59,6 @@ export type TrackPanelProps = {
   initialTrack: ScopeTrack,
   numPoints: number,
   numTracks: number,
-  onDownloadImage: (image: ScopeImage) => void,
   onRecordStart: () => void,
   onTrackChange: (newTrack: ScopeTrack) => void,
   onBackButtonClick: () => void,
@@ -71,7 +71,6 @@ const TrackPanel: FC<TrackPanelProps> = ({
   initialTrack,
   numPoints,
   numTracks,
-  onDownloadImage,
   onRecordStart,
   onTrackChange,
   onBackButtonClick,
@@ -156,6 +155,8 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const handleDeleteImage = (image: ScopeImage) => remove(image);
 
+  const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
+
   const handleAccept = () => {
     save();
     onTrackChange({
@@ -233,7 +234,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
         sx={sxInput}
         onAddImage={handleAddImage}
         onDeleteImage={handleDeleteImage}
-        onDownloadImage={onDownloadImage}
+        onDownloadImage={handleOpenImage}
       />}
     </ScrollableContent>
     {isEditing &&

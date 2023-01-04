@@ -27,7 +27,7 @@ export const openPhoto = (images: Array<ScopeImage>, selectedImage: ScopeImage) 
 
   PhotoViewer.show({
     images: viewerImages,
-    mode: 'slider',
+    mode: images.length > 1 ? 'slider' : 'one',
     startFrom: index,
     options: {
       share: false

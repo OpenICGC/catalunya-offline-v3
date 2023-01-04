@@ -1,12 +1,11 @@
 import React, {FC} from 'react';
 
-import {ScopeImage, ScopePoint, UUID} from '../../types/commonTypes';
+import {ScopePoint, UUID} from '../../types/commonTypes';
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import PointPanel from '../../components/scope/PointPanel';
 import GeoJSON from 'geojson';
 import {useViewport} from '../../hooks/useViewport';
 import {MAP_PROPS} from '../../config';
-import {openPhoto} from '../../utils/camera';
 
 export interface ScopePointProps {
   scopeId: UUID,
@@ -46,12 +45,6 @@ const ScopePoint: FC<ScopePointProps> = ({
     });
   };
 
-  const downloadImage = (image: ScopeImage) => {
-    if (selectedPoint?.properties.images) {
-      openPhoto(selectedPoint.properties.images, image);
-    }
-  };
-
   const addPrecisePosition = () => {
     onPrecisePositionRequested(selectedPoint?.geometry.coordinates || true);
   };
@@ -65,7 +58,6 @@ const ScopePoint: FC<ScopePointProps> = ({
 
     onPointChange={pointChange}
     onGoTo={goTo}
-    onDownloadImage={downloadImage}
     onAddPrecisePosition={addPrecisePosition}
   /> : <div>Error: the selected point does not exist</div>;
 };

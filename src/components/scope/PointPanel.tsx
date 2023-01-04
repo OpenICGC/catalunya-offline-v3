@@ -31,6 +31,7 @@ import styled from '@mui/styles/styled';
 import FeaturesSummary from './FeaturesSummary';
 import {useScopeImages} from '../../hooks/useScopeImages';
 import {IS_WEB} from '../../config';
+import {openPhoto} from '../../utils/camera';
 
 //STYLES
 const sectionWrapperSx = {
@@ -97,7 +98,6 @@ export type PointPanelProps = {
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void,
-    onDownloadImage: (image: ScopeImage) => void,
     onAddPrecisePosition: () => void
 };
 
@@ -109,7 +109,6 @@ const PointPanel: FC<PointPanelProps> = ({
   onBackButtonClick,
   onPointChange,
   onGoTo,
-  onDownloadImage,
   onAddPrecisePosition
 }) => {
   const {t} = useTranslation();
@@ -209,6 +208,8 @@ const PointPanel: FC<PointPanelProps> = ({
   const handleAddImage = () => create();
 
   const handleDeleteImage = (image: ScopeImage) => remove(image);
+
+  const handleOpenImage = (image: ScopeImage) => openPhoto(images, image);
 
   const handleAccept = () => {
     save();
@@ -314,7 +315,7 @@ const PointPanel: FC<PointPanelProps> = ({
       {!IS_WEB && <ImageInput isEditing={isEditing} images={images} sx={sxInput}
         onAddImage={handleAddImage}
         onDeleteImage={handleDeleteImage}
-        onDownloadImage={onDownloadImage}
+        onDownloadImage={handleOpenImage}
       />}
     </ScrollableContent>
     { isEditing &&
