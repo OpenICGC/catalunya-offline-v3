@@ -21,7 +21,8 @@ export const openPhoto = (images: Array<ImagePath>, selectedImage: ImagePath) =>
   const index = images.findIndex(image => image === selectedImage);
 
   const viewerImages: Array<Image> = images.map(image => ({
-    url: Capacitor.convertFileSrc(image)
+    url: Capacitor.convertFileSrc(image),
+    title: ''
   }));
 
   PhotoViewer.show({

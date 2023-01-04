@@ -1,13 +1,11 @@
-import {PLATFORM} from '../config';
-
 export const getOrientation = () => {
-  if (PLATFORM === 'ios') {
+  if (screen?.orientation) {
+    return screen.orientation.angle;
+  } else {
     let angle = window.orientation;
     if (angle === -90) {
       angle = 360 - 90;
     }
     return angle;
-  } else {
-    return screen.orientation.angle;
   }
 };
