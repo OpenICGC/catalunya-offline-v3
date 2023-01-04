@@ -127,7 +127,6 @@
     "babel-plugin-typescript-to-proptypes": "^2.0.0",
     "compare-versions": "^6.0.0-rc.1",
     "cordova-plugin-device-orientation": "^2.0.1",
-    "install": "^0.13.0",
     "cordova-plugin-file": "^7.0.0",
     "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer#7ba6fa3755605bca6bfeef2c2a808a1f22c6848c",
     "cordova-plugin-zip": "^3.1.0",

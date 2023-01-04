@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {DeviceOrientation, DeviceOrientationCompassHeading} from '@awesome-cordova-plugins/device-orientation';
 import {IS_WEB} from '../config';
+import {getOrientation} from '../utils/orientation';
 
 declare interface CompassError {
   code: 0 | 20;
@@ -29,7 +30,7 @@ const useCompass = () => {
       };
     } else {
       const onSuccess = ({magneticHeading}: DeviceOrientationCompassHeading) => {
-        const newHeading = Math.round(magneticHeading + screen.orientation.angle);
+        const newHeading = Math.round(magneticHeading + getOrientation());
         setHeading(prevHeading => prevHeading === newHeading ? prevHeading : newHeading);
       };
 
