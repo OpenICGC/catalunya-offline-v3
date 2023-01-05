@@ -58,7 +58,8 @@ const ScopePoint: FC<ScopePointProps> = ({
 
     onPointChange={pointChange}
     onGoTo={goTo}
-    onAddPrecisePosition={addPrecisePosition}/> : <div>Error: the selected point does not exist</div>;
+    onAddPrecisePosition={addPrecisePosition}
+  /> : <div>Error: the selected point does not exist</div>;
 };
 
 export default ScopePoint;
