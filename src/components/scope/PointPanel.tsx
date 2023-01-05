@@ -313,7 +313,9 @@ const PointPanel: FC<PointPanelProps> = ({
       </Stack>
       <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={point.properties.timestamp} sx={sxInput}/>
       <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={point.properties.description} sx={sxInput}/>
-      {!IS_WEB && <ImageInput isEditing={isEditing} images={images} sx={sxInput}
+      {!IS_WEB && <ImageInput isEditing={isEditing}
+        images={images}
+        sx={sxInput}
         onAddImage={handleAddImage}
         onDeleteImage={handleDeleteImage}
         onDownloadImage={handleOpenImage}

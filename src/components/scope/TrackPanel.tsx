@@ -82,7 +82,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const [track, setTrack] = useState(initialTrack);
   const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
 
-  const accums = getAccumulatedTrackProperties(track);
+  const accums = useMemo(() => getAccumulatedTrackProperties(track), [track]);
   const distance: string | undefined = accums ? (accums.distance / 1000).toFixed(2) + 'km' : undefined;
   const ascent: string | undefined = accums?.ascent + 'm';
   const descent: string | undefined = accums?.descent + 'm';
@@ -91,7 +91,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
   const hasTimestamp = !!track.geometry?.coordinates[track.geometry.coordinates.length - 1][3] || false;
 
-  const actionIcons = [
+  const actionIcons = useMemo(() => ([
     {
       id: 'rename',
       activeIcon: <EditIcon/>
@@ -101,7 +101,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
       activeIcon: <SwipeRightAltIcon/>,
       disabled: !track.geometry
     }
-  ];
+  ]), [track.geometry]);
 
   const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',
@@ -209,8 +209,9 @@ const TrackPanel: FC<TrackPanelProps> = ({
             </Box> :
             <Stack>
               <Stack direction="row" sx={{justifyContent: 'space-between'}}>
-                {track.geometry &&
-                  <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/>}
+                { track.geometry &&
+                  <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/>
+                }
                 <Stack direction="row" justifyContent="space-between" gap={0.5} sx={{flexGrow: 1}}>
                   <Stack direction="column" sx={{justifyContent: 'space-between'}}>
                     <TrackProperty icon={<StraightenIcon/>} value={distance}/>
@@ -230,7 +231,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
       <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={track.properties.timestamp} sx={sxInput}/>
       <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={track.properties.description} sx={sxInput}/>
       {!IS_WEB && <ImageInput isEditing={isEditing}
-        images={track.properties.images}
+        images={images}
         sx={sxInput}
         onAddImage={handleAddImage}
         onDeleteImage={handleDeleteImage}
