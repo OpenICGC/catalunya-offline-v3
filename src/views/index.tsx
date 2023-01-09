@@ -30,7 +30,6 @@ const Index: FC = () => {
   const [scope, setScope] = useState<UUID>();
   const [point, setPoint] = useState<UUID>();
   const [track, setTrack] = useState<UUID>();
-  const [precisePositionRequest, setPrecisePositionRequest] = useState<boolean | GeoJSON.Position>(false);
   const pointStore = useScopePoints(scope);
 
   const acceptPrecisePosition = (position: GeoJSON.Position) => {
@@ -44,11 +43,10 @@ const Index: FC = () => {
         }
       });
     }
-    setPrecisePositionRequest(false);
   };
 
   const cancelPrecisePosition = () => {
-    setPrecisePositionRequest(false);
+    // TODO
   };
 
   const toggleSidePanel = () => {
@@ -75,7 +73,7 @@ const Index: FC = () => {
         onPointSelected={setPoint}
         selectedTrack={track}
         onTrackSelected={setTrack}
-        onPrecisePositionRequested={setPrecisePositionRequest}
+        onPrecisePositionRequested={() => undefined}
       />}
     </Stack>
     : <></>
@@ -87,7 +85,7 @@ const Index: FC = () => {
     onManagerChanged={setManager}
     selectedScope={scope}
     setSelectedPoint={setPoint}
-    precisePositionRequest={precisePositionRequest}
+    //precisePositionRequest={precisePositionRequest}
     onPrecisePositionAccepted={acceptPrecisePosition}
     onPrecisePositionCancelled={cancelPrecisePosition}
   />;

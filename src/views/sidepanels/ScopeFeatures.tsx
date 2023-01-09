@@ -42,7 +42,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const unselectPoint = () => onPointSelected();
   const unselectTrack = () => onTrackSelected();
 
-  const [viewport, setViewport] = useViewport();
+  const {viewport, setViewport} = useViewport();
 
   const pointAdd = () => {
     pointStore.create({
@@ -103,7 +103,6 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const pointGoTo = (pointId: UUID) => {
     const targetPosition = pointStore.retrieve(pointId)?.geometry.coordinates;
     targetPosition && setViewport({
-      ...viewport,
       longitude: targetPosition[0],
       latitude: targetPosition[1],
       zoom: MAP_PROPS.maxZoom - 1

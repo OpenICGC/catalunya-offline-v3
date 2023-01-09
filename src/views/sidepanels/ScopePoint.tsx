@@ -23,7 +23,7 @@ const ScopePoint: FC<ScopePointProps> = ({
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
-  const [viewport, setViewport] = useViewport();
+  const {setViewport} = useViewport();
 
   const selectedScope = scopeStore.retrieve(scopeId);
   const selectedPoint = pointStore.retrieve(pointId);
@@ -38,7 +38,6 @@ const ScopePoint: FC<ScopePointProps> = ({
   const goTo = (pointId: UUID) => {
     const targetPosition = pointStore.retrieve(pointId)?.geometry.coordinates;
     targetPosition && setViewport({
-      ...viewport,
       longitude: targetPosition[0],
       latitude: targetPosition[1],
       zoom: MAP_PROPS.maxZoom - 1

@@ -15,6 +15,7 @@ import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
 import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
+import {usePositionEditor} from '../hooks/usePositionEditor';
 
 mbtiles(maplibregl);
 
@@ -69,12 +70,11 @@ const Map: FC<MainContentProps> = ({
   onManagerChanged,
   selectedScope,
   setSelectedPoint,
-  precisePositionRequest = false,
   onPrecisePositionAccepted,
   onPrecisePositionCancelled
 }) => {
   const mapRef = useRef<maplibregl.Map>();
-  const [viewport, setViewport] = useViewport();
+  const {viewport, setViewport} = useViewport();
   const {geolocation, error: geolocationError} = useGeolocation();
   const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
@@ -83,6 +83,8 @@ const Map: FC<MainContentProps> = ({
   const scopeColor = selectedScope ? scopeStore.retrieve(selectedScope)?.color : undefined;
   const pointStore = useScopePoints(selectedScope);
   const pointList = pointStore.list();
+
+  const positionEditor = usePositionEditor();
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -167,7 +169,6 @@ const Map: FC<MainContentProps> = ({
     if (latitude && longitude) {
       if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
         setViewport({
-          ...viewport,
           latitude,
           longitude,
           zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
@@ -182,7 +183,6 @@ const Map: FC<MainContentProps> = ({
     if (locationStatus === LOCATION_STATUS.NAVIGATING) {
       if (heading !== undefined) {
         setViewport({
-          ...viewport,
           bearing: heading
         });
       }
@@ -193,24 +193,18 @@ const Map: FC<MainContentProps> = ({
     onManagerChanged(clicked === manager ? undefined : clicked);
   };
 
-  useEffect(() => {
-    if (Array.isArray(precisePositionRequest)) {
-      setViewport({
-        ...viewport,
-        longitude: precisePositionRequest[0],
-        latitude: precisePositionRequest[1],
-        zoom: MAP_PROPS.maxZoom
-      });
-    }
-  }, [precisePositionRequest]);
-
   const handlePrecisePositionAccepted = () => {
-    onPrecisePositionAccepted([viewport.longitude, viewport.latitude]);
+    positionEditor.position && onPrecisePositionAccepted(positionEditor.position);
+    positionEditor.accept();
+  };
+
+  const handlePrecisePositionCancelled = () => {
+    onPrecisePositionCancelled();
+    positionEditor.cancel();
   };
 
   const selectPoint = (point: ScopePoint) => {
     setViewport({
-      ...viewport,
       longitude: point.geometry.coordinates[0],
       latitude: point.geometry.coordinates[1],
       zoom: MAP_PROPS.maxZoom
@@ -234,7 +228,7 @@ const Map: FC<MainContentProps> = ({
     >
       <LocationMarker geolocation={geolocation} heading={heading}/>
       <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
-      {!precisePositionRequest && <FabButton
+      {!positionEditor.position && <FabButton
         isLeftHanded={false} isAccessibleSize={false}
         bearing={viewport.bearing} pitch={viewport.pitch}
         locationStatus={locationStatus}
@@ -245,10 +239,9 @@ const Map: FC<MainContentProps> = ({
         onScopesClick={() => changeManager('SCOPES')}
       />}
     </GeocomponentMap>
-    {!!precisePositionRequest && <PrecisePositionEditor
-      // name={} // TODO get selected point's name
+    {!!positionEditor.position && <PrecisePositionEditor
       onAccept={handlePrecisePositionAccepted}
-      onCancel={onPrecisePositionCancelled}
+      onCancel={handlePrecisePositionCancelled}
     />}
   </>;
 };
