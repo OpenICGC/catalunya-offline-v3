@@ -63,6 +63,7 @@ const Index: FC = () => {
     manager={manager}
     onManagerChanged={setManager}
     selectedScope={scope}
+    setSelectedScope={setScope}
     setSelectedPoint={setPoint}
   />;
 

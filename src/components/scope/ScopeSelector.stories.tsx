@@ -19,7 +19,6 @@ const palette = useColorRamp('BrewerDark27').hexColors;
 export const Default = Template.bind({});
 Default.args = {
   isAccesibleSize: false,
-  isOpen: true,
   scopes: [...Array(25).keys()].map(i => ({
     id: uuidv4(),
     name: `Mi ámbito ${i}`,

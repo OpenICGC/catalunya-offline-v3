@@ -10,6 +10,7 @@ import ScopePoint from './ScopePoint';
 import ScopeTrack from './ScopeTrack';
 import {useViewport} from '../../hooks/useViewport';
 import {MAP_PROPS} from '../../config';
+import useEditingPosition from '../../hooks/useEditingPosition';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -36,25 +37,33 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const pointStore = useScopePoints(scopeId);
   const trackStore = useScopeTracks(scopeId);
 
+  const editingPosition = useEditingPosition();
+
   const unselectPoint = () => onPointSelected();
   const unselectTrack = () => onTrackSelected();
 
-  const {viewport, setViewport} = useViewport();
+  const {setViewport} = useViewport();
 
   const pointAdd = () => {
-    pointStore.create({
-      type: 'Feature',
-      id: uuid(),
-      geometry: {
-        type: 'Point',
-        coordinates: [viewport.longitude, viewport.latitude] // TODO Ask for a PrecisePosition before creating point
-      },
-      properties: {
-        name: `${t('point')} ${pointStore.list().length + 1}`,
-        timestamp: Date.now(),
-        description: '',
-        images: [],
-        isVisible: true
+    editingPosition.start({
+      onAccept: (newPosition) => {
+        const id = uuid();
+        pointStore.create({
+          type: 'Feature',
+          id: id,
+          geometry: {
+            type: 'Point',
+            coordinates: newPosition
+          },
+          properties: {
+            name: `${t('point')} ${pointStore.list().length + 1}`,
+            timestamp: Date.now(),
+            description: '',
+            images: [],
+            isVisible: true
+          }
+        });
+        onPointSelected(id);
       }
     });
   };

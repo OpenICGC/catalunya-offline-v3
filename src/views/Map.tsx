@@ -19,6 +19,7 @@ import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
 import {Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
+import ScopeSelector from '../components/scope/ScopeSelector';
 
 mbtiles(maplibregl);
 
@@ -61,6 +62,7 @@ export type MainContentProps = {
   manager: Manager,
   onManagerChanged: (newManager: Manager) => void,
   selectedScope?: UUID,
+  setSelectedScope: (scopeId: UUID) => void,
   setSelectedPoint: (pointId: UUID) => void
 };
 
@@ -69,6 +71,7 @@ const Map: FC<MainContentProps> = ({
   manager,
   onManagerChanged,
   selectedScope,
+  setSelectedScope,
   setSelectedPoint
 }) => {
   const mapRef = useRef<maplibregl.Map>();
@@ -84,6 +87,7 @@ const Map: FC<MainContentProps> = ({
   const pointList = pointStore.list();
 
   const editingPosition = useEditingPosition();
+  const [pointIntent, setPointIntent] = useState<Position>();
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -201,29 +205,40 @@ const Map: FC<MainContentProps> = ({
     setSelectedPoint(point.id);
   };
 
+  const createNewPoint = (coordinates: Position) => {
+    const id = uuid();
+    pointStore.create({
+      type: 'Feature',
+      id: id,
+      geometry: {
+        type: 'Point',
+        coordinates: coordinates
+      },
+      properties: {
+        name: `${t('point')} ${pointStore.list().length + 1}`,
+        timestamp: Date.now(),
+        description: '',
+        images: [],
+        isVisible: true
+      }
+    });
+    setPointIntent(undefined);
+    setSelectedPoint(id);
+    return id;
+  };
+
   const onLongTap = useCallback((position: Position) => {
     editingPosition.start({
       initialPosition: position,
       onAccept: (newPosition) => {
-        selectedScope ? pointStore.create({
-          type: 'Feature',
-          id: uuid(),
-          geometry: {
-            type: 'Point',
-            coordinates: newPosition
-          },
-          properties: {
-            name: `${t('point')} ${pointStore.list().length + 1}`,
-            timestamp: Date.now(),
-            description: '',
-            images: [],
-            isVisible: true
-          }
-        }) : console.error('TODO: No scope selected, point could not be created'); // TODO ask for the scope
+        if (selectedScope) {
+          createNewPoint(newPosition);
+        } else {
+          setPointIntent(newPosition);
+        }
       }
     });
   }, [editingPosition, selectedScope, pointStore]);
-
 
   const longTouchTimer = useRef<number>();
 
@@ -246,6 +261,19 @@ const Map: FC<MainContentProps> = ({
 
   const handleDoubleClick = (e: MapLayerMouseEvent) => {
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
+  };
+
+  const handleScopeSelected = (scopeId: UUID) => {
+    setSelectedScope(scopeId);
+  };
+
+  useEffect(() => {
+    pointIntent && selectedScope && createNewPoint(pointIntent);
+  }, [pointIntent, selectedScope]);
+
+  const handleScopeSelectionCancelled = () => {
+    // TODO cancel the point intent
+    setPointIntent(undefined);
   };
 
   return <>
@@ -286,6 +314,12 @@ const Map: FC<MainContentProps> = ({
     {!!editingPosition.position && <PrecisePositionEditor
       onAccept={editingPosition.accept}
       onCancel={editingPosition.cancel}
+    />}
+    {!!pointIntent && <ScopeSelector
+      isAccesibleSize={false}
+      scopes={scopeStore.list()}
+      onScopeSelected={handleScopeSelected}
+      onCancel={handleScopeSelectionCancelled}
     />}
   </>;
 };
