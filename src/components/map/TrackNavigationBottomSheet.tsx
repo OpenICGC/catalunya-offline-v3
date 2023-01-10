@@ -18,7 +18,6 @@ import TrackProfile from '../scope/inputs/TrackProfile';
 
 //UTILS
 import {HEXColor} from '../../types/commonTypes';
-import {useTranslation} from 'react-i18next';
 import GeoJSON from 'geojson';
 
 export interface TrackNavigationBottomSheetProps {
