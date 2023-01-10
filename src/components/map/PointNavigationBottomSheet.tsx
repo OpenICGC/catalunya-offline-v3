@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 
@@ -17,6 +16,7 @@ import BottomSheet from '@geomatico/geocomponents/BottomSheet';
 
 //CATTOFFLINE
 import ListItem from '../scope/ListItem';
+import MarkerDetails from '../icons/MarkerDetails';
 import NoGoTo from '../icons/NoGoTo';
 
 //UTILS
@@ -46,7 +46,7 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
     },
     {
       id: 'details',
-      activeIcon: <ContentPasteSearchIcon/>
+      activeIcon: <MarkerDetails/>
     },
     {
       id: 'overview',

@@ -4,7 +4,7 @@ import React, {FC, useState} from 'react';
 import Stack from '@mui/material/Stack';
 
 //MUI-ICONS
-import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
+
 import TransferWithinAStationIcon from '@mui/icons-material/TransferWithinAStation';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 
@@ -14,6 +14,7 @@ import BottomSheet from '@geomatico/geocomponents/BottomSheet';
 //CATTOFFLINE
 import ListItem from '../scope/ListItem';
 import NoGoTo from '../icons/NoGoTo';
+import TrackDetails from '../icons/TrackDetails';
 import TrackProfile from '../scope/inputs/TrackProfile';
 
 //UTILS
@@ -47,7 +48,7 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
     },
     {
       id: 'details',
-      activeIcon: <ContentPasteSearchIcon/>
+      activeIcon: <TrackDetails/>
     },
     {
       id: 'overview',
