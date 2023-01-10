@@ -224,7 +224,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
                   </Stack>
                 </Stack>
               </Stack>
-              <TrackProfile geometry={track.geometry} color={track.properties.color}/>
+              <TrackProfile geometry={track.geometry} color={track.properties.color} isOutOfTrack={false}/>
             </Stack>
         }
       </Stack>
