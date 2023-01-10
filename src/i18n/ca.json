@@ -38,6 +38,7 @@
   },
   "layerManager": "Capes",
   "noScopeAlert": "Trieu un àmbit per al punt",
+  "point": "Punt",
   "properties": {
     "date": "Data",
     "description": "Descripció",
@@ -57,6 +58,7 @@
   },
   "scopeManager": "Àmbits",
   "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
+  "track": "Traça",
   "trackAlert": {
     "noTrack": "No es pot mostrar el perfil de la traza"
   }

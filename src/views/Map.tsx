@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import maplibregl, {StyleSpecification} from 'maplibre-gl';
 
 import GeocomponentMap from '@geomatico/geocomponents/Map';
@@ -15,6 +15,10 @@ import PointMarkers from '../components/map/PointMarkers';
 import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
 import useEditingPosition from '../hooks/useEditingPosition';
+import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
+import {Position} from 'geojson';
+import {v4 as uuid} from 'uuid';
+import {useTranslation} from 'react-i18next';
 
 mbtiles(maplibregl);
 
@@ -72,6 +76,7 @@ const Map: FC<MainContentProps> = ({
   const {geolocation, error: geolocationError} = useGeolocation();
   const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
+  const {t} = useTranslation();
 
   const scopeStore = useScopes();
   const scopeColor = selectedScope ? scopeStore.retrieve(selectedScope)?.color : undefined;
@@ -128,7 +133,7 @@ const Map: FC<MainContentProps> = ({
   };
 
   const disableTracking = () => {
-    if(locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
+    if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
       setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
     }
   };
@@ -158,7 +163,7 @@ const Map: FC<MainContentProps> = ({
     }
   }, [locationStatus]);
 
-  useEffect( () => {
+  useEffect(() => {
     const {latitude, longitude} = geolocation;
     if (latitude && longitude) {
       if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
@@ -196,6 +201,53 @@ const Map: FC<MainContentProps> = ({
     setSelectedPoint(point.id);
   };
 
+  const onLongTap = useCallback((position: Position) => {
+    editingPosition.start({
+      initialPosition: position,
+      onAccept: (newPosition) => {
+        selectedScope ? pointStore.create({
+          type: 'Feature',
+          id: uuid(),
+          geometry: {
+            type: 'Point',
+            coordinates: newPosition
+          },
+          properties: {
+            name: `${t('point')} ${pointStore.list().length + 1}`,
+            timestamp: Date.now(),
+            description: '',
+            images: [],
+            isVisible: true
+          }
+        }) : console.error('TODO: No scope selected, point could not be created'); // TODO ask for the scope
+      }
+    });
+  }, [editingPosition, selectedScope, pointStore]);
+
+
+  const longTouchTimer = useRef<number>();
+
+  const handleTouchStart = (e: MapTouchEvent) => {
+    if (e.originalEvent.touches.length > 1) {
+      return;
+    }
+    clearLongTouchTimer();
+    longTouchTimer.current = window.setTimeout(() => {
+      onLongTap([e.lngLat.lng, e.lngLat.lat]);
+    }, 500);
+  };
+
+  const clearLongTouchTimer = () => {
+    if (longTouchTimer.current) {
+      window.clearTimeout(longTouchTimer.current);
+      longTouchTimer.current = undefined;
+    }
+  };
+
+  const handleDoubleClick = (e: MapLayerMouseEvent) => {
+    onLongTap([e.lngLat.lng, e.lngLat.lat]);
+  };
+
   return <>
     <GeocomponentMap
       {...MAP_PROPS}
@@ -207,8 +259,16 @@ const Map: FC<MainContentProps> = ({
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
-      onTouchMove={disableTracking}
+      onTouchMove={() => {
+        disableTracking();
+        clearLongTouchTimer();
+      }}
       onWheel={disableTracking}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={clearLongTouchTimer}
+      onTouchCancel={clearLongTouchTimer}
+      onDblClick={handleDoubleClick}
+      doubleClickZoom={false}
     >
       <LocationMarker geolocation={geolocation} heading={heading}/>
       <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>

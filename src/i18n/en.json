@@ -38,6 +38,7 @@
   },
   "layerManager": "Layers",
   "noScopeAlert": "Choose the point's scope",
+  "point": "Point",
   "properties": {
     "date": "Date",
     "description": "Description",
@@ -57,6 +58,7 @@
   },
   "scopeManager": "Scopes",
   "topographicMap": "Topographic Map of Catalonia 1:25 000",
+  "track": "Track",
   "trackAlert": {
     "noTrack": "It is not possible to show track profile."
   }

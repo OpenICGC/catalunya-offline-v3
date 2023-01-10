@@ -4,11 +4,11 @@ import {useViewport} from './useViewport';
 import {singletonHook} from 'react-singleton-hook';
 import {MAP_PROPS} from '../config';
 
-type acceptFn = (finalPosition?: Position) => void;
+type acceptFn = (finalPosition: Position) => void;
 type cancelFn = (initialPosition?: Position) => void;
 
 type startFn = (argument: {
-  initialPosition: Position | undefined,
+  initialPosition?: Position,
   onAccept?: acceptFn,
   onCancel?: cancelFn
 }) => boolean;
@@ -53,7 +53,7 @@ const useEditingPositionImpl = () => {
   };
 
   const accept = () => {
-    state.onAccept && state.onAccept(position);
+    position && state.onAccept && state.onAccept(position);
     setState(initialState);
   };
 
