@@ -11,7 +11,6 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 //CATOFFLINE
 import CancelButton from '../buttons/CancelButton';
-import AcceptButton from '../buttons/AcceptButton';
 import List from './List';
 
 //UTILS
