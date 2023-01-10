@@ -8,9 +8,9 @@ import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCo
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
 import ScopeTrack from './ScopeTrack';
-import GeoJSON from 'geojson';
 import {useViewport} from '../../hooks/useViewport';
 import {MAP_PROPS} from '../../config';
+import useEditingPosition from '../../hooks/useEditingPosition';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -18,8 +18,7 @@ type ScopeFeaturesProps = {
   selectedPoint?: UUID,
   onPointSelected: (scopeId?: UUID) => void,
   selectedTrack?: UUID,
-  onTrackSelected: (scopeId?: UUID) => void,
-  onPrecisePositionRequested: (request: GeoJSON.Position | boolean) => void
+  onTrackSelected: (scopeId?: UUID) => void
 };
 
 const ScopeFeatures: FC<ScopeFeaturesProps> = ({
@@ -28,8 +27,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   selectedPoint,
   onPointSelected,
   selectedTrack,
-  onTrackSelected,
-  onPrecisePositionRequested
+  onTrackSelected
 }) => {
   const {t} = useTranslation();
 
@@ -39,25 +37,33 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const pointStore = useScopePoints(scopeId);
   const trackStore = useScopeTracks(scopeId);
 
+  const editingPosition = useEditingPosition();
+
   const unselectPoint = () => onPointSelected();
   const unselectTrack = () => onTrackSelected();
 
-  const [viewport, setViewport] = useViewport();
+  const {setViewport} = useViewport();
 
   const pointAdd = () => {
-    pointStore.create({
-      type: 'Feature',
-      id: uuid(),
-      geometry: {
-        type: 'Point',
-        coordinates: [viewport.longitude, viewport.latitude] // TODO Ask for a PrecisePosition before creating point
-      },
-      properties: {
-        name: `${t('point')} ${pointStore.list().length + 1}`,
-        timestamp: Date.now(),
-        description: '',
-        images: [],
-        isVisible: true
+    editingPosition.start({
+      onAccept: (newPosition) => {
+        const id = uuid();
+        pointStore.create({
+          type: 'Feature',
+          id: id,
+          geometry: {
+            type: 'Point',
+            coordinates: newPosition
+          },
+          properties: {
+            name: `${t('point')} ${pointStore.list().length + 1}`,
+            timestamp: Date.now(),
+            description: '',
+            images: [],
+            isVisible: true
+          }
+        });
+        onPointSelected(id);
       }
     });
   };
@@ -103,7 +109,6 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const pointGoTo = (pointId: UUID) => {
     const targetPosition = pointStore.retrieve(pointId)?.geometry.coordinates;
     targetPosition && setViewport({
-      ...viewport,
       longitude: targetPosition[0],
       latitude: targetPosition[1],
       zoom: MAP_PROPS.maxZoom - 1
@@ -186,7 +191,6 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     scopeId={scopeId}
     pointId={selectedPoint}
     onClose={unselectPoint}
-    onPrecisePositionRequested={onPrecisePositionRequested}
   />;
 
   if (selectedScope) return <FeaturesPanel

@@ -9,7 +9,6 @@ import {HEXColor, UUID} from '../../types/commonTypes';
 import {useScopes} from '../../hooks/useStoredCollections';
 import MainPanel from '../../components/scope/MainPanel';
 import ScopeFeatures from './ScopeFeatures';
-import GeoJSON from 'geojson';
 
 export interface ScopeMainProps {
   selectedScope?: UUID,
@@ -17,8 +16,7 @@ export interface ScopeMainProps {
   selectedPoint?: UUID,
   onPointSelected: (scopeId?: UUID) => void,
   selectedTrack?: UUID,
-  onTrackSelected: (scopeId?: UUID) => void,
-  onPrecisePositionRequested: (request: GeoJSON.Position | boolean) => void
+  onTrackSelected: (scopeId?: UUID) => void
 }
 
 const ScopeMain: FC<ScopeMainProps> = ({
@@ -27,8 +25,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
   selectedPoint,
   onPointSelected,
   selectedTrack,
-  onTrackSelected,
-  onPrecisePositionRequested
+  onTrackSelected
 }) => {
   const {t} = useTranslation();
   const {hexColors: palette} = useColorRamp('BrewerDark27');
@@ -97,7 +94,6 @@ const ScopeMain: FC<ScopeMainProps> = ({
       onPointSelected={onPointSelected}
       selectedTrack={selectedTrack}
       onTrackSelected={onTrackSelected}
-      onPrecisePositionRequested={onPrecisePositionRequested}
     />;
 };
 

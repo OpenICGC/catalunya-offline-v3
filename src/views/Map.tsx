@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import maplibregl, {StyleSpecification} from 'maplibre-gl';
 
 import GeocomponentMap from '@geomatico/geocomponents/Map';
@@ -10,11 +10,16 @@ import {mbtiles} from '../utils/mbtiles';
 import useCompass from '../hooks/useCompass';
 import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import PrecisePositionEditor from '../components/map/PrecisePositionEditor';
-import GeoJSON from 'geojson';
 import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
 import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
+import useEditingPosition from '../hooks/useEditingPosition';
+import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
+import {Position} from 'geojson';
+import {v4 as uuid} from 'uuid';
+import {useTranslation} from 'react-i18next';
+import ScopeSelector from '../components/scope/ScopeSelector';
 
 mbtiles(maplibregl);
 
@@ -57,10 +62,8 @@ export type MainContentProps = {
   manager: Manager,
   onManagerChanged: (newManager: Manager) => void,
   selectedScope?: UUID,
-  setSelectedPoint: (pointId: UUID) => void,
-  precisePositionRequest?: boolean | GeoJSON.Position,
-  onPrecisePositionAccepted: (position: GeoJSON.Position) => void
-  onPrecisePositionCancelled: () => void
+  setSelectedScope: (scopeId: UUID) => void,
+  setSelectedPoint: (pointId: UUID) => void
 };
 
 const Map: FC<MainContentProps> = ({
@@ -68,21 +71,23 @@ const Map: FC<MainContentProps> = ({
   manager,
   onManagerChanged,
   selectedScope,
-  setSelectedPoint,
-  precisePositionRequest = false,
-  onPrecisePositionAccepted,
-  onPrecisePositionCancelled
+  setSelectedScope,
+  setSelectedPoint
 }) => {
   const mapRef = useRef<maplibregl.Map>();
-  const [viewport, setViewport] = useViewport();
+  const {viewport, setViewport} = useViewport();
   const {geolocation, error: geolocationError} = useGeolocation();
   const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
+  const {t} = useTranslation();
 
   const scopeStore = useScopes();
   const scopeColor = selectedScope ? scopeStore.retrieve(selectedScope)?.color : undefined;
   const pointStore = useScopePoints(selectedScope);
   const pointList = pointStore.list();
+
+  const editingPosition = useEditingPosition();
+  const [pointIntent, setPointIntent] = useState<Position>();
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -132,7 +137,7 @@ const Map: FC<MainContentProps> = ({
   };
 
   const disableTracking = () => {
-    if(locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
+    if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
       setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
     }
   };
@@ -162,12 +167,11 @@ const Map: FC<MainContentProps> = ({
     }
   }, [locationStatus]);
 
-  useEffect( () => {
+  useEffect(() => {
     const {latitude, longitude} = geolocation;
     if (latitude && longitude) {
       if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
         setViewport({
-          ...viewport,
           latitude,
           longitude,
           zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
@@ -182,7 +186,6 @@ const Map: FC<MainContentProps> = ({
     if (locationStatus === LOCATION_STATUS.NAVIGATING) {
       if (heading !== undefined) {
         setViewport({
-          ...viewport,
           bearing: heading
         });
       }
@@ -193,29 +196,84 @@ const Map: FC<MainContentProps> = ({
     onManagerChanged(clicked === manager ? undefined : clicked);
   };
 
-  useEffect(() => {
-    if (Array.isArray(precisePositionRequest)) {
-      setViewport({
-        ...viewport,
-        longitude: precisePositionRequest[0],
-        latitude: precisePositionRequest[1],
-        zoom: MAP_PROPS.maxZoom
-      });
-    }
-  }, [precisePositionRequest]);
-
-  const handlePrecisePositionAccepted = () => {
-    onPrecisePositionAccepted([viewport.longitude, viewport.latitude]);
-  };
-
   const selectPoint = (point: ScopePoint) => {
     setViewport({
-      ...viewport,
       longitude: point.geometry.coordinates[0],
       latitude: point.geometry.coordinates[1],
       zoom: MAP_PROPS.maxZoom
     });
     setSelectedPoint(point.id);
+  };
+
+  const createNewPoint = (coordinates: Position) => {
+    const id = uuid();
+    pointStore.create({
+      type: 'Feature',
+      id: id,
+      geometry: {
+        type: 'Point',
+        coordinates: coordinates
+      },
+      properties: {
+        name: `${t('point')} ${pointStore.list().length + 1}`,
+        timestamp: Date.now(),
+        description: '',
+        images: [],
+        isVisible: true
+      }
+    });
+    setPointIntent(undefined);
+    setSelectedPoint(id);
+    return id;
+  };
+
+  const onLongTap = useCallback((position: Position) => {
+    editingPosition.start({
+      initialPosition: position,
+      onAccept: (newPosition) => {
+        if (selectedScope) {
+          createNewPoint(newPosition);
+        } else {
+          setPointIntent(newPosition);
+        }
+      }
+    });
+  }, [editingPosition, selectedScope, pointStore]);
+
+  const longTouchTimer = useRef<number>();
+
+  const handleTouchStart = (e: MapTouchEvent) => {
+    if (e.originalEvent.touches.length > 1) {
+      return;
+    }
+    clearLongTouchTimer();
+    longTouchTimer.current = window.setTimeout(() => {
+      onLongTap([e.lngLat.lng, e.lngLat.lat]);
+    }, 500);
+  };
+
+  const clearLongTouchTimer = () => {
+    if (longTouchTimer.current) {
+      window.clearTimeout(longTouchTimer.current);
+      longTouchTimer.current = undefined;
+    }
+  };
+
+  const handleDoubleClick = (e: MapLayerMouseEvent) => {
+    onLongTap([e.lngLat.lng, e.lngLat.lat]);
+  };
+
+  const handleScopeSelected = (scopeId: UUID) => {
+    setSelectedScope(scopeId);
+  };
+
+  useEffect(() => {
+    pointIntent && selectedScope && createNewPoint(pointIntent);
+  }, [pointIntent, selectedScope]);
+
+  const handleScopeSelectionCancelled = () => {
+    // TODO cancel the point intent
+    setPointIntent(undefined);
   };
 
   return <>
@@ -229,12 +287,20 @@ const Map: FC<MainContentProps> = ({
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
-      onTouchMove={disableTracking}
+      onTouchMove={() => {
+        disableTracking();
+        clearLongTouchTimer();
+      }}
       onWheel={disableTracking}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={clearLongTouchTimer}
+      onTouchCancel={clearLongTouchTimer}
+      onDblClick={handleDoubleClick}
+      doubleClickZoom={false}
     >
       <LocationMarker geolocation={geolocation} heading={heading}/>
       <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
-      {!precisePositionRequest && <FabButton
+      {!editingPosition.position && <FabButton
         isLeftHanded={false} isAccessibleSize={false}
         bearing={viewport.bearing} pitch={viewport.pitch}
         locationStatus={locationStatus}
@@ -245,10 +311,15 @@ const Map: FC<MainContentProps> = ({
         onScopesClick={() => changeManager('SCOPES')}
       />}
     </GeocomponentMap>
-    {!!precisePositionRequest && <PrecisePositionEditor
-      // name={} // TODO get selected point's name
-      onAccept={handlePrecisePositionAccepted}
-      onCancel={onPrecisePositionCancelled}
+    {!!editingPosition.position && <PrecisePositionEditor
+      onAccept={editingPosition.accept}
+      onCancel={editingPosition.cancel}
+    />}
+    {!!pointIntent && <ScopeSelector
+      isAccesibleSize={false}
+      scopes={scopeStore.list()}
+      onScopeSelected={handleScopeSelected}
+      onCancel={handleScopeSelectionCancelled}
     />}
   </>;
 };

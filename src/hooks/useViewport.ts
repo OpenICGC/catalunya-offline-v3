@@ -1,5 +1,5 @@
 import {INITIAL_VIEWPORT} from '../config';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import { singletonHook } from 'react-singleton-hook';
 
 export type ViewportType = {
@@ -11,7 +11,25 @@ export type ViewportType = {
 };
 
 const useViewportImpl = () => {
-  return useState(INITIAL_VIEWPORT);
+  const [viewport, setViewport] = useState<ViewportType>(INITIAL_VIEWPORT);
+
+  const updateViewport = useCallback(
+    (newViewport: Partial<ViewportType>) => setViewport(
+      prevViewport => ({
+        ...prevViewport,
+        ...newViewport
+      })
+    ), []);
+
+  return {
+    viewport,
+    setViewport: updateViewport
+  };
 };
 
-export const useViewport = singletonHook([INITIAL_VIEWPORT, () => undefined], useViewportImpl);
+const initialState = {
+  viewport: INITIAL_VIEWPORT,
+  setViewport: () => undefined
+};
+
+export const useViewport = singletonHook(initialState, useViewportImpl);

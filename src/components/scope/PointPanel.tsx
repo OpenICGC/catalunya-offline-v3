@@ -33,6 +33,8 @@ import FeaturesSummary from './FeaturesSummary';
 import {IS_WEB} from '../../config';
 import useImages from '../../hooks/useImages';
 import {openPhoto} from '../../utils/camera';
+import useEditingPosition from '../../hooks/useEditingPosition';
+import {Position} from 'geojson';
 
 //STYLES
 const sectionWrapperSx = {
@@ -98,8 +100,7 @@ export type PointPanelProps = {
     numTracks: number,
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
-    onGoTo: (pointId: UUID) => void,
-    onAddPrecisePosition: () => void
+    onGoTo: (pointId: UUID) => void
 };
 
 const PointPanel: FC<PointPanelProps> = ({
@@ -109,14 +110,15 @@ const PointPanel: FC<PointPanelProps> = ({
   numTracks,
   onBackButtonClick,
   onPointChange,
-  onGoTo,
-  onAddPrecisePosition
+  onGoTo
 }) => {
   const {t} = useTranslation();
 
   const [isEditing, setIsEditing] = useState(false);
   const [point, setPoint] = useState(initialPoint);
   const {images, create, remove, save, discard} = useImages(initialPoint.properties.images);
+
+  const editingPosition = useEditingPosition();
 
   useEffect(() => {
     setPoint(prevPoint => ({
@@ -206,11 +208,26 @@ const PointPanel: FC<PointPanelProps> = ({
       };
     }), []);
 
+  const setPosition = useCallback((newPosition?: Position) =>
+    newPosition && setPoint(prevPoint => ({
+      ...prevPoint,
+      geometry: {
+        type: 'Point',
+        coordinates: prevPoint.geometry.coordinates.length > 2 ? [...newPosition, prevPoint.geometry.coordinates[2]] : newPosition
+      }
+    })),
+  []);
+
   const handleAddImage = () => create();
 
   const handleDeleteImage = (image: ImagePath) => remove(image);
 
   const handleOpenImage = (image: ImagePath) => openPhoto(images, image);
+
+  const stopEditing = () => {
+    editingPosition.cancel();
+    setIsEditing(false);
+  };
 
   const handleAccept = () => {
     save();
@@ -221,14 +238,26 @@ const PointPanel: FC<PointPanelProps> = ({
         images
       }
     });
-    setIsEditing(false);
+    stopEditing();
   };
 
   const handleCancel = () => {
     discard();
     setPoint(initialPoint);
-    setIsEditing(false);
+    stopEditing();
   };
+
+  const startEditingPosition = () => {
+    editingPosition.start({
+      initialPosition: point?.geometry.coordinates,
+      onAccept: setPosition,
+      onCancel: setPosition
+    });
+  };
+
+  useEffect(() => {
+    setPosition(editingPosition.position);
+  }, [editingPosition.position]);
 
   return <>
     <Header
@@ -305,7 +334,7 @@ const PointPanel: FC<PointPanelProps> = ({
             <Typography sx={coordTitle} variant='caption'>{t('properties.height')}</Typography>
           </Stack>
           <Stack alignItems='center' sx={{m: 0, p: 0}}>
-            <IconButton size='small' onClick={() => onAddPrecisePosition()} sx={precisePositionIconSx}>
+            <IconButton size='small' onClick={startEditingPosition} sx={precisePositionIconSx}>
               <EditLocationAltIcon sx={{color: isEditing? 'grey.600' : 'transparent'}}/>
             </IconButton>
           </Stack>
