@@ -8,7 +8,6 @@ import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCo
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
 import ScopeTrack from './ScopeTrack';
-import GeoJSON from 'geojson';
 import {useViewport} from '../../hooks/useViewport';
 import {MAP_PROPS} from '../../config';
 
@@ -18,8 +17,7 @@ type ScopeFeaturesProps = {
   selectedPoint?: UUID,
   onPointSelected: (scopeId?: UUID) => void,
   selectedTrack?: UUID,
-  onTrackSelected: (scopeId?: UUID) => void,
-  onPrecisePositionRequested: (request: GeoJSON.Position | boolean) => void
+  onTrackSelected: (scopeId?: UUID) => void
 };
 
 const ScopeFeatures: FC<ScopeFeaturesProps> = ({
@@ -28,8 +26,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   selectedPoint,
   onPointSelected,
   selectedTrack,
-  onTrackSelected,
-  onPrecisePositionRequested
+  onTrackSelected
 }) => {
   const {t} = useTranslation();
 
@@ -185,7 +182,6 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     scopeId={scopeId}
     pointId={selectedPoint}
     onClose={unselectPoint}
-    onPrecisePositionRequested={onPrecisePositionRequested}
   />;
 
   if (selectedScope) return <FeaturesPanel

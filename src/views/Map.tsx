@@ -10,12 +10,11 @@ import {mbtiles} from '../utils/mbtiles';
 import useCompass from '../hooks/useCompass';
 import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import PrecisePositionEditor from '../components/map/PrecisePositionEditor';
-import GeoJSON from 'geojson';
 import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
 import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
-import {usePositionEditor} from '../hooks/usePositionEditor';
+import useEditingPosition from '../hooks/useEditingPosition';
 
 mbtiles(maplibregl);
 
@@ -58,10 +57,7 @@ export type MainContentProps = {
   manager: Manager,
   onManagerChanged: (newManager: Manager) => void,
   selectedScope?: UUID,
-  setSelectedPoint: (pointId: UUID) => void,
-  precisePositionRequest?: boolean | GeoJSON.Position,
-  onPrecisePositionAccepted: (position: GeoJSON.Position) => void
-  onPrecisePositionCancelled: () => void
+  setSelectedPoint: (pointId: UUID) => void
 };
 
 const Map: FC<MainContentProps> = ({
@@ -69,9 +65,7 @@ const Map: FC<MainContentProps> = ({
   manager,
   onManagerChanged,
   selectedScope,
-  setSelectedPoint,
-  onPrecisePositionAccepted,
-  onPrecisePositionCancelled
+  setSelectedPoint
 }) => {
   const mapRef = useRef<maplibregl.Map>();
   const {viewport, setViewport} = useViewport();
@@ -84,7 +78,7 @@ const Map: FC<MainContentProps> = ({
   const pointStore = useScopePoints(selectedScope);
   const pointList = pointStore.list();
 
-  const positionEditor = usePositionEditor();
+  const editingPosition = useEditingPosition();
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -193,16 +187,6 @@ const Map: FC<MainContentProps> = ({
     onManagerChanged(clicked === manager ? undefined : clicked);
   };
 
-  const handlePrecisePositionAccepted = () => {
-    positionEditor.position && onPrecisePositionAccepted(positionEditor.position);
-    positionEditor.accept();
-  };
-
-  const handlePrecisePositionCancelled = () => {
-    onPrecisePositionCancelled();
-    positionEditor.cancel();
-  };
-
   const selectPoint = (point: ScopePoint) => {
     setViewport({
       longitude: point.geometry.coordinates[0],
@@ -228,7 +212,7 @@ const Map: FC<MainContentProps> = ({
     >
       <LocationMarker geolocation={geolocation} heading={heading}/>
       <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
-      {!positionEditor.position && <FabButton
+      {!editingPosition.position && <FabButton
         isLeftHanded={false} isAccessibleSize={false}
         bearing={viewport.bearing} pitch={viewport.pitch}
         locationStatus={locationStatus}
@@ -239,9 +223,9 @@ const Map: FC<MainContentProps> = ({
         onScopesClick={() => changeManager('SCOPES')}
       />}
     </GeocomponentMap>
-    {!!positionEditor.position && <PrecisePositionEditor
-      onAccept={handlePrecisePositionAccepted}
-      onCancel={handlePrecisePositionCancelled}
+    {!!editingPosition.position && <PrecisePositionEditor
+      onAccept={editingPosition.accept}
+      onCancel={editingPosition.cancel}
     />}
   </>;
 };

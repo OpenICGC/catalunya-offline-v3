@@ -10,8 +10,6 @@ import Layers from './sidepanels/Layers';
 import BaseMaps from './sidepanels/BaseMaps';
 import ScopeMain from './sidepanels/ScopeMain';
 import Stack from '@mui/material/Stack';
-import GeoJSON from 'geojson';
-import {useScopePoints} from '../hooks/useStoredCollections';
 import useMapStyle from '../hooks/useMapStyle';
 
 const stackSx = {
@@ -30,24 +28,6 @@ const Index: FC = () => {
   const [scope, setScope] = useState<UUID>();
   const [point, setPoint] = useState<UUID>();
   const [track, setTrack] = useState<UUID>();
-  const pointStore = useScopePoints(scope);
-
-  const acceptPrecisePosition = (position: GeoJSON.Position) => {
-    const prevPoint = point && pointStore.retrieve(point);
-    if (prevPoint) {
-      pointStore.update({
-        ...prevPoint,
-        geometry: {
-          ...prevPoint.geometry,
-          coordinates: position
-        }
-      });
-    }
-  };
-
-  const cancelPrecisePosition = () => {
-    // TODO
-  };
 
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);
@@ -73,7 +53,6 @@ const Index: FC = () => {
         onPointSelected={setPoint}
         selectedTrack={track}
         onTrackSelected={setTrack}
-        onPrecisePositionRequested={() => undefined}
       />}
     </Stack>
     : <></>
@@ -85,9 +64,6 @@ const Index: FC = () => {
     onManagerChanged={setManager}
     selectedScope={scope}
     setSelectedPoint={setPoint}
-    //precisePositionRequest={precisePositionRequest}
-    onPrecisePositionAccepted={acceptPrecisePosition}
-    onPrecisePositionCancelled={cancelPrecisePosition}
   />;
 
   return <>
