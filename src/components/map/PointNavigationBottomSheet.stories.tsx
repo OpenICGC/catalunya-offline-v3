@@ -23,7 +23,7 @@ const Template: Story<PointNavigationBottomSheetProps> = args => <PointNavigatio
 
 export const Default = Template.bind({});
 Default.args = {
-  name: 'Point 01',
+  name: 'Track 01',
   color: '#973572',
   course: 73.5,
   distance: 120

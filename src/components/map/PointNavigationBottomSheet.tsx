@@ -1,25 +1,33 @@
 import React, {FC, useState} from 'react';
-import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
-import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import StraightenIcon from '@mui/icons-material/Straighten';
-import BottomSheet from '@geomatico/geocomponents/BottomSheet';
-import ListItem from '../scope/ListItem';
-import {HEXColor} from '../../types/commonTypes';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+
+//MUI
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import {useTranslation} from 'react-i18next';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+
+//MUI-ICONS
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
+import StraightenIcon from '@mui/icons-material/Straighten';
+import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
+
+//GEOCOMPONETS
+import BottomSheet from '@geomatico/geocomponents/BottomSheet';
+
+//CATTOFFLINE
+import ListItem from '../scope/ListItem';
 import NoGoTo from '../icons/NoGoTo';
 
+//UTILS
+import {HEXColor} from '../../types/commonTypes';
+import {useTranslation} from 'react-i18next';
 
 export interface PointNavigationBottomSheetProps {
     name: string,
     color: HEXColor,
     course: number,
-    distance: number,
-    onActionClick: () => void
+    distance: number
 }
 
 const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
@@ -27,7 +35,6 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
   color,
   course,
   distance,
-  onActionClick
 }) => {
   const {t} = useTranslation();
 
@@ -57,16 +64,13 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
     openHeight={'80vh'}
     onToggle={() => setOpen(!isOpen)}
     isOpen={isOpen}
-    swipeableStyleProps={{}}
   >
     <ListItem
       itemId="point"
       name={name}
       color={color}
       actionIcons={actionIcons}
-      onActionClick={onActionClick}
-      onColorChange={() => console.log('You can\'t change the color at this point')}
-      onNameChange={() => console.log('You can\'t change the name at this point')}
+      onActionClick={() => undefined}
     />
     <Stack direction="row" justifyContent='space-around' sx={{mt: 1}}>
       <Stack alignItems='center'>

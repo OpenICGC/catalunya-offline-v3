@@ -51,9 +51,9 @@ export type ListItemProps = {
   contextualMenu?: Array<{ id: string, label: string, icon?: ReactNode }>,
   onActionClick: (itemId: UUID, actionId: string) => void,
   onClick?: (itemId: UUID) => void,
-  onColorChange: (itemId: UUID, color: HEXColor) => void,
+  onColorChange?: (itemId: UUID, color: HEXColor) => void,
   onContextualMenuClick?: (itemId: UUID, menuId: string) => void,
-  onNameChange: (itemId: UUID, name: string) => void,
+  onNameChange?: (itemId: UUID, name: string) => void,
   onStopEditing?: () => void
 }
 
@@ -68,9 +68,9 @@ const ListItem: FC<ListItemProps> = memo(({
   contextualMenu = [],
   onActionClick,
   onClick = () => undefined,
-  onColorChange, 
+  onColorChange = () => undefined,
   onContextualMenuClick = () => undefined,
-  onNameChange,
+  onNameChange = () => undefined,
   onStopEditing = () => undefined
 }) => {
   const {t} = useTranslation();

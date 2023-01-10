@@ -29,7 +29,22 @@ export const Default = Template.bind({});
 Default.args = {
   geometry: sampleGeometry,
   color: '#4d0330',
-  currentPositionIndex: undefined
+  currentPositionIndex: undefined,
+  isOutOfTrack: false,
+  isReverseDirection: false
+};
+
+export const Navigate = Template.bind({});
+Navigate.args = {
+  ...Default.args,
+  currentPositionIndex: 17
+};
+
+export const NavigateOutOfTrack = Template.bind({});
+NavigateOutOfTrack.args = {
+  ...Default.args,
+  currentPositionIndex: 17,
+  isOutOfTrack: true
 };
 
 export const WithoutHeight = Template.bind({});
@@ -63,12 +78,6 @@ InvalidCoords.args = {
     type: 'LineString',
     coordinates: [[-250, 200, -50], [-200, 210, -55]],
   }
-};
-
-export const Navigate = Template.bind({});
-Navigate.args = {
-  ...Default.args,
-  currentPositionIndex: 17
 };
 
 export const NavigateFirstIndex = Template.bind({});

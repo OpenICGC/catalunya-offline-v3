@@ -60,6 +60,7 @@
   "scopeManager": "Scopes",
   "topographicMap": "Topographic Map of Catalonia 1:25 000",
   "trackAlert": {
-    "noTrack": "It is not possible to show track profile."
+    "noTrack": "It is not possible to show track profile.",
+    "outOfTrack": "OUT OF TRACK"
   }
 }

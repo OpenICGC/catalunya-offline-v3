@@ -1,0 +1,78 @@
+import React, {FC, useState} from 'react';
+
+//MUI
+import Stack from '@mui/material/Stack';
+
+//MUI-ICONS
+import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
+import TransferWithinAStationIcon from '@mui/icons-material/TransferWithinAStation';
+import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
+
+//GEOCOMPONETS
+import BottomSheet from '@geomatico/geocomponents/BottomSheet';
+
+//CATTOFFLINE
+import ListItem from '../scope/ListItem';
+import NoGoTo from '../icons/NoGoTo';
+import TrackProfile from '../scope/inputs/TrackProfile';
+
+//UTILS
+import {HEXColor} from '../../types/commonTypes';
+import {useTranslation} from 'react-i18next';
+import GeoJSON from 'geojson';
+
+export interface TrackNavigationBottomSheetProps {
+    name: string,
+    color: HEXColor,
+    geometry: GeoJSON.LineString,
+    isOutOfTrack: boolean,
+    isReverseDirection: boolean
+}
+
+const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
+  name,
+  color,
+  geometry,
+  isOutOfTrack,
+  isReverseDirection,
+}) => {
+  const [isOpen, setOpen] = useState(true);
+  const actionIcons = [
+    {
+      id: 'toggleDirection',
+      activeIcon: <TransferWithinAStationIcon/>
+    },
+    {
+      id: 'noGoTo',
+      activeIcon: <NoGoTo/>
+    },
+    {
+      id: 'details',
+      activeIcon: <ContentPasteSearchIcon/>
+    },
+    {
+      id: 'overview',
+      activeIcon: <ZoomOutMapIcon/>
+    }
+  ];
+
+  return <BottomSheet
+    closedHeight={20}
+    openHeight={'80vh'}
+    onToggle={() => setOpen(!isOpen)}
+    isOpen={isOpen}
+  >
+    <ListItem
+      itemId="track"
+      name={name}
+      color={color}
+      actionIcons={actionIcons}
+      onActionClick={() => undefined}
+    />
+    <Stack direction="column" sx={{mt: 1}}>
+      <TrackProfile geometry={geometry} color={color} currentPositionIndex={24} isOutOfTrack={isOutOfTrack} isReverseDirection={isReverseDirection}/>
+    </Stack>
+  </BottomSheet>;
+};
+
+export default TrackNavigationBottomSheet;
