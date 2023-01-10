@@ -9,7 +9,6 @@ import {HEXColor, UUID} from '../../types/commonTypes';
 import {useScopes} from '../../hooks/useStoredCollections';
 import MainPanel from '../../components/scope/MainPanel';
 import ScopeFeatures from './ScopeFeatures';
-import GeoJSON from 'geojson';
 
 export interface ScopeMainProps {
   selectedScope?: UUID,

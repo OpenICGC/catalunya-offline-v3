@@ -5,7 +5,6 @@ import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCo
 import PointPanel from '../../components/scope/PointPanel';
 import {useViewport} from '../../hooks/useViewport';
 import {MAP_PROPS} from '../../config';
-import useEditingPosition from '../../hooks/useEditingPosition';
 
 export interface ScopePointProps {
   scopeId: UUID,
