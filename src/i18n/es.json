@@ -61,6 +61,6 @@
   "topographicMap": "Mapa topográfico de Catalunya 1:25 000",
   "trackAlert": {
     "noTrack": "No es posible mostrar perfil de la ruta.",
-    "outOfTrack": "FUERA DE RUTA"
+    "outOfTrack": "Fuera de ruta"
   }
 }
