@@ -4,13 +4,15 @@ import {VegaLite} from 'react-vega';
 import {TopLevelSpec} from 'vega-lite';
 import turfDistance from '@turf/distance';
 
+//MUI
+import Typography from '@mui/material/Typography';
+
 //UTILS
 import {HEXColor} from '../../../types/commonTypes';
 import {GPS_POSITION_COLOR} from '../../../config';
 import {useTranslation} from 'react-i18next';
 import GeoJSON from 'geojson';
-import Typography from '@mui/material/Typography';
-import NoGoTo from '../../icons/NoGoTo';
+
 
 export interface TrackProfileProps {
     geometry: GeoJSON.LineString | null,
