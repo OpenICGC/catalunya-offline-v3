@@ -39,9 +39,11 @@
   "layerManager": "Capas",
   "noScopeAlert": "Elige un ámbito para el punto",
   "properties": {
+    "course": "Rumbo",
     "date": "Fecha",
     "description": "Descripción",
     "detailsTrack": "Detalles de la ruta",
+    "distance": "Distancia",
     "height": "altura",
     "images": "Imágenes",
     "latitude": "latitud",

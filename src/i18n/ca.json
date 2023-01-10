@@ -39,9 +39,11 @@
   "layerManager": "Capes",
   "noScopeAlert": "Trieu un àmbit per al punt",
   "properties": {
+    "course": "Rumb",
     "date": "Data",
     "description": "Descripció",
     "detailsTrack": "Detalls de la ruta",
+    "distance": "Distància",
     "height": "altura",
     "images": "Imatges",
     "latitude": "latitud",

@@ -39,9 +39,11 @@
   "layerManager": "Layers",
   "noScopeAlert": "Choose the point's scope",
   "properties": {
+    "course": "Course",
     "date": "Date",
     "description": "Description",
     "detailsTrack": "Route details",
+    "distance": "Distance",
     "height": "height",
     "images": "Images",
     "latitude": "latitude",
