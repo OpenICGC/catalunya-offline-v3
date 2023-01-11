@@ -25,17 +25,22 @@ export interface TrackNavigationBottomSheetProps {
     name: string,
     color: HEXColor,
     geometry: GeoJSON.LineString,
+    currentPositionIndex: number,
     isOutOfTrack: boolean,
-    isReverseDirection: boolean
+    isReverseDirection: boolean,
+    onActionClick: () => void
 }
 
 const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
   name,
   color,
   geometry,
+  currentPositionIndex,
   isOutOfTrack,
   isReverseDirection,
+  onActionClick,
 }) => {
+  
   const [isOpen, setOpen] = useState(true);
   const actionIcons = [
     {
@@ -67,10 +72,10 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
       name={name}
       color={color}
       actionIcons={actionIcons}
-      onActionClick={() => undefined}
+      onActionClick={onActionClick}
     />
     <Stack direction="column" sx={{mt: 1}}>
-      <TrackProfile geometry={geometry} color={color} currentPositionIndex={24} isOutOfTrack={isOutOfTrack} isReverseDirection={isReverseDirection}/>
+      <TrackProfile geometry={geometry} color={color} currentPositionIndex={currentPositionIndex} isOutOfTrack={isOutOfTrack} isReverseDirection={isReverseDirection}/>
     </Stack>
   </BottomSheet>;
 };

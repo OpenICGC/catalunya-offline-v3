@@ -27,7 +27,8 @@ export interface PointNavigationBottomSheetProps {
     name: string,
     color: HEXColor,
     course: number,
-    distance: number
+    distance: number,
+    onActionClick: () => void
 }
 
 const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
@@ -35,6 +36,7 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
   color,
   course,
   distance,
+  onActionClick
 }) => {
   const {t} = useTranslation();
 
@@ -70,7 +72,7 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
       name={name}
       color={color}
       actionIcons={actionIcons}
-      onActionClick={() => undefined}
+      onActionClick={onActionClick}
     />
     <Stack direction="row" justifyContent='space-around' sx={{mt: 1}}>
       <Stack alignItems='center'>

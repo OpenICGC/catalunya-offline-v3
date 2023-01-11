@@ -5,6 +5,7 @@ import {TopLevelSpec} from 'vega-lite';
 import turfDistance from '@turf/distance';
 
 //MUI
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 //UTILS
@@ -13,6 +14,25 @@ import {GPS_POSITION_COLOR} from '../../../config';
 import {useTranslation} from 'react-i18next';
 import GeoJSON from 'geojson';
 
+//STYLES
+const alertOutOfTrackSx = {
+  position: 'absolute',
+  transform: 'translate(-50%, -50%)',
+  left: '50%',
+  top: '50%',
+  color: 'error.light', 
+  p: 1,
+  borderRadius: 2, 
+  border: 1, 
+  borderColor: 'error.light', 
+  bgcolor: 'rgba(255,255,255,0.75)'
+};
+  
+const profileContainerSx = {
+  m: 0, 
+  p: 0, 
+  position: 'relative'  
+};
 
 export interface TrackProfileProps {
     geometry: GeoJSON.LineString | null,
@@ -88,19 +108,6 @@ const TrackProfile: FC<TrackProfileProps> = ({
       trackReverse(vegaTrack).slice(0, currentPositionIndex + 1) :
       vegaTrack.slice(0, currentPositionIndex + 1) : 
     [];
-  
-  const alertOutOfTrackSx = {
-    position: 'absolute',
-    transform: 'translate(-50%, -50%)',
-    left: '50%',
-    top: '65%',
-    color: 'error.light', 
-    p: 1,
-    borderRadius: 2, 
-    border: 1, 
-    borderColor: 'error.light', 
-    bgcolor: 'rgba(255,255,255,0.75)'
-  };
   
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
@@ -284,12 +291,12 @@ const TrackProfile: FC<TrackProfileProps> = ({
     }
   };
 
-  return isTrackValid ? <>
+  return isTrackValid ? <Box sx={profileContainerSx}>
     <VegaLite spec={spec} actions={false}/>
     {
       isOutOfTrack && <Typography variant="button" sx={alertOutOfTrackSx}>{t('trackAlert.outOfTrack')}</Typography>
     }
-  </> : 
+  </Box> :
     null;
 };
 

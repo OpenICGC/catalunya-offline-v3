@@ -10,6 +10,14 @@ export default {
   component: TrackNavigationBottomSheet,
   argTypes: {
     color: {control: 'color'},
+    currentPositionIndex: {
+      control: {
+        type: 'range',
+        min: 0,
+        max: sampleGeometry && sampleGeometry.coordinates.length - 1,
+        step: 1
+      }
+    }
   }
 } as Meta;
 
@@ -20,6 +28,7 @@ Default.args = {
   name: 'Track 01',
   color: '#973572',
   geometry: sampleGeometry,
+  currentPositionIndex: 24,
   isOutOfTrack: false,
   isReverseDirection: false
 };
