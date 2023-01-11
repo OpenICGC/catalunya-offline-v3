@@ -50,7 +50,10 @@
     "location": "Location",
     "longitude": "longitude",
     "name": "Name",
-    "recordingTrack": "Track recording"
+    "recordingTrack": "Track recording",
+    "remaining": "Remaining",
+    "remainingToGo": "Remaining to go",
+    "total": "Total"
   },
   "scope": "Scope",
   "scopeList": {

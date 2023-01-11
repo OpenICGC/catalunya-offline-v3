@@ -50,7 +50,10 @@
     "location": "Ubicació",
     "longitude": "longitud",
     "name": "Nom",
-    "recordingTrack": "Enregistrament de la ruta"
+    "recordingTrack": "Enregistrament de la ruta",
+    "remaining": "Restant",
+    "remainingToGo": "Restant per recórrer",
+    "total": "Total"
   },
   "scope": "Àmbit",
   "scopeList": {

@@ -50,7 +50,10 @@
     "location": "Ubicación",
     "longitude": "longitud",
     "name": "Nombre",
-    "recordingTrack": "Grabación de la ruta"
+    "recordingTrack": "Grabación de la ruta",
+    "remaining": "Pendiente",
+    "remainingToGo": "Pendiente de recorrer",
+    "total": "Total"
   },
   "scope": "Ámbito",
   "scopeList": {

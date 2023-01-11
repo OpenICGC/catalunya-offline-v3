@@ -24,10 +24,10 @@ export type DownloadRequestProps = {
   onDownload: () => void
 };
 
-const DownloadRequest: FC<DownloadRequestProps> = ({isOpen=false, onClose, onDownload}) => {
+const DownloadRequest: FC<DownloadRequestProps> = ({isOpen= false, onClose, onDownload}) => {
   const {t} = useTranslation();
   return <Dialog open={isOpen} onClose={onClose} fullWidth>
-    <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.35}}>
+    <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.05}}>
       <MapIcon sx={{mr: 1}}/>
       {t('downloadingAlert.title')}
     </DialogTitle>

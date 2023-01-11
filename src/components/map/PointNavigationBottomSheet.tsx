@@ -2,7 +2,6 @@ import React, {FC, useState} from 'react';
 
 //MUI
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -22,6 +21,7 @@ import NoGoTo from '../icons/NoGoTo';
 //UTILS
 import {HEXColor} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
+import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
 
 export interface PointNavigationBottomSheetProps {
     name: string,
@@ -56,11 +56,6 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
     }
   ];
 
-  const distanceWithUnits = distance > 10000 ?
-    distance > 1000000? `${(distance/1000).toFixed()} km`
-      : `${distance/1000} km`
-    : `${distance} m`;
-
   return <BottomSheet
     closedHeight={20}
     openHeight={'80vh'}
@@ -78,19 +73,15 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
       <Stack alignItems='center'>
         <Typography variant='h6' component='p'>{course}º</Typography>
         <Stack direction="row" spacing={1} alignItems='center'>
-          <IconButton size='small' >
-            <ArrowUpwardIcon sx={{transform: `rotate(${course}deg)`}}/>
-          </IconButton>
+          <ArrowUpwardIcon sx={{transform: `rotate(${course}deg)`, color: 'grey.600'}}/>
           <Typography variant='body2' component='p' sx={{color: 'grey.600'}}>{t('properties.course')}</Typography>
         </Stack>
       </Stack>
       <Divider flexItem orientation='vertical'/>
       <Stack alignItems='center'>
-        <Typography variant='h6' component='p'>{distanceWithUnits}</Typography>
+        <Typography variant='h6' component='p'>{getSignificantDistanceUnits(distance)}</Typography>
         <Stack direction="row" spacing={1} alignItems='center'>
-          <IconButton size='small'>
-            <StraightenIcon/>
-          </IconButton>
+          <StraightenIcon sx={{color: 'grey.600'}}/>
           <Typography variant='body2' component='p' sx={{color: 'grey.600'}}>{t('properties.distance')}</Typography>
         </Stack>
       </Stack>

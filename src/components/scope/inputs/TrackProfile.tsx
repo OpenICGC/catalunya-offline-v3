@@ -6,28 +6,16 @@ import turfDistance from '@turf/distance';
 
 //MUI
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 //UTILS
 import {HEXColor} from '../../../types/commonTypes';
 import {GPS_POSITION_COLOR} from '../../../config';
 import {useTranslation} from 'react-i18next';
 import GeoJSON from 'geojson';
+import OutOfTrackButton from '../../buttons/OutOfTrackButton';
+import Typography from '@mui/material/Typography';
 
 //STYLES
-const alertOutOfTrackSx = {
-  position: 'absolute',
-  transform: 'translate(-50%, -50%)',
-  left: '50%',
-  top: '50%',
-  color: 'error.light', 
-  p: 1,
-  borderRadius: 2, 
-  border: 1, 
-  borderColor: 'error.light', 
-  bgcolor: 'rgba(255,255,255,0.75)'
-};
-  
 const profileContainerSx = {
   m: 0, 
   p: 0, 
@@ -294,10 +282,9 @@ const TrackProfile: FC<TrackProfileProps> = ({
   return isTrackValid ? <Box sx={profileContainerSx}>
     <VegaLite spec={spec} actions={false}/>
     {
-      isOutOfTrack && <Typography variant="button" sx={alertOutOfTrackSx}>{t('trackAlert.outOfTrack')}</Typography>
+      isOutOfTrack && <OutOfTrackButton/>
     }
-  </Box> :
-    null;
+  </Box> : <Typography variant='caption' sx={{color: 'error.main'}}>{t('trackAlert.noTrack')}</Typography>;
 };
 
 export default TrackProfile;

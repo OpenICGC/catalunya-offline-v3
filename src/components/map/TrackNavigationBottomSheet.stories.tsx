@@ -3,13 +3,15 @@ import {Meta, Story} from '@storybook/react';
 
 import TrackNavigationBottomSheet, {TrackNavigationBottomSheetProps} from './TrackNavigationBottomSheet';
 import sample from '../scope/inputs/sampleLineString.geo.json';
+import sampleWithoutHeight from '../scope/inputs/sampleLineStringWithoutHeight.geo.json';
 const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
+const sampleGeometryWithoutHeight: GeoJSON.LineString = sampleWithoutHeight as GeoJSON.LineString;
+import {v4 as uuid} from 'uuid';
 
 export default {
   title: 'Map/TrackNavigationBottomSheet',
   component: TrackNavigationBottomSheet,
   argTypes: {
-    color: {control: 'color'},
     currentPositionIndex: {
       control: {
         type: 'range',
@@ -25,15 +27,38 @@ const Template: Story<TrackNavigationBottomSheetProps> = args => <TrackNavigatio
 
 export const Default = Template.bind({});
 Default.args = {
-  name: 'Track 01',
-  color: '#973572',
-  geometry: sampleGeometry,
+  track: {
+    type: 'Feature',
+    id: uuid(),
+    properties: {
+      name: 'Mi traza 01',
+      timestamp: Date.now(),
+      description: 'Excursión con amigos de la infancia',
+      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
+      color: '#973572',
+      isVisible: true
+    },
+    geometry: sampleGeometry
+  },
   currentPositionIndex: 24,
   isOutOfTrack: false,
   isReverseDirection: false
 };
-export const OutOfTrack = Template.bind({});
-OutOfTrack.args = {
+
+export const WithoutHeight = Template.bind({});
+WithoutHeight.args = {
   ...Default.args,
-  isOutOfTrack: true
+  track: {
+    type: 'Feature',
+    id: uuid(),
+    properties: {
+      name: 'Mi traza 01',
+      timestamp: Date.now(),
+      description: 'Excursión con amigos de la infancia',
+      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
+      color: '#973572',
+      isVisible: true
+    },
+    geometry: sampleGeometryWithoutHeight
+  },
 };

@@ -39,6 +39,7 @@ import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProp
 import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';
 import {openPhoto} from '../../utils/camera';
+import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
 
 //STYLES
 const sectionWrapperSx = {
@@ -83,9 +84,9 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
 
   const accums = useMemo(() => getAccumulatedTrackProperties(track), [track]);
-  const distance: string | undefined = accums ? (accums.distance / 1000).toFixed(2) + 'km' : undefined;
-  const ascent: string | undefined = accums?.ascent + 'm';
-  const descent: string | undefined = accums?.descent + 'm';
+  const distance: string | undefined = accums ? getSignificantDistanceUnits(accums.distance) : undefined;
+  const ascent: string | undefined = accums ? getSignificantDistanceUnits(accums.ascent) : undefined;
+  const descent: string | undefined = accums ? getSignificantDistanceUnits(accums.descent) : undefined;
   const formattedTime = accums?.time ? moment.duration(accums?.time, 'seconds').format('h[h] mm[m] ss[s]') : undefined;
 
   const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
