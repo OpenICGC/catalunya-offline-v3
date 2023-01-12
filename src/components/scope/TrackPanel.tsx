@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import AvTimerIcon from '@mui/icons-material/AvTimer';
 import EditIcon from '@mui/icons-material/Edit';
-import LandscapeIcon from '@mui/icons-material/Landscape';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 
@@ -26,6 +25,8 @@ import RecordButton from '../buttons/RecordButton';
 import TextAreaInput from './inputs/TextAreaInput';
 import TrackProfile from './inputs/TrackProfile';
 import TrackProperty from './inputs/TrackProperty';
+import PositiveSlope from '../icons/PositiveSlope';
+import NegativeSlope from '../icons/NegativeSlope';
 
 //OTHERS
 import moment from 'moment/moment';
@@ -39,6 +40,7 @@ import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProp
 import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';
 import {openPhoto} from '../../utils/camera';
+import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
 
 //STYLES
 const sectionWrapperSx = {
@@ -83,9 +85,9 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
 
   const accums = useMemo(() => getAccumulatedTrackProperties(track), [track]);
-  const distance: string | undefined = accums ? (accums.distance / 1000).toFixed(2) + 'km' : undefined;
-  const ascent: string | undefined = accums?.ascent + 'm';
-  const descent: string | undefined = accums?.descent + 'm';
+  const distance: string | undefined = accums ? getSignificantDistanceUnits(accums.distance) : undefined;
+  const ascent: string | undefined = accums ? getSignificantDistanceUnits(accums.ascent) : undefined;
+  const descent: string | undefined = accums ? getSignificantDistanceUnits(accums.descent) : undefined;
   const formattedTime = accums?.time ? moment.duration(accums?.time, 'seconds').format('h[h] mm[m] ss[s]') : undefined;
 
   const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
@@ -219,12 +221,12 @@ const TrackPanel: FC<TrackPanelProps> = ({
                     <TrackProperty icon={<AvTimerIcon/>} value={hasTimestamp && formattedTime}/>
                   </Stack>
                   <Stack direction="column" sx={{justifyContent: 'space-between'}}>
-                    <TrackProperty icon={<LandscapeIcon/>} value={hasElevation && ascent}/>
-                    <TrackProperty icon={<LandscapeIcon/>} value={hasElevation && descent}/>
+                    <TrackProperty icon={<PositiveSlope/>} value={hasElevation && ascent}/>
+                    <TrackProperty icon={<NegativeSlope/>} value={hasElevation && descent}/>
                   </Stack>
                 </Stack>
               </Stack>
-              <TrackProfile geometry={track.geometry} color={track.properties.color}/>
+              <TrackProfile geometry={track.geometry} color={track.properties.color} isOutOfTrack={false}/>
             </Stack>
         }
       </Stack>

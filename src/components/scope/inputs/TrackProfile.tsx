@@ -4,16 +4,30 @@ import {VegaLite} from 'react-vega';
 import {TopLevelSpec} from 'vega-lite';
 import turfDistance from '@turf/distance';
 
+//MUI
+import Box from '@mui/material/Box';
+
 //UTILS
 import {HEXColor} from '../../../types/commonTypes';
 import {GPS_POSITION_COLOR} from '../../../config';
 import {useTranslation} from 'react-i18next';
 import GeoJSON from 'geojson';
+import OutOfTrackButton from '../../buttons/OutOfTrackButton';
+import Typography from '@mui/material/Typography';
+
+//STYLES
+const profileContainerSx = {
+  m: 0, 
+  p: 0, 
+  position: 'relative'  
+};
 
 export interface TrackProfileProps {
     geometry: GeoJSON.LineString | null,
     color?: HEXColor,
-    currentPositionIndex?: number
+    currentPositionIndex?: number,
+    isOutOfTrack: boolean,
+    isReverseDirection?: boolean
 }
         
 export type vegaTrackType = Array<{
@@ -25,6 +39,8 @@ const TrackProfile: FC<TrackProfileProps> = ({
   geometry,
   color = '#2f2f2f',
   currentPositionIndex,
+  isOutOfTrack,
+  isReverseDirection= false
 }) => {
 
   const {t} = useTranslation();
@@ -56,6 +72,18 @@ const TrackProfile: FC<TrackProfileProps> = ({
     } else return [];
   }, [geometry]);
 
+  
+  const trackReverse = (track: vegaTrackType) => {
+    const allReversed = [...track].reverse();
+    return allReversed.reduce((acc: vegaTrackType, item, i, track) => {
+      acc.push({
+        length: track[0].length-item.length,
+        height: item.height
+      });
+      return acc;
+    }, []);
+  };
+
   const arrayHeightsTrack: Array<number> = vegaTrack && vegaTrack.map(coord => coord.height);
   const minHeight: number = Math.min(...arrayHeightsTrack);
   const maxHeight: number = Math.max(...arrayHeightsTrack);
@@ -63,7 +91,11 @@ const TrackProfile: FC<TrackProfileProps> = ({
   const arrayLengthsTrack: Array<number> = vegaTrack && vegaTrack.map(coord => coord.length);
   const maxLength: number = Math.max(...arrayLengthsTrack);
 
-  const travelled: vegaTrackType = isNavigateMode && currentPositionIndex !== undefined ? vegaTrack.slice(0, currentPositionIndex + 1) : [];
+  const travelled: vegaTrackType = isNavigateMode && currentPositionIndex !== undefined ?
+    isReverseDirection ?
+      trackReverse(vegaTrack).slice(0, currentPositionIndex + 1) :
+      vegaTrack.slice(0, currentPositionIndex + 1) : 
+    [];
   
   const spec: TopLevelSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
@@ -71,8 +103,11 @@ const TrackProfile: FC<TrackProfileProps> = ({
     height: 100,
     layer: isNavigateMode ? [
       {
-        mark: 'line',
-        data: { values: vegaTrack},
+        mark: {
+          type: 'line',
+          opacity: isOutOfTrack? 0.25 : 1
+        },
+        data: { values: isReverseDirection ? trackReverse(vegaTrack) : vegaTrack },
         encoding: {
           color: {
             value: color,
@@ -121,9 +156,15 @@ const TrackProfile: FC<TrackProfileProps> = ({
           shape: 'circle',
           size: 75,
           filled: true,
-          opacity: 1
+          opacity: isOutOfTrack? 0 : 1
         },
-        data: { values: currentPositionIndex !== undefined ? vegaTrack[currentPositionIndex] : [] },
+        data: { 
+          values: currentPositionIndex !== undefined ? 
+            isReverseDirection? 
+              trackReverse(vegaTrack)[currentPositionIndex] : 
+              vegaTrack[currentPositionIndex] : 
+            [] 
+        },
         encoding: {
           color: {
             value: GPS_POSITION_COLOR,
@@ -143,7 +184,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
       {
         mark: {
           type: 'area',
-          opacity: 0.25
+          opacity: isOutOfTrack? 0 : 0.25
         },
         data: { values: travelled},
         encoding: {
@@ -161,11 +202,11 @@ const TrackProfile: FC<TrackProfileProps> = ({
             scale: { domain: [minHeight-5, maxHeight+5] },
           }
         }
-      }    
+      }
     ] : [
       {
         mark: 'line',
-        data: { values: vegaTrack},
+        data: { values: isReverseDirection ? trackReverse(vegaTrack) : vegaTrack },
         encoding: {
           color: {
             value: color,
@@ -238,7 +279,12 @@ const TrackProfile: FC<TrackProfileProps> = ({
     }
   };
 
-  return isTrackValid ? <VegaLite spec={spec} actions={false}/> : null;
+  return isTrackValid ? <Box sx={profileContainerSx}>
+    <VegaLite spec={spec} actions={false}/>
+    {
+      isOutOfTrack && <OutOfTrackButton/>
+    }
+  </Box> : <Typography variant='caption' sx={{color: 'error.main'}}>{t('trackAlert.noTrack')}</Typography>;
 };
 
 export default TrackProfile;

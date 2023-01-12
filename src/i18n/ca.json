@@ -40,16 +40,21 @@
   "noScopeAlert": "Trieu un àmbit per al punt",
   "point": "Punt",
   "properties": {
+    "course": "Rumb",
     "date": "Data",
     "description": "Descripció",
     "detailsTrack": "Detalls de la ruta",
+    "distance": "Distància",
     "height": "altura",
     "images": "Imatges",
     "latitude": "latitud",
     "location": "Ubicació",
     "longitude": "longitud",
     "name": "Nom",
-    "recordingTrack": "Enregistrament de la ruta"
+    "recordingTrack": "Enregistrament de la ruta",
+    "remaining": "Restant",
+    "remainingToGo": "Restant per recórrer",
+    "total": "Total"
   },
   "scope": "Àmbit",
   "scopeList": {
@@ -60,6 +65,7 @@
   "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
   "track": "Traça",
   "trackAlert": {
-    "noTrack": "No es pot mostrar el perfil de la traza"
+    "noTrack": "No ji ja dades d'alçada",
+    "outOfTrack": "Fora de traza"
   }
 }

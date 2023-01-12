@@ -30,7 +30,7 @@ const TextAreaInput: FC<TextAreaInputProps> = ({
     cursor: 'default',
     padding: '8px',
     fontFamily: '\'Roboto\',\'Helvetica\',\'Arial\'',
-    fontSize: '1rem',
+    fontSize: '0.9rem',
     letterSpacing: '0.00938em',
     fontWeight: 400,
     lineHeight: 1.5,

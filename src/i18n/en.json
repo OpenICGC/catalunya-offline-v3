@@ -40,16 +40,21 @@
   "noScopeAlert": "Choose the point's scope",
   "point": "Point",
   "properties": {
+    "course": "Course",
     "date": "Date",
     "description": "Description",
     "detailsTrack": "Route details",
+    "distance": "Distance",
     "height": "height",
     "images": "Images",
     "latitude": "latitude",
     "location": "Location",
     "longitude": "longitude",
     "name": "Name",
-    "recordingTrack": "Track recording"
+    "recordingTrack": "Track recording",
+    "remaining": "Remaining",
+    "remainingToGo": "Remaining to finish",
+    "total": "Total"
   },
   "scope": "Scope",
   "scopeList": {
@@ -60,6 +65,7 @@
   "topographicMap": "Topographic Map of Catalonia 1:25 000",
   "track": "Track",
   "trackAlert": {
-    "noTrack": "It is not possible to show track profile."
+    "noTrack": "No height data",
+    "outOfTrack": "Out of track"
   }
 }

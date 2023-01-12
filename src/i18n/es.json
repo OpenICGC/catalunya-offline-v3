@@ -40,16 +40,21 @@
   "noScopeAlert": "Elige un ámbito para el punto",
   "point": "Punto",
   "properties": {
+    "course": "Rumbo",
     "date": "Fecha",
     "description": "Descripción",
     "detailsTrack": "Detalles de la ruta",
+    "distance": "Distancia",
     "height": "altura",
     "images": "Imágenes",
     "latitude": "latitud",
     "location": "Ubicación",
     "longitude": "longitud",
     "name": "Nombre",
-    "recordingTrack": "Grabación de la ruta"
+    "recordingTrack": "Grabación de la ruta",
+    "remaining": "Pendiente",
+    "remainingToGo": "Pendiente de recorrer",
+    "total": "Total"
   },
   "scope": "Ámbito",
   "scopeList": {
@@ -60,6 +65,7 @@
   "topographicMap": "Mapa topográfico de Catalunya 1:25 000",
   "track": "Ruta",
   "trackAlert": {
-    "noTrack": "No es posible mostrar perfil de la ruta."
+    "noTrack": "No hay datos de altura",
+    "outOfTrack": "Fuera de ruta"
   }
 }
