@@ -9,17 +9,20 @@ import FabButton, {LOCATION_STATUS} from '../components/buttons/FabButton';
 import {mbtiles} from '../utils/mbtiles';
 import useCompass from '../hooks/useCompass';
 import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
-import PrecisePositionEditor from '../components/map/PrecisePositionEditor';
-import {useScopePoints, useScopes} from '../hooks/useStoredCollections';
+import PositionEditor from '../components/map/PositionEditor';
+import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
 import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
 import useEditingPosition from '../hooks/useEditingPosition';
-import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
+import {LineLayer, MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
 import {Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 import ScopeSelector from '../components/scope/ScopeSelector';
+import useRecordingTrack from '../hooks/useRecordingTrack';
+import TrackRecorder from '../components/map/TrackRecorder';
+import {Source, Layer} from 'react-map-gl';
 
 mbtiles(maplibregl);
 
@@ -61,18 +64,24 @@ export type MainContentProps = {
   mapStyle: string | StyleSpecification,
   manager: Manager,
   onManagerChanged: (newManager: Manager) => void,
-  selectedScope?: UUID,
-  setSelectedScope: (scopeId: UUID) => void,
-  setSelectedPoint: (pointId: UUID) => void
+  selectedScopeId?: UUID,
+  onScopeSelected: (scopeId: UUID) => void,
+  selectedPointId?: UUID,
+  onPointSelected: (scopeId: UUID) => void,
+  selectedTrackId?: UUID,
+  /*onTrackSelected: (pointId: UUID) => void*/
 };
 
 const Map: FC<MainContentProps> = ({
   mapStyle,
   manager,
   onManagerChanged,
-  selectedScope,
-  setSelectedScope,
-  setSelectedPoint
+  selectedScopeId,
+  onScopeSelected,
+  selectedPointId,
+  onPointSelected,
+  selectedTrackId,
+  /*onTrackSelected*/
 }) => {
   const mapRef = useRef<maplibregl.Map>();
   const {viewport, setViewport} = useViewport();
@@ -82,12 +91,22 @@ const Map: FC<MainContentProps> = ({
   const {t} = useTranslation();
 
   const scopeStore = useScopes();
-  const scopeColor = selectedScope ? scopeStore.retrieve(selectedScope)?.color : undefined;
-  const pointStore = useScopePoints(selectedScope);
+  const pointStore = useScopePoints(selectedScopeId);
+  const trackStore = useScopeTracks(selectedScopeId);
+
+  const selectedScope = selectedScopeId ? scopeStore.retrieve(selectedScopeId) : undefined;
+  const selectedPoint = selectedPointId ? pointStore.retrieve(selectedPointId) : undefined;
+  const selectedTrack = selectedTrackId ? trackStore.retrieve(selectedTrackId) : undefined;
+
+  const scopeColor = selectedScope?.color;
+  const pointColor = selectedPoint?.properties.color || scopeColor;
+  const trackColor = selectedTrack?.properties.color || scopeColor;
   const pointList = pointStore.list();
 
   const editingPosition = useEditingPosition();
   const [pointIntent, setPointIntent] = useState<Position>();
+
+  const recordingTrack = useRecordingTrack();
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -202,7 +221,7 @@ const Map: FC<MainContentProps> = ({
       latitude: point.geometry.coordinates[1],
       zoom: MAP_PROPS.maxZoom
     });
-    setSelectedPoint(point.id);
+    onPointSelected(point.id);
   };
 
   const createNewPoint = (coordinates: Position) => {
@@ -223,7 +242,7 @@ const Map: FC<MainContentProps> = ({
       }
     });
     setPointIntent(undefined);
-    setSelectedPoint(id);
+    onPointSelected(id);
     return id;
   };
 
@@ -231,14 +250,14 @@ const Map: FC<MainContentProps> = ({
     editingPosition.start({
       initialPosition: position,
       onAccept: (newPosition) => {
-        if (selectedScope) {
+        if (selectedScopeId) {
           createNewPoint(newPosition);
         } else {
           setPointIntent(newPosition);
         }
       }
     });
-  }, [editingPosition, selectedScope, pointStore]);
+  }, [editingPosition, selectedScopeId, pointStore]);
 
   const longTouchTimer = useRef<number>();
 
@@ -264,16 +283,37 @@ const Map: FC<MainContentProps> = ({
   };
 
   const handleScopeSelected = (scopeId: UUID) => {
-    setSelectedScope(scopeId);
+    onScopeSelected(scopeId);
   };
 
   useEffect(() => {
-    pointIntent && selectedScope && createNewPoint(pointIntent);
-  }, [pointIntent, selectedScope]);
+    pointIntent && selectedScopeId && createNewPoint(pointIntent);
+  }, [pointIntent, selectedScopeId]);
 
   const handleScopeSelectionCancelled = () => {
     // TODO cancel the point intent
     setPointIntent(undefined);
+  };
+
+  const recordingTrackSource: GeoJSON.FeatureCollection = {
+    type: 'FeatureCollection',
+    features: [{
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: recordingTrack.coordinates
+      }
+    }]
+  };
+
+  const recordingTrackLayer: LineLayer = {
+    id: 'recordingTrack',
+    type: 'line',
+    paint: {
+      'line-color': '#FF0000',
+      'line-width': 2
+    }
   };
 
   return <>
@@ -310,10 +350,24 @@ const Map: FC<MainContentProps> = ({
         onBaseMapsClick={() => changeManager('BASEMAPS')}
         onScopesClick={() => changeManager('SCOPES')}
       />}
+      <Source type="geojson" data={recordingTrackSource}>
+        <Layer {...recordingTrackLayer} />
+      </Source>
     </GeocomponentMap>
-    {!!editingPosition.position && <PrecisePositionEditor
+    {!!editingPosition.position && <PositionEditor
+      name={selectedPoint?.properties.name}
+      color={pointColor}
       onAccept={editingPosition.accept}
       onCancel={editingPosition.cancel}
+    />}
+    {recordingTrack.isRecording && <TrackRecorder
+      isAccessibleSize={false}
+      name={selectedTrack?.properties.name}
+      color={trackColor}
+      elapsedTime={recordingTrack.elapsedTime}
+      onPause={recordingTrack.pause}
+      onResume={recordingTrack.resume}
+      onStop={recordingTrack.stop}
     />}
     {!!pointIntent && <ScopeSelector
       isAccesibleSize={false}

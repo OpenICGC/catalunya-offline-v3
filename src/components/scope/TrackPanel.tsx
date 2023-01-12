@@ -41,6 +41,7 @@ import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';
 import {openPhoto} from '../../utils/camera';
 import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
+import useRecordingTrack from '../../hooks/useRecordingTrack';
 
 //STYLES
 const sectionWrapperSx = {
@@ -61,7 +62,6 @@ export type TrackPanelProps = {
   initialTrack: ScopeTrack,
   numPoints: number,
   numTracks: number,
-  onRecordStart: () => void,
   onTrackChange: (newTrack: ScopeTrack) => void,
   onBackButtonClick: () => void,
   onGoTo: (pointId: UUID) => void,
@@ -73,7 +73,6 @@ const TrackPanel: FC<TrackPanelProps> = ({
   initialTrack,
   numPoints,
   numTracks,
-  onRecordStart,
   onTrackChange,
   onBackButtonClick,
   onGoTo
@@ -84,6 +83,8 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const [track, setTrack] = useState(initialTrack);
   const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
 
+  const recordingTrack = useRecordingTrack();
+
   const accums = useMemo(() => getAccumulatedTrackProperties(track), [track]);
   const distance: string | undefined = accums ? getSignificantDistanceUnits(accums.distance) : undefined;
   const ascent: string | undefined = accums ? getSignificantDistanceUnits(accums.ascent) : undefined;
@@ -91,7 +92,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const formattedTime = accums?.time ? moment.duration(accums?.time, 'seconds').format('h[h] mm[m] ss[s]') : undefined;
 
   const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
-  const hasTimestamp = !!track.geometry?.coordinates[track.geometry.coordinates.length - 1][3] || false;
+  const hasTimestamp = track.geometry && track.geometry.coordinates.length ? !!track.geometry.coordinates[track.geometry.coordinates.length - 1][3] : false;
 
   const actionIcons = useMemo(() => ([
     {
@@ -177,6 +178,21 @@ const TrackPanel: FC<TrackPanelProps> = ({
     setIsEditing(false);
   };
 
+  const startRecordingTrack = () => {
+    recordingTrack.start({
+      onStop: (coordinates) => {
+        console.log('[trackPanel] Recording stopped', coordinates);
+        setTrack(prevTrack => ({
+          ...prevTrack,
+          geometry: coordinates.length ? {
+            type: 'LineString',
+            coordinates
+          } : null
+        }));
+      }
+    });
+  };
+
   return <>
     <Header
       startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
@@ -204,30 +220,31 @@ const TrackPanel: FC<TrackPanelProps> = ({
         <Typography sx={sectionTitleSx} variant="caption">
           {!track.geometry ? t('properties.recordingTrack') : t('properties.detailsTrack')}
         </Typography>
-        {
-          !track.geometry ?
-            <Box>
-              <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/>
-            </Box> :
-            <Stack>
-              <Stack direction="row" sx={{justifyContent: 'space-between'}}>
-                { track.geometry &&
-                  <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/>
-                }
-                <Stack direction="row" justifyContent="space-between" gap={0.5} sx={{flexGrow: 1}}>
-                  <Stack direction="column" sx={{justifyContent: 'space-between'}}>
-                    <TrackProperty icon={<StraightenIcon/>} value={distance}/>
-                    {/*if it does not have elevation, it does not have time either*/}
-                    <TrackProperty icon={<AvTimerIcon/>} value={hasTimestamp && formattedTime}/>
-                  </Stack>
-                  <Stack direction="column" sx={{justifyContent: 'space-between'}}>
-                    <TrackProperty icon={<PositiveSlope/>} value={hasElevation && ascent}/>
-                    <TrackProperty icon={<NegativeSlope/>} value={hasElevation && descent}/>
-                  </Stack>
+        {!track.geometry && isEditing &&
+          <Box>
+            <RecordButton isAccessibleSize={isAccessibleSize} onClick={startRecordingTrack}/>
+          </Box>
+        }
+        {track.geometry && track.geometry.coordinates.length &&
+          <Stack>
+            <Stack direction="row" sx={{justifyContent: 'space-between'}}>
+              { track.geometry &&
+                <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/>
+              }
+              <Stack direction="row" justifyContent="space-between" gap={0.5} sx={{flexGrow: 1}}>
+                <Stack direction="column" sx={{justifyContent: 'space-between'}}>
+                  <TrackProperty icon={<StraightenIcon/>} value={distance}/>
+                  {/*if it does not have elevation, it does not have time either*/}
+                  <TrackProperty icon={<AvTimerIcon/>} value={hasTimestamp && formattedTime}/>
+                </Stack>
+                <Stack direction="column" sx={{justifyContent: 'space-between'}}>
+                  <TrackProperty icon={<PositiveSlope/>} value={hasElevation && ascent}/>
+                  <TrackProperty icon={<NegativeSlope/>} value={hasElevation && descent}/>
                 </Stack>
               </Stack>
-              <TrackProfile geometry={track.geometry} color={track.properties.color} isOutOfTrack={false}/>
             </Stack>
+            <TrackProfile geometry={track.geometry} color={track.properties.color} isOutOfTrack={false}/>
+          </Stack>
         }
       </Stack>
       <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={track.properties.timestamp} sx={sxInput}/>

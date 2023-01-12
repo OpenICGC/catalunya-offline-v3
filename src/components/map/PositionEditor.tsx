@@ -18,7 +18,7 @@ import CancelButton from '../buttons/CancelButton';
 import AcceptButton from '../buttons/AcceptButton';
 
 
-export type PrecisePositionEditorProps = {
+export type PositionEditorProps = {
   isAccessibleSize?: boolean,
   name?: string,
   color?: HEXColor,
@@ -26,7 +26,7 @@ export type PrecisePositionEditorProps = {
   onCancel: () => void,
 }
 
-const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
+const PositionEditor: FC<PositionEditorProps> = ({
   isAccessibleSize = false,
   name,
   color,
@@ -65,11 +65,11 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
   };
   
   const headerName = (name ? `${name.toUpperCase()} - ` : '') + t('actions.addPoint');
-  const headerColor = color ? color : theme.palette.secondary.main;
+  const headerColor = color ? color : (theme.palette.secondary.main as HEXColor);
 
   return <>
     <Stack sx={{position: 'absolute', top: 0, width: '100%'}}>
-      <Header name={headerName} color={`#${headerColor}`} startIcon={<AddLocationAltIcon/>}/>
+      <Header name={headerName} color={headerColor} startIcon={<AddLocationAltIcon/>}/>
     </Stack>
     <Stack sx={{position: 'absolute', top: `calc(50% - ${crosshairSize/2}px)`, left: `calc(50% - ${crosshairSize/2}px)`, width: 0, height: 0}}>
       <PrecisePosition sx={precisePositionIcon}/>
@@ -83,4 +83,4 @@ const PrecisePositionEditor: FC<PrecisePositionEditorProps> = ({
   </>;
 };
 
-export default PrecisePositionEditor;
+export default PositionEditor;

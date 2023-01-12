@@ -52,7 +52,7 @@ const nullGeolocation = () => ({
   timestamp: Date.now()
 });
 
-const useGeolocation = (watchInBackground= false) => {
+const useGeolocation = (watchInBackground = false) => {
   const [watcherId, setWatcherId] = useState<string>();
   const [error, setError] = useState<CatOfflineError>();
   const [geolocation, setGeolocation] = useState<Geolocation>(nullGeolocation);

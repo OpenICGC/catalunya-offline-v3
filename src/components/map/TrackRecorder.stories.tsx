@@ -1,0 +1,41 @@
+import React, {useState} from 'react';
+import {Meta, Story} from '@storybook/react';
+
+import Box from '@mui/material/Box';
+import TrackRecorder, {TrackRecorderProps} from './TrackRecorder';
+import GeocomponentMap from '@geomatico/geocomponents/Map';
+import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
+
+export default {
+  title: 'Map/TrackRecorder',
+  component: TrackRecorder,
+  argTypes: {
+    elapsedTime: {
+      control: { type: 'range', min: 0, max: 86400, step: 1}
+    }
+  }
+} as Meta;
+
+const Template: Story<TrackRecorderProps> = args => <TrackRecorder {...args}/>;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const WithMapTemplate: Story<TrackRecorderProps> = ({...args}) => {
+  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
+  return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
+    <GeocomponentMap mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}/>
+    <TrackRecorder {...args}/>
+  </Box>;
+};
+
+export const Default = Template.bind({});
+Default.args = {
+  isAccessibleSize: false,
+  name: 'Traza 01',
+  color: '#973572',
+  elapsedTime: 3855
+};
+
+export const WithMap = WithMapTemplate.bind({});
+WithMap.args = {
+  ...Default.args
+};

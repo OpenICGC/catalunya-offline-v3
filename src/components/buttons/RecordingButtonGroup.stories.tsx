@@ -3,7 +3,7 @@ import {Meta, Story} from '@storybook/react';
 import RecordingButtonGroup, {RecordingButtonGroupProps} from './RecordingButtonGroup';
 
 //UTILS
-import {RECORDING_STATUS} from '../map/RecordingPanel';
+import {RECORDING_STATUS} from '../map/TrackRecorder';
 
 export default {
   title: 'Buttons/RecordingButtonGroup',
@@ -12,8 +12,8 @@ export default {
     recordingStatus: {
       options: {
         RECORDING: RECORDING_STATUS.RECORDING,
-        PAUSE: RECORDING_STATUS.PAUSE, 
-        STOP: RECORDING_STATUS.STOP
+        PAUSED: RECORDING_STATUS.PAUSED,
+        STOPPED: RECORDING_STATUS.STOPPED
       },
       control: { type: 'inline-radio' },
     },

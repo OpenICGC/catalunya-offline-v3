@@ -33,10 +33,6 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     console.log('Unimplemented go to Track'); // TODO
   };
 
-  const startRecording = () => {
-    console.log('Unimplemented Start Recording'); // TODO
-  };
-
   return selectedScope && selectedTrack ? <TrackPanel
     isAccessibleSize={false}
     scope={selectedScope}
@@ -47,8 +43,6 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
 
     onTrackChange={trackChange}
     onGoTo={goTo}
-
-    onRecordStart={startRecording}
   /> : <div>Error: the selected track does not exist</div>;
 };
 
