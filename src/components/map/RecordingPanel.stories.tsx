@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
-import RecordingPanel, {RECORDING_STATUS, RecordingPanelProps} from './RecordingPanel';
-import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
 import Box from '@mui/material/Box';
+import RecordingPanel, {RECORDING_STATUS, RecordingPanelProps} from './RecordingPanel';
 import GeocomponentMap from '@geomatico/geocomponents/Map';
+import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
 
 export default {
   title: 'Map/RecordingPanel',

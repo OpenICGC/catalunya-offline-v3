@@ -63,7 +63,7 @@
   "scopeManager": "Àmbits",
   "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
   "trackAlert": {
-    "noTrack": "No es pot mostrar el perfil de la traza",
+    "noTrack": "No ji ja dades d'alçada",
     "outOfTrack": "Fora de traza"
   }
 }

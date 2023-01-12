@@ -22,7 +22,7 @@ import TrackProfile from '../scope/inputs/TrackProfile';
 import TrackProperty from '../scope/inputs/TrackProperty';
 
 //UTILS
-import {ScopeTrack} from '../../types/commonTypes';
+import {HEXColor, ScopeTrack} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProperties';
 import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
@@ -35,6 +35,7 @@ const sectionTitleSx = {
 
 export interface TrackNavigationBottomSheetProps {
     track: ScopeTrack
+    defaultColor: HEXColor,
     currentPositionIndex: number,
     isOutOfTrack: boolean,
     isReverseDirection: boolean,
@@ -43,6 +44,7 @@ export interface TrackNavigationBottomSheetProps {
 
 const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
   track,
+  defaultColor,
   currentPositionIndex,
   isOutOfTrack,
   isReverseDirection,
@@ -104,7 +106,7 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
     <ListItem
       itemId="track"
       name={track.properties.name}
-      color={track.properties.color}
+      color={track.properties.color || defaultColor}
       actionIcons={actionIcons}
       onActionClick={onActionClick}
     />

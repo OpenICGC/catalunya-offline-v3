@@ -3,7 +3,7 @@ import {Meta, Story} from '@storybook/react';
 
 import PrecisePositionEditor, {PrecisePositionEditorProps} from './PrecisePositionEditor';
 import Box from '@mui/material/Box';
-import Map from '@geomatico/geocomponents/Map';
+import GeocomponentMap from '@geomatico/geocomponents/Map';
 import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
 
 export default {
@@ -16,10 +16,10 @@ export default {
 
 const Template: Story<PrecisePositionEditorProps> = args => <PrecisePositionEditor {...args}/>;
 
-const IntegrationTemplate: Story<PrecisePositionEditorProps> = args => {
+const WithMapTemplate: Story<PrecisePositionEditorProps> = ({...args}) => {
   const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
   return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
-    <Map mapStyle={BASEMAPS[1].id} onViewportChange={setViewport} viewport={getViewport}/>
+    <GeocomponentMap mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}/>
     <PrecisePositionEditor {...args}/>
   </Box>;
 };
@@ -31,7 +31,7 @@ Default.args = {
   color: '#973572'
 };
 
-export const WithMap = IntegrationTemplate.bind({});
+export const WithMap = WithMapTemplate.bind({});
 WithMap.args = {
   ...Default.args
 };

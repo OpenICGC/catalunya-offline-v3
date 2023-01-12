@@ -52,7 +52,7 @@
     "name": "Name",
     "recordingTrack": "Track recording",
     "remaining": "Remaining",
-    "remainingToGo": "Remaining to go",
+    "remainingToGo": "Remaining to finish",
     "total": "Total"
   },
   "scope": "Scope",
@@ -63,7 +63,7 @@
   "scopeManager": "Scopes",
   "topographicMap": "Topographic Map of Catalonia 1:25 000",
   "trackAlert": {
-    "noTrack": "It is not possible to show track profile.",
+    "noTrack": "No height data",
     "outOfTrack": "Out of track"
   }
 }

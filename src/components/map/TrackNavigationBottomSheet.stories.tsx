@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import TrackNavigationBottomSheet, {TrackNavigationBottomSheetProps} from './TrackNavigationBottomSheet';
@@ -7,6 +7,9 @@ import sampleWithoutHeight from '../scope/inputs/sampleLineStringWithoutHeight.g
 const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
 const sampleGeometryWithoutHeight: GeoJSON.LineString = sampleWithoutHeight as GeoJSON.LineString;
 import {v4 as uuid} from 'uuid';
+import {BASEMAPS, INITIAL_VIEWPORT} from '../../config';
+import Box from '@mui/material/Box';
+import GeocomponentMap from '@geomatico/geocomponents/Map';
 
 export default {
   title: 'Map/TrackNavigationBottomSheet',
@@ -24,6 +27,14 @@ export default {
 } as Meta;
 
 const Template: Story<TrackNavigationBottomSheetProps> = args => <TrackNavigationBottomSheet {...args}/>;
+
+const WithMapTemplate: Story<TrackNavigationBottomSheetProps> = ({...args}) => {
+  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
+  return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
+    <GeocomponentMap mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}/>
+    <TrackNavigationBottomSheet {...args}/>
+  </Box>;
+};
 
 export const Default = Template.bind({});
 Default.args = {
@@ -61,4 +72,9 @@ WithoutHeight.args = {
     },
     geometry: sampleGeometryWithoutHeight
   },
+};
+
+export const WithMap = WithMapTemplate.bind({});
+WithMap.args = {
+  ...Default.args
 };
