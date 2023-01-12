@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import AvTimerIcon from '@mui/icons-material/AvTimer';
 import EditIcon from '@mui/icons-material/Edit';
-import LandscapeIcon from '@mui/icons-material/Landscape';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 
@@ -26,6 +25,8 @@ import RecordButton from '../buttons/RecordButton';
 import TextAreaInput from './inputs/TextAreaInput';
 import TrackProfile from './inputs/TrackProfile';
 import TrackProperty from './inputs/TrackProperty';
+import PositiveSlope from '../icons/PositiveSlope';
+import NegativeSlope from '../icons/NegativeSlope';
 
 //OTHERS
 import moment from 'moment/moment';
@@ -220,8 +221,8 @@ const TrackPanel: FC<TrackPanelProps> = ({
                     <TrackProperty icon={<AvTimerIcon/>} value={hasTimestamp && formattedTime}/>
                   </Stack>
                   <Stack direction="column" sx={{justifyContent: 'space-between'}}>
-                    <TrackProperty icon={<LandscapeIcon/>} value={hasElevation && ascent}/>
-                    <TrackProperty icon={<LandscapeIcon/>} value={hasElevation && descent}/>
+                    <TrackProperty icon={<PositiveSlope/>} value={hasElevation && ascent}/>
+                    <TrackProperty icon={<NegativeSlope/>} value={hasElevation && descent}/>
                   </Stack>
                 </Stack>
               </Stack>

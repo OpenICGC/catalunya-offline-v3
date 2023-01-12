@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
 import StraightenIcon from '@mui/icons-material/Straighten';
-import LandscapeIcon from '@mui/icons-material/Landscape';
 import TransferWithinAStationIcon from '@mui/icons-material/TransferWithinAStation';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 
@@ -20,6 +19,8 @@ import NoGoTo from '../icons/NoGoTo';
 import TrackDetails from '../icons/TrackDetails';
 import TrackProfile from '../scope/inputs/TrackProfile';
 import TrackProperty from '../scope/inputs/TrackProperty';
+import PositiveSlope from '../icons/PositiveSlope';
+import NegativeSlope from '../icons/NegativeSlope';
 
 //UTILS
 import {HEXColor, ScopeTrack} from '../../types/commonTypes';
@@ -123,8 +124,8 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
         hasElevation ?
           <Stack direction="row" justifyContent="space-around" gap={0.5} sx={{flexGrow: 1}}>
             <TrackProperty icon={<StraightenIcon sx={outOfTrackSx}/>} value={isOutOfTrack ? undefined : distanceRemaining}/>
-            <TrackProperty icon={<LandscapeIcon sx={outOfTrackSx}/>} value={hasElevation && isOutOfTrack ? undefined : ascentRemaining}/>
-            <TrackProperty icon={<LandscapeIcon sx={outOfTrackSx}/>} value={hasElevation && isOutOfTrack ? undefined : descentRemaining}/>
+            <TrackProperty icon={<PositiveSlope sx={outOfTrackSx}/>} value={hasElevation && isOutOfTrack ? undefined : ascentRemaining}/>
+            <TrackProperty icon={<NegativeSlope sx={outOfTrackSx}/>} value={hasElevation && isOutOfTrack ? undefined : descentRemaining}/>
           </Stack>
           :
           <Stack direction="row" justifyContent="space-around" sx={{mt: 1, position: 'relative'}}>
