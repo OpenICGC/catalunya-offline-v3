@@ -62,6 +62,11 @@
     "notFound": "No s'hi han trobat elements coincidents amb la cerca"
   },
   "scopeManager": "Àmbits",
+  "share": {
+    "point": "Compartir Point",
+    "scope": "Compartir Àmbit",
+    "track": "Compartir Track"
+  },
   "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
   "track": "Traça",
   "trackAlert": {

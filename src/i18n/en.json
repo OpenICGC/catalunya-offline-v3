@@ -62,6 +62,11 @@
     "notFound": "No elements found matching the search criteria"
   },
   "scopeManager": "Scopes",
+  "share": {
+    "point": "Share Point",
+    "scope": "Share Scope",
+    "track": "Share Track"
+  },
   "topographicMap": "Topographic Map of Catalonia 1:25 000",
   "track": "Track",
   "trackAlert": {
