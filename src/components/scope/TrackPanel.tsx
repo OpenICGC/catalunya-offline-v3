@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -41,7 +41,6 @@ import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';
 import {openPhoto} from '../../utils/camera';
 import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
-import useRecordingTrack from '../../hooks/useRecordingTrack';
 
 //STYLES
 const sectionWrapperSx = {
@@ -62,6 +61,7 @@ export type TrackPanelProps = {
   initialTrack: ScopeTrack,
   numPoints: number,
   numTracks: number,
+  onRecordStart: () => void,
   onTrackChange: (newTrack: ScopeTrack) => void,
   onBackButtonClick: () => void,
   onGoTo: (pointId: UUID) => void,
@@ -73,6 +73,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
   initialTrack,
   numPoints,
   numTracks,
+  onRecordStart,
   onTrackChange,
   onBackButtonClick,
   onGoTo
@@ -83,8 +84,6 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const [track, setTrack] = useState(initialTrack);
   const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
 
-  const recordingTrack = useRecordingTrack();
-
   const accums = useMemo(() => getAccumulatedTrackProperties(track), [track]);
   const distance: string | undefined = accums ? getSignificantDistanceUnits(accums.distance) : undefined;
   const ascent: string | undefined = accums ? getSignificantDistanceUnits(accums.ascent) : undefined;
@@ -93,6 +92,10 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
   const hasTimestamp = track.geometry && track.geometry.coordinates.length ? !!track.geometry.coordinates[track.geometry.coordinates.length - 1][3] : false;
+
+  useEffect(() => {
+    setTrack(initialTrack);
+  }, [initialTrack]);
 
   const actionIcons = useMemo(() => ([
     {
@@ -178,21 +181,6 @@ const TrackPanel: FC<TrackPanelProps> = ({
     setIsEditing(false);
   };
 
-  const startRecordingTrack = () => {
-    recordingTrack.start({
-      onStop: (coordinates) => {
-        console.log('[trackPanel] Recording stopped', coordinates);
-        setTrack(prevTrack => ({
-          ...prevTrack,
-          geometry: coordinates.length ? {
-            type: 'LineString',
-            coordinates
-          } : null
-        }));
-      }
-    });
-  };
-
   return <>
     <Header
       startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
@@ -217,15 +205,18 @@ const TrackPanel: FC<TrackPanelProps> = ({
     </Box>
     <ScrollableContent>
       <Stack sx={sectionWrapperSx}>
-        <Typography sx={sectionTitleSx} variant="caption">
-          {!track.geometry ? t('properties.recordingTrack') : t('properties.detailsTrack')}
-        </Typography>
-        {!track.geometry && isEditing &&
+        {!track.geometry && !isEditing && <>
+          <Typography sx={sectionTitleSx} variant="caption">
+            {t('properties.recordingTrack')}
+          </Typography>
           <Box>
-            <RecordButton isAccessibleSize={isAccessibleSize} onClick={startRecordingTrack}/>
+            <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/>
           </Box>
-        }
-        {track.geometry && track.geometry.coordinates.length &&
+        </>}
+        {track.geometry && track.geometry.coordinates.length && <>
+          <Typography sx={sectionTitleSx} variant="caption">
+            {t('properties.detailsTrack')}
+          </Typography>
           <Stack>
             <Stack direction="row" sx={{justifyContent: 'space-between'}}>
               { track.geometry &&
@@ -245,7 +236,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
             </Stack>
             <TrackProfile geometry={track.geometry} color={track.properties.color} isOutOfTrack={false}/>
           </Stack>
-        }
+        </>}
       </Stack>
       <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={track.properties.timestamp} sx={sxInput}/>
       <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={track.properties.description} sx={sxInput}/>
