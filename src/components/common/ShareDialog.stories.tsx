@@ -10,8 +10,7 @@ export default {
     featureShared: {
       options: {
         SCOPE: FEATURE_SHARED.SCOPE,
-        TRACK: FEATURE_SHARED.TRACK,
-        POINT: FEATURE_SHARED.POINT
+        TRACK: FEATURE_SHARED.TRACK
       },
       control: { type: 'inline-radio' },
     },

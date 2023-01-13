@@ -31,7 +31,7 @@ const optionSx = {
     bgcolor: 'grey.100'
   },
   borderBottom: '1px solid lightgrey',
-  cursor: 'pointer',
+  cursor: 'pointer'
 };
 
 const cardHeaderSx = {
@@ -42,40 +42,32 @@ const cardHeaderSx = {
 
 const dialogSx = {
   bgcolor: 'secondary.main',
-  display: 'flex', 
-  alignItems: 'center', 
+  display: 'flex',
+  alignItems: 'center',
   letterSpacing: 1.35
 };
 
 export enum SHARE_FORMAT {
-    ZIP,
-    KMZ,
-    GPX
+  ZIP,
+  KMZ,
+  GPX
 }
 
 export enum FEATURE_SHARED {
-    SCOPE,
-    TRACK,
-    POINT,
+  SCOPE,
+  TRACK
 }
 
 export type ShareDialogProps = {
-    featureShared: FEATURE_SHARED,
-    isAccesibleSize: boolean;
-    onClick: (format: SHARE_FORMAT, shareVisiblePoints: boolean) => void;
-    onCancel: () => void;
+  featureShared: FEATURE_SHARED,
+  isAccesibleSize: boolean;
+  onClick: (format: SHARE_FORMAT, shareVisiblePoints?: boolean) => void;
+  onCancel: () => void;
 }
 
 const formatsForEachFeature = {
   [FEATURE_SHARED.SCOPE]: [SHARE_FORMAT.ZIP, SHARE_FORMAT.KMZ],
-  [FEATURE_SHARED.TRACK]: [SHARE_FORMAT.GPX, SHARE_FORMAT.ZIP],
-  [FEATURE_SHARED.POINT]: [SHARE_FORMAT.ZIP, SHARE_FORMAT.KMZ]
-};
-
-const featureSharedName = {
-  0: 'scope',
-  1: 'track',
-  2: 'point'
+  [FEATURE_SHARED.TRACK]: [SHARE_FORMAT.ZIP, SHARE_FORMAT.GPX]
 };
 
 const ShareDialog: FC<ShareDialogProps> = ({
@@ -84,59 +76,66 @@ const ShareDialog: FC<ShareDialogProps> = ({
   onClick,
   onCancel
 }) => {
-
   const {t} = useTranslation();
   const [shareVisiblePoints, setShareVisiblePoints] = useState(false);
 
   const FORMAT_DETAILS = {
     [SHARE_FORMAT.ZIP]: {
-      id: 'zip',
+      id: SHARE_FORMAT[SHARE_FORMAT.ZIP],
       icon: <FolderZipIcon sx={{color: 'grey.600'}}/>,
       label: t('format.zip.label'),
-      message: t('format.zip.message'),
+      message: t('format.zip.message')
     },
     [SHARE_FORMAT.KMZ]: {
-      id: 'kmz',
+      id: SHARE_FORMAT[SHARE_FORMAT.KMZ],
       icon: <Kmz sx={{color: 'grey.600'}}/>,
       label: t('format.kmz.label'),
-      message: t('format.kmz.message'),
+      message: t('format.kmz.message')
     },
     [SHARE_FORMAT.GPX]: {
-      id: 'ppx',
+      id: SHARE_FORMAT[SHARE_FORMAT.GPX],
       icon: <Gpx sx={{color: 'grey.600'}}/>,
       label: t('format.gpx.label'),
-      message: t('format.gpx.message'),
+      message: t('format.gpx.message')
     }
   };
 
-  const handleChange = () => setShareVisiblePoints(!shareVisiblePoints);
-  
+  const toggleVisiblePoints = () => setShareVisiblePoints(!shareVisiblePoints);
+
+  const handleClick = (format: SHARE_FORMAT) => {
+    if (featureShared === FEATURE_SHARED.TRACK) {
+      onClick(format, shareVisiblePoints);
+    } else {
+      onClick(format);
+    }
+  };
+
   return <Dialog open={true} onClose={() => onCancel()} fullWidth PaperProps={{sx: {height: 'auto', pb: 8}}}>
-    <DialogTitle sx={featureShared === FEATURE_SHARED.POINT ? dialogSx : dialogSx}>
+    <DialogTitle sx={dialogSx}>
       <ShareIcon sx={{mr: 2}}/>
-      {t(`share.${featureSharedName[featureShared]}`)}
+      {t(`share.${FEATURE_SHARED[featureShared].toLowerCase()}`)}
     </DialogTitle>
     {
-      featureShared === FEATURE_SHARED.POINT &&
-                  <CardContent sx={{my:0, py: 0, bgcolor: lighten('#ffd300', 0.75)}}>
-                    <FormGroup sx={{mb:0, pb: 0, ml: 2}}>
-                      <FormControlLabel sx={{mb:0, pb: 0, '& .MuiFormControlLabel-label': {fontSize: '0.875rem'}}}
-                        control={
-                          <Checkbox
-                            checked={shareVisiblePoints}
-                            onChange={handleChange}
-                            inputProps={{'aria-label': 'controlled'}}
-                          />
-                        }
-                        label={t('share.includeVisiblePoints')}
-                      />
-                    </FormGroup>
-                  </CardContent>
+      featureShared === FEATURE_SHARED.TRACK &&
+      <CardContent sx={{my: 0, py: 0, bgcolor: theme => lighten(theme.palette.secondary.main, 0.75)}}>
+        <FormGroup sx={{mb: 0, pb: 0, ml: 2}}>
+          <FormControlLabel sx={{mb: 0, pb: 0, '& .MuiFormControlLabel-label': {fontSize: '0.875rem'}}}
+            control={
+              <Checkbox
+                checked={shareVisiblePoints}
+                onChange={toggleVisiblePoints}
+                inputProps={{'aria-label': 'controlled'}}
+              />
+            }
+            label={t('share.includeVisiblePoints')}
+          />
+        </FormGroup>
+      </CardContent>
     }
     <Divider/>
     {
       formatsForEachFeature[featureShared].map((format, i) =>
-        <Card key={i} elevation={0} onClick={() => onClick(format, shareVisiblePoints)} sx={optionSx}>
+        <Card key={i} elevation={0} onClick={() => handleClick(format)} sx={optionSx}>
           <CardHeader
             avatar={FORMAT_DETAILS[format].icon}
             title={FORMAT_DETAILS[format].label}

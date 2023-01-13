@@ -38,15 +38,15 @@
   },
   "format": {
     "gpx": {
-      "label": "Archivo gpx",
+      "label": "Archivo GPX",
       "message": "Estándar para compartir rutas grabadas con GPS entre dispositivos. No contiene las fotos"
     },
     "kmz": {
-      "label": "Archivo kmz",
+      "label": "Archivo KMZ",
       "message": "Archivo de Google Earth, contiene las geometrías y sus fotos"
     },
     "zip": {
-      "label": "Archivo comprimido zip",
+      "label": "Archivo ZIP",
       "message": "Archivo comprimido que contiene un GeoJSON y una carpeta con fotos"
     }
   },

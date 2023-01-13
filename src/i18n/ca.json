@@ -38,15 +38,15 @@
   },
     "format": {
     "gpx": {
-      "label": "Arxiu gpx",
+      "label": "Arxiu GPX",
       "message": "Estàndard per compartir rutes gravades amb GPS entre dispositius. No conté les fotos"
     },
     "kmz": {
-      "label": "Arxiu kmz",
+      "label": "Arxiu KMZ",
       "message": "Fitxer de Google Earth, conté les geometries i les seves fotos"
     },
     "zip": {
-      "label": "Arxiu zip",
+      "label": "Arxiu ZIP",
       "message": "Fitxer comprimit que conté un GeoJSON i una carpeta amb fotos"
     }
   },

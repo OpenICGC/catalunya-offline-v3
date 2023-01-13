@@ -38,15 +38,15 @@
   },
     "format": {
     "gpx": {
-      "label": "Gpx file",
+      "label": "GPX file",
       "message": "Standard for sharing GPS recorded routes between devices. Does not contain the photos"
     },
     "kmz": {
-      "label": "Kmz file",
+      "label": "KMZ file",
       "message": "Google Earth file, contains the geometries and their photos"
     },
     "zip": {
-      "label": "Zip file",
+      "label": "ZIP file",
       "message": "Compressed file containing a GeoJSON and a folder with photos"
     }
   },
