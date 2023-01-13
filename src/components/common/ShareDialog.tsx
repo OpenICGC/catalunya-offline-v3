@@ -1,19 +1,29 @@
 import React, {FC, useState} from 'react';
 
 //MUI
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
-import DialogActions from '@mui/material/DialogActions';
-import CancelButton from '../buttons/CancelButton';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 
 //MUI-ICONS
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import FolderZipIcon from '@mui/icons-material/FolderZip';
 import ShareIcon from '@mui/icons-material/Share';
+
+//CATOFFLINE
+import CancelButton from '../buttons/CancelButton';
+import Kmz from '../icons/Kmz';
+import Gpx from '../icons/Gpx';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {Card, CardContent, CardHeader, Checkbox, FormControlLabel, FormGroup} from '@mui/material';
+import {lighten} from '@mui/system/colorManipulator';
 
 //STYLES
 const optionSx = {
@@ -31,24 +41,16 @@ const cardHeaderSx = {
 };
 
 const dialogSx = {
+  bgcolor: 'secondary.main',
   display: 'flex', 
   alignItems: 'center', 
   letterSpacing: 1.35
 };
 
-const dialogWithCheckboxSx = {
-  display: 'flex',
-  alignItems: 'center',
-  letterSpacing: 1.35,
-  mb: 0,
-  pb:0
-};
-
 export enum SHARE_FORMAT {
     ZIP,
     KMZ,
-    GPX,
-    GEOJSON
+    GPX
 }
 
 export enum FEATURE_SHARED {
@@ -64,36 +66,9 @@ export type ShareDialogProps = {
     onCancel: () => void;
 }
 
-const FORMAT_DETAILS = {
-  [SHARE_FORMAT.ZIP]: {
-    id: 'zip',
-    icon: <InsertDriveFileIcon/>,
-    label: 'Archivo comprimido zip',
-    message: 'Archivo comprimido que contiene un GeoJSON y una carpeta con fotos'
-  },
-  [SHARE_FORMAT.KMZ]: {
-    id: 'kmz',
-    icon: <InsertDriveFileIcon/>,
-    label: 'Archivo kmz',
-    message: 'Archivo comprimido que contiene la geometría y las fotos'
-  },
-  [SHARE_FORMAT.GPX]: {
-    id: 'ppx',
-    icon: <InsertDriveFileIcon/>,
-    label: 'Archivo gpx',
-    message: 'Archivo comprimido que contiene la geometría y las fotos'
-  },
-  [SHARE_FORMAT.GEOJSON]: {
-    id: 'geoJSON',
-    icon: <InsertDriveFileIcon/>,
-    label: 'Archivo geoJSON',
-    message: 'Archivo comprimido que contiene la geometría.'
-  }
-};
-
 const formatsForEachFeature = {
   [FEATURE_SHARED.SCOPE]: [SHARE_FORMAT.ZIP, SHARE_FORMAT.KMZ],
-  [FEATURE_SHARED.TRACK]: [SHARE_FORMAT.GPX, SHARE_FORMAT.ZIP, SHARE_FORMAT.GEOJSON],
+  [FEATURE_SHARED.TRACK]: [SHARE_FORMAT.GPX, SHARE_FORMAT.ZIP],
   [FEATURE_SHARED.POINT]: [SHARE_FORMAT.ZIP, SHARE_FORMAT.KMZ]
 };
 
@@ -113,17 +88,38 @@ const ShareDialog: FC<ShareDialogProps> = ({
   const {t} = useTranslation();
   const [shareVisiblePoints, setShareVisiblePoints] = useState(false);
 
+  const FORMAT_DETAILS = {
+    [SHARE_FORMAT.ZIP]: {
+      id: 'zip',
+      icon: <FolderZipIcon sx={{color: 'grey.600'}}/>,
+      label: t('format.zip.label'),
+      message: t('format.zip.message'),
+    },
+    [SHARE_FORMAT.KMZ]: {
+      id: 'kmz',
+      icon: <Kmz sx={{color: 'grey.600'}}/>,
+      label: t('format.kmz.label'),
+      message: t('format.kmz.message'),
+    },
+    [SHARE_FORMAT.GPX]: {
+      id: 'ppx',
+      icon: <Gpx sx={{color: 'grey.600'}}/>,
+      label: t('format.gpx.label'),
+      message: t('format.gpx.message'),
+    }
+  };
+
   const handleChange = () => setShareVisiblePoints(!shareVisiblePoints);
   
   return <Dialog open={true} onClose={() => onCancel()} fullWidth PaperProps={{sx: {height: 'auto', pb: 8}}}>
-    <DialogTitle sx={featureShared === FEATURE_SHARED.POINT ? dialogWithCheckboxSx : dialogSx}>
+    <DialogTitle sx={featureShared === FEATURE_SHARED.POINT ? dialogSx : dialogSx}>
       <ShareIcon sx={{mr: 2}}/>
       {t(`share.${featureSharedName[featureShared]}`)}
     </DialogTitle>
     {
       featureShared === FEATURE_SHARED.POINT &&
-                  <CardContent sx={{my:0, py: 0}}>
-                    <FormGroup sx={{mb:0, pb: 0, ml: 6}}>
+                  <CardContent sx={{my:0, py: 0, bgcolor: lighten('#ffd300', 0.75)}}>
+                    <FormGroup sx={{mb:0, pb: 0, ml: 2}}>
                       <FormControlLabel sx={{mb:0, pb: 0, '& .MuiFormControlLabel-label': {fontSize: '0.875rem'}}}
                         control={
                           <Checkbox
@@ -132,7 +128,7 @@ const ShareDialog: FC<ShareDialogProps> = ({
                             inputProps={{'aria-label': 'controlled'}}
                           />
                         }
-                        label={'¿Quieres incluir los puntos visibles?'}
+                        label={t('share.includeVisiblePoints')}
                       />
                     </FormGroup>
                   </CardContent>

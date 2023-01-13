@@ -36,6 +36,20 @@
     "points": "Punts",
     "tracks": "Traces"
   },
+    "format": {
+    "gpx": {
+      "label": "Arxiu gpx",
+      "message": "Estàndard per compartir rutes gravades amb GPS entre dispositius. No conté les fotos"
+    },
+    "kmz": {
+      "label": "Arxiu kmz",
+      "message": "Fitxer de Google Earth, conté les geometries i les seves fotos"
+    },
+    "zip": {
+      "label": "Arxiu zip",
+      "message": "Fitxer comprimit que conté un GeoJSON i una carpeta amb fotos"
+    }
+  },
   "layerManager": "Capes",
   "noScopeAlert": "Trieu un àmbit per al punt",
   "point": "Punt",
@@ -63,6 +77,7 @@
   },
   "scopeManager": "Àmbits",
   "share": {
+    "includeVisiblePoints": "Incloure punts visibles?",
     "point": "Compartir Point",
     "scope": "Compartir Àmbit",
     "track": "Compartir Track"
