@@ -36,6 +36,20 @@
     "points": "Puntos",
     "tracks": "Rutas"
   },
+  "format": {
+    "gpx": {
+      "label": "Archivo GPX",
+      "message": "Estándar para compartir rutas grabadas con GPS entre dispositivos. No contiene las fotos"
+    },
+    "kmz": {
+      "label": "Archivo KMZ",
+      "message": "Archivo de Google Earth, contiene las geometrías y sus fotos"
+    },
+    "zip": {
+      "label": "Archivo ZIP",
+      "message": "Archivo comprimido que contiene un GeoJSON y una carpeta con fotos"
+    }
+  },
   "layerManager": "Capas",
   "noScopeAlert": "Elige un ámbito para el punto",
   "point": "Punto",
@@ -62,6 +76,12 @@
     "notFound": "No coincide ningún elemento con la búsqueda"
   },
   "scopeManager": "Ámbitos",
+  "share": {
+    "includeVisiblePoints": "¿Incluir puntos visibles?",
+    "point": "Compartir Punto",
+    "scope": "Compartir Ámbito",
+    "track": "Compartir Ruta"
+  },
   "topographicMap": "Mapa topográfico de Catalunya 1:25 000",
   "track": "Ruta",
   "trackAlert": {

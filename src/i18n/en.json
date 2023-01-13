@@ -36,6 +36,20 @@
     "points": "Points",
     "tracks": "Tracks"
   },
+    "format": {
+    "gpx": {
+      "label": "GPX file",
+      "message": "Standard for sharing GPS recorded routes between devices. Does not contain the photos"
+    },
+    "kmz": {
+      "label": "KMZ file",
+      "message": "Google Earth file, contains the geometries and their photos"
+    },
+    "zip": {
+      "label": "ZIP file",
+      "message": "Compressed file containing a GeoJSON and a folder with photos"
+    }
+  },
   "layerManager": "Layers",
   "noScopeAlert": "Choose the point's scope",
   "point": "Point",
@@ -62,6 +76,12 @@
     "notFound": "No elements found matching the search criteria"
   },
   "scopeManager": "Scopes",
+  "share": {
+    "includeVisiblePoints": "Include visible points?",
+    "point": "Share Point",
+    "scope": "Share Scope",
+    "track": "Share Track"
+  },
   "topographicMap": "Topographic Map of Catalonia 1:25 000",
   "track": "Track",
   "trackAlert": {
