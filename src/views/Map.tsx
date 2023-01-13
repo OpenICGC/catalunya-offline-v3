@@ -159,7 +159,11 @@ const Map: FC<MainContentProps> = ({
   }, [geolocation, mapRef.current]);
 
   useEffect(() => {
-    mapRef.current?.once('styledata', () => setMapGeolocation(mapRef.current, geolocation));
+    mapRef.current?.once('styledata', () => {
+      setMapGeolocation(mapRef.current, geolocation);
+      addMapRecordingTrack();
+      addMapTrackList();
+    });
   }, [mapStyle]);
 
   ////// Handle orientation & navigation state transitions
@@ -324,7 +328,7 @@ const Map: FC<MainContentProps> = ({
     setPointIntent(undefined);
   };
 
-  useEffect(() => {
+  const addMapRecordingTrack = () => {
     if (mapRef?.current && recordingTrack.coordinates.length) {
       const map = mapRef.current;
       const source = (map?.getSource('recordingTrack') as maplibregl.GeoJSONSource | undefined);
@@ -340,10 +344,14 @@ const Map: FC<MainContentProps> = ({
         }]
       });
     }
-  }, [recordingTrack.coordinates, mapRef.current]);
+  };
 
   useEffect(() => {
-    if (mapRef?.current && trackList.length) {
+    addMapRecordingTrack();
+  }, [recordingTrack.coordinates, mapRef.current]);
+
+  const addMapTrackList = () => {
+    if (mapRef?.current) {
       const map = mapRef.current;
       const source = (map?.getSource('trackList') as maplibregl.GeoJSONSource | undefined);
       source?.setData({
@@ -360,6 +368,10 @@ const Map: FC<MainContentProps> = ({
         })) as Array<Feature>
       });
     }
+  };
+
+  useEffect(() => {
+    addMapTrackList();
   }, [trackList, mapRef.current]);
 
   return <>
