@@ -9,7 +9,7 @@ import StopIcon from '@mui/icons-material/Stop';
 import ButtonGroup from '@geomatico/geocomponents/ButtonGroup';
 
 //UTILS
-import {RECORDING_STATUS} from '../map/RecordingPanel';
+import {RECORDING_STATUS} from '../map/TrackRecorder';
 
 const recordIconSx = {color: '#d32f2f'};
 
@@ -24,20 +24,20 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
   recordingStatus,
   onButtonClick
 }) => {
-  const pauseIconSx = {color: recordingStatus === RECORDING_STATUS.PAUSE ? 'white': 'grey.700'};
-  const stopIconSx = {color: recordingStatus === RECORDING_STATUS.STOP ? 'white': 'grey.700'};
+  const pauseIconSx = {color: recordingStatus === RECORDING_STATUS.PAUSED ? 'white': 'grey.700'};
+  const stopIconSx = {color: recordingStatus === RECORDING_STATUS.STOPPED ? 'white': 'grey.700'};
 
   const controls = [
     {
-      id: RECORDING_STATUS.RECORDING,
+      id: RECORDING_STATUS.RECORDING.toString(),
       content: <RecordIcon sx={recordIconSx}/>
     },
     {
-      id: RECORDING_STATUS.PAUSE,
+      id: RECORDING_STATUS.PAUSED.toString(),
       content: <PauseIcon sx={pauseIconSx}/>
     },
     {
-      id: RECORDING_STATUS.STOP,
+      id: RECORDING_STATUS.STOPPED.toString(),
       content: <StopIcon sx={stopIconSx}/>
     },
   ];
@@ -70,9 +70,9 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
     }
   };
 
-  const handleItemClick = (itemId: number) => {
+  const handleItemClick = (itemId: string) => {
     if (itemId !== null) {
-      onButtonClick(itemId);
+      onButtonClick(parseInt(itemId));
     }
   };
 
@@ -81,7 +81,7 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
     color='#616161'
     sx={recordingButtonSx}
     items={controls}
-    selectedItemId={recordingStatus}
+    selectedItemId={recordingStatus.toString()}
     onItemClick={handleItemClick}
   />;
 };

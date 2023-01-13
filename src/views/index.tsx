@@ -62,9 +62,12 @@ const Index: FC = () => {
     mapStyle={mapStyle}
     manager={manager}
     onManagerChanged={setManager}
-    selectedScope={scope}
-    setSelectedScope={setScope}
-    setSelectedPoint={setPoint}
+    selectedScopeId={scope}
+    onScopeSelected={setScope}
+    selectedPointId={point}
+    onPointSelected={setPoint}
+    selectedTrackId={track}
+    /*onTrackSelected={setTrack}*/
   />;
 
   return <>

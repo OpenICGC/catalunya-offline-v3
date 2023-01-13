@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -91,7 +91,11 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const formattedTime = accums?.time ? moment.duration(accums?.time, 'seconds').format('h[h] mm[m] ss[s]') : undefined;
 
   const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
-  const hasTimestamp = !!track.geometry?.coordinates[track.geometry.coordinates.length - 1][3] || false;
+  const hasTimestamp = track.geometry && track.geometry.coordinates.length ? !!track.geometry.coordinates[track.geometry.coordinates.length - 1][3] : false;
+
+  useEffect(() => {
+    setTrack(initialTrack);
+  }, [initialTrack]);
 
   const actionIcons = useMemo(() => ([
     {
@@ -201,34 +205,38 @@ const TrackPanel: FC<TrackPanelProps> = ({
     </Box>
     <ScrollableContent>
       <Stack sx={sectionWrapperSx}>
-        <Typography sx={sectionTitleSx} variant="caption">
-          {!track.geometry ? t('properties.recordingTrack') : t('properties.detailsTrack')}
-        </Typography>
-        {
-          !track.geometry ?
-            <Box>
-              <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/>
-            </Box> :
-            <Stack>
-              <Stack direction="row" sx={{justifyContent: 'space-between'}}>
-                { track.geometry &&
-                  <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/>
-                }
-                <Stack direction="row" justifyContent="space-between" gap={0.5} sx={{flexGrow: 1}}>
-                  <Stack direction="column" sx={{justifyContent: 'space-between'}}>
-                    <TrackProperty icon={<StraightenIcon/>} value={distance}/>
-                    {/*if it does not have elevation, it does not have time either*/}
-                    <TrackProperty icon={<AvTimerIcon/>} value={hasTimestamp && formattedTime}/>
-                  </Stack>
-                  <Stack direction="column" sx={{justifyContent: 'space-between'}}>
-                    <TrackProperty icon={<PositiveSlope/>} value={hasElevation && ascent}/>
-                    <TrackProperty icon={<NegativeSlope/>} value={hasElevation && descent}/>
-                  </Stack>
+        {!track.geometry && !isEditing && <>
+          <Typography sx={sectionTitleSx} variant="caption">
+            {t('properties.recordingTrack')}
+          </Typography>
+          <Box>
+            <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/>
+          </Box>
+        </>}
+        {track.geometry && track.geometry.coordinates.length && <>
+          <Typography sx={sectionTitleSx} variant="caption">
+            {t('properties.detailsTrack')}
+          </Typography>
+          <Stack>
+            <Stack direction="row" sx={{justifyContent: 'space-between'}}>
+              { track.geometry &&
+                <GeometryThumbnail geometry={track.geometry} color={track.properties.color || scope.color} size={50}/>
+              }
+              <Stack direction="row" justifyContent="space-between" gap={0.5} sx={{flexGrow: 1}}>
+                <Stack direction="column" sx={{justifyContent: 'space-between'}}>
+                  <TrackProperty icon={<StraightenIcon/>} value={distance}/>
+                  {/*if it does not have elevation, it does not have time either*/}
+                  <TrackProperty icon={<AvTimerIcon/>} value={hasTimestamp && formattedTime}/>
+                </Stack>
+                <Stack direction="column" sx={{justifyContent: 'space-between'}}>
+                  <TrackProperty icon={<PositiveSlope/>} value={hasElevation && ascent}/>
+                  <TrackProperty icon={<NegativeSlope/>} value={hasElevation && descent}/>
                 </Stack>
               </Stack>
-              <TrackProfile geometry={track.geometry} color={track.properties.color} isOutOfTrack={false}/>
             </Stack>
-        }
+            <TrackProfile geometry={track.geometry} color={track.properties.color || scope.color} isOutOfTrack={false}/>
+          </Stack>
+        </>}
       </Stack>
       <DateInput isEditing={isEditing} onChange={handleDateChange} timestamp={track.properties.timestamp} sx={sxInput}/>
       <TextAreaInput isEditing={isEditing} onChange={handleDescriptionChange} text={track.properties.description} sx={sxInput}/>
