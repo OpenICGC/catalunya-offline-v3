@@ -220,7 +220,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
           <Stack>
             <Stack direction="row" sx={{justifyContent: 'space-between'}}>
               { track.geometry &&
-                <GeometryThumbnail geometry={track.geometry} color={track.properties.color} size={50}/>
+                <GeometryThumbnail geometry={track.geometry} color={track.properties.color || scope.color} size={50}/>
               }
               <Stack direction="row" justifyContent="space-between" gap={0.5} sx={{flexGrow: 1}}>
                 <Stack direction="column" sx={{justifyContent: 'space-between'}}>
@@ -234,7 +234,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
                 </Stack>
               </Stack>
             </Stack>
-            <TrackProfile geometry={track.geometry} color={track.properties.color} isOutOfTrack={false}/>
+            <TrackProfile geometry={track.geometry} color={track.properties.color || scope.color} isOutOfTrack={false}/>
           </Stack>
         </>}
       </Stack>

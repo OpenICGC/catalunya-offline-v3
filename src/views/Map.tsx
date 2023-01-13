@@ -15,14 +15,13 @@ import PointMarkers from '../components/map/PointMarkers';
 import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
 import useEditingPosition from '../hooks/useEditingPosition';
-import {LineLayer, MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
-import {Position} from 'geojson';
+import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
+import {Position, Feature} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 import ScopeSelector from '../components/scope/ScopeSelector';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import TrackRecorder from '../components/map/TrackRecorder';
-import {Source, Layer} from 'react-map-gl';
 
 mbtiles(maplibregl);
 
@@ -33,7 +32,21 @@ const sources = {
       type: 'FeatureCollection',
       features: []
     }
-  }
+  },
+  'recordingTrack': {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    }
+  },
+  'trackList': {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    }
+  },
 };
 
 const layers = [{
@@ -57,8 +70,23 @@ const layers = [{
     'circle-stroke-width': 1,
     'circle-pitch-alignment': 'map'
   }
+}, {
+  id: 'recordingTrack',
+  source: 'recordingTrack',
+  type: 'line',
+  paint: {
+    'line-color': '#d32f2f',
+    'line-width': 4
+  }
+}, {
+  id: 'trackList',
+  source: 'trackList',
+  type: 'line',
+  paint: {
+    'line-color': ['get', 'color'],
+    'line-width': 4
+  }
 }];
-
 
 export type MainContentProps = {
   mapStyle: string | StyleSpecification,
@@ -102,6 +130,7 @@ const Map: FC<MainContentProps> = ({
   const pointColor = selectedPoint?.properties.color || scopeColor;
   const trackColor = selectedTrack?.properties.color || scopeColor;
   const pointList = pointStore.list();
+  const trackList = trackStore.list();
 
   const editingPosition = useEditingPosition();
   const [pointIntent, setPointIntent] = useState<Position>();
@@ -295,26 +324,43 @@ const Map: FC<MainContentProps> = ({
     setPointIntent(undefined);
   };
 
-  const recordingTrackSource: GeoJSON.FeatureCollection = {
-    type: 'FeatureCollection',
-    features: [{
-      type: 'Feature',
-      properties: {},
-      geometry: {
-        type: 'LineString',
-        coordinates: recordingTrack.coordinates
-      }
-    }]
-  };
-
-  const recordingTrackLayer: LineLayer = {
-    id: 'recordingTrack',
-    type: 'line',
-    paint: {
-      'line-color': '#FF0000',
-      'line-width': 2
+  useEffect(() => {
+    if (mapRef?.current && recordingTrack.coordinates.length) {
+      const map = mapRef.current;
+      const source = (map?.getSource('recordingTrack') as maplibregl.GeoJSONSource | undefined);
+      source?.setData({
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'LineString',
+            coordinates: recordingTrack.coordinates
+          }
+        }]
+      });
     }
-  };
+  }, [recordingTrack.coordinates, mapRef.current]);
+
+  useEffect(() => {
+    if (mapRef?.current && trackList.length) {
+      const map = mapRef.current;
+      const source = (map?.getSource('trackList') as maplibregl.GeoJSONSource | undefined);
+      source?.setData({
+        type: 'FeatureCollection',
+        features: trackList.filter(track =>
+          track.geometry !== null &&
+          track.properties.isVisible
+        ).map(track => ({
+          ...track,
+          properties: {
+            ...track.properties,
+            color: track.properties.color || scopeColor
+          }
+        })) as Array<Feature>
+      });
+    }
+  }, [trackList, mapRef.current]);
 
   return <>
     <GeocomponentMap
@@ -350,9 +396,6 @@ const Map: FC<MainContentProps> = ({
         onBaseMapsClick={() => changeManager('BASEMAPS')}
         onScopesClick={() => changeManager('SCOPES')}
       />}
-      <Source type="geojson" data={recordingTrackSource}>
-        <Layer {...recordingTrackLayer} />
-      </Source>
     </GeocomponentMap>
     {!!editingPosition.position && <PositionEditor
       name={selectedPoint?.properties.name}
@@ -377,5 +420,4 @@ const Map: FC<MainContentProps> = ({
     />}
   </>;
 };
-
 export default Map;
