@@ -32,6 +32,7 @@ import {lighten} from '@mui/system/colorManipulator';
 import {Theme} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import FeaturesSummary from './FeaturesSummary';
+import ShareIcon from '@mui/icons-material/Share';
 
 export type FeaturesPanelProps = {
   isAccessibleSize?: boolean,
@@ -130,9 +131,9 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       }
       ,
       {
-        id: 'export',
-        label: t('actions.export'),
-        icon: <FileUploadIcon/>,
+        id: 'share',
+        label: t('actions.share'),
+        icon: <ShareIcon/>,
         callbackProp: onExportPoint
       }
     ],
