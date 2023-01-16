@@ -124,6 +124,7 @@
     "@capacitor/core": "^4.4.0",
     "@capacitor/filesystem": "^4.1.4",
     "@capacitor/ios": "^4.4.0",
+    "@capacitor/share": "^4.1.0",
     "babel-plugin-typescript-to-proptypes": "^2.0.0",
     "compare-versions": "^6.0.0-rc.1",
     "cordova-plugin-device-orientation": "^2.0.1",

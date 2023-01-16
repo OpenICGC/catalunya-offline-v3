@@ -9,13 +9,13 @@
     "download": "Download",
     "downloading": "Downloading...",
     "edit": "Edit",
-    "export": "Export",
     "goTo": "Go to",
     "instamaps": "Instamaps",
     "paused": "Paused",
     "rec": "Rec",
     "recording": "Recording",
     "search": "Search...",
+    "share": "Share",
     "stopped": "Stopped"
   },
   "baseMapManager": "Base Maps",
@@ -36,7 +36,7 @@
     "points": "Points",
     "tracks": "Tracks"
   },
-    "format": {
+  "format": {
     "gpx": {
       "label": "GPX file",
       "message": "Standard for sharing GPS recorded routes between devices. Does not contain the photos"

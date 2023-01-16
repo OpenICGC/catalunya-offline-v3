@@ -11,6 +11,7 @@ import ScopeTrack from './ScopeTrack';
 import {useViewport} from '../../hooks/useViewport';
 import {MAP_PROPS} from '../../config';
 import useEditingPosition from '../../hooks/useEditingPosition';
+import useShare from '../../hooks/useShare';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -36,6 +37,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
 
   const pointStore = useScopePoints(scopeId);
   const trackStore = useScopeTracks(scopeId);
+
+  const {sharePoint}  = useShare();
 
   const editingPosition = useEditingPosition();
 
@@ -116,7 +119,10 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   };
 
   const pointExport = (pointId: UUID) => {
-    console.log('Unimplemented Export, Point', pointId); // TODO
+    const point = pointStore.retrieve(pointId);
+    if (point) {
+      sharePoint(point);
+    }
   };
   
   

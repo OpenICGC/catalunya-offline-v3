@@ -9,13 +9,13 @@
     "download": "Descarrega",
     "downloading": "Descarregant...",
     "edit": "Edita",
-    "export": "Exporta",
     "goTo": "Anar a",
     "instamaps": "Instamaps",
     "paused": "Pausat",
     "rec": "Grava",
     "recording": "Gravant",
     "search": "Cerca...",
+    "share": "Compartir",
     "stopped": "Finalizat"
   },
   "baseMapManager": "Mapes Base",
@@ -36,7 +36,7 @@
     "points": "Punts",
     "tracks": "Traces"
   },
-    "format": {
+  "format": {
     "gpx": {
       "label": "Arxiu GPX",
       "message": "Estàndard per compartir rutes gravades amb GPS entre dispositius. No conté les fotos"
