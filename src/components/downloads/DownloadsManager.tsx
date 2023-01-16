@@ -100,6 +100,13 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
 
   useEffect(() => {
     dispatch({type: 'RESET'});
+    setAccepted(undefined);
+    setErrorOpen(false);
+    setCancelDownload(false);
+    setExistingFilesOnDevice(undefined);
+    setOfflineMetadata(undefined);
+    setMetadata(undefined);
+    setDownloadDescription('');
   }, [baseMap]);
   
   useEffect(() => {
@@ -230,7 +237,9 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
 
 
   useEffect(() => {
-    if (accepted && metadata){
+    if (!accepted) {
+      setOpen(false);
+    } else if (accepted && metadata){
       setOpen(false);
       handleDownloads(metadata);
     }
