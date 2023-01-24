@@ -1,44 +1,38 @@
 import {UUID} from '../types/commonTypes';
 import {useScopePoints, useScopeTracks} from './useStoredCollections';
 export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePoints?: boolean) => {
-  const pointStore = useScopePoints(scopeId);
-  const trackStore = useScopeTracks(scopeId);
-
-  const scopePointList = pointStore.list();
-  const scopeTrackList = trackStore.list();
-
-  const scopeTrack = trackId ? trackStore.retrieve(trackId) : undefined;
-  
-  //EXPORT SCOPE
-  const allPointsToExport = scopePointList.map(point => {
-    return {
-      geometry: point.geometry,
-      properties: point.properties,
-      type: point.type
-    };
-  });
-  const allTracksToExport = scopeTrackList.map(track => {
-    return {
-      geometry: track.geometry,
-      properties: track.properties,
-      type: track.type
-    };
-  });
-
-  const scopeToExport = [...allPointsToExport, ...allTracksToExport];
     
-  //EXPORT TRACK & VISIBLE POINTS (trackId === true)
-  const trackToExport = [{
-    geometry: scopeTrack && scopeTrack.geometry,
-    properties: scopeTrack && scopeTrack.properties,
-    type: scopeTrack && scopeTrack.type
-  }];
-  const visiblePointsToExport = allPointsToExport.filter(point => point.properties.isVisible);
+  if ( trackId ) {
+    if (includeVisiblePoints) { //Export Track and visiblePoints
+      const trackStore = useScopeTracks(scopeId);
+      const scopeTrack = trackStore.retrieve(trackId);
+      const pointStore = useScopePoints(scopeId);
+      const scopePointList = pointStore.list();
+      const visiblePointsToExport = scopePointList.filter(point => point.properties.isVisible);
 
-  const trackWithVisiblePointsToExport = visiblePointsToExport ? [...trackToExport, ...visiblePointsToExport] : undefined;
+      return {
+        'type': 'FeatureCollection',
+        'features': scopeTrack && [...[scopeTrack], ...visiblePointsToExport]
+      };
+      
+    } else { //Export Track
+      const trackStore = useScopeTracks(scopeId);
 
-  return {
-    'type': 'FeatureCollection',
-    'features': trackId ?  includeVisiblePoints ? trackWithVisiblePointsToExport : trackToExport : scopeToExport,
-  };
+      return {
+        'type': 'FeatureCollection',
+        'features': [trackStore.retrieve(trackId)]
+      };
+    }
+      
+  } else { //Export all Scope
+    const pointStore = useScopePoints(scopeId);
+    const trackStore = useScopeTracks(scopeId);
+    const scopePointList = pointStore.list();
+    const scopeTrackList = trackStore.list();
+
+    return {
+      'type': 'FeatureCollection',
+      'features': [...scopePointList, ...scopeTrackList]
+    };
+  }
 };

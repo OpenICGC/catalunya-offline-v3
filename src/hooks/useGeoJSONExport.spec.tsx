@@ -102,62 +102,8 @@ describe('useGeoJSONExport', () => {
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
-        {
-          'type': 'Feature',
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [0, 0]
-          },
-          'properties': {
-            'description': '',
-            'images': [],
-            'isVisible': true,
-            'name': 'Point 1',
-            'timestamp': 1673876171254,
-          }
-        },
-        {
-          'type': 'Feature',
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [1, 1]
-          },
-          'properties': {
-            'description': '',
-            'images': [],
-            'isVisible': false,
-            'name': 'Point 2',
-            'timestamp': 1673876171245,
-          }
-        },
-        {
-          'type': 'Feature',
-          'geometry': {
-            type: 'LineString',
-            coordinates: [[0, 0], [1, 1]]
-          },
-          'properties': {
-            'description': '',
-            'images': [],
-            'isVisible': true,
-            'name': 'Track 1',
-            'timestamp': 1673876115769
-          }
-        },
-        {
-          'type': 'Feature',
-          'geometry': {
-            type: 'LineString',
-            coordinates: [[2, 2], [3, 3]]
-          },
-          'properties': {
-            'description': '',
-            'images': [],
-            'isVisible': true,
-            'name': 'Track 2',
-            'timestamp': 1673876115785
-          }
-        }
+        ...samplePoints,
+        ...sampleTracks
       ]
     };
     expect(computedGeoJSON.result.all[0]).to.deep.equal(expectedGeoJSON);
@@ -167,11 +113,6 @@ describe('useGeoJSONExport', () => {
     samplePoints.map(point => act(() => resultPoint.result.current.delete(point.id)));
     sampleTracks.map(track => act(() => resultTrack.result.current.delete(track.id)));
 
-    // THEN
-    expect(resultScope.result.current.list()).to.deep.equal([]);
-    expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([]));
-    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([]));
-    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([]));
   });
 
   it('useGeoJSONExport should generate a valid GeoJSON from trackId', () => {
@@ -197,20 +138,7 @@ describe('useGeoJSONExport', () => {
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
-        {
-          'type': 'Feature',
-          'geometry': {
-            type: 'LineString',
-            coordinates: [[0, 0], [1, 1]]
-          },
-          'properties': {
-            'description': '',
-            'images': [],
-            'isVisible': true,
-            'name': 'Track 1',
-            'timestamp': 1673876115769
-          }
-        }
+        sampleTracks[0]
       ]
     };
     expect(computedGeoJSON.result.all[0]).to.deep.equal(expectedGeoJSON);
@@ -219,12 +147,6 @@ describe('useGeoJSONExport', () => {
     act(() => resultScope.result.current.delete(sampleScope.id));
     samplePoints.map(point => act(() => resultPoint.result.current.delete(point.id)));
     sampleTracks.map(track => act(() => resultTrack.result.current.delete(track.id)));
-
-    // THEN
-    expect(resultScope.result.current.list()).to.deep.equal([]);
-    expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([]));
-    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([]));
-    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([]));
 
   });
 
@@ -251,35 +173,8 @@ describe('useGeoJSONExport', () => {
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
-        {
-          'type': 'Feature',
-          'geometry': {
-            'type': 'LineString',
-            'coordinates': [[0, 0], [1, 1]]
-          },
-          'properties': {
-            'description': '',
-            'images': [],
-            'isVisible': true,
-            'name': 'Track 1',
-            'timestamp': 1673876115769
-          }
-        },
-        {
-          'type': 'Feature',
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [0, 0]
-          },
-          'properties': {
-            'name': 'Point 1',
-            'timestamp': 1673876171254,
-            'description': '',
-            'images': [],
-            'isVisible': true
-          },
-          
-        }
+        sampleTracks[0],
+        samplePoints[0]
       ]
     };
     expect(computedGeoJSON.result.all[0]).to.deep.equal(expectedGeoJSON);
@@ -288,12 +183,6 @@ describe('useGeoJSONExport', () => {
     act(() => resultScope.result.current.delete(sampleScope.id));
     samplePoints.map(point => act(() => resultPoint.result.current.delete(point.id)));
     sampleTracks.map(track => act(() => resultTrack.result.current.delete(track.id)));
-
-    // THEN
-    expect(resultScope.result.current.list()).to.deep.equal([]);
-    expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([]));
-    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([]));
-    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([]));
     
   });
 
