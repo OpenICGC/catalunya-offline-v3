@@ -7,7 +7,6 @@ export const useGPXExport = (scope: Scope, trackId: UUID, includeVisiblePoints?:
   const meta = new Metadata(
     {
       name: scope.name,
-      copyright: new Copyright('Institut Cartogràfic i Geològic de Catalunya', {year: 2023}),
       link: new Link('https://www.icgc.cat/ca/')
     }
   );
@@ -20,28 +19,38 @@ export const useGPXExport = (scope: Scope, trackId: UUID, includeVisiblePoints?:
     const pointStore = useScopePoints(scope.id);
     const scopePointList = pointStore.list();
     const visiblePointsToExport = scopePointList.filter(point => point.properties.isVisible);
-    
-    const trackWayPoints = scopeTrack?.geometry?.coordinates.map(coord =>
-      new Point(coord[1], coord[0],
-        {
-          ele: coord[2] || undefined,
-          time: new Date(coord[3]) || undefined,
-        }));
+
+    const trackWayPoints = scopeTrack?.geometry?.coordinates.map(coord => {
+      if(coord[2] && coord[3]){
+        return new Point(coord[1], coord[0],
+          {
+            ele: coord[2],
+            time: new Date(coord[3])
+          });
+      } else if (coord[2]) {
+        return new Point(coord[1], coord[0],
+          {
+            ele: coord[2],
+          });
+      } else {
+        return new Point(coord[1], coord[0]);
+      }
+    });
 
     const points = visiblePointsToExport.map(point =>
       new Point(point.geometry.coordinates[1], point.geometry.coordinates[0],
         {
           ele: point.geometry.coordinates[2] || undefined,
           time: new Date(point.properties.timestamp) || undefined,
-          name: point.properties.name || undefined,
-          cmt: point.properties.description || undefined
+          name: point.properties.name,
+          cmt: point.properties.description
         }));
     
     const trackLine = [
       new Route(
         {
-          name: scopeTrack?.properties.name || undefined,
-          cmt: scopeTrack?.properties.description || undefined,
+          name: scopeTrack?.properties.name,
+          cmt: scopeTrack?.properties.description,
           rtept: trackWayPoints
         }
       )
@@ -56,18 +65,28 @@ export const useGPXExport = (scope: Scope, trackId: UUID, includeVisiblePoints?:
 
   } else {
 
-    const trackWayPoints = scopeTrack?.geometry?.coordinates.map(coord =>
-      new Point(coord[1], coord[0],
-        {
-          ele: coord[2] || undefined,
-          time: new Date(coord[3]) || undefined,
-        }));
+    const trackWayPoints = scopeTrack?.geometry?.coordinates.map(coord => {
+      if(coord[2] && coord[3]){
+        return new Point(coord[1], coord[0],
+          {
+            ele: coord[2],
+            time: new Date(coord[3])
+          });
+      } else if (coord[2]) {
+        return new Point(coord[1], coord[0],
+          {
+            ele: coord[2],
+          });
+      } else {
+        return new Point(coord[1], coord[0]);
+      }
+    });
 
     const trackLine = [
       new Route(
         {
-          name: scopeTrack?.properties.name || undefined,
-          cmt: scopeTrack?.properties.description || undefined,
+          name: scopeTrack?.properties.name,
+          cmt: scopeTrack?.properties.description,
           rtept: trackWayPoints
         }
       )
