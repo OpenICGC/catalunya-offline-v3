@@ -28,8 +28,8 @@ module.exports = (env) => ({
       },
       {
         test: /\.(ts|tsx)$/,
-        use: 'ts-loader',
         exclude: /node_modules/,
+        use: 'ts-loader',
       },
       {
         test: /\.html$/,

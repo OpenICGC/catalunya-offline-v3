@@ -78,27 +78,35 @@ const tracks: ScopeTrack[] = [
 ];
 
 describe('useGeoJSONExport', () => {
-  const scopeId = uuidv4();
-  it('useGeoJSONExport should generate a valid GeoJSON from scopeId', () => {
+  // GIVEN
+  const sampleScope = scope;
+  const samplePoints = points;
+  const sampleTracks = tracks;
 
-    // GIVEN
-    const sampleScope = scope;
-    const samplePoints = points;
-    const sampleTracks = tracks;
-    
+  
+  
+  it('useGeoJSONExport should generate a valid GeoJSON from scopeId', async () => {
+
+    // WHEN
     const resultScope = renderHook(() => useScopes());
     const resultPoint = renderHook(() => useScopePoints(scopeId));
     const resultTrack = renderHook(() => useScopeTracks(scopeId));
-
-    // WHEN
+    
     act(() => resultScope.result.current.create(sampleScope));
-    samplePoints.map(point => act(() => resultPoint.result.current.create(point)));
-    sampleTracks.map(track => act(() => resultTrack.result.current.create(track)));
+    await resultScope.waitForNextUpdate();
+    for (const point of samplePoints) {
+      act(() => resultPoint.result.current.create(point));
+      await resultPoint.waitForNextUpdate();
+    }
+    for (const track of sampleTracks) {
+      act(() => resultTrack.result.current.create(track));
+      await resultTrack.waitForNextUpdate();
+    }
 
-    const computedGeoJSON = renderHook(() => useGeoJSONExport(scopeId));
+    const {result, waitForNextUpdate} = renderHook(() => useGeoJSONExport(scopeId));
+    await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
@@ -106,70 +114,68 @@ describe('useGeoJSONExport', () => {
         ...sampleTracks
       ]
     };
-    expect(computedGeoJSON.result.all[0]).to.deep.equal(expectedGeoJSON);
+    expect(result.current).to.deep.equal(expectedGeoJSON);
 
-    // WHEN
-    act(() => resultScope.result.current.delete(sampleScope.id));
-    samplePoints.map(point => act(() => resultPoint.result.current.delete(point.id)));
-    sampleTracks.map(track => act(() => resultTrack.result.current.delete(track.id)));
-
+    //CLEAN
+    act(() => resultScope.result.current.delete(scopeId));
+    await resultScope.waitForNextUpdate();
   });
 
-  it('useGeoJSONExport should generate a valid GeoJSON from trackId', () => {
-
-    // GIVEN
-    const sampleScope = scope;
-    const samplePoints = points;
-    const sampleTracks = tracks;
-
+  it('useGeoJSONExport should generate a valid GeoJSON from trackId', async () => {
+    // WHEN
     const resultScope = renderHook(() => useScopes());
     const resultPoint = renderHook(() => useScopePoints(scopeId));
     const resultTrack = renderHook(() => useScopeTracks(scopeId));
-
-    // WHEN
+    
     act(() => resultScope.result.current.create(sampleScope));
-    samplePoints.map(point => act(() => resultPoint.result.current.create(point)));
-    sampleTracks.map(track => act(() => resultTrack.result.current.create(track)));
+    await resultScope.waitForNextUpdate();
+    for (const point of samplePoints) {
+      act(() => resultPoint.result.current.create(point));
+      await resultPoint.waitForNextUpdate();
+    }
+    for (const track of sampleTracks) {
+      act(() => resultTrack.result.current.create(track));
+      await resultTrack.waitForNextUpdate();
+    }
 
-    const computedGeoJSON = renderHook(() => useGeoJSONExport(scopeId, '3578a'));
+    const {result, waitForNextUpdate} = renderHook(() => useGeoJSONExport(scopeId, '3578a'));
+    await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
         sampleTracks[0]
       ]
     };
-    expect(computedGeoJSON.result.all[0]).to.deep.equal(expectedGeoJSON);
+    expect(result.current).to.deep.equal(expectedGeoJSON);
 
-    // WHEN
-    act(() => resultScope.result.current.delete(sampleScope.id));
-    samplePoints.map(point => act(() => resultPoint.result.current.delete(point.id)));
-    sampleTracks.map(track => act(() => resultTrack.result.current.delete(track.id)));
-
+    //CLEAN
+    act(() => resultScope.result.current.delete(scopeId));
+    await resultScope.waitForNextUpdate();
   });
 
-  it('useGeoJSONExport should generate a valid GeoJSON from trackId and visiblePoints', () => {
-
-    // GIVEN
-    const sampleScope = scope;
-    const samplePoints = points;
-    const sampleTracks = tracks;
-
+  it('useGeoJSONExport should generate a valid GeoJSON from trackId and visiblePoints', async () => {
+    // WHEN
     const resultScope = renderHook(() => useScopes());
     const resultPoint = renderHook(() => useScopePoints(scopeId));
     const resultTrack = renderHook(() => useScopeTracks(scopeId));
-
-    // WHEN
+    
     act(() => resultScope.result.current.create(sampleScope));
-    samplePoints.map(point => act(() => resultPoint.result.current.create(point)));
-    sampleTracks.map(track => act(() => resultTrack.result.current.create(track)));
+    await resultScope.waitForNextUpdate();
+    for (const point of samplePoints) {
+      act(() => resultPoint.result.current.create(point));
+      await resultPoint.waitForNextUpdate();
+    }
+    for (const track of sampleTracks) {
+      act(() => resultTrack.result.current.create(track));
+      await resultTrack.waitForNextUpdate();
+    }
 
-    const computedGeoJSON = renderHook(() => useGeoJSONExport(scopeId, '3578a', true));
+    const {result, waitForNextUpdate} = renderHook(() => useGeoJSONExport(scopeId, '3578a', true));
+    await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
@@ -177,13 +183,10 @@ describe('useGeoJSONExport', () => {
         samplePoints[0]
       ]
     };
-    expect(computedGeoJSON.result.all[0]).to.deep.equal(expectedGeoJSON);
-    
-    // WHEN
-    act(() => resultScope.result.current.delete(sampleScope.id));
-    samplePoints.map(point => act(() => resultPoint.result.current.delete(point.id)));
-    sampleTracks.map(track => act(() => resultTrack.result.current.delete(track.id)));
-    
-  });
+    expect(result.current).to.deep.equal(expectedGeoJSON);
 
+    //CLEAN
+    act(() => resultScope.result.current.delete(scopeId));
+    await resultScope.waitForNextUpdate();
+  });
 });
