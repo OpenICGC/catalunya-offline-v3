@@ -84,7 +84,6 @@ describe('useGeoJSONExport', () => {
   const sampleTracks = tracks;
 
   
-  
   it('useGeoJSONExport should generate a valid GeoJSON from scopeId', async () => {
 
     // WHEN

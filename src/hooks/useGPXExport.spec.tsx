@@ -5,7 +5,6 @@ import {Scope, ScopePoint, ScopeTrack} from '../types/commonTypes';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
 import {useScopePoints, useScopes, useScopeTracks} from './useStoredCollections';
 
-
 const scopeId = uuidv4();
 
 const scope: Scope = {
@@ -74,19 +73,26 @@ describe('useGPXExport', () => {
   const samplePoints = points;
   
 
-  it('useGPXExport should generate a valid GPX from trackId', () => {
+  it('useGPXExport should generate a valid GPX from trackId', async() => {
 
     // GIVEN
     const resultScope = renderHook(() => useScopes());
     const resultTrack = renderHook(() => useScopeTracks(scopeId));
-    const resultPoints = renderHook(() => useScopePoints(scopeId));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
 
     // WHEN
     act(() => resultScope.result.current.create(sampleScope));
+    await resultScope.waitForNextUpdate();
+
+    for (const point of samplePoints) {
+      act(() => resultPoint.result.current.create(point));
+      await resultPoint.waitForNextUpdate();
+    }
     act(() => resultTrack.result.current.create(sampleTrack));
-    samplePoints.map(point => act(() => resultPoints.result.current.create(point)));
+    await resultTrack.waitForNextUpdate();
     
-    const { result } = renderHook(() => useGPXExport(scope, track.id));
+    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope, track.id));
+    await waitForNextUpdate();
     
     // THEN
     // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
@@ -127,25 +133,35 @@ describe('useGPXExport', () => {
 
     expect(result.current).to.deep.equal(expectedGPX);
 
+    //CLEAN
     act(() => resultScope.result.current.delete(sampleScope.id));
-    act(() => resultTrack.result.current.delete(track.id));
-    samplePoints.map(point => act(() => resultPoints.result.current.delete(point.id)));
+    await resultScope.waitForNextUpdate();
+    /*act(() => resultTrack.result.current.delete(track.id));
+    samplePoints.map(point => act(() => resultPoint.result.current.delete(point.id)));*/
     
   });
 
-  it('useGPXExport should generate a valid GPX from trackId and visiblePoints', () => {
+  it('useGPXExport should generate a valid GPX from trackId and visiblePoints', async() => {
 
     // GIVEN
     const resultScope = renderHook(() => useScopes());
     const resultTrack = renderHook(() => useScopeTracks(scopeId));
-    const resultPoints = renderHook(() => useScopePoints(scopeId));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
 
     // WHEN
     act(() => resultScope.result.current.create(sampleScope));
+    await resultScope.waitForNextUpdate();
+
+    for (const point of samplePoints) {
+      act(() => resultPoint.result.current.create(point));
+      await resultPoint.waitForNextUpdate();
+    }
+
     act(() => resultTrack.result.current.create(sampleTrack));
-    samplePoints.map(point => act(() => resultPoints.result.current.create(point)));
+    await resultTrack.waitForNextUpdate();
     
-    const { result } = renderHook(() => useGPXExport(scope, track.id, true));
+    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope, track.id, true));
+    await waitForNextUpdate();
 
     // THEN
     // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
@@ -192,9 +208,11 @@ describe('useGPXExport', () => {
 
     expect(result.current).to.deep.equal(expectedGPX);
 
+    //CLEAN
     act(() => resultScope.result.current.delete(sampleScope.id));
-    act(() => resultTrack.result.current.delete(track.id));
-    samplePoints.map(point => act(() => resultPoints.result.current.delete(point.id)));
+    await resultScope.waitForNextUpdate();
+    /*act(() => resultTrack.result.current.delete(track.id));
+    samplePoints.map(point => act(() => resultPoints.result.current.delete(point.id)));*/
 
   });
 
