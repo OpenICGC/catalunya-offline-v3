@@ -136,8 +136,6 @@ describe('useGPXExport', () => {
     //CLEAN
     act(() => resultScope.result.current.delete(sampleScope.id));
     await resultScope.waitForNextUpdate();
-    /*act(() => resultTrack.result.current.delete(track.id));
-    samplePoints.map(point => act(() => resultPoint.result.current.delete(point.id)));*/
     
   });
 
@@ -211,8 +209,6 @@ describe('useGPXExport', () => {
     //CLEAN
     act(() => resultScope.result.current.delete(sampleScope.id));
     await resultScope.waitForNextUpdate();
-    /*act(() => resultTrack.result.current.delete(track.id));
-    samplePoints.map(point => act(() => resultPoints.result.current.delete(point.id)));*/
 
   });
 
