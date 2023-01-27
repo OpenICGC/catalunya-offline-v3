@@ -3,8 +3,9 @@ import {expect} from 'chai';
 import {useScopes, useScopePoints, useScopeTracks} from './useStoredCollections';
 import {Scope, ScopeTrack, ScopePoint} from '../types/commonTypes';
 import {v4 as uuidv4} from 'uuid';
+import {PERSISTENCE_NAMESPACE} from '../config';
 
-describe('usePersitedCollection', () => {
+describe('usePersitedCollection',() => {
   const scopeId = uuidv4();
 
   it('useScopes should list, create, retrieve, update and delete Scopes from localStorage', () => {
@@ -20,29 +21,35 @@ describe('usePersitedCollection', () => {
       name: 'Scope 1bis',
       color: '#FEBEDE'
     };
-    const {result} = renderHook(() => useScopes());
+    const {result, waitForNextUpdate} = renderHook(() => useScopes());
 
     // WHEN
     act(() => result.current.create(sampleScope));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([sampleScope]);
-    expect(result.current.retrieve(sampleScope.id)).to.deep.equal(sampleScope);
-    expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([sampleScope]));
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([sampleScope]);
+        expect(result.current.retrieve(sampleScope.id)).to.deep.equal(sampleScope);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes`)).to.deep.equal(JSON.stringify([sampleScope]));
+      });
 
     // WHEN
     act(() => result.current.update(modifiedScope));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([modifiedScope]);
-    expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([modifiedScope]));
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([modifiedScope]);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes`)).to.deep.equal(JSON.stringify([modifiedScope]));
+      });
 
     // WHEN
     act(() => result.current.delete(modifiedScope.id));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([]);
-    expect(localStorage.getItem('scopes')).to.deep.equal(JSON.stringify([]));
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([]);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes`)).to.deep.equal(JSON.stringify([]));
+      });
   });
 
   it('useScopePoints should list, create, retrieve, update and delete ScopePoints from localStorage', () => {
@@ -76,30 +83,35 @@ describe('usePersitedCollection', () => {
         coordinates: [1, 1]
       }
     };
-    const {result} = renderHook(() => useScopePoints(scopeId));
+    const {result, waitForNextUpdate} = renderHook(() => useScopePoints(scopeId));
 
     // WHEN
     act(() => result.current.create(samplePoint));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([samplePoint]);
-    expect(result.current.retrieve(samplePoint.id)).to.deep.equal(samplePoint);
-    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([samplePoint]));
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([samplePoint]);
+        expect(result.current.retrieve(samplePoint.id)).to.deep.equal(samplePoint);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([samplePoint]));
+      });
 
     // WHEN
     act(() => result.current.update(modifiedPoint));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([modifiedPoint]);
-    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([modifiedPoint]));
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([modifiedPoint]);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([modifiedPoint]));
+      });
 
     // WHEN
     act(() => result.current.delete(modifiedPoint.id));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([]);
-    expect(localStorage.getItem(`scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([]));
-
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([]);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes/${scopeId}/points`)).to.deep.equal(JSON.stringify([]));
+      });
   });
 
   it('useScopeTracks should list, create, retrieve, update and delete ScopeTracks from localStorage', () => {
@@ -133,28 +145,34 @@ describe('usePersitedCollection', () => {
         coordinates: [[2, 2], [3, 3]]
       }
     };
-    const {result} = renderHook(() => useScopeTracks(scopeId));
+    const {result, waitForNextUpdate} = renderHook(() => useScopeTracks(scopeId));
 
     // WHEN
     act(() => result.current.create(sampleTrack));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([sampleTrack]);
-    expect(result.current.retrieve(sampleTrack.id)).to.deep.equal(sampleTrack);
-    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([sampleTrack]));
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([sampleTrack]);
+        expect(result.current.retrieve(sampleTrack.id)).to.deep.equal(sampleTrack);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([sampleTrack]));
+      });
 
     // WHEN
     act(() => result.current.update(modifiedTrack));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([modifiedTrack]);
-    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([modifiedTrack]));
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([modifiedTrack]);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([modifiedTrack]));
+      });
 
     // WHEN
     act(() => result.current.delete(modifiedTrack.id));
-
-    // THEN
-    expect(result.current.list()).to.deep.equal([]);
-    expect(localStorage.getItem(`scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([]));
+    waitForNextUpdate()
+      .then(() => {
+        // THEN
+        expect(result.current.list()).to.deep.equal([]);
+        expect(localStorage.getItem(`${PERSISTENCE_NAMESPACE}.scopes/${scopeId}/tracks`)).to.deep.equal(JSON.stringify([]));
+      });
   });
 });

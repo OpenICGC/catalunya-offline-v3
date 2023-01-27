@@ -83,3 +83,5 @@ export const OFFLINE_DATADIR_NAME = 'offlineData';
 
 export const PLATFORM = Capacitor.getPlatform();
 export const IS_WEB = PLATFORM === 'web';
+
+export const PERSISTENCE_NAMESPACE = 'catoffline';
