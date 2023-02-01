@@ -1,10 +1,7 @@
 import {Scope} from '../types/commonTypes';
 import Mustache from 'mustache';
 import {useScopePoints, useScopeTracks} from './useStoredCollections';
-import {v4 as uuidv4} from 'uuid';
 import kmlTemplate from './kmlTemplate.xml';
-
-const scopeId = uuidv4();
 
 export const useKmlExport = (scope: Scope) => {
   const pointStore = useScopePoints(scope.id);
@@ -79,17 +76,6 @@ export const useKmlExport = (scope: Scope) => {
     }
   }
   );
-  
-  /*const formattedTracks = scopeTrackList.map(track => ({
-    ...track,
-    properties: {
-      ...track.properties,
-      color: track.properties.color && 'ff'+track.properties.color.slice(1,7),
-    },
-    getCoordinates: () => {
-      return track.geometry?.coordinates.join(',');
-    }
-  }));*/
 
   const data = {
     scope: scope,
