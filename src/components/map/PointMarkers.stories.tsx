@@ -51,7 +51,7 @@ Default.args = {
       properties: {
         name: 'Color explícit',
         timestamp: 1671040874109,
-        color: '#FABADA',
+        color: '#973572',
         description: '',
         images: [],
         isVisible: true
