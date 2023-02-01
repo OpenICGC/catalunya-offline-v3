@@ -2,6 +2,7 @@ import {Scope, ScopePoint, ScopeTrack} from '../types/commonTypes';
 import Mustache from 'mustache';
 import {useScopePoints, useScopeTracks} from './useStoredCollections';
 import {v4 as uuidv4} from 'uuid';
+import kmlTemplate from './kmlTemplate.xml';
 
 const scopeId = uuidv4();
 /*const scope: Scope = {
@@ -87,7 +88,10 @@ export const useKmlExport = (scope: Scope) => {
     ...track,
     properties: {
       ...track.properties,
-      color: track.properties.color && 'ff'+track.properties.color.slice(1,7)
+      color: track.properties.color && 'ff'+track.properties.color.slice(1,7),
+    },
+    getCoordinates: () => {
+      return track.geometry?.coordinates.join(',');
     }
   }));
 
@@ -97,104 +101,7 @@ export const useKmlExport = (scope: Scope) => {
     tracks: formattedTracks
   };
 
-  const kml = Mustache.render(
-    '<?xml version="1.0" encoding="UTF-8"?>\n' +
-      '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">\n' +
-      '<Document>\n' +
-        '<name>{{scope.name}}</name>\n' +
-        '<open>1</open>\n' +
-        '<!-- TRACK STYLES -->\n' +
-            '{{#tracks}}\n' +
-                '<Style id="{{id}}-normal">\n' +
-                    '<LineStyle>\n' +
-                        '<color>ff973572</color>\n' +
-                        '<width>5</width>\n' +
-                    '</LineStyle>\n' +
-                '</Style>\n' +
-                '<Style id="{{id}}-highlight">\n' +
-                    '<LineStyle>\n' +
-                        '<color>ff973572</color>\n' +
-                        '<width>7</width>\n' +
-                    '</LineStyle>\n' +
-                '</Style>\n' +
-                '<StyleMap id="{{id}}">\n' +
-                    '<Pair>\n' +
-                        '<key>normal</key>\n' +
-                        '<styleUrl>#{{id}}-normal</styleUrl>\n' +
-                    '</Pair>\n' +
-                    '<Pair>\n' +
-                        '<key>highlight</key>\n' +
-                        '<styleUrl>#{{id}}-highlight</styleUrl>\n' +
-                    '</Pair>\n' +
-                '</StyleMap>\n' +
-            '{{/tracks}}\n' +
-        '<!-- POINT STYLES -->\n' +
-            '{{#points}}\n' +
-                '<Style id="{{id}}-normal">\n' +
-                    '<IconStyle>\n' +
-                        '<color>ff973572</color>\n' +
-                    '</IconStyle>\n' +
-                    '<LabelStyle>\n' +
-                        '<scale>1</scale>\n' +
-                    '</LabelStyle>\n' +
-                '</Style>\n' +
-                '<Style id="{{id}}-highlight">\n' +
-                    '<IconStyle>\n' +
-                        '<color>ff973572</color>\n' +
-                    '</IconStyle>\n' +
-                    '<LabelStyle>\n' +
-                        '<scale>1.1</scale>\n' +
-                    '</LabelStyle>\n' +
-                '</Style>\n' +
-                '<StyleMap id="{{id}}">\n' +
-                    '<Pair>\n' +
-                        '<key>normal</key>\n' +
-                        '<styleUrl>#{{id}}-normal</styleUrl>\n' +
-                    '</Pair>\n' +
-                    '<Pair>\n' +
-                        '<key>highlight</key>\n' +
-                        '<styleUrl>#{{id}}-highlight</styleUrl>\n' +
-                    '</Pair>\n' +
-                '</StyleMap>\n' +
-            '{{/points}}\n' +
-        '<!-- POINT FOLDER -->\n' +
-          '<Folder>\n' +
-              '<name>Points</name>\n' +
-              '<open>1</open>\n' +
-              '{{#points}}\n' +
-                '<Placemark>\n' +
-                    '<name>{{properties.name}}</name>\n' +
-                    '<description>{{properties.description}}</description>\n' +
-                    '<styleUrl>#{{id}}</styleUrl>\n' +
-                    '<Point>\n' +
-                        '<coordinates>{{geometry.coordinates.0}}, {{geometry.coordinates.1}}, {{geometry.coordinates.2}}</coordinates>\n' +
-                    '</Point>\n' +
-                '</Placemark>\n' +
-              '{{/points}}\n' +
-          '</Folder>\n' +
-        '<!-- TRACK FOLDER -->\n' +
-          '<Folder>\n' +
-            '<name>Tracks</name>\n' +
-          '<open>1</open>\n' +
-              '{{#tracks}}\n' +
-                '<Placemark>\n' +
-                    '<name>{{properties.name}}</name>\n' +
-                    '<description>{{properties.description}}</description>\n' +
-                    '<styleUrl>#{{id}}</styleUrl>\n' +
-                    '<LineString>\n' +
-                        '<tessellate>1</tessellate>\n' +
-                        '<coordinates>\n' +
-                            '{{#geometry.coordinates}}\n' +
-                                '{{.}} \n' +
-                            '{{/geometry.coordinates}}\n' +
-                        '</coordinates>\n' +
-                    '</LineString>\n' +
-                '</Placemark>\n' +
-              '{{/tracks}}\n' +
-          '</Folder>\n' +
-          '</Document>\n' +
-          '</kml>',
-    data);
+  const kml = Mustache.render(kmlTemplate, data);
 
   /*const kml = Mustache.render(
     `<?xml version="1.0" encoding="UTF-8"?>

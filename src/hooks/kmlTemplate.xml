@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+    <Document>
+        <name>{{scope.name}}</name>
+        <open>1</open>
+        <!-- TRACK STYLES -->
+        {{#tracks}}
+        <Style id="{{id}}-normal">
+            <LineStyle>
+                <color>ff973572</color>
+                <width>5</width>
+            </LineStyle>
+        </Style>
+        <Style id="{{id}}-highlight">
+            <LineStyle>
+                <color>ff973572</color>
+                <width>7</width>
+            </LineStyle>
+        </Style>
+        <StyleMap id="{{id}}">
+            <Pair>
+                <key>normal</key>
+                <styleUrl>#{{id}}-normal</styleUrl>
+            </Pair>
+            <Pair>
+                <key>highlight</key>
+                <styleUrl>#{{id}}-highlight</styleUrl>
+            </Pair>
+        </StyleMap>
+        {{/tracks}}
+        <!-- POINT STYLES -->
+        {{#points}}
+        <Style id="{{id}}-normal">
+            <IconStyle>
+                <color>ff973572</color>
+            </IconStyle>
+            <LabelStyle>
+                <scale>1</scale>
+            </LabelStyle>
+        </Style>
+        <Style id="{{id}}-highlight">
+            <IconStyle>
+                <color>ff973572</color>
+            </IconStyle>
+            <LabelStyle>
+                <scale>1.1</scale>
+            </LabelStyle>
+        </Style>
+        <StyleMap id="{{id}}">
+            <Pair>
+                <key>normal</key>
+                <styleUrl>#{{id}}-normal</styleUrl>
+            </Pair>
+            <Pair>
+                <key>highlight</key>
+                <styleUrl>#{{id}}-highlight</styleUrl>
+            </Pair>
+        </StyleMap>
+        {{/points}}
+        <!-- POINT FOLDER -->
+        <Folder>
+            <name>Points</name>
+            <open>1</open>
+            {{#points}}
+            <Placemark>
+                <name>{{properties.name}}</name>
+                <description>{{properties.description}}</description>
+                <styleUrl>#{{id}}</styleUrl>
+                <Point>
+                    <coordinates>{{geometry.coordinates.0}}, {{geometry.coordinates.1}}, {{geometry.coordinates.2}}</coordinates>
+                </Point>
+            </Placemark>
+            {{/points}}
+        </Folder>
+        <!-- TRACK FOLDER -->
+        <Folder>
+            <name>Tracks</name>
+            <open>1</open>
+            {{#tracks}}
+            <Placemark>
+                <name>{{properties.name}}</name>
+                <description>{{properties.description}}</description>
+                <styleUrl>#{{id}}</styleUrl>
+                <LineString>
+                    <tessellate>1</tessellate>
+                    <coordinates>
+                    {{getCoordinates}}
+                    </coordinates>
+                </LineString>
+            </Placemark>
+            {{/tracks}}
+        </Folder>
+    </Document>
+</kml>
