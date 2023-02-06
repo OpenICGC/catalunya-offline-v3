@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import TrackNavigationBottomSheet, {TrackNavigationBottomSheetProps} from './TrackNavigationBottomSheet';
-import sample from '../scope/inputs/sampleLineString.geo.json';
-import sampleWithoutHeight from '../scope/inputs/sampleLineStringWithoutHeight.geo.json';
+import sample from '../fixtures/sampleLineString.geo.json';
+import sampleWithoutHeight from '../fixtures/sampleLineStringWithoutHeight.geo.json';
 const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
 const sampleGeometryWithoutHeight: GeoJSON.LineString = sampleWithoutHeight as GeoJSON.LineString;
 import {v4 as uuid} from 'uuid';

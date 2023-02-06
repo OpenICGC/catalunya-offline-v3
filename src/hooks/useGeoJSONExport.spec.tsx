@@ -5,6 +5,7 @@ import {useScopePoints, useScopes, useScopeTracks} from './useStoredCollections'
 import {v4 as uuidv4} from 'uuid';
 import {Scope, ScopePoint, ScopeTrack} from '../types/commonTypes';
 
+
 const scopeId = uuidv4();
 
 const scope: Scope = {

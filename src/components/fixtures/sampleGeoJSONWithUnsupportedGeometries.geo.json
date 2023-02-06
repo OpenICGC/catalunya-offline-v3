@@ -1,0 +1,138 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+     "type": "Feature",
+     "geometry": {
+         "type": "Polygon",
+         "coordinates": [
+             [
+                 [100.0, 0.0],
+                 [101.0, 0.0],
+                 [101.0, 1.0],
+                 [100.0, 1.0],
+                 [100.0, 0.0]
+             ]
+         ]
+     },
+     "properties": {
+         "prop0": "value0"
+     }
+     },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              1.7803459095708718,
+              41.59215288699362
+            ],
+            [
+              1.7802670932937152,
+              41.59248251238174
+            ],
+            [
+              1.780151045678068,
+              41.592751492879906
+            ],
+            [
+              1.7799813012643337,
+              41.59316401636335
+            ],
+            [
+              1.7795432998673972,
+              41.593485873009705
+            ],
+            [
+              1.7791298800989923,
+              41.593776464314764
+            ],
+            [
+              1.7789749369025691,
+              41.593880651611315
+            ],
+            [
+              1.7789406324042374,
+              41.59395009194761
+            ],
+            [
+              1.7789300652767153,
+              41.59403329500607
+            ],
+            [
+              1.7788713441780952,
+              41.59412499360974
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "nom": "D'El Bruc a Can Ma\u00e7ana",
+        "longitud": "5405.35333",
+        "municipi": "Bruc",
+        "url": {
+          "url": "http://muntanyamontserrat.gencat.cat/ca/el_parc/senderisme/itineraris_bruc/bruc_can_macana/"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "x": "326120",
+        "y": "4740276",
+        "Refugi": "Liat",
+        "Cota": "2280",
+        "Tipus": "bivac"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.873804669435134,
+          42.79529993496272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "x": "408091",
+        "y": "4682261",
+        "Refugi": "Rebost",
+        "Cota": "1640",
+        "Tipus": "bivac"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.885204812674283,
+          42.28715348611288
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "x": "397751",
+        "y": "4665691",
+        "Refugi": "Rasos de Peguera",
+        "Cota": "1805",
+        "Tipus": "bivac"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.762730235917609,
+          42.13666587112498
+        ]
+      }
+    }
+    ],
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  }
+}
