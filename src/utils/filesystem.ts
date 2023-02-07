@@ -1,7 +1,8 @@
-import {Directory, Filesystem} from '@capacitor/filesystem';
+import {Directory, Encoding, Filesystem} from '@capacitor/filesystem';
 import {OFFLINE_DATADIR_NAME} from '../config';
 import {BaseMap} from '../types/commonTypes';
 import {Zip} from '@awesome-cordova-plugins/zip';
+import {ZipPlugin, ZipResult} from 'capacitor-zip';
 
 export const listOfflineDir = async (directory?:string) => {
   try {
@@ -46,6 +47,24 @@ export const readFile = async (uri: string) => {
   return await Filesystem.readFile({
     path: uri
   });
+};
+
+export const writeFile = async (content: string, path: string, encoding: Encoding = Encoding.UTF8) => {
+  return await Filesystem.writeFile({
+    path: path,
+    data: content,
+    directory: Directory.Cache,
+    encoding: encoding,
+    recursive: true
+  });
+};
+
+export const copyFilesToDir = async (files: string[], dir: string) => {
+  return Promise.all(
+    files.map(async file =>
+      await Filesystem.copy({from: file, to: dir, directory: Directory.Data, toDirectory: Directory.Cache})
+    )
+  );
 };
 
 export const getLastVersionOfBasemap = async (basemap: BaseMap) => {
@@ -97,4 +116,18 @@ export const deleteFile = async (path:string) => {
   } catch (e) {
     return false;
   }
+};
+
+export const generateZip = async (source: string, path: string, directory: Directory = Directory.Cache) => {
+  const fromDirectory = await getUri(source);
+  const destination = await Filesystem.getUri({
+    directory: directory,
+    path: path,
+  });
+
+  return ZipPlugin.zip({
+    source: fromDirectory.uri,
+    destination: destination.uri,
+    password: ''
+  });
 };

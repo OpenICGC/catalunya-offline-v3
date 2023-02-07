@@ -130,6 +130,7 @@
     "@capacitor/preferences": "^4.0.2",
     "@capacitor/share": "^4.1.0",
     "babel-plugin-typescript-to-proptypes": "^2.0.0",
+    "capacitor-zip": "github:GeotrekCE/capacitor-zip",
     "compare-versions": "^6.0.0-rc.1",
     "cordova-plugin-device-orientation": "^2.0.1",
     "cordova-plugin-file": "^7.0.0",
