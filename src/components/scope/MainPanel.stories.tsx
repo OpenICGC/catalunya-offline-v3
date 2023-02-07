@@ -35,7 +35,7 @@ const ManagedTemplate: Story<MainPanelProps> = ({scopes, onAdd, onColorChange, o
     prevScopes => ([...prevScopes, {
       id: uuidv4(),
       name: 'Nuevo ámbito',
-      color: '#fabada'
+      color: '#973572'
     }])
   ), []);
   const handleColorChange = useCallback((scopeId: UUID, color: HEXColor) => setScopes(
@@ -70,7 +70,7 @@ Default.args = {
   scopes: [...Array(20).keys()].map(i => ({
     id: uuidv4(),
     name: `Mi ámbito ${i}`,
-    color: '#fabada',
+    color: '#973572',
     isActive: true,
     isEditing: false
   }))

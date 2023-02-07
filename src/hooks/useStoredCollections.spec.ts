@@ -14,7 +14,7 @@ describe('usePersitedCollection',() => {
     const sampleScope: Scope = {
       id: scopeId,
       name: 'Scope 1',
-      color: '#FABADA'
+      color: '#973572'
     };
     const modifiedScope: Scope = {
       ...sampleScope,

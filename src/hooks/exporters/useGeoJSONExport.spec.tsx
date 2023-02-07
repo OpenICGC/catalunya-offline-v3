@@ -11,7 +11,7 @@ const scopeId = uuidv4();
 const scope: Scope = {
   id: scopeId,
   name: 'Scope 1',
-  color: '#FABADA'
+  color: '#973572'
 };
 const points: ScopePoint[] = [
   {
@@ -84,7 +84,6 @@ describe('useGeoJSONExport', () => {
   const samplePoints = points;
   const sampleTracks = tracks;
 
-  
   it('useGeoJSONExport should generate a valid GeoJSON from scopeId', async () => {
 
     // WHEN
