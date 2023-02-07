@@ -1,10 +1,11 @@
 import {expect} from 'chai';
-import {DataImport} from './DataImport';
+import {GeoJSONImport} from './GeoJSONImport';
 
 import sampleGeoJSONExportedFromCatOffline from '../components/fixtures/sampleGeoJSONExportedFromCatOffline.geo.json';
 import sampleGeoJSONWithEmptyProperties from '../components/fixtures/sampleGeoJSONWithEmptyProperties.geo.json';
 import sampleGeoJSONWithoutProperties from '../components/fixtures/sampleGeoJSONWithoutProperties.geo.json';
 import sampleGeoJSONWithUnsupportedGeometries from '../components/fixtures/sampleGeoJSONWithUnsupportedGeometries.geo.json';
+import GeoJSON from 'geojson';
 
 const expectedImportedFromCatOffline = {
   points: [
@@ -75,7 +76,7 @@ const expectedImportedFromCatOffline = {
       }
     }
   ],
-  error: [false, 0]
+  numberOfErrors: 0
 };
 const expectedImportedWithEmptyProperties = {
   points: [
@@ -134,7 +135,7 @@ const expectedImportedWithEmptyProperties = {
       }
     }
   ],
-  error: [false, 0]
+  numberOfErrors: 0
 };
 const expectedImportedWithUnsupportedGeometries = {
   points: [
@@ -188,31 +189,30 @@ const expectedImportedWithUnsupportedGeometries = {
     }
   ],
   tracks: [],
-  error: [true, 2]
+  numberOfErrors: 2
 };
 
 describe('useGeoJSONImport', () => {
 
   it('useGeoJSONImport should import a GeoJSON previously exported with CatOffline', async () => {
     // GIVEN
-    const data = sampleGeoJSONExportedFromCatOffline;
+    const data: GeoJSON.FeatureCollection = sampleGeoJSONExportedFromCatOffline as GeoJSON.FeatureCollection;
 
     //WHEN
-    const computedData = DataImport(data);
+    const computedData = GeoJSONImport(data);
 
     // THEN
-    const expectedObject = expectedImportedFromCatOffline;
-    expect(computedData).to.deep.equal(expectedObject);
+    expect(computedData).to.deep.equal(expectedImportedFromCatOffline);
   });
 
   it('useGeoJSONImport should import a GeoJSON with empty properties', async () => {
 
-    const test = (data) => {
+    const test = (data: GeoJSON.FeatureCollection) => {
       // WHEN
-      const computedData = DataImport(data);
+      const computedData = GeoJSONImport(data);
       
       const partialComputedData = {
-        points: computedData?.points.map(point => (
+        points: computedData.points.map(point => (
           {
             type: point.type,
             properties: {
@@ -224,7 +224,7 @@ describe('useGeoJSONImport', () => {
             geometry: point.geometry
           }
         )),
-        tracks: computedData?.tracks.map(track => (
+        tracks: computedData.tracks.map(track => (
           {
             type: track.type,
             properties: {
@@ -236,12 +236,11 @@ describe('useGeoJSONImport', () => {
             geometry: track.geometry
           }
         )),
-        error: computedData?.error
+        numberOfErrors: computedData.numberOfErrors
       };
 
       // THEN
-      const expectedObject = expectedImportedWithEmptyProperties;
-      expect(partialComputedData).to.deep.equal(expectedObject);
+      expect(partialComputedData).to.deep.equal(expectedImportedWithEmptyProperties);
     
       // THEN
       const computedPoint = computedData?.points && computedData.points.map(point => point);
@@ -260,20 +259,20 @@ describe('useGeoJSONImport', () => {
       );
     };
       
-    test(sampleGeoJSONWithEmptyProperties);
-    test(sampleGeoJSONWithoutProperties);
+    test(sampleGeoJSONWithEmptyProperties as GeoJSON.FeatureCollection);
+    test(sampleGeoJSONWithoutProperties as GeoJSON.FeatureCollection);
 
   });
   
   it('useGeoJSONImport should import a GeoJSON with unssuported geometries', async () => {
     // GIVEN
-    const data = sampleGeoJSONWithUnsupportedGeometries;
+    const data = sampleGeoJSONWithUnsupportedGeometries as GeoJSON.FeatureCollection;
 
     //WHEN
-    const computedData = DataImport(data);
+    const computedData = GeoJSONImport(data);
       
     const partialComputedData = {
-      points: computedData?.points.map(point => (
+      points: computedData.points.map(point => (
         {
           type: point.type,
           properties: {
@@ -285,7 +284,7 @@ describe('useGeoJSONImport', () => {
           geometry: point.geometry
         }
       )),
-      tracks: computedData?.tracks.map(track => (
+      tracks: computedData.tracks.map(track => (
         {
           type: track.type,
           properties: {
@@ -297,12 +296,11 @@ describe('useGeoJSONImport', () => {
           geometry: track.geometry
         }
       )),
-      error: computedData?.error
+      numberOfErrors: computedData.numberOfErrors
     };
 
     // THEN
-    const expectedObject = expectedImportedWithUnsupportedGeometries;
-    expect(partialComputedData).to.deep.equal(expectedObject);
+    expect(partialComputedData).to.deep.equal(expectedImportedWithUnsupportedGeometries);
     
     // THEN
     const computedPoint = computedData?.points && computedData.points.map(point => point);
