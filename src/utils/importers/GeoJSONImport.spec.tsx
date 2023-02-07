@@ -1,10 +1,8 @@
 import {expect} from 'chai';
 import {GeoJSONImport} from './GeoJSONImport';
 
-import sampleGeoJSONExportedFromCatOffline from '../components/fixtures/sampleGeoJSONExportedFromCatOffline.geo.json';
-import sampleGeoJSONWithEmptyProperties from '../components/fixtures/sampleGeoJSONWithEmptyProperties.geo.json';
-import sampleGeoJSONWithoutProperties from '../components/fixtures/sampleGeoJSONWithoutProperties.geo.json';
-import sampleGeoJSONWithUnsupportedGeometries from '../components/fixtures/sampleGeoJSONWithUnsupportedGeometries.geo.json';
+import sampleGeoJSONExportedFromCatOffline from '../../components/fixtures/sampleGeoJSONExportedFromCatOffline.geo.json';
+import sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries from '../../components/fixtures/sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries.geo.json';
 import GeoJSON from 'geojson';
 
 const expectedImportedFromCatOffline = {
@@ -78,7 +76,7 @@ const expectedImportedFromCatOffline = {
   ],
   numberOfErrors: 0
 };
-const expectedImportedWithEmptyProperties = {
+const expectedImportedWithUnsupportedGeometries = {
   points: [
     {
       type: 'Feature',
@@ -135,61 +133,7 @@ const expectedImportedWithEmptyProperties = {
       }
     }
   ],
-  numberOfErrors: 0
-};
-const expectedImportedWithUnsupportedGeometries = {
-  points: [
-    {
-      type: 'Feature',
-      properties: {
-        color: undefined,
-        description: '',
-        images: [],
-        isVisible: true
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [
-          0.873804669435134,
-          42.79529993496272
-        ]
-      }
-    },
-    {
-      type: 'Feature',
-      properties: {
-        color: undefined,
-        description: '',
-        images: [],
-        isVisible: true
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [
-          1.885204812674283,
-          42.28715348611288
-        ]
-      }
-    },
-    {
-      type: 'Feature',
-      properties: {
-        color: undefined,
-        description: '',
-        images: [],
-        isVisible: true
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [
-          1.762730235917609,
-          42.13666587112498
-        ]
-      }
-    }
-  ],
-  tracks: [],
-  numberOfErrors: 2
+  numberOfErrors: 1
 };
 
 describe('useGeoJSONImport', () => {
@@ -204,72 +148,11 @@ describe('useGeoJSONImport', () => {
     // THEN
     expect(computedData).to.deep.equal(expectedImportedFromCatOffline);
   });
-
-  it('useGeoJSONImport should import a GeoJSON with empty properties', async () => {
-
-    const test = (data: GeoJSON.FeatureCollection) => {
-      // WHEN
-      const computedData = GeoJSONImport(data);
-      
-      const partialComputedData = {
-        points: computedData.points.map(point => (
-          {
-            type: point.type,
-            properties: {
-              color: point.properties.color,
-              description: point.properties.description,
-              images: point.properties.images,
-              isVisible: point.properties.isVisible
-            },
-            geometry: point.geometry
-          }
-        )),
-        tracks: computedData.tracks.map(track => (
-          {
-            type: track.type,
-            properties: {
-              color: track.properties.color,
-              description: track.properties.description,
-              images: track.properties.images,
-              isVisible: track.properties.isVisible
-            },
-            geometry: track.geometry
-          }
-        )),
-        numberOfErrors: computedData.numberOfErrors
-      };
-
-      // THEN
-      expect(partialComputedData).to.deep.equal(expectedImportedWithEmptyProperties);
-    
-      // THEN
-      const computedPoint = computedData?.points && computedData.points.map(point => point);
-      const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
-    
-      computedPoint && computedPoint.map(point =>
-        expect(point.id).to.be.a('string') && expect(point.id).to.have.lengthOf(36) &&
-        expect(point.properties.name).to.be.a('string') && expect(point.properties.name).to.include('Point') && expect(point.properties.name).to.have.lengthOf(42) &&
-            expect(point.properties.timestamp).to.be.a('number') && expect(Date.now()-point.properties.timestamp).to.be.below(20)
-      );
-
-      computedTrack && computedTrack.map(track =>
-        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
-        expect(track.properties.name).to.be.a('string') && expect(track.properties.name).to.include('Track') && expect(track.properties.name).to.have.lengthOf(42) &&
-            expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-      );
-    };
-      
-    test(sampleGeoJSONWithEmptyProperties as GeoJSON.FeatureCollection);
-    test(sampleGeoJSONWithoutProperties as GeoJSON.FeatureCollection);
-
-  });
   
-  it('useGeoJSONImport should import a GeoJSON with unssuported geometries', async () => {
-    // GIVEN
-    const data = sampleGeoJSONWithUnsupportedGeometries as GeoJSON.FeatureCollection;
-
-    //WHEN
-    const computedData = GeoJSONImport(data);
+  it('useGeoJSONImport should import a GeoJSON with empty properties', async () => {
+    
+    // WHEN
+    const computedData = GeoJSONImport(sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries as GeoJSON.FeatureCollection);
       
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -317,7 +200,7 @@ describe('useGeoJSONImport', () => {
         expect(track.properties.name).to.be.a('string') && expect(track.properties.name).to.include('Track') && expect(track.properties.name).to.have.lengthOf(42) &&
             expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
     );
-
+      
   });
-
+  
 });

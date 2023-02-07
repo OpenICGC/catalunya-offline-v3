@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import {validate as uuidValidate, version as uuidVersion} from 'uuid';
-import {ScopePoint, ScopeTrack} from '../types/commonTypes';
+import {ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import GeoJSON from 'geojson';
 
 interface ScopeImportResults {
