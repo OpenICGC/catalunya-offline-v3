@@ -1,6 +1,6 @@
-import {Scope, UUID} from '../types/commonTypes';
+import {Scope, UUID} from '../../types/commonTypes';
 import { buildGPX, BaseBuilder } from 'gpx-builder';
-import {useScopePoints, useScopeTracks} from './useStoredCollections';
+import {useScopePoints, useScopeTracks} from '../useStoredCollections';
 export const useGPXExport = (scope: Scope, trackId: UUID, includeVisiblePoints?: boolean) => {
   const {Point, Metadata, Route, Link} = BaseBuilder.MODELS;
 
