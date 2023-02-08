@@ -23,7 +23,7 @@ const points: ScopePoint[] = [
       color: '#973572',
       timestamp: 1673876171254,
       description: 'Point 1 description',
-      images: [],
+      images: ['image1Point1.jpg', 'image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -57,7 +57,7 @@ const tracks: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: [],
+      images: ['imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {
@@ -83,7 +83,7 @@ const pointsWithoutElevation: ScopePoint[] = [
       color: '#973572',
       timestamp: 1673876171254,
       description: 'Point 1 description',
-      images: [],
+      images: ['image1Point1.jpg', 'image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -118,7 +118,7 @@ const trackWithoutTimestampNorElevation: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: [],
+      images: ['imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {
@@ -143,7 +143,7 @@ const trackWithoutTimestamp: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: [],
+      images: ['imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {

@@ -64,7 +64,14 @@
             {{#points}}
             <Placemark>
                 <name>{{properties.name}}</name>
-                <description>{{properties.description}}</description>
+                <description>
+                    ![CDATA[
+                        <p>{{properties.description}}</p>
+                        {{#properties.images}}
+                        <img style="max-width:500px; margin-bottom: 10px" src="file:///{{.}}">
+                        {{/properties.images}}
+                    ]]
+                </description>
                 <styleUrl>#{{id}}</styleUrl>
                 <Point>
                     <coordinates>{{getCoordinates}}</coordinates>
@@ -79,7 +86,14 @@
             {{#tracks}}
             <Placemark>
                 <name>{{properties.name}}</name>
-                <description>{{properties.description}}</description>
+                <description>
+                    ![CDATA[
+                        <p>{{properties.description}}</p>
+                        {{#properties.images}}
+                        <img style="max-width:500px; margin-bottom: 10px" src="file:///{{.}}">
+                        {{/properties.images}}
+                    ]]
+                </description>
                 <styleUrl>#{{id}}</styleUrl>
                 <LineString>
                     <tessellate>1</tessellate>

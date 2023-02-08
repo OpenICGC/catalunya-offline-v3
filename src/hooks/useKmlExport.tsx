@@ -15,7 +15,7 @@ export const useKmlExport = (scope: Scope) => {
         ...point,
         properties: {
           ...point.properties,
-          color: point.properties.color && 'ff'+point.properties.color.slice(1,7)
+          color: point.properties.color && 'ff'+point.properties.color.slice(1,7),
         },
         getCoordinates: () => {
           return point.geometry?.coordinates.toString();
@@ -29,7 +29,7 @@ export const useKmlExport = (scope: Scope) => {
           color: point.properties.color && 'ff'+point.properties.color.slice(1,7)
         },
         getCoordinates: () => {
-          return point.geometry?.coordinates;
+          return point.geometry?.coordinates.toString();
         }
       };
     }

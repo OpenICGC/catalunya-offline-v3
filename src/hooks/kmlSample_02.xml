@@ -85,7 +85,13 @@
             <open>1</open>
             <Placemark>
                 <name>Point 1</name>
-                <description>Point 1 description</description>
+                <description>
+                    ![CDATA[
+                        <p>Point 1 description</p>
+                        <img style="max-width:500px; margin-bottom: 10px" src="file:///image1Point1.jpg">
+                        <img style="max-width:500px; margin-bottom: 10px" src="file:///image2Point1.jpg">
+                    ]]
+                </description>
                 <styleUrl>#874bf4f0-4a3f-4c75-972f-fb9b8ac4a596</styleUrl>
                 <Point>
                     <coordinates>-3.698005,40.402501</coordinates>
@@ -93,7 +99,11 @@
             </Placemark>
             <Placemark>
                 <name>Point 2</name>
-                <description>Point 2 description</description>
+                <description>
+                    ![CDATA[
+                        <p>Point 2 description</p>
+                    ]]
+                </description>
                 <styleUrl>#35de56eb-7c9d-405d-8d6c-147e083cb6bf</styleUrl>
                 <Point>
                     <coordinates>-3.698864176137905,40.40192130721456</coordinates>
@@ -106,7 +116,12 @@
             <open>1</open>
             <Placemark>
                 <name>Track 1</name>
-                <description>Track 1 description</description>
+                <description>
+                    ![CDATA[
+                        <p>Track 1 description</p>
+                        <img style="max-width:500px; margin-bottom: 10px" src="file:///imageTrack1.jpg">
+                    ]]
+                </description>
                 <styleUrl>#e73af4f0-4a3f-4c75-972f-fb9b8ac4a596</styleUrl>
                 <LineString>
                     <tessellate>1</tessellate>
