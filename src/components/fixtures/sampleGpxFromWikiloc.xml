@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" creator="Wikiloc - https://www.wikiloc.com" version="1.1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+   <metadata>
+      <name>Wikiloc - Les Fonts del Llobregat</name>
+      <author>
+         <name>elebben</name>
+         <link href="https://www.wikiloc.com/wikiloc/user.do?id=1717832">
+            <text>elebben on Wikiloc</text>
+         </link>
+      </author>
+      <link href="https://www.wikiloc.com/hiking-trails/les-fonts-del-llobregat-69416572">
+         <text>Les Fonts del Llobregat on Wikiloc</text>
+      </link>
+      <time>2021-03-31T15:00:45Z</time>
+   </metadata>
+   <trk>
+      <name>Track 01</name>
+      <cmt />
+      <desc />
+      <trkseg>
+         <trkpt lat="42.281256" lon="2.011065">
+            <ele>1264.071</ele>
+            <time>2021-03-31T14:42:41Z</time>
+         </trkpt>
+         <trkpt lat="42.281275" lon="2.011152">
+            <ele>1263.541</ele>
+            <time>2021-03-31T14:43:08Z</time>
+         </trkpt>
+         <trkpt lat="42.281302" lon="2.011242">
+            <ele>1263.215</ele>
+            <time>2021-03-31T14:43:37Z</time>
+         </trkpt>
+         <trkpt lat="42.281354" lon="2.011462">
+            <ele>1263.308</ele>
+            <time>2021-03-31T14:44:16Z</time>
+         </trkpt>
+      </trkseg>
+   </trk>
+</gpx>
