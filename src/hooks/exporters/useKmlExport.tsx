@@ -1,6 +1,6 @@
-import {Scope} from '../types/commonTypes';
+import {Scope} from '../../types/commonTypes';
 import Mustache from 'mustache';
-import {useScopePoints, useScopeTracks} from './useStoredCollections';
+import {useScopePoints, useScopeTracks} from '../useStoredCollections';
 import kmlTemplate from './kmlTemplate.xml';
 
 export const useKmlExport = (scope: Scope) => {
