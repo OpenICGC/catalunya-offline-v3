@@ -15,6 +15,7 @@ const scope: Scope = {
   name: 'Scope 1',
   color: '#fabada'
 };
+
 const points: ScopePoint[] = [
   {
     type: 'Feature',
@@ -172,8 +173,8 @@ describe('useKmlExport', () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
-    const resultPoint = renderHook(() => useScopePoints(scope.id));
-    const resultTrack = renderHook(() => useScopeTracks(scope.id));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
+    const resultTrack = renderHook(() => useScopeTracks(scopeId));
 
     act(() => resultScope.result.current.create(sampleScope));
     await resultScope.waitForNextUpdate();
@@ -186,7 +187,7 @@ describe('useKmlExport', () => {
       await resultTrack.waitForNextUpdate();
     }
 
-    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scope));
+    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scopeId));
     await waitForNextUpdate();
 
     // THEN
@@ -203,8 +204,8 @@ describe('useKmlExport', () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
-    const resultPoint = renderHook(() => useScopePoints(scope.id));
-    const resultTrack = renderHook(() => useScopeTracks(scope.id));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
+    const resultTrack = renderHook(() => useScopeTracks(scopeId));
 
     act(() => resultScope.result.current.create(sampleScope));
     await resultScope.waitForNextUpdate();
@@ -217,7 +218,7 @@ describe('useKmlExport', () => {
       await resultTrack.waitForNextUpdate();
     }
 
-    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scope));
+    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scopeId));
     await waitForNextUpdate();
 
     // THEN
@@ -226,7 +227,7 @@ describe('useKmlExport', () => {
     expect(result.current).to.deep.equal(expectedKML);
 
     //CLEAN
-    act(() => resultScope.result.current.delete(scope.id));
+    act(() => resultScope.result.current.delete(scopeId));
     await resultScope.waitForNextUpdate();
   });
 
@@ -234,8 +235,8 @@ describe('useKmlExport', () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
-    const resultPoint = renderHook(() => useScopePoints(scope.id));
-    const resultTrack = renderHook(() => useScopeTracks(scope.id));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
+    const resultTrack = renderHook(() => useScopeTracks(scopeId));
 
     act(() => resultScope.result.current.create(sampleScope));
     await resultScope.waitForNextUpdate();
@@ -248,7 +249,7 @@ describe('useKmlExport', () => {
       await resultTrack.waitForNextUpdate();
     }
 
-    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scope));
+    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scopeId));
     await waitForNextUpdate();
 
     // THEN
@@ -257,7 +258,7 @@ describe('useKmlExport', () => {
     expect(result.current).to.deep.equal(expectedKML);
 
     //CLEAN
-    act(() => resultScope.result.current.delete(scope.id));
+    act(() => resultScope.result.current.delete(scopeId));
     await resultScope.waitForNextUpdate();
   });
 
@@ -265,8 +266,8 @@ describe('useKmlExport', () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
-    const resultPoint = renderHook(() => useScopePoints(scope.id));
-    const resultTrack = renderHook(() => useScopeTracks(scope.id));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
+    const resultTrack = renderHook(() => useScopeTracks(scopeId));
 
     act(() => resultScope.result.current.create(sampleScope));
     await resultScope.waitForNextUpdate();
@@ -279,7 +280,7 @@ describe('useKmlExport', () => {
       await resultTrack.waitForNextUpdate();
     }
 
-    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scope));
+    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scopeId));
     await waitForNextUpdate();
 
     // THEN
@@ -288,7 +289,7 @@ describe('useKmlExport', () => {
     expect(result.current).to.deep.equal(expectedKML);
 
     //CLEAN
-    act(() => resultScope.result.current.delete(scope.id));
+    act(() => resultScope.result.current.delete(scopeId));
     await resultScope.waitForNextUpdate();
   });
 
