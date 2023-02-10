@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="fabulator:gpx-builder" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+    <metadata>
+        <name>Scope 1</name>
+        <link href="https://www.icgc.cat/ca/"></link>
+    </metadata>
+    <wpt lat="41.608731" lon="1.849113">
+        <ele>12</ele>
+        <time>2023-01-16T13:36:11.254Z</time>
+        <name>Point 1</name>
+        <cmt>A visible point</cmt>
+    </wpt>
+    <wpt lat="41.608731" lon="1.849313">
+        <ele>12</ele>
+        <time>2023-01-16T13:36:11.254Z</time>
+        <name>Point 2</name>
+        <cmt>Other visible point</cmt>
+    </wpt>
+</gpx>

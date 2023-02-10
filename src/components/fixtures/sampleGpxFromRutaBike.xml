@@ -8,8 +8,8 @@
     <bounds maxlat="42.439670" maxlon="3.058080" minlat="42.378370" minlon="3.001310"/>
   </metadata>
   <trk>
-    <name>Track 01</name>
-    <desc>ACTIVE LOG</desc>
+    <name>Track 1</name>
+    <desc>A custom description</desc>
     <trkseg>
       <trkpt lat="42.403040" lon="3.007210">
         <ele>180.4</ele>
@@ -26,10 +26,6 @@
       <trkpt lat="42.402270" lon="3.007570">
         <ele>176.2</ele>
         <time>2005-05-27T18:19:33Z</time>
-      </trkpt>
-      <trkpt lat="42.402100" lon="3.007640">
-        <ele>173.7</ele>
-        <time>2005-05-27T18:19:37Z</time>
       </trkpt>
       <trkpt lat="42.401800" lon="3.007700">
         <ele>171.3</ele>
