@@ -65,17 +65,20 @@
             <Placemark>
                 <name>{{properties.name}}</name>
                 <description>
-                    ![CDATA[
+                    <![CDATA[
                         <p>{{properties.description}}</p>
-                        {{#properties.images}}
-                        <img style="max-width:500px; margin-bottom: 10px" src="file:///{{.}}">
-                        {{/properties.images}}
-                    ]]
+                        {{#getImages}}
+                        <img style="max-width:500px; margin-bottom: 10px" src="file/{{.}}">
+                        {{/getImages}}
+                    ]]>
                 </description>
                 <styleUrl>#{{id}}</styleUrl>
                 <Point>
                     <coordinates>{{getCoordinates}}</coordinates>
                 </Point>
+                <Timestamp>
+                    <when>{{properties.timestamp}}</when>
+                </Timestamp>
             </Placemark>
             {{/points}}
         </Folder>
@@ -87,19 +90,18 @@
             <Placemark>
                 <name>{{properties.name}}</name>
                 <description>
-                    ![CDATA[
+                    <![CDATA[
                         <p>{{properties.description}}</p>
-                        {{#properties.images}}
-                        <img style="max-width:500px; margin-bottom: 10px" src="file:///{{.}}">
-                        {{/properties.images}}
-                    ]]
+                        <p>Timestamp: {{properties.timestamp}}</p>
+                        {{#getImages}}
+                        <img style="max-width:500px; margin-bottom: 10px" src="file/{{.}}">
+                        {{/getImages}}
+                    ]]>
                 </description>
                 <styleUrl>#{{id}}</styleUrl>
                 <LineString>
                     <tessellate>1</tessellate>
-                    <coordinates>
-                    {{getCoordinates}}
-                    </coordinates>
+                    <coordinates>{{getCoordinates}}</coordinates>
                 </LineString>
             </Placemark>
             {{/tracks}}

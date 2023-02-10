@@ -7,12 +7,13 @@ import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import kmlSample_01 from './kmlSample_01.xml';
 import kmlSample_02 from './kmlSample_02.xml';
 
+
 const scopeId = uuidv4();
 
 const scope: Scope = {
   id: scopeId,
   name: 'Scope 1',
-  color: '#973572'
+  color: '#fabada'
 };
 const points: ScopePoint[] = [
   {
@@ -23,7 +24,7 @@ const points: ScopePoint[] = [
       color: '#973572',
       timestamp: 1673876171254,
       description: 'Point 1 description',
-      images: ['image1Point1.jpg', 'image2Point1.jpg' ],
+      images: ['myPath/image1Point1.jpg', 'myPath/image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -57,7 +58,7 @@ const tracks: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: ['imageTrack1.jpg'],
+      images: ['myPath/imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {
@@ -80,10 +81,9 @@ const pointsWithoutElevation: ScopePoint[] = [
     id: '874bf4f0-4a3f-4c75-972f-fb9b8ac4a596',
     properties: {
       name: 'Point 1',
-      color: '#973572',
       timestamp: 1673876171254,
       description: 'Point 1 description',
-      images: ['image1Point1.jpg', 'image2Point1.jpg' ],
+      images: ['myPath/mySubPath/image1Point1.jpg', 'myPath/mySubPath/image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -108,7 +108,6 @@ const pointsWithoutElevation: ScopePoint[] = [
     }
   }
 ];
-
 const trackWithoutTimestampNorElevation: ScopeTrack[] = [
   {
     type: 'Feature',
@@ -118,7 +117,7 @@ const trackWithoutTimestampNorElevation: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: ['imageTrack1.jpg'],
+      images: ['myPath/imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {
@@ -143,7 +142,7 @@ const trackWithoutTimestamp: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: ['imageTrack1.jpg'],
+      images: ['myPath/imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {

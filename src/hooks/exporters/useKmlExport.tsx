@@ -15,11 +15,15 @@ export const useKmlExport = (scope: Scope) => {
         ...point,
         properties: {
           ...point.properties,
-          color: point.properties.color && 'ff'+point.properties.color.slice(1,7),
+          color: point.properties.color ? 'ff'+point.properties.color.slice(1,7) : 'ff'+scope.color.slice(1,7),
         },
         getCoordinates: () => {
           return point.geometry?.coordinates.toString();
-        }
+        },
+        getImages: () => point.properties.images.map(image => {
+          const lastIndexOf = image.lastIndexOf('/');
+          return image.substring(lastIndexOf + 1);
+        })
       };
     } else {
       return {
@@ -30,7 +34,11 @@ export const useKmlExport = (scope: Scope) => {
         },
         getCoordinates: () => {
           return point.geometry?.coordinates.toString();
-        }
+        },
+        getImages: () => point.properties.images.map(image => {
+          const lastIndexOf = image.lastIndexOf('/');
+          return image.substring(lastIndexOf + 1);
+        })
       };
     }
   }
@@ -47,7 +55,11 @@ export const useKmlExport = (scope: Scope) => {
           },
         getCoordinates: () => {
           return track.geometry?.coordinates.map(coord => coord.concat(0)).join(',');
-        }
+        },
+        getImages: () => track.properties.images.map(image => {
+          const lastIndexOf = image.lastIndexOf('/');
+          return image.substring(lastIndexOf + 1);
+        })
       };
     } else if (track.geometry?.coordinates.some(coord => coord.length > 3)) {
       return {
@@ -59,7 +71,11 @@ export const useKmlExport = (scope: Scope) => {
           },
         getCoordinates: () => {
           return track.geometry?.coordinates.map(coord => coord.slice(0,3)).join(',');
-        }
+        },
+        getImages: () => track.properties.images.map(image => {
+          const lastIndexOf = image.lastIndexOf('/');
+          return image.substring(lastIndexOf + 1);
+        })
       };
     } else {
       return {
@@ -71,7 +87,11 @@ export const useKmlExport = (scope: Scope) => {
           },
         getCoordinates: () => {
           return track.geometry?.coordinates.join(',');
-        }
+        },
+        getImages: () => track.properties.images.map(image => {
+          const lastIndexOf = image.lastIndexOf('/');
+          return image.substring(lastIndexOf + 1);
+        })
       };
     }
   }
