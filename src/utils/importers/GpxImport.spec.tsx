@@ -4,6 +4,7 @@ import sampleGpxTrackFromCatOffline from '../../components/fixtures/sampleGpxTra
 import sampleGpxTrackAndPointFromCatOffline from '../../components/fixtures/sampleGpxTrackAndPointFromCatOffline.xml';
 import sampleGpxFromRutaBike from '../../components/fixtures/sampleGpxFromRutaBike.xml';
 import sampleGpxFromWikiloc from '../../components/fixtures/sampleGpxFromWikiloc.xml';
+import kmlSample_01 from '../../hooks/kmlSample_01.xml';
 
 const expectedImportedTrackFromCatOffline = {
   points: [],
@@ -123,9 +124,15 @@ const expectedImportedFromWikiloc = {
   ],
   numberOfErrors: 0
 };
+
+const expectedImportedError = {
+  points: [],
+  tracks: [],
+  numberOfErrors: 1
+};
 describe('GpxImport', () => {
     
-  it.only('GpxImport should import a Gpx Track and Point from CatOffline', async () => {
+  it('GpxImport should import a Gpx Track and Point from CatOffline', async () => {
     //GIVEN
     const data = sampleGpxTrackAndPointFromCatOffline;
     
@@ -322,6 +329,29 @@ describe('GpxImport', () => {
       expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
     );
+  });
+
+  it('GpxImport should not import a string', async () => {
+    //GIVEN
+    const data = 'hola mundo';
+
+    //WHEN
+    const computedData = GpxImport(data);
+
+    // THEN
+    expect(computedData).to.deep.equal(expectedImportedError);
+
+  });
+  it('GpxImport should not import a kml', async () => {
+    //GIVEN
+    const data = kmlSample_01;
+
+    //WHEN
+    const computedData = GpxImport(data);
+
+    // THEN
+    expect(computedData).to.deep.equal(expectedImportedError);
+
   });
 
 });

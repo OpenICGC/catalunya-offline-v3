@@ -19,6 +19,14 @@ export const GpxImport = (data: string) => {
       }
     ))
   };
-  //return geoJsonFromGpx;
-  return GeoJSONImport(geoJsonFormatted);
+
+  if(geoJsonFromGpx.features.length === 0) {
+    return {
+      points: [],
+      tracks: [],
+      numberOfErrors: 1
+    };
+  } else {
+    return GeoJSONImport(geoJsonFormatted);
+  }
 };
