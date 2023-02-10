@@ -1,8 +1,19 @@
 import {Directory, Encoding, Filesystem} from '@capacitor/filesystem';
-import {OFFLINE_DATADIR_NAME} from '../config';
+import {EXPORT_DIR_NAME, OFFLINE_DATADIR_NAME} from '../config';
 import {BaseMap} from '../types/commonTypes';
 import {Zip} from '@awesome-cordova-plugins/zip';
-import {ZipPlugin, ZipResult} from 'capacitor-zip';
+import {ZipPlugin} from 'capacitor-zip';
+
+export type {
+  Directory,
+  Encoding
+} from '@capacitor/filesystem';
+
+
+export enum FolderType {
+  Download,
+  Export
+}
 
 export const listOfflineDir = async (directory?:string) => {
   try {
@@ -28,19 +39,99 @@ export const offlineDirExists = async (directory:string) => {
   }
 };
 
-export const createDirectory = async (directory: string) => {
-  return await Filesystem.mkdir({
-    directory: Directory.Data,
-    path: OFFLINE_DATADIR_NAME + '/' + directory,
-    recursive: true
-  });
+
+export const dirExists = async (path:string, type: FolderType) => {
+  const directory =
+    type === FolderType.Download ? Directory.Data :
+      type === FolderType.Export ? Directory.Cache :
+        undefined;
+
+  const destinationBaseFolder =
+    type === FolderType.Download ? OFFLINE_DATADIR_NAME :
+      type === FolderType.Export ? EXPORT_DIR_NAME :
+        undefined;
+
+  try {
+    await Filesystem.readdir({
+      directory: directory,
+      path: destinationBaseFolder + '/' + path
+    });
+    return true;
+  } catch (e) {
+    return false;
+  }
 };
 
-export const getUri = async (directory: string) => {
-  return await Filesystem.getUri({
-    directory: Directory.Data,
-    path: OFFLINE_DATADIR_NAME + '/' + directory,
-  });
+export const createDirectory = async (path: string, type: FolderType) => {
+
+  const directory = 
+    type === FolderType.Download ? Directory.Data :
+      type === FolderType.Export ? Directory.Cache :
+        undefined;
+
+  const destinationBaseFolder =
+    type === FolderType.Download ? OFFLINE_DATADIR_NAME :
+      type === FolderType.Export ? EXPORT_DIR_NAME :
+        undefined;
+
+  if (directory && destinationBaseFolder) {
+    try {
+      await Filesystem.mkdir({
+        directory: directory,
+        path: destinationBaseFolder + '/' + path,
+        recursive: true
+      });
+      return destinationBaseFolder + '/' + path;
+    } catch (e) {
+      console.error('Error creating folder', e);
+    }
+  }
+};
+
+export const removeDirectory = async (path: string, type: FolderType) => {
+
+  const directory =
+    type === FolderType.Download ? Directory.Data :
+      type === FolderType.Export ? Directory.Cache :
+        undefined;
+
+  const destinationBaseFolder =
+    type === FolderType.Download ? OFFLINE_DATADIR_NAME :
+      type === FolderType.Export ? EXPORT_DIR_NAME :
+        undefined;
+
+  if (directory && destinationBaseFolder) {
+    try {
+      await Filesystem.rmdir({
+        directory: directory,
+        path: destinationBaseFolder + '/' + path,
+        recursive: true
+      });
+      return true;
+    } catch (e) {
+      console.error('Error creating folder', e);
+      return false;
+    }
+  }
+};
+
+export const getUri = async (path: string, type: FolderType = FolderType.Download) => {
+  const directory =
+    type === FolderType.Download ? Directory.Data :
+      type === FolderType.Export ? Directory.Cache :
+        undefined;
+  
+  const destinationBaseFolder =
+    type === FolderType.Download ? OFFLINE_DATADIR_NAME :
+      type === FolderType.Export ? EXPORT_DIR_NAME :
+        undefined;
+  
+  if (directory && destinationBaseFolder) {
+    return await Filesystem.getUri({
+      directory: directory,
+      path: destinationBaseFolder + '/' + path,
+    });  
+  }
 };
 
 export const readFile = async (uri: string) => {
@@ -61,9 +152,10 @@ export const writeFile = async (content: string, path: string, encoding: Encodin
 
 export const copyFilesToDir = async (files: string[], dir: string) => {
   return Promise.all(
-    files.map(async file =>
-      await Filesystem.copy({from: file, to: dir, directory: Directory.Data, toDirectory: Directory.Cache})
-    )
+    files.map(async file => {
+      const filename = file.split('/').pop();
+      await Filesystem.copy({from: file, to: dir + '/' + filename, toDirectory: Directory.Cache});
+    })
   );
 };
 
@@ -118,16 +210,18 @@ export const deleteFile = async (path:string) => {
   }
 };
 
-export const generateZip = async (source: string, path: string, directory: Directory = Directory.Cache) => {
-  const fromDirectory = await getUri(source);
-  const destination = await Filesystem.getUri({
-    directory: directory,
-    path: path,
-  });
+export const generateZip = async (source: string, path: string, fromType: FolderType, toType: FolderType) => {
+  const fromDirectory = await getUri(source, fromType);
+  const destinationFile = await getUri(path, toType);
 
-  return ZipPlugin.zip({
-    source: fromDirectory.uri,
-    destination: destination.uri,
-    password: ''
-  });
+  if (destinationFile && fromDirectory) {
+
+    await ZipPlugin.zip({
+      source: fromDirectory.uri,
+      destination: destinationFile.uri,
+      password: ''
+    });
+
+    return destinationFile.uri;
+  }
 };
