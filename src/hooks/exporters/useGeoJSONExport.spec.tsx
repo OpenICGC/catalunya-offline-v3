@@ -21,7 +21,7 @@ const points: ScopePoint[] = [
       name: 'Point 1',
       timestamp: 1673876171254,
       description: '',
-      images: [],
+      images: ['myPath/image1Point1.jpg', 'myPath/image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -53,7 +53,7 @@ const tracks: ScopeTrack[] = [
       name: 'Track 1',
       timestamp: 1673876115769,
       description: '',
-      images: [],
+      images: ['myPath/imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {

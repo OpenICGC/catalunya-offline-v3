@@ -64,11 +64,21 @@
             {{#points}}
             <Placemark>
                 <name>{{properties.name}}</name>
-                <description>{{properties.description}}</description>
+                <description>
+                    <![CDATA[
+                        <p>{{properties.description}}</p>
+                        {{#getImages}}
+                        <img style="max-width:500px; margin-bottom: 10px" src="file/{{.}}">
+                        {{/getImages}}
+                    ]]>
+                </description>
                 <styleUrl>#{{id}}</styleUrl>
                 <Point>
                     <coordinates>{{getCoordinates}}</coordinates>
                 </Point>
+                <Timestamp>
+                    <when>{{properties.timestamp}}</when>
+                </Timestamp>
             </Placemark>
             {{/points}}
         </Folder>
@@ -79,13 +89,19 @@
             {{#tracks}}
             <Placemark>
                 <name>{{properties.name}}</name>
-                <description>{{properties.description}}</description>
+                <description>
+                    <![CDATA[
+                        <p>{{properties.description}}</p>
+                        <p>Timestamp: {{properties.timestamp}}</p>
+                        {{#getImages}}
+                        <img style="max-width:500px; margin-bottom: 10px" src="file/{{.}}">
+                        {{/getImages}}
+                    ]]>
+                </description>
                 <styleUrl>#{{id}}</styleUrl>
                 <LineString>
                     <tessellate>1</tessellate>
-                    <coordinates>
-                    {{getCoordinates}}
-                    </coordinates>
+                    <coordinates>{{getCoordinates}}</coordinates>
                 </LineString>
             </Placemark>
             {{/tracks}}
