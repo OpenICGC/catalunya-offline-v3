@@ -7,9 +7,9 @@ import Stack from '@mui/material/Stack';
 import {DRAWER_WIDTH} from '../../config';
 
 import GeoJSON from 'geojson';
-import sample from '../scope/inputs/sampleLineString.geo.json';
-import sampleWithoutHeight from '../scope/inputs/sampleLineStringWithoutHeight.geo.json';
-import sampleWithoutTimestamp from '../scope/inputs/sampleLineStringWithoutTimestamp.geo.json';
+import sample from '../fixtures/sampleLineString.geo.json';
+import sampleWithoutHeight from '../fixtures/sampleLineStringWithoutHeight.geo.json';
+import sampleWithoutTimestamp from '../fixtures/sampleLineStringWithoutTimestamp.geo.json';
 const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
 const sampleGeometryWithoutHeight: GeoJSON.LineString = sampleWithoutHeight as GeoJSON.LineString;
 const sampleGeomatryWithoutTimestamp: GeoJSON.LineString = sampleWithoutTimestamp as GeoJSON.LineString;

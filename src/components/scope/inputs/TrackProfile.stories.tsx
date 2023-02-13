@@ -4,7 +4,7 @@ import {Meta, Story} from '@storybook/react';
 import TrackProfile, {TrackProfileProps} from './TrackProfile';
 import GeoJSON from 'geojson';
 
-import sample from './sampleLineString.geo.json';
+import sample from '../../fixtures/sampleLineString.geo.json';
 const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
 
 export default {

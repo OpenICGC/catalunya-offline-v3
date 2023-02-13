@@ -1,9 +1,10 @@
 import {expect} from 'chai';
 import {useGeoJSONExport} from './useGeoJSONExport';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
-import {useScopePoints, useScopes, useScopeTracks} from './useStoredCollections';
+import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
 import {v4 as uuidv4} from 'uuid';
-import {Scope, ScopePoint, ScopeTrack} from '../types/commonTypes';
+import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
+
 
 const scopeId = uuidv4();
 
@@ -20,7 +21,7 @@ const points: ScopePoint[] = [
       name: 'Point 1',
       timestamp: 1673876171254,
       description: '',
-      images: [],
+      images: ['myPath/image1Point1.jpg', 'myPath/image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -52,7 +53,7 @@ const tracks: ScopeTrack[] = [
       name: 'Track 1',
       timestamp: 1673876115769,
       description: '',
-      images: [],
+      images: ['myPath/imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {

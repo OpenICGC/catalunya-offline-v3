@@ -1,5 +1,5 @@
-import {UUID} from '../types/commonTypes';
-import {useScopePoints, useScopeTracks} from './useStoredCollections';
+import {UUID} from '../../types/commonTypes';
+import {useScopePoints, useScopeTracks} from '../useStoredCollections';
 export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePoints?: boolean) => {
     
   if ( trackId ) {
