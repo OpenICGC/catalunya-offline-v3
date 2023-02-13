@@ -12,8 +12,8 @@ import {
   writeFile
 } from '../utils/filesystem';
 import {PersistenceStatus} from './usePersistenceData';
-import {useKmlExport} from './useKmlExport';
-import {useGeoJSONExport} from './useGeoJSONExport';
+import {useKmlExport} from './exporters/useKmlExport';
+import {useGeoJSONExport} from './exporters/useGeoJSONExport';
 
 type useZipState = {
   data: string,
@@ -26,18 +26,28 @@ export enum ZipType {
   KMZ
 }
 
+interface useZipOptions {
+  type: ZipType,
+  scopeId: UUID,
+  trackId?: UUID,
+  includeVisiblePoints?: boolean
+}
+
 export const useZip = (
-  scopeId: UUID, 
-  trackId?: UUID, 
-  includeVisiblePoints = false, 
-  type: ZipType = ZipType.ZIP
+  options: useZipOptions
 ) => {
+  const {
+    type = ZipType.ZIP,
+    scopeId,
+    trackId,
+    includeVisiblePoints = false
+  } = options;
 
   const geojson = useGeoJSONExport(scopeId, trackId, includeVisiblePoints);
   const kml = useKmlExport(scopeId);
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
-  
+
   const tracks = trackStore.list();
   const points = pointStore.list();
 
@@ -51,17 +61,17 @@ export const useZip = (
     features.flatMap(feature => feature.properties.images.map(image => image.replace('file://', '')));
 
   useEffect(() => {
-    if (!state && geojson.features?.length && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
-      const data = type === ZipType.ZIP ? 
-        JSON.stringify(geojson) : 
+    if (!state && geojson && kml && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
+      const data = type === ZipType.ZIP ?
+        JSON.stringify(geojson) :
         kml;
       setState({
-        data, 
-        tracks, 
+        data,
+        tracks,
         points
       });
     }
-  }, [state, geojson, tracks, points, pointStatus, tracksStatus]);
+  }, [state, geojson, kml, tracks, points, pointStatus, tracksStatus]);
 
 
   useEffect(() => {
@@ -84,7 +94,7 @@ export const useZip = (
             if (pointPhotos?.length && filesFolder) await copyFilesToDir(pointPhotos, filesFolder);
           }
           const zipFilename = type === ZipType.ZIP ?
-            `${scopeId}.zip` : `${scopeId}.kml`;
+            `${scopeId}.zip` : `${scopeId}.kmz`;
           const finalZip = await generateZip(scopeId, zipFilename, FolderType.Export, FolderType.Export);
           if (finalZip) {
             setPath(finalZip);
@@ -92,7 +102,7 @@ export const useZip = (
           await removeDirectory(scopeId, FolderType.Export);
         }
       };
-      
+
       launch();
     }
   }, [state]);

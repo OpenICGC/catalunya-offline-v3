@@ -88,8 +88,8 @@
                 <description>
                     <![CDATA[
                         <p>Point 1 description</p>
-                        <img style="max-width:500px; margin-bottom: 10px" src="file/image1Point1.jpg">
-                        <img style="max-width:500px; margin-bottom: 10px" src="file/image2Point1.jpg">
+                        <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/image1Point1.jpg">
+                        <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/image2Point1.jpg">
                     ]]>
                 </description>
                 <styleUrl>#874bf4f0-4a3f-4c75-972f-fb9b8ac4a596</styleUrl>
@@ -126,7 +126,7 @@
                     <![CDATA[
                         <p>Track 1 description</p>
                         <p>Timestamp: 1673876115769</p>
-                        <img style="max-width:500px; margin-bottom: 10px" src="file/imageTrack1.jpg">
+                        <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/imageTrack1.jpg">
                     ]]>
                 </description>
                 <styleUrl>#e73af4f0-4a3f-4c75-972f-fb9b8ac4a596</styleUrl>

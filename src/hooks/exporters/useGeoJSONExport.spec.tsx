@@ -4,6 +4,7 @@ import {act, renderHook} from '@testing-library/react-hooks/dom';
 import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
 import {v4 as uuidv4} from 'uuid';
 import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
+import {getImageNameWithoutPath} from '../../utils/getImageNameWithoutPath';
 
 
 const scopeId = uuidv4();
@@ -78,6 +79,25 @@ const tracks: ScopeTrack[] = [
   }
 ];
 
+const expectedPoints = points
+  .map(point => ({
+    ...point,
+    properties: {
+      ...point.properties,
+      images: point.properties.images
+        .map(image => 'files/' + getImageNameWithoutPath(image))
+    }
+  }));
+const expectedTracks = tracks
+  .map(track => ({
+    ...track,
+    properties: {
+      ...track.properties,
+      images: track.properties.images
+        .map(image => 'files/' + getImageNameWithoutPath(image))
+    }
+  }));
+
 describe('useGeoJSONExport', () => {
   // GIVEN
   const sampleScope = scope;
@@ -109,8 +129,8 @@ describe('useGeoJSONExport', () => {
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
-        ...samplePoints,
-        ...sampleTracks
+        ...expectedTracks,
+        ...expectedPoints
       ]
     };
     expect(result.current).to.deep.equal(expectedGeoJSON);
@@ -144,7 +164,7 @@ describe('useGeoJSONExport', () => {
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
-        sampleTracks[0]
+        expectedTracks[0]
       ]
     };
     expect(result.current).to.deep.equal(expectedGeoJSON);
@@ -178,8 +198,8 @@ describe('useGeoJSONExport', () => {
     const expectedGeoJSON = {
       'type': 'FeatureCollection',
       'features': [
-        sampleTracks[0],
-        samplePoints[0]
+        expectedTracks[0],
+        expectedPoints[0]
       ]
     };
     expect(result.current).to.deep.equal(expectedGeoJSON);
