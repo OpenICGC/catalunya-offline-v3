@@ -3,7 +3,6 @@ import {KmlImport} from './KmlImport';
 
 import sampleKmlFromWikiloc from '../../components/fixtures/sampleKmlFromWikiloc.xml';
 import sampleKmlFromRutaBike from '../../components/fixtures/sampleKmlFromRutaBike.xml';
-import sampleKmlFromGEarth from '../../components/fixtures/sampleKmlFromGEarth.xml';
 
 const expectedImportedFromWikiloc = {
   points: [
@@ -104,12 +103,6 @@ const expectedImportedFromRutaBike = {
     }
   ],
   numberOfErrors: 0
-};
-
-const expectedImportedFromGEarth = {
-  points: [],
-  tracks: [],
-  numberOfErrors: 1
 };
 
 describe('KmlImport', () => {
