@@ -1,8 +1,10 @@
 import {Scope, UUID} from '../../types/commonTypes';
 import { buildGPX, BaseBuilder } from 'gpx-builder';
 import {useScopePoints, useScopeTracks} from '../useStoredCollections';
+import {Segment} from 'gpx-builder/dist/builder/BaseBuilder/models';
+
 export const useGPXExport = (scope: Scope, trackId: UUID, includeVisiblePoints?: boolean) => {
-  const {Point, Metadata, Route, Link} = BaseBuilder.MODELS;
+  const {Point, Metadata, Track, Link} = BaseBuilder.MODELS;
 
   const meta = new Metadata(
     {
@@ -20,7 +22,7 @@ export const useGPXExport = (scope: Scope, trackId: UUID, includeVisiblePoints?:
     const scopePointList = pointStore.list();
     const visiblePointsToExport = scopePointList.filter(point => point.properties.isVisible);
 
-    const trackWayPoints = scopeTrack?.geometry?.coordinates.map(coord => {
+    const trackWayPoints = scopeTrack && scopeTrack?.geometry?.coordinates.map(coord => {
       if(coord[2] && coord[3]){
         return new Point(coord[1], coord[0],
           {
@@ -43,23 +45,22 @@ export const useGPXExport = (scope: Scope, trackId: UUID, includeVisiblePoints?:
           ele: point.geometry.coordinates[2] || undefined,
           time: new Date(point.properties.timestamp) || undefined,
           name: point.properties.name,
-          cmt: point.properties.description
+          desc: point.properties.description
         }));
     
-    const trackLine = [
-      new Route(
-        {
-          name: scopeTrack?.properties.name,
-          cmt: scopeTrack?.properties.description,
-          rtept: trackWayPoints
-        }
-      )
-    ];
+    const segmentLine = trackWayPoints && new Segment(trackWayPoints);
+    
+    const trackLine = segmentLine && new Track(
+      [segmentLine], {
+        name: scopeTrack?.properties.name,
+        desc: scopeTrack?.properties.description
+      }
+    );
 
     const gpx = new BaseBuilder();
     gpx.setMetadata(meta);
     gpx.setWayPoints(points);
-    gpx.setRoutes(trackLine);
+    trackLine && gpx.setTracks([trackLine]);
 
     return buildGPX(gpx.toObject());
 
@@ -82,19 +83,18 @@ export const useGPXExport = (scope: Scope, trackId: UUID, includeVisiblePoints?:
       }
     });
 
-    const trackLine = [
-      new Route(
-        {
-          name: scopeTrack?.properties.name,
-          cmt: scopeTrack?.properties.description,
-          rtept: trackWayPoints
-        }
-      )
-    ];
+    const segmentLine = trackWayPoints && new Segment(trackWayPoints);
+
+    const trackLine = segmentLine && new Track(
+      [segmentLine], {
+        name: scopeTrack?.properties.name,
+        desc: scopeTrack?.properties.description
+      }
+    );
 
     const gpx = new BaseBuilder();
     gpx.setMetadata(meta);
-    gpx.setRoutes(trackLine);
+    trackLine && gpx.setTracks([trackLine]);
 
     return buildGPX(gpx.toObject());
 

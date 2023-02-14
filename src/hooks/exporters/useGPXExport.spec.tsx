@@ -145,30 +145,32 @@ describe('useGPXExport', () => {
             '    <name>Scope 1</name>\n' +
             '    <link href="https://www.icgc.cat/ca/"></link>\n' +
             '  </metadata>\n' +
-            '  <rte>\n' +
-            '    <cmt>A custom description</cmt>\n' +
-            '    <rtept lat="41.609283" lon="1.849509">\n' +
-            '      <ele>142</ele>\n' +
-            '      <time>1970-01-20T09:12:16.045Z</time>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.60926" lon="1.849479">\n' +
-            '      <ele>141</ele>\n' +
-            '      <time>1970-01-20T09:12:16.058Z</time>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609236" lon="1.849474">\n' +
-            '      <ele>141</ele>\n' +
-            '      <time>1970-01-20T09:12:16.070Z</time>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609232" lon="1.849479">\n' +
-            '      <ele>141</ele>\n' +
-            '      <time>1970-01-20T09:12:16.079Z</time>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609233" lon="1.849478">\n' +
-            '      <ele>141</ele>\n' +
-            '      <time>1970-01-20T09:12:16.085Z</time>\n' +
-            '    </rtept>\n' +
+            '  <trk>\n' +
             '    <name>Track 1</name>\n' +
-            '  </rte>\n' +
+            '    <desc>A custom description</desc>\n' +
+            '    <trkseg>\n' +
+            '      <trkpt lat="41.609283" lon="1.849509">\n' +
+            '        <ele>142</ele>\n' +
+            '        <time>1970-01-20T09:12:16.045Z</time>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.60926" lon="1.849479">\n' +
+            '        <ele>141</ele>\n' +
+            '        <time>1970-01-20T09:12:16.058Z</time>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609236" lon="1.849474">\n' +
+            '        <ele>141</ele>\n' +
+            '        <time>1970-01-20T09:12:16.070Z</time>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609232" lon="1.849479">\n' +
+            '        <ele>141</ele>\n' +
+            '        <time>1970-01-20T09:12:16.079Z</time>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609233" lon="1.849478">\n' +
+            '        <ele>141</ele>\n' +
+            '        <time>1970-01-20T09:12:16.085Z</time>\n' +
+            '      </trkpt>\n' +
+            '    </trkseg>\n' +
+            '  </trk>\n' +
             '</gpx>';
 
     expect(result.current).to.deep.equal(expectedGPX);
@@ -197,7 +199,7 @@ describe('useGPXExport', () => {
 
     act(() => resultTrack.result.current.create(sampleTrack));
     await resultTrack.waitForNextUpdate();
-    
+
     const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope, track.id, true));
     await waitForNextUpdate();
 
@@ -213,32 +215,34 @@ describe('useGPXExport', () => {
             '    <ele>12</ele>\n' +
             '    <time>2023-01-16T13:36:11.254Z</time>\n' +
             '    <name>Point 1</name>\n' +
-            '    <cmt>A visible point</cmt>\n' +
+            '    <desc>A visible point</desc>\n' +
             '  </wpt>\n' +
-            '  <rte>\n' +
-            '    <cmt>A custom description</cmt>\n' +
-            '    <rtept lat="41.609283" lon="1.849509">\n' +
-            '      <ele>142</ele>\n' +
-            '      <time>1970-01-20T09:12:16.045Z</time>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.60926" lon="1.849479">\n' +
-            '      <ele>141</ele>\n' +
-            '      <time>1970-01-20T09:12:16.058Z</time>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609236" lon="1.849474">\n' +
-            '      <ele>141</ele>\n' +
-            '      <time>1970-01-20T09:12:16.070Z</time>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609232" lon="1.849479">\n' +
-            '      <ele>141</ele>\n' +
-            '      <time>1970-01-20T09:12:16.079Z</time>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609233" lon="1.849478">\n' +
-            '      <ele>141</ele>\n' +
-            '      <time>1970-01-20T09:12:16.085Z</time>\n' +
-            '    </rtept>\n' +
+            '  <trk>\n' +
             '    <name>Track 1</name>\n' +
-            '  </rte>\n' +
+            '    <desc>A custom description</desc>\n' +
+            '    <trkseg>\n' +
+            '      <trkpt lat="41.609283" lon="1.849509">\n' +
+            '        <ele>142</ele>\n' +
+            '        <time>1970-01-20T09:12:16.045Z</time>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.60926" lon="1.849479">\n' +
+            '        <ele>141</ele>\n' +
+            '        <time>1970-01-20T09:12:16.058Z</time>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609236" lon="1.849474">\n' +
+            '        <ele>141</ele>\n' +
+            '        <time>1970-01-20T09:12:16.070Z</time>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609232" lon="1.849479">\n' +
+            '        <ele>141</ele>\n' +
+            '        <time>1970-01-20T09:12:16.079Z</time>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609233" lon="1.849478">\n' +
+            '        <ele>141</ele>\n' +
+            '        <time>1970-01-20T09:12:16.085Z</time>\n' +
+            '      </trkpt>\n' +
+            '    </trkseg>\n' +
+            '  </trk>\n' +
             '</gpx>';
 
     expect(result.current).to.deep.equal(expectedGPX);
@@ -273,25 +277,27 @@ describe('useGPXExport', () => {
             '    <name>Scope 1</name>\n' +
             '    <link href="https://www.icgc.cat/ca/"></link>\n' +
             '  </metadata>\n' +
-            '  <rte>\n' +
-            '    <cmt>A custom description</cmt>\n' +
-            '    <rtept lat="41.609283" lon="1.849509">\n' +
-            '      <ele>142</ele>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.60926" lon="1.849479">\n' +
-            '      <ele>141</ele>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609236" lon="1.849474">\n' +
-            '      <ele>141</ele>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609232" lon="1.849479">\n' +
-            '      <ele>141</ele>\n' +
-            '    </rtept>\n' +
-            '    <rtept lat="41.609233" lon="1.849478">\n' +
-            '      <ele>141</ele>\n' +
-            '    </rtept>\n' +
+            '  <trk>\n' +
             '    <name>Track withoutTimestamp</name>\n' +
-            '  </rte>\n' +
+            '    <desc>A custom description</desc>\n' +
+            '    <trkseg>\n' +
+            '      <trkpt lat="41.609283" lon="1.849509">\n' +
+            '        <ele>142</ele>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.60926" lon="1.849479">\n' +
+            '        <ele>141</ele>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609236" lon="1.849474">\n' +
+            '        <ele>141</ele>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609232" lon="1.849479">\n' +
+            '        <ele>141</ele>\n' +
+            '      </trkpt>\n' +
+            '      <trkpt lat="41.609233" lon="1.849478">\n' +
+            '        <ele>141</ele>\n' +
+            '      </trkpt>\n' +
+            '    </trkseg>\n' +
+            '  </trk>\n' +
             '</gpx>';
 
     expect(result.current).to.deep.equal(expectedGPX);
@@ -326,15 +332,17 @@ describe('useGPXExport', () => {
             '    <name>Scope 1</name>\n' +
             '    <link href="https://www.icgc.cat/ca/"></link>\n' +
             '  </metadata>\n' +
-            '  <rte>\n' +
-            '    <cmt>A custom description</cmt>\n' +
-            '    <rtept lat="41.609283" lon="1.849509"></rtept>\n' +
-            '    <rtept lat="41.60926" lon="1.849479"></rtept>\n' +
-            '    <rtept lat="41.609236" lon="1.849474"></rtept>\n' +
-            '    <rtept lat="41.609232" lon="1.849479"></rtept>\n' +
-            '    <rtept lat="41.609233" lon="1.849478"></rtept>\n' +
+            '  <trk>\n' +
             '    <name>Track without timestamp nor elevation</name>\n' +
-            '  </rte>\n' +
+            '    <desc>A custom description</desc>\n' +
+            '    <trkseg>\n' +
+            '      <trkpt lat="41.609283" lon="1.849509"></trkpt>\n' +
+            '      <trkpt lat="41.60926" lon="1.849479"></trkpt>\n' +
+            '      <trkpt lat="41.609236" lon="1.849474"></trkpt>\n' +
+            '      <trkpt lat="41.609232" lon="1.849479"></trkpt>\n' +
+            '      <trkpt lat="41.609233" lon="1.849478"></trkpt>\n' +
+            '    </trkseg>\n' +
+            '  </trk>\n' +
             '</gpx>';
 
     expect(result.current).to.deep.equal(expectedGPX);
