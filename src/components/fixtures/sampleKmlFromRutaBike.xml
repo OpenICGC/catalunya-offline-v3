@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"
+	xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>GPS device</name>
+    <Snippet>Created Sat Apr 14 18:37:31 2012</Snippet>
+<!-- Normal track-none style -->
+    <Style id="track-none_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-none style -->
+    <Style id="track-none_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-none">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-none_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-none_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-0 style -->
+    <Style id="track-0_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-0 style -->
+    <Style id="track-0_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-0_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-0_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-1 style -->
+    <Style id="track-1_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-1.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-1 style -->
+    <Style id="track-1_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-1.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-1">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-1_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-1_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-2 style -->
+    <Style id="track-2_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-2.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-2 style -->
+    <Style id="track-2_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-2.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-2">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-2_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-2_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-3 style -->
+    <Style id="track-3_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-3.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-3 style -->
+    <Style id="track-3_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-3.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-3">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-3_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-3_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-4 style -->
+    <Style id="track-4_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-4.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-4 style -->
+    <Style id="track-4_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-4.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-4">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-4_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-4_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-5 style -->
+    <Style id="track-5_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-5.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-5 style -->
+    <Style id="track-5_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-5.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-5">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-5_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-5_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-6 style -->
+    <Style id="track-6_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-6.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-6 style -->
+    <Style id="track-6_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-6.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-6">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-6_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-6_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-7 style -->
+    <Style id="track-7_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-7.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-7 style -->
+    <Style id="track-7_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-7.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-7">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-7_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-7_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-8 style -->
+    <Style id="track-8_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-8.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-8 style -->
+    <Style id="track-8_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-8.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-8">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-8_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-8_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-9 style -->
+    <Style id="track-9_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-9.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-9 style -->
+    <Style id="track-9_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-9.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-9">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-9_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-9_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-10 style -->
+    <Style id="track-10_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-10.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-10 style -->
+    <Style id="track-10_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-10.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-10">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-10_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-10_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-11 style -->
+    <Style id="track-11_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-11.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-11 style -->
+    <Style id="track-11_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-11.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-11">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-11_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-11_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-12 style -->
+    <Style id="track-12_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-12.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-12 style -->
+    <Style id="track-12_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-12.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-12">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-12_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-12_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-13 style -->
+    <Style id="track-13_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-13.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-13 style -->
+    <Style id="track-13_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-13.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-13">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-13_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-13_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-14 style -->
+    <Style id="track-14_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-14.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-14 style -->
+    <Style id="track-14_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-14.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-14">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-14_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-14_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal track-15 style -->
+    <Style id="track-15_n">
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-15.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted track-15 style -->
+    <Style id="track-15_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-15.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-15">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-15_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-15_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="lineStyle">
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <Folder>
+      <name>Tracks</name>
+      <Folder>
+        <name>Espinelves</name>
+        <Snippet/>
+        <description>
+        <![CDATA[<table>
+            <tr><td><b>Distance</b> 13.7 km </td></tr>
+            <tr><td><b>Min Alt</b> 691.286 meters </td></tr>
+            <tr><td><b>Max Alt</b> 988.466 meters </td></tr>
+            <tr><td><b>Max Speed</b> 172.6 km/hour </td></tr>
+            <tr><td><b>Avg Speed</b> 8.5 km/hour </td></tr>
+            <tr><td><b>Start Time</b> 2003-07-03T17:39:31Z  </td></tr>
+            <tr><td><b>End Time</b> 2003-07-03T19:15:49Z  </td></tr>
+          </table>]]>
+        </description>
+        <TimeSpan>
+          <begin>2003-07-03T17:39:31Z</begin>
+          <end>2003-07-03T19:15:49Z</end>
+        </TimeSpan>
+        <Folder>
+          <name>Points</name>
+          <Placemark>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: 2.417380 </td></tr>
+                <tr><td>Latitude: 41.869000 </td></tr>
+                <tr><td>Altitude: 751.027 meters </td></tr>
+                <tr><td>Speed: 15.9 meters/hour </td></tr>
+                <tr><td>Heading: 2.7 </td></tr>
+                <tr><td>Time: 2003-07-03T17:39:31Z </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>2.417380</longitude>
+              <latitude>41.869000</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2003-07-03T17:39:31Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>2.417380,41.869000,751.03</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: 2.425380 </td></tr>
+                <tr><td>Latitude: 41.872720 </td></tr>
+                <tr><td>Altitude: 838.505 meters </td></tr>
+                <tr><td>Speed: 5.6 km/hour </td></tr>
+                <tr><td>Heading: 44.8 </td></tr>
+                <tr><td>Time: 2003-07-03T17:51:59Z </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>2.425380</longitude>
+              <latitude>41.872720</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2003-07-03T17:51:59Z</when></TimeStamp>
+            <styleUrl>#track-2</styleUrl>
+            <Point>
+              <coordinates>2.425380,41.872720,838.50</coordinates>
+            </Point>
+          </Placemark>
+        </Folder>
+        <Placemark>
+          <name>Track 1</name>
+          <styleUrl>#lineStyle</styleUrl>
+          <LineString>
+            <tessellate>1</tessellate>
+            <coordinates>
+              2.417380,41.869000,751.03
+              2.417380,41.869000,751.027200
+              2.417380,41.869030,750.42
+              2.417380,41.869030,750.417600
+              2.417460,41.869000,749.50
+              2.417460,41.869000,749.503200
+              2.417550,41.868960,750.11
+              2.417550,41.868960,750.112800
+              2.417640,41.868960,750.42
+              2.417640,41.868960,750.417600
+            </coordinates>
+          </LineString>
+        </Placemark>
+      </Folder>
+    </Folder>
+    <LookAt>
+      <gx:TimeSpan>
+        <begin>2003-07-03T17:39:31Z</begin>
+        <end>2003-07-03T19:15:49Z</end>
+      </gx:TimeSpan>
+      <longitude>2.421745</longitude>
+      <latitude>41.878940</latitude>
+      <range>5614.953807</range>
+    </LookAt>
+  </Document>
+</kml>
