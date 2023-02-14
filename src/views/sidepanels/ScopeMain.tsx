@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
@@ -9,6 +9,7 @@ import {HEXColor, UUID} from '../../types/commonTypes';
 import {useScopes} from '../../hooks/useStoredCollections';
 import MainPanel from '../../components/scope/MainPanel';
 import ScopeFeatures from './ScopeFeatures';
+import HandleExport from '../../components/scope/export/HandleExport';
 
 export interface ScopeMainProps {
   selectedScope?: UUID,
@@ -29,6 +30,8 @@ const ScopeMain: FC<ScopeMainProps> = ({
 }) => {
   const {t} = useTranslation();
   const {hexColors: palette} = useColorRamp('BrewerDark27');
+  
+  const [sharingScopeId, setSharingScopeId] = useState<UUID|undefined>(undefined);
 
   const scopeStore = useScopes();
   const unselectScope = () => onScopeSelected('');
@@ -63,7 +66,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
   };
 
   const share = (scopeId: UUID) => {
-    console.log('Unimplemented Share, Scope', scopeId); // TODO
+    setSharingScopeId(scopeId);
   };
 
   const instamaps = (scopeId: UUID) => {
@@ -74,18 +77,30 @@ const ScopeMain: FC<ScopeMainProps> = ({
     console.log('Unimplemented Data Schema, Scope', id); // TODO
   };
 
+  const closeHandleExport = () => setSharingScopeId(undefined);
+
   return !selectedScope ?
-    <MainPanel
-      scopes={scopeStore.list()}
-      onSelect={onScopeSelected}
-      onAdd={scopeAdd}
-      onColorChange={scopeColorChange}
-      onRename={scopeRename}
-      onDelete={scopeDelete}
-      onShare={share}
-      onInstamaps={instamaps}
-      onDataSchema={dataSchema}
-    />
+    <>
+      <MainPanel
+        scopes={scopeStore.list()}
+        onSelect={onScopeSelected}
+        onAdd={scopeAdd}
+        onColorChange={scopeColorChange}
+        onRename={scopeRename}
+        onDelete={scopeDelete}
+        onShare={share}
+        onInstamaps={instamaps}
+        onDataSchema={dataSchema}
+      />
+      {
+        sharingScopeId &&
+        <HandleExport
+          scopeId={sharingScopeId}
+          onSharedStarted={closeHandleExport}
+          onSharedCancel={closeHandleExport}
+        />
+      }
+    </>
     :
     <ScopeFeatures
       scopeId={selectedScope}

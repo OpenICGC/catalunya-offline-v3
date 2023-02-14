@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
@@ -12,6 +12,7 @@ import {useViewport} from '../../hooks/useViewport';
 import {MAP_PROPS} from '../../config';
 import useEditingPosition from '../../hooks/useEditingPosition';
 import useShare from '../../hooks/useShare';
+import HandleExport from '../../components/scope/export/HandleExport';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -39,6 +40,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const trackStore = useScopeTracks(scopeId);
 
   const {sharePoint}  = useShare();
+  const [sharingTrackId, setSharingTrackId] = useState<UUID|undefined>(undefined);
 
   const editingPosition = useEditingPosition();
 
@@ -184,8 +186,11 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   };
 
   const trackExport = (trackId: UUID) => {
+    setSharingTrackId(trackId);
     console.log('Unimplemented Export, track', trackId); // TODO
   };
+
+  const closeHandleExport = () => setSharingTrackId(undefined);
 
   if (selectedTrack) return <ScopeTrack
     scopeId={scopeId}
@@ -199,30 +204,41 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     onClose={unselectPoint}
   />;
 
-  if (selectedScope) return <FeaturesPanel
-    scope={selectedScope}
-    scopePoints={pointStore.list()}
-    scopeTracks={trackStore.list()}
-    onBackButtonClick={onClose}
+  if (selectedScope) return <>
+    <FeaturesPanel
+      scope={selectedScope}
+      scopePoints={pointStore.list()}
+      scopeTracks={trackStore.list()}
+      onBackButtonClick={onClose}
 
-    onSelectPoint={onPointSelected}
-    onAddPoint={pointAdd}
-    onColorChangePoint={pointColorChange}
-    onNameChangePoint={pointRename}
-    onToggleVisibilityPoint={pointToggleVisibility}
-    onDeletePoint={pointDelete}
-    onGoToPoint={pointGoTo}
-    onExportPoint={pointExport}
+      onSelectPoint={onPointSelected}
+      onAddPoint={pointAdd}
+      onColorChangePoint={pointColorChange}
+      onNameChangePoint={pointRename}
+      onToggleVisibilityPoint={pointToggleVisibility}
+      onDeletePoint={pointDelete}
+      onGoToPoint={pointGoTo}
+      onExportPoint={pointExport}
 
-    onSelectTrack={onTrackSelected}
-    onAddTrack={trackAdd}
-    onColorChangeTrack={trackColorChange}
-    onNameChangeTrack={trackRename}
-    onToggleVisibilityTrack={trackToggleVisibility}
-    onDeleteTrack={trackDelete}
-    onGoToTrack={trackGoTo}
-    onExportTrack={trackExport}
-  />;
+      onSelectTrack={onTrackSelected}
+      onAddTrack={trackAdd}
+      onColorChangeTrack={trackColorChange}
+      onNameChangeTrack={trackRename}
+      onToggleVisibilityTrack={trackToggleVisibility}
+      onDeleteTrack={trackDelete}
+      onGoToTrack={trackGoTo}
+      onExportTrack={trackExport}
+    />
+    {
+      sharingTrackId &&
+      <HandleExport
+        scopeId={scopeId}
+        trackId={sharingTrackId}
+        onSharedStarted={closeHandleExport}
+        onSharedCancel={closeHandleExport}
+      />
+    }
+  </>;
 
   return <div>Error: the selected scope does not exist</div>;
 };

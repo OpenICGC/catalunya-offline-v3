@@ -14,6 +14,7 @@ import {
 import {PersistenceStatus} from './usePersistenceData';
 import {useKmlExport} from './exporters/useKmlExport';
 import {useGeoJSONExport} from './exporters/useGeoJSONExport';
+import {SHARE_FORMAT} from '../components/common/ShareDialog';
 
 type useZipState = {
   data: string,
@@ -21,13 +22,8 @@ type useZipState = {
   points: ScopePoint[]
 }
 
-export enum ZipType {
-  ZIP,
-  KMZ
-}
-
 interface useZipOptions {
-  type: ZipType,
+  type: SHARE_FORMAT,
   scopeId: UUID,
   trackId?: UUID,
   includeVisiblePoints?: boolean
@@ -37,7 +33,7 @@ export const useZip = (
   options: useZipOptions
 ) => {
   const {
-    type = ZipType.ZIP,
+    type = SHARE_FORMAT.ZIP,
     scopeId,
     trackId,
     includeVisiblePoints = false
@@ -62,7 +58,7 @@ export const useZip = (
 
   useEffect(() => {
     if (!state && geojson && kml && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
-      const data = type === ZipType.ZIP ?
+      const data = type === SHARE_FORMAT.ZIP ?
         JSON.stringify(geojson) :
         kml;
       setState({
@@ -85,7 +81,7 @@ export const useZip = (
         if (folder){
           const trackPhotos = getPhotosPaths(state.tracks);
           const pointPhotos = getPhotosPaths(state.points);
-          const filename = type === ZipType.ZIP ?
+          const filename = type === SHARE_FORMAT.ZIP ?
             `${scopeId}.geojson` : `${scopeId}.kml`;
           await writeFile(state.data, folder + '/' + filename);
           if (trackPhotos || pointPhotos) {
@@ -93,7 +89,7 @@ export const useZip = (
             if (trackPhotos?.length && filesFolder) await copyFilesToDir(trackPhotos, filesFolder);
             if (pointPhotos?.length && filesFolder) await copyFilesToDir(pointPhotos, filesFolder);
           }
-          const zipFilename = type === ZipType.ZIP ?
+          const zipFilename = type === SHARE_FORMAT.ZIP ?
             `${scopeId}.zip` : `${scopeId}.kmz`;
           const finalZip = await generateZip(scopeId, zipFilename, FolderType.Export, FolderType.Export);
           if (finalZip) {
