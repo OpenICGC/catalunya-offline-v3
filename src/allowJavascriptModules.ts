@@ -3,3 +3,8 @@
 
 // Declare untyped modules, explicitly
 declare module '@geomatico/geocomponents/*';
+
+declare module '*.xml' {
+  const doc: string;
+  export default doc;
+}

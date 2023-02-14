@@ -1,38 +1,66 @@
-import {UUID} from '../../types/commonTypes';
+import {ScopeFeature, UUID} from '../../types/commonTypes';
 import {useScopePoints, useScopeTracks} from '../useStoredCollections';
-export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePoints?: boolean) => {
-    
-  if ( trackId ) {
-    if (includeVisiblePoints) { //Export Track and visiblePoints
-      const trackStore = useScopeTracks(scopeId);
-      const scopeTrack = trackStore.retrieve(trackId);
-      const pointStore = useScopePoints(scopeId);
-      const scopePointList = pointStore.list();
-      const visiblePointsToExport = scopePointList.filter(point => point.properties.isVisible);
+import {useEffect, useState} from 'react';
+import {PersistenceStatus} from '../usePersistenceData';
+import {getImageNameWithoutPath} from '../../utils/getImageNameWithoutPath';
+import {Feature, FeatureCollection} from 'geojson';
 
-      return {
-        'type': 'FeatureCollection',
-        'features': scopeTrack && [...[scopeTrack], ...visiblePointsToExport]
-      };
-      
-    } else { //Export Track
-      const trackStore = useScopeTracks(scopeId);
-
-      return {
-        'type': 'FeatureCollection',
-        'features': [trackStore.retrieve(trackId)]
-      };
+const changeImagePaths = (features: Array<ScopeFeature>): Array<ScopeFeature> => features
+  .map(feature => ({
+    ...feature,
+    properties: {
+      ...feature.properties,
+      images: feature.properties.images
+        .map(image => 'files/' + getImageNameWithoutPath(image))
     }
-      
-  } else { //Export all Scope
-    const pointStore = useScopePoints(scopeId);
-    const trackStore = useScopeTracks(scopeId);
-    const scopePointList = pointStore.list();
-    const scopeTrackList = trackStore.list();
+  }));
+export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePoints?: boolean) => {
+  
+  const [geojson, setGeojson] = useState<FeatureCollection|undefined>(undefined);
+  
+  const trackStore = useScopeTracks(scopeId);
+  const pointStore = useScopePoints(scopeId);
+  
+  const tracks = trackStore.list();
+  const points = pointStore.list();
+  
+  const tracksStatus = trackStore.status;
+  const pointStatus = pointStore.status;
+  
+  useEffect(() => {
+    if (!geojson && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
+      const tracksWithValidImagePaths = changeImagePaths(tracks);
+      const pointsWithValidImagePaths = changeImagePaths(points);
 
-    return {
-      'type': 'FeatureCollection',
-      'features': [...scopePointList, ...scopeTrackList]
-    };
-  }
+      if ( trackId ) {
+        const track = tracksWithValidImagePaths
+          .filter(track => track.geometry)
+          .find(track => track.id === trackId);
+        
+        if (track) {
+          if (includeVisiblePoints) {
+            const visiblePointsToExport = pointsWithValidImagePaths.filter(point => point.properties.isVisible);
+            setGeojson({
+              'type': 'FeatureCollection',
+              'features': [track as Feature, ...visiblePointsToExport as Array<Feature>]
+            });
+          } else {
+            setGeojson({
+              'type': 'FeatureCollection',
+              'features': [track as Feature]
+            });
+          } 
+        }          
+      } else { //Export all Scope
+        const allTrack = tracksWithValidImagePaths
+          .filter(track => track.geometry);
+        setGeojson({
+          'type': 'FeatureCollection',
+          'features': [...allTrack as Array<Feature>, ...pointsWithValidImagePaths as Array<Feature>]
+        });
+      }
+    }
+  }, [tracks, points, tracksStatus, pointStatus]);
+  
+  return geojson;
 };

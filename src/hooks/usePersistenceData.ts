@@ -17,25 +17,36 @@ declare global {
 
 type SetValue<T> = Dispatch<SetStateAction<T>>
 
-function usePersistenceData<T>(key: string, initialValue: T): [T, SetValue<T>] {
+export enum PersistenceStatus {
+  INITIAL,
+  LOADING,
+  READY
+}
+
+function usePersistenceData<T>(key: string, initialValue: T): [T, SetValue<T>, PersistenceStatus] {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const [status, setStatus] = useState<PersistenceStatus>(PersistenceStatus.INITIAL);
 
   // Get from local storage or capacitor preferences then
   // parse stored json or return initialValue
   const readValue = useCallback(async () => {
     // Prevent build error "window is undefined" but keeps working
+    setStatus(PersistenceStatus.LOADING);
     if (typeof window === 'undefined') {
       setStoredValue(initialValue);
+      setStatus(PersistenceStatus.READY);
     }
 
     try {
       const item = await getPersistenceImpl(key);
       setStoredValue(item ? (parseJSON(item) as T) : initialValue);
+      setStatus(PersistenceStatus.READY);
     } catch (error) {
       console.warn(`Error reading localStorage key “${key}”:`, error);
       setStoredValue(initialValue);
+      setStatus(PersistenceStatus.READY);
     }
   }, [initialValue, key]);
 
@@ -50,17 +61,22 @@ function usePersistenceData<T>(key: string, initialValue: T): [T, SetValue<T>] {
     }
 
     try {
+      setStatus(PersistenceStatus.LOADING);
       // Allow value to be a function, so we have the same API as useState
       const newValue = value instanceof Function ? value(storedValue) : value;
 
       // Save to local storage or capacitor preferences
       setPersistenceImpl(key, JSON.stringify(newValue))
         // Save state
-        .then(() => setStoredValue(newValue));
+        .then(() => {
+          setStoredValue(newValue);
+          setStatus(PersistenceStatus.READY);
+        });
       // We dispatch a custom event so every useLocalStorage hook are notified
       window.dispatchEvent(new Event('local-storage'));
     } catch (error) {
       console.warn(`Error setting localStorage key “${key}”:`, error);
+      setStatus(PersistenceStatus.READY);
     }
   });
 
@@ -85,7 +101,7 @@ function usePersistenceData<T>(key: string, initialValue: T): [T, SetValue<T>] {
   // See: useLocalStorage()
   useEventListener('local-storage', handleStorageChange);
 
-  return [storedValue, setValue];
+  return [storedValue, setValue, status];
 }
 
 export default usePersistenceData;

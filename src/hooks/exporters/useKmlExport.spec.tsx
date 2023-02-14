@@ -2,13 +2,12 @@ import {expect} from 'chai';
 import {useKmlExport} from './useKmlExport';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
 import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
-import {v4 as uuidv4} from 'uuid';
 import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import kmlSample_01 from './kmlSample_01.xml';
 import kmlSample_02 from './kmlSample_02.xml';
 
 
-const scopeId = uuidv4();
+const scopeId = '9c3981d3-8ca5-4b7b-a3bc-a949761591ab';
 
 const scope: Scope = {
   id: scopeId,
