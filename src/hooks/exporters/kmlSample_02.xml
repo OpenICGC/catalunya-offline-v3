@@ -6,13 +6,13 @@
         <!-- TRACK STYLES -->
         <Style id="e73af4f0-4a3f-4c75-972f-fb9b8ac4a596-normal">
             <LineStyle>
-                <color>ff973572</color>
+                <color>ff723597</color>
                 <width>5</width>
             </LineStyle>
         </Style>
         <Style id="e73af4f0-4a3f-4c75-972f-fb9b8ac4a596-highlight">
             <LineStyle>
-                <color>ff973572</color>
+                <color>ff723597</color>
                 <width>7</width>
             </LineStyle>
         </Style>
@@ -29,7 +29,7 @@
         <!-- POINT STYLES -->
         <Style id="874bf4f0-4a3f-4c75-972f-fb9b8ac4a596-normal">
             <IconStyle>
-                <color>fffabada</color>
+                <color>ffdabafa</color>
             </IconStyle>
             <LabelStyle>
                 <scale>1</scale>
@@ -37,7 +37,7 @@
         </Style>
         <Style id="874bf4f0-4a3f-4c75-972f-fb9b8ac4a596-highlight">
             <IconStyle>
-                <color>fffabada</color>
+                <color>ffdabafa</color>
             </IconStyle>
             <LabelStyle>
                 <scale>1.1</scale>
@@ -55,7 +55,7 @@
         </StyleMap>
         <Style id="35de56eb-7c9d-405d-8d6c-147e083cb6bf-normal">
             <IconStyle>
-                <color>ff973572</color>
+                <color>ff723597</color>
             </IconStyle>
             <LabelStyle>
                 <scale>1</scale>
@@ -63,7 +63,7 @@
         </Style>
         <Style id="35de56eb-7c9d-405d-8d6c-147e083cb6bf-highlight">
             <IconStyle>
-                <color>ff973572</color>
+                <color>ff723597</color>
             </IconStyle>
             <LabelStyle>
                 <scale>1.1</scale>
@@ -87,7 +87,7 @@
                 <name>Point 1</name>
                 <description>
                     <![CDATA[
-                        <p>Point 1 description</p>
+                        Point 1 description
                         <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/image1Point1.jpg">
                         <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/image2Point1.jpg">
                     ]]>
@@ -104,7 +104,7 @@
                 <name>Point 2</name>
                 <description>
                     <![CDATA[
-                        <p>Point 2 description</p>
+                        Point 2 description
                     ]]>
                 </description>
                 <styleUrl>#35de56eb-7c9d-405d-8d6c-147e083cb6bf</styleUrl>
@@ -124,7 +124,7 @@
                 <name>Track 1</name>
                 <description>
                     <![CDATA[
-                        <p>Track 1 description</p>
+                        Track 1 description
                         <p>Timestamp: 1673876115769</p>
                         <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/imageTrack1.jpg">
                     ]]>
@@ -132,7 +132,7 @@
                 <styleUrl>#e73af4f0-4a3f-4c75-972f-fb9b8ac4a596</styleUrl>
                 <LineString>
                     <tessellate>1</tessellate>
-                    <coordinates>-3.698053272441833,40.40243085733725,0,-3.697723976621552,40.40272136663401,0,-3.695985219357802,40.40257933830212,0,-3.696128879062175,40.40098962237379,0,-3.698789629333535,40.40101458330396,0,-3.699582462026573,40.40127776668836,0</coordinates>
+                    <coordinates>-3.698053272441833,40.40243085733725,0 -3.697723976621552,40.40272136663401,0 -3.695985219357802,40.40257933830212,0 -3.696128879062175,40.40098962237379,0 -3.698789629333535,40.40101458330396,0 -3.699582462026573,40.40127776668836,0</coordinates>
                 </LineString>
             </Placemark>
         </Folder>

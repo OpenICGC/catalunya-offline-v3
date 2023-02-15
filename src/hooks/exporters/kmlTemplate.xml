@@ -66,7 +66,7 @@
                 <name>{{properties.name}}</name>
                 <description>
                     <![CDATA[
-                        <p>{{properties.description}}</p>
+                        {{properties.description}}
                         {{#getImages}}
                         <img style="max-width:500px; margin-bottom: 10px" src="{{scope.id}}/files/{{.}}">
                         {{/getImages}}
@@ -91,7 +91,7 @@
                 <name>{{properties.name}}</name>
                 <description>
                     <![CDATA[
-                        <p>{{properties.description}}</p>
+                        {{properties.description}}
                         <p>Timestamp: {{properties.timestamp}}</p>
                         {{#getImages}}
                         <img style="max-width:500px; margin-bottom: 10px" src="{{scope.id}}/files/{{.}}">

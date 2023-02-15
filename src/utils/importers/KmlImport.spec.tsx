@@ -3,6 +3,8 @@ import {KmlImport} from './KmlImport';
 
 import sampleKmlFromWikiloc from '../../components/fixtures/sampleKmlFromWikiloc.xml';
 import sampleKmlFromRutaBike from '../../components/fixtures/sampleKmlFromRutaBike.xml';
+import sampleKmlFromGEarth from '../../components/fixtures/sampleKmlFromGEarth.xml';
+import kmlSample_01 from '../../hooks/exporters/kmlSample_01.xml';
 
 const expectedImportedFromWikiloc = {
   points: [
@@ -45,7 +47,6 @@ const expectedImportedFromWikiloc = {
   ],
   numberOfErrors: 0
 };
-
 const expectedImportedFromRutaBike = {
   points: [
     {
@@ -104,8 +105,146 @@ const expectedImportedFromRutaBike = {
   ],
   numberOfErrors: 0
 };
+const expectedImportedFromGEarth = {
+  points: [],
+  tracks: [
+    {
+      type: 'Feature',
+      properties: {
+        name: 'KmlPath',
+        color: '#aa00ff',
+        description: 'A kmlPath description',
+        images: [],
+        isVisible: true,
+      },
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [ 1.189078170287159,41.11763934406184,0 ],
+          [ 1.190725247335649,41.12131425356854,0 ],
+          [ 1.193769182339264,41.12296929348794,0 ],
+          [ 1.195315560929782,41.12106882889221,0 ],
+          [ 1.193673346337989,41.11621332650662,0 ],
+          [ 1.190429489326825,41.11569927135588,0 ]
+        ]
+      }
+    }
+  ],
+  numberOfErrors: 0
+};
+const expectedImportedFromCatoffline = {
+  points: [
+    {
+      type: 'Feature',
+      properties: {
+        name: 'Point 1',
+        color: '#973572',
+        description: '',
+        images: [],
+        isVisible: true
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [-3.698005,40.402501,0]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        name: 'Point 2',
+        color: '#973572',
+        description: '',
+        images: [],
+        isVisible: true
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [-3.698864176137905,40.40192130721456,0]
+      }
+    }
+  ],
+  tracks: [
+    {
+      type: 'Feature',
+      properties: {
+        name: 'Track 1',
+        color: '#973572',
+        description: '',
+        images: [],
+        isVisible: true
+      },
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [-3.698053272441833,40.40243085733725,0],
+          [-3.697723976621552,40.40272136663401,0],
+          [-3.695985219357802,40.40257933830212,0],
+          [-3.696128879062175,40.40098962237379,0],
+          [-3.698789629333535,40.40101458330396,0],
+          [-3.699582462026573,40.40127776668836,0]
+        ]
+      }
+    }
+  ],
+  numberOfErrors: 0
+};
 
 describe('KmlImport', () => {
+
+  it('KmlImport should import a Kml from Catoffline', async () => {
+    //GIVEN
+    const data = kmlSample_01;
+
+    //WHEN
+    const computedData = KmlImport(data);
+
+    const partialComputedData = {
+      points: computedData.points.map(point => (
+        {
+          type: point.type,
+          properties: {
+            name: point.properties.name,
+            color: point.properties.color,
+            description: point.properties.description,
+            images: [],
+            isVisible: point.properties.isVisible
+          },
+          geometry: point.geometry
+        }
+      )),
+      tracks: computedData.tracks.map(track => (
+        {
+          type: track.type,
+          properties: {
+            name: track.properties.name,
+            color: track.properties.color,
+            description: track.properties.description,
+            images: [],
+            isVisible: track.properties.isVisible
+          },
+          geometry: track.geometry
+        }
+      )),
+      numberOfErrors: computedData.numberOfErrors
+    };
+
+    // THEN
+    expect(partialComputedData).to.deep.equal(expectedImportedFromCatoffline);
+
+    // THEN
+    const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
+    const computedPoint = computedData?.points && computedData.points.map(point => point);
+
+    computedPoint && computedPoint.map(point =>
+      expect(point.id).to.be.a('string') && expect(point.id).to.have.lengthOf(36) &&
+        expect(point.properties.timestamp).to.be.a('number') && expect(Date.now()-point.properties.timestamp).to.be.below(20)
+    );
+    computedTrack && computedTrack.map(track =>
+      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+        expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
+    );
+
+  });
 
   it('KmlImport should import a Kml from Wikiloc', async () => {
     //GIVEN
@@ -205,6 +344,56 @@ describe('KmlImport', () => {
         expect(point.properties.name).to.be.a('string') && expect(point.properties.name).to.include('Point') && expect(point.properties.name).to.have.lengthOf(42) &&
             expect(point.properties.timestamp).to.be.a('number') && expect(Date.now()-point.properties.timestamp).to.be.below(20)
     );
+
+    computedTrack && computedTrack.map(track =>
+      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+        expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
+    );
+
+  });
+
+  it('KmlImport should import a Kml from Google Earth', async () => {
+    //GIVEN
+    const data = sampleKmlFromGEarth;
+
+    //WHEN
+    const computedData = KmlImport(data);
+
+    const partialComputedData = {
+      points: computedData.points.map(point => (
+        {
+          type: point.type,
+          properties: {
+            color: point.properties.color,
+            description: point.properties.description,
+            images: point.properties.images,
+            isVisible: point.properties.isVisible
+          },
+          geometry: point.geometry
+        }
+      )),
+      tracks: computedData.tracks.map(track => (
+        {
+          type: track.type,
+          properties: {
+            name: track.properties.name,
+            color: track.properties.color,
+            description: track.properties.description,
+            images: track.properties.images,
+            isVisible: track.properties.isVisible
+          },
+          geometry: track.geometry
+        }
+      )),
+      numberOfErrors: computedData.numberOfErrors
+    };
+
+    // THEN
+    expect(partialComputedData).to.deep.equal(expectedImportedFromGEarth);
+    //expect(computedData).to.deep.equal(expectedImportedFromGEarth);
+
+    // THEN
+    const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
     computedTrack && computedTrack.map(track =>
       expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&

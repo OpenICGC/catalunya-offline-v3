@@ -20,7 +20,7 @@ export const KmlImport: (data: string) => ScopeImportResults = (data) => {
           ...feature,
           properties: {
             ...feature.properties,
-            description: feature.properties && feature.properties.desc && typeof feature.properties.desc === 'string' ? feature.properties.desc : '',
+            description: feature.properties && feature.properties.description && typeof feature.properties.description === 'string' ? feature.properties.description : '',
             color: feature.properties ? feature.properties['icon-color'] : undefined
           },
           geometry: {
@@ -33,7 +33,7 @@ export const KmlImport: (data: string) => ScopeImportResults = (data) => {
           ...feature,
           properties: {
             ...feature.properties,
-            description: feature.properties && feature.properties.desc && typeof feature.properties.desc === 'string' ? feature.properties.desc : '',
+            description: feature.properties && feature.properties.description && typeof feature.properties.description === 'string' ? feature.properties.description : '',
             color: feature.properties && feature.properties.stroke
           },
           geometry: {
@@ -57,8 +57,6 @@ export const KmlImport: (data: string) => ScopeImportResults = (data) => {
       numberOfErrors: 1
     };
   } else {
-    //return kmlFromGpx;
-    //return kmlFormatted;
     return GeoJSONImport(kmlFormatted);
   }
 };

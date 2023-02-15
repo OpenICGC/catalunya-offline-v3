@@ -3,6 +3,7 @@ import Mustache from 'mustache';
 import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
 import kmlTemplate from './kmlTemplate.xml';
 import {getImageNameWithoutPath} from '../../utils/getImageNameWithoutPath';
+import {getKmlColorFromHexaColor} from '../../utils/getKmlColorFromHexaColor';
 
 export const useKmlExport = (scopeId: UUID) => {
   const scope = useScopes().retrieve(scopeId);
@@ -16,7 +17,7 @@ export const useKmlExport = (scopeId: UUID) => {
       ...point,
       properties: {
         ...point.properties,
-        color: point.properties.color ? 'ff'+point.properties.color.slice(1,7) : 'ff'+scope?.color.slice(1,7),
+        color: point.properties.color ? getKmlColorFromHexaColor(point.properties.color) : getKmlColorFromHexaColor(scope?.color),
       },
       getCoordinates: () => {
         return point.geometry?.coordinates.toString();
@@ -32,9 +33,9 @@ export const useKmlExport = (scopeId: UUID) => {
         properties:
           {
             ...track.properties,
-            color: track.properties.color ? 'ff'+track.properties.color.slice(1,7) : 'ff'+scope?.color.slice(1,7),
+            color: track.properties.color ? getKmlColorFromHexaColor(track.properties.color) : getKmlColorFromHexaColor(scope?.color),
           },
-        getCoordinates: () => track.geometry?.coordinates.map(coord => coord.concat(0)).join(','),
+        getCoordinates: () => track.geometry?.coordinates.map(coord => coord.concat(0)).join(' '),
         getImages: () => track.properties.images.map(image => getImageNameWithoutPath(image))
       };
     } else if (track.geometry?.coordinates.some(coord => coord.length > 3)) {
@@ -43,9 +44,9 @@ export const useKmlExport = (scopeId: UUID) => {
         properties:
           {
             ...track.properties,
-            color: track.properties.color ? 'ff'+track.properties.color.slice(1,7) : 'ff'+scope?.color.slice(1,7),
+            color: track.properties.color ? getKmlColorFromHexaColor(track.properties.color) : getKmlColorFromHexaColor(scope?.color),
           },
-        getCoordinates: () => track.geometry?.coordinates.map(coord => coord.slice(0,3)).join(','),
+        getCoordinates: () => track.geometry?.coordinates.map(coord => coord.slice(0,3)).join(' '),
         getImages: () => track.properties.images.map(image => getImageNameWithoutPath(image))
       };
     } else {
@@ -54,9 +55,9 @@ export const useKmlExport = (scopeId: UUID) => {
         properties:
           {
             ...track.properties,
-            color: track.properties.color ? 'ff'+track.properties.color.slice(1,7) : 'ff'+scope?.color.slice(1,7),
+            color: track.properties.color ? getKmlColorFromHexaColor(track.properties.color) : getKmlColorFromHexaColor(scope?.color),
           },
-        getCoordinates: () => track.geometry?.coordinates.join(','),
+        getCoordinates: () => track.geometry?.coordinates.join(' '),
         getImages: () => track.properties.images.map(image => getImageNameWithoutPath(image))
       };
     }
