@@ -1,19 +1,20 @@
 import {expect} from 'chai';
 import {useKmlExport} from './useKmlExport';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
-import {useScopePoints, useScopes, useScopeTracks} from './useStoredCollections';
-import {v4 as uuidv4} from 'uuid';
-import {Scope, ScopePoint, ScopeTrack} from '../types/commonTypes';
+import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
+import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import kmlSample_01 from './kmlSample_01.xml';
 import kmlSample_02 from './kmlSample_02.xml';
 
-const scopeId = uuidv4();
+
+const scopeId = '9c3981d3-8ca5-4b7b-a3bc-a949761591ab';
 
 const scope: Scope = {
   id: scopeId,
   name: 'Scope 1',
-  color: '#973572'
+  color: '#fabada'
 };
+
 const points: ScopePoint[] = [
   {
     type: 'Feature',
@@ -23,7 +24,7 @@ const points: ScopePoint[] = [
       color: '#973572',
       timestamp: 1673876171254,
       description: 'Point 1 description',
-      images: [],
+      images: ['myPath/image1Point1.jpg', 'myPath/image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -57,7 +58,7 @@ const tracks: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: [],
+      images: ['myPath/imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {
@@ -80,10 +81,9 @@ const pointsWithoutElevation: ScopePoint[] = [
     id: '874bf4f0-4a3f-4c75-972f-fb9b8ac4a596',
     properties: {
       name: 'Point 1',
-      color: '#973572',
       timestamp: 1673876171254,
       description: 'Point 1 description',
-      images: [],
+      images: ['myPath/mySubPath/image1Point1.jpg', 'myPath/mySubPath/image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -108,7 +108,6 @@ const pointsWithoutElevation: ScopePoint[] = [
     }
   }
 ];
-
 const trackWithoutTimestampNorElevation: ScopeTrack[] = [
   {
     type: 'Feature',
@@ -118,7 +117,7 @@ const trackWithoutTimestampNorElevation: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: [],
+      images: ['myPath/imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {
@@ -143,7 +142,7 @@ const trackWithoutTimestamp: ScopeTrack[] = [
       color: '#973572',
       timestamp: 1673876115769,
       description: 'Track 1 description',
-      images: [],
+      images: ['myPath/imageTrack1.jpg'],
       isVisible: true
     },
     geometry: {
@@ -173,8 +172,8 @@ describe('useKmlExport', () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
-    const resultPoint = renderHook(() => useScopePoints(scope.id));
-    const resultTrack = renderHook(() => useScopeTracks(scope.id));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
+    const resultTrack = renderHook(() => useScopeTracks(scopeId));
 
     act(() => resultScope.result.current.create(sampleScope));
     await resultScope.waitForNextUpdate();
@@ -187,7 +186,7 @@ describe('useKmlExport', () => {
       await resultTrack.waitForNextUpdate();
     }
 
-    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scope));
+    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scopeId));
     await waitForNextUpdate();
 
     // THEN
@@ -204,8 +203,8 @@ describe('useKmlExport', () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
-    const resultPoint = renderHook(() => useScopePoints(scope.id));
-    const resultTrack = renderHook(() => useScopeTracks(scope.id));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
+    const resultTrack = renderHook(() => useScopeTracks(scopeId));
 
     act(() => resultScope.result.current.create(sampleScope));
     await resultScope.waitForNextUpdate();
@@ -218,7 +217,7 @@ describe('useKmlExport', () => {
       await resultTrack.waitForNextUpdate();
     }
 
-    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scope));
+    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scopeId));
     await waitForNextUpdate();
 
     // THEN
@@ -227,7 +226,7 @@ describe('useKmlExport', () => {
     expect(result.current).to.deep.equal(expectedKML);
 
     //CLEAN
-    act(() => resultScope.result.current.delete(scope.id));
+    act(() => resultScope.result.current.delete(scopeId));
     await resultScope.waitForNextUpdate();
   });
 
@@ -235,8 +234,8 @@ describe('useKmlExport', () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
-    const resultPoint = renderHook(() => useScopePoints(scope.id));
-    const resultTrack = renderHook(() => useScopeTracks(scope.id));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
+    const resultTrack = renderHook(() => useScopeTracks(scopeId));
 
     act(() => resultScope.result.current.create(sampleScope));
     await resultScope.waitForNextUpdate();
@@ -249,7 +248,7 @@ describe('useKmlExport', () => {
       await resultTrack.waitForNextUpdate();
     }
 
-    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scope));
+    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scopeId));
     await waitForNextUpdate();
 
     // THEN
@@ -258,7 +257,7 @@ describe('useKmlExport', () => {
     expect(result.current).to.deep.equal(expectedKML);
 
     //CLEAN
-    act(() => resultScope.result.current.delete(scope.id));
+    act(() => resultScope.result.current.delete(scopeId));
     await resultScope.waitForNextUpdate();
   });
 
@@ -266,8 +265,8 @@ describe('useKmlExport', () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
-    const resultPoint = renderHook(() => useScopePoints(scope.id));
-    const resultTrack = renderHook(() => useScopeTracks(scope.id));
+    const resultPoint = renderHook(() => useScopePoints(scopeId));
+    const resultTrack = renderHook(() => useScopeTracks(scopeId));
 
     act(() => resultScope.result.current.create(sampleScope));
     await resultScope.waitForNextUpdate();
@@ -280,7 +279,7 @@ describe('useKmlExport', () => {
       await resultTrack.waitForNextUpdate();
     }
 
-    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scope));
+    const {result, waitForNextUpdate} = renderHook(() => useKmlExport(scopeId));
     await waitForNextUpdate();
 
     // THEN
@@ -289,7 +288,7 @@ describe('useKmlExport', () => {
     expect(result.current).to.deep.equal(expectedKML);
 
     //CLEAN
-    act(() => resultScope.result.current.delete(scope.id));
+    act(() => resultScope.result.current.delete(scopeId));
     await resultScope.waitForNextUpdate();
   });
 

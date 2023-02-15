@@ -1,5 +1,5 @@
 import {Scope, ScopeTrack, ScopePoint, UUID} from '../types/commonTypes';
-import usePersistenceData from './usePersistenceData';
+import usePersistenceData, {PersistenceStatus} from './usePersistenceData';
 import {removePersistenceImpl} from '../utils/persistenceImpl';
 
 type CollectionItem = {
@@ -12,22 +12,24 @@ interface collectionStorage<ItemType extends CollectionItem> {
   retrieve: (id: UUID) => ItemType | undefined;
   update: (updated: ItemType) => void;
   delete: (id: UUID) => void;
+  status: PersistenceStatus;
 }
 
 export const useLocalCollectionStore = <ItemType extends CollectionItem>(collectionId: string): collectionStorage<ItemType> => {
-  const [items, setItems] = usePersistenceData<Array<ItemType>>(collectionId, []);
+  const [items, setItems, persistenceStatus] = usePersistenceData<Array<ItemType>>(collectionId, []);
 
   return {
     list: () => items,
     create: created => setItems(prevData => [...prevData, created]),
     retrieve: (id: UUID) => items.find(item => item.id === id),
     update: updated => setItems(prevData => prevData.map(item => item.id === updated.id ? updated : item)),
-    delete: id => setItems(prevData => prevData.filter(item => item.id !== id))
+    delete: id => setItems(prevData => prevData.filter(item => item.id !== id)),
+    status: persistenceStatus
   };
 };
 
 export const useLocalCollectionStoreScopes = (collectionId: string): collectionStorage<Scope> => {
-  const [items, setItems] = usePersistenceData<Array<Scope>>(collectionId, []);
+  const [items, setItems, persistenceStatus] = usePersistenceData<Array<Scope>>(collectionId, []);
 
   return {
     list: () => items,
@@ -38,7 +40,8 @@ export const useLocalCollectionStoreScopes = (collectionId: string): collectionS
       removePersistenceImpl(`scopes/${id}/points`);
       removePersistenceImpl(`scopes/${id}/tracks`);
       setItems(prevData => prevData.filter(item => item.id !== id));
-    }
+    },
+    status: persistenceStatus
   };
 };
 

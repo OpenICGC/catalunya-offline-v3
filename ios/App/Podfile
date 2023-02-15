@@ -19,6 +19,7 @@ def capacitor_pods
   pod 'CapacitorFilesystem', :path => '../../node_modules/@capacitor/filesystem'
   pod 'CapacitorPreferences', :path => '../../node_modules/@capacitor/preferences'
   pod 'CapacitorShare', :path => '../../node_modules/@capacitor/share'
+  pod 'CapacitorZip', :path => '../../node_modules/capacitor-zip'
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
 end
 

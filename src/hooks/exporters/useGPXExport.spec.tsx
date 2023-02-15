@@ -4,6 +4,10 @@ import {v4 as uuidv4} from 'uuid';
 import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
 import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
+import gpxSample_01 from './gpxSample_01.xml';
+import gpxSample_02 from './gpxSample_02.xml';
+import gpxSample_03 from './gpxSample_03.xml';
+import gpxSample_04 from './gpxSample_04.xml';
 
 const scopeId = uuidv4();
 
@@ -20,7 +24,7 @@ const points: ScopePoint[] = [
       name: 'Point 1',
       timestamp: 1673876171254,
       description: 'A visible point',
-      images: [],
+      images: ['image1Point1.jpg', 'image2Point1.jpg' ],
       isVisible: true
     },
     geometry: {
@@ -51,7 +55,7 @@ const track: ScopeTrack = {
     name: 'Track 1',
     timestamp: 1673876115769,
     description: 'A custom description',
-    images: [],
+    images: ['imageTrack1.jpg'],
     isVisible: true
   },
   geometry: {
@@ -73,7 +77,7 @@ const trackWithoutTimestamp: ScopeTrack = {
     name: 'Track withoutTimestamp',
     timestamp: 1673876115769,
     description: 'A custom description',
-    images: [],
+    images: ['imageTrack1.jpg'],
     isVisible: true
   },
   geometry: {
@@ -95,7 +99,7 @@ const trackWithoutTimestampNorElevation: ScopeTrack = {
     name: 'Track without timestamp nor elevation',
     timestamp: 1673876115769,
     description: 'A custom description',
-    images: [],
+    images: ['imageTrack1.jpg'],
     isVisible: true
   },
   geometry: {
@@ -138,40 +142,7 @@ describe('useGPXExport', () => {
     await waitForNextUpdate();
     
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    const expectedGPX = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-            '<gpx creator="fabulator:gpx-builder" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">\n' +
-            '  <metadata>\n' +
-            '    <name>Scope 1</name>\n' +
-            '    <link href="https://www.icgc.cat/ca/"></link>\n' +
-            '  </metadata>\n' +
-            '  <trk>\n' +
-            '    <name>Track 1</name>\n' +
-            '    <desc>A custom description</desc>\n' +
-            '    <trkseg>\n' +
-            '      <trkpt lat="41.609283" lon="1.849509">\n' +
-            '        <ele>142</ele>\n' +
-            '        <time>1970-01-20T09:12:16.045Z</time>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.60926" lon="1.849479">\n' +
-            '        <ele>141</ele>\n' +
-            '        <time>1970-01-20T09:12:16.058Z</time>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609236" lon="1.849474">\n' +
-            '        <ele>141</ele>\n' +
-            '        <time>1970-01-20T09:12:16.070Z</time>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609232" lon="1.849479">\n' +
-            '        <ele>141</ele>\n' +
-            '        <time>1970-01-20T09:12:16.079Z</time>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609233" lon="1.849478">\n' +
-            '        <ele>141</ele>\n' +
-            '        <time>1970-01-20T09:12:16.085Z</time>\n' +
-            '      </trkpt>\n' +
-            '    </trkseg>\n' +
-            '  </trk>\n' +
-            '</gpx>';
+    const expectedGPX = gpxSample_01;
 
     expect(result.current).to.deep.equal(expectedGPX);
 
@@ -204,46 +175,7 @@ describe('useGPXExport', () => {
     await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    const expectedGPX = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-            '<gpx creator="fabulator:gpx-builder" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">\n' +
-            '  <metadata>\n' +
-            '    <name>Scope 1</name>\n' +
-            '    <link href="https://www.icgc.cat/ca/"></link>\n' +
-            '  </metadata>\n' +
-            '  <wpt lat="41.608731" lon="1.849113">\n' +
-            '    <ele>12</ele>\n' +
-            '    <time>2023-01-16T13:36:11.254Z</time>\n' +
-            '    <name>Point 1</name>\n' +
-            '    <desc>A visible point</desc>\n' +
-            '  </wpt>\n' +
-            '  <trk>\n' +
-            '    <name>Track 1</name>\n' +
-            '    <desc>A custom description</desc>\n' +
-            '    <trkseg>\n' +
-            '      <trkpt lat="41.609283" lon="1.849509">\n' +
-            '        <ele>142</ele>\n' +
-            '        <time>1970-01-20T09:12:16.045Z</time>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.60926" lon="1.849479">\n' +
-            '        <ele>141</ele>\n' +
-            '        <time>1970-01-20T09:12:16.058Z</time>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609236" lon="1.849474">\n' +
-            '        <ele>141</ele>\n' +
-            '        <time>1970-01-20T09:12:16.070Z</time>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609232" lon="1.849479">\n' +
-            '        <ele>141</ele>\n' +
-            '        <time>1970-01-20T09:12:16.079Z</time>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609233" lon="1.849478">\n' +
-            '        <ele>141</ele>\n' +
-            '        <time>1970-01-20T09:12:16.085Z</time>\n' +
-            '      </trkpt>\n' +
-            '    </trkseg>\n' +
-            '  </trk>\n' +
-            '</gpx>';
+    const expectedGPX = gpxSample_02;
 
     expect(result.current).to.deep.equal(expectedGPX);
 
@@ -270,35 +202,7 @@ describe('useGPXExport', () => {
     await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    const expectedGPX = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-            '<gpx creator="fabulator:gpx-builder" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">\n' +
-            '  <metadata>\n' +
-            '    <name>Scope 1</name>\n' +
-            '    <link href="https://www.icgc.cat/ca/"></link>\n' +
-            '  </metadata>\n' +
-            '  <trk>\n' +
-            '    <name>Track withoutTimestamp</name>\n' +
-            '    <desc>A custom description</desc>\n' +
-            '    <trkseg>\n' +
-            '      <trkpt lat="41.609283" lon="1.849509">\n' +
-            '        <ele>142</ele>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.60926" lon="1.849479">\n' +
-            '        <ele>141</ele>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609236" lon="1.849474">\n' +
-            '        <ele>141</ele>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609232" lon="1.849479">\n' +
-            '        <ele>141</ele>\n' +
-            '      </trkpt>\n' +
-            '      <trkpt lat="41.609233" lon="1.849478">\n' +
-            '        <ele>141</ele>\n' +
-            '      </trkpt>\n' +
-            '    </trkseg>\n' +
-            '  </trk>\n' +
-            '</gpx>';
+    const expectedGPX = gpxSample_03;
 
     expect(result.current).to.deep.equal(expectedGPX);
 
@@ -325,25 +229,7 @@ describe('useGPXExport', () => {
     await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    const expectedGPX = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-            '<gpx creator="fabulator:gpx-builder" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">\n' +
-            '  <metadata>\n' +
-            '    <name>Scope 1</name>\n' +
-            '    <link href="https://www.icgc.cat/ca/"></link>\n' +
-            '  </metadata>\n' +
-            '  <trk>\n' +
-            '    <name>Track without timestamp nor elevation</name>\n' +
-            '    <desc>A custom description</desc>\n' +
-            '    <trkseg>\n' +
-            '      <trkpt lat="41.609283" lon="1.849509"></trkpt>\n' +
-            '      <trkpt lat="41.60926" lon="1.849479"></trkpt>\n' +
-            '      <trkpt lat="41.609236" lon="1.849474"></trkpt>\n' +
-            '      <trkpt lat="41.609232" lon="1.849479"></trkpt>\n' +
-            '      <trkpt lat="41.609233" lon="1.849478"></trkpt>\n' +
-            '    </trkseg>\n' +
-            '  </trk>\n' +
-            '</gpx>';
+    const expectedGPX = gpxSample_04;
 
     expect(result.current).to.deep.equal(expectedGPX);
 
