@@ -49,7 +49,7 @@ const ScopePoint: FC<ScopePointProps> = ({
     onBackButtonClick={onClose}
     onPointChange={pointChange}
     onGoTo={goTo}
-  /> : <div>Error: the selected point does not exist</div>;
+  /> : null;
 };
 
 export default ScopePoint;

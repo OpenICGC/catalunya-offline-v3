@@ -142,7 +142,6 @@ describe('useGPXExport', () => {
     await waitForNextUpdate();
     
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const expectedGPX = gpxSample_01;
 
     expect(result.current).to.deep.equal(expectedGPX);
@@ -171,12 +170,11 @@ describe('useGPXExport', () => {
 
     act(() => resultTrack.result.current.create(sampleTrack));
     await resultTrack.waitForNextUpdate();
-    
+
     const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope, track.id, true));
     await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const expectedGPX = gpxSample_02;
 
     expect(result.current).to.deep.equal(expectedGPX);
@@ -204,7 +202,6 @@ describe('useGPXExport', () => {
     await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const expectedGPX = gpxSample_03;
 
     expect(result.current).to.deep.equal(expectedGPX);
@@ -232,7 +229,6 @@ describe('useGPXExport', () => {
     await waitForNextUpdate();
 
     // THEN
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     const expectedGPX = gpxSample_04;
 
     expect(result.current).to.deep.equal(expectedGPX);

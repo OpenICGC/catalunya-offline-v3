@@ -240,7 +240,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     }
   </>;
 
-  return <div>Error: the selected scope does not exist</div>;
+  return null;
 };
 
 export default ScopeFeatures;

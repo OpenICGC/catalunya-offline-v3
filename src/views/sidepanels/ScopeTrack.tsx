@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {ScopeTrack, UUID} from '../../types/commonTypes';
 
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
@@ -23,14 +23,13 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   const recordingTrack = useRecordingTrack();
 
   const selectedScope = scopeStore.retrieve(scopeId);
-  const [selectedTrack, setSelectedTrack] = useState(trackStore.retrieve(trackId));
+  const selectedTrack = trackStore.retrieve(trackId);
   const numPoints = pointStore.list().length;
   const numTracks = trackStore.list().length;
 
   const trackChange = (newTrack: ScopeTrack) => {
     if (trackStore.retrieve(newTrack.id)) {
       trackStore.update(newTrack);
-      setSelectedTrack(newTrack);
     }
   };
 
@@ -62,7 +61,7 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     onBackButtonClick={onClose}
     onTrackChange={trackChange}
     onGoTo={goTo}
-  /> : <div>Error: the selected track does not exist</div>;
+  /> : null;
 };
 
 export default ScopeTrack;
