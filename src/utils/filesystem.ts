@@ -1,5 +1,5 @@
 import {Directory, Encoding, Filesystem} from '@capacitor/filesystem';
-import {EXPORT_DIR_NAME, OFFLINE_DATADIR_NAME} from '../config';
+import {EXPORT_DIR_NAME, OFFLINE_DATADIR_NAME, PLATFORM} from '../config';
 import {BaseMap} from '../types/commonTypes';
 import {Zip} from '@awesome-cordova-plugins/zip';
 import {ZipPlugin} from 'capacitor-zip';
@@ -219,7 +219,7 @@ export const generateZip = async (source: string, path: string, fromType: Folder
     await ZipPlugin.zip({
       source: fromDirectory.uri,
       destination: destinationFile.uri,
-      password: ''
+      password: PLATFORM === 'android' ? '' : undefined //en android necesita ser una string vacía, en ios undefined.
     });
 
     return destinationFile.uri;
