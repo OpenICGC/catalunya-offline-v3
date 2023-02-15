@@ -2,6 +2,7 @@ import * as converter from '@tmcw/togeojson';
 import {DOMParser} from 'xmldom';
 import {ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import {GeoJSONImport} from './GeoJSONImport';
+import {Feature, FeatureCollection} from 'geojson';
 
 interface ScopeImportResults {
   points: Array<ScopePoint>,
@@ -11,52 +12,33 @@ interface ScopeImportResults {
 
 export const KmlImport: (data: string) => ScopeImportResults = (data) => {
   const kml = new DOMParser().parseFromString(data, 'utf-8');
-  const kmlFromGpx = converter.kml(kml);
-  const kmlFormatted = {
-    ...kmlFromGpx,
-    features: kmlFromGpx.features.map(feature => {
-      if (feature?.geometry?.type === 'Point') {
-        return {
-          ...feature,
-          properties: {
-            ...feature.properties,
-            description: feature.properties && feature.properties.description && typeof feature.properties.description === 'string' ? feature.properties.description : '',
-            color: feature.properties ? feature.properties['icon-color'] : undefined
-          },
-          geometry: {
-            ...feature.geometry,
-            coordinates: feature.geometry.coordinates
-          }
-        };
-      } else if (feature.geometry?.type === 'LineString') {
-        return {
-          ...feature,
-          properties: {
-            ...feature.properties,
-            description: feature.properties && feature.properties.description && typeof feature.properties.description === 'string' ? feature.properties.description : '',
-            color: feature.properties && feature.properties.stroke
-          },
-          geometry: {
-            ...feature.geometry,
-            coordinates: feature.geometry.coordinates
-          }
-        };
-      } else {
-        return {
-          type: 'Feature',
-          features: []
-        };
-      }
-    })
+  const geoJsonFromConverter = converter.kml(kml);
+  const geoJsonForImporter: FeatureCollection = {
+    ...geoJsonFromConverter,
+    features: geoJsonFromConverter.features
+      .filter(feature => feature.geometry !== null)
+      .map(feature => ({
+        ...feature,
+        properties: {
+          ...feature.properties,
+          color: feature.properties ?
+            (feature?.geometry?.type === 'Point') ?
+              feature.properties['icon-color'] :
+              (feature.geometry?.type === 'LineString') ?
+                feature.properties.stroke :
+                feature.properties.color
+            : undefined
+        }
+      })) as Array<Feature>
   };
 
-  if(kmlFromGpx.features.length === 0) {
+  if(geoJsonFromConverter.features.length === 0) {
     return {
       points: [],
       tracks: [],
       numberOfErrors: 1
     };
   } else {
-    return GeoJSONImport(kmlFormatted);
+    return GeoJSONImport(geoJsonForImporter);
   }
 };
