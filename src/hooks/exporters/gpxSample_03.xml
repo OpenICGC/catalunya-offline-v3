@@ -4,23 +4,25 @@
     <name>Scope 1</name>
     <link href="https://www.icgc.cat/ca/"></link>
   </metadata>
-  <rte>
-    <cmt>A custom description</cmt>
-    <rtept lat="41.609283" lon="1.849509">
-      <ele>142</ele>
-    </rtept>
-    <rtept lat="41.60926" lon="1.849479">
-      <ele>141</ele>
-    </rtept>
-    <rtept lat="41.609236" lon="1.849474">
-      <ele>141</ele>
-    </rtept>
-    <rtept lat="41.609232" lon="1.849479">
-      <ele>141</ele>
-    </rtept>
-    <rtept lat="41.609233" lon="1.849478">
-      <ele>141</ele>
-    </rtept>
+  <trk>
     <name>Track withoutTimestamp</name>
-  </rte>
+    <desc>A custom description</desc>
+    <trkseg>
+      <trkpt lat="41.609283" lon="1.849509">
+        <ele>142</ele>
+      </trkpt>
+      <trkpt lat="41.60926" lon="1.849479">
+        <ele>141</ele>
+      </trkpt>
+      <trkpt lat="41.609236" lon="1.849474">
+        <ele>141</ele>
+      </trkpt>
+      <trkpt lat="41.609232" lon="1.849479">
+        <ele>141</ele>
+      </trkpt>
+      <trkpt lat="41.609233" lon="1.849478">
+        <ele>141</ele>
+      </trkpt>
+    </trkseg>
+  </trk>
 </gpx>

@@ -4,7 +4,7 @@ import sampleGpxTrackFromCatOffline from '../../components/fixtures/sampleGpxTra
 import sampleGpxTrackAndPointFromCatOffline from '../../components/fixtures/sampleGpxTrackAndPointFromCatOffline.xml';
 import sampleGpxFromRutaBike from '../../components/fixtures/sampleGpxFromRutaBike.xml';
 import sampleGpxFromWikiloc from '../../components/fixtures/sampleGpxFromWikiloc.xml';
-import kmlSample_01 from '../../hooks/kmlSample_01.xml';
+import kmlSample_01 from '../../hooks/exporters/kmlSample_01.xml';
 import sampleMultiPolygon from '../../components/fixtures/sampleMultiPolygon.xml';
 
 const expectedImportedTrackFromCatOffline = {
