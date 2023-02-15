@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+   <Document>
+      <name>Track paki estacio :wikiloc.com</name>
+      <Style id="lineStyle">
+         <LineStyle>
+            <color>F03399FF</color>
+            <width>4</width>
+         </LineStyle>
+      </Style>
+      <Style id="waypointStyle">
+         <IconStyle>
+            <Icon>
+               <href>https://sc.wklcdn.com/wikiloc/images/pictograms/ge/wpt.png</href>
+            </Icon>
+         </IconStyle>
+         <BalloonStyle>
+            <text>$[description]</text>
+         </BalloonStyle>
+      </Style>
+      <Folder>
+         <name>Trails</name>
+         <open>true</open>
+         <Folder>
+            <open>false</open>
+            <name>paki estacio</name>
+            <Placemark>
+               <name>paki estacio</name>
+               <Snippet maxLines="0" />
+               <styleUrl>#m21063457</styleUrl>
+               <description><![CDATA[<table width="400" style="color:#666"><tr><td colspan="2" align="left"><a href="https://www.wikiloc.com"><img src="https://sc.wklcdn.com/wikiloc/images/wikiloc.png?v=3.0" alt="Wikiloc"></a></td></tr><tr><td colspan="2"><font style="font-size:14pt;color:#2B60DE"><a href="https://www.wikiloc.com/hiking-trails/paki-estacio-21063457">paki estacio</a></font><br/>near La Floresta Pearson, Catalunya (España) by <a style="color:#2B60DE" href="https://www.wikiloc.com/wikiloc/user.do?id=607096">Carme Burrel</a></td></tr><tr><td width="40"><img src="https://sc.wklcdn.com/wikiloc/images/pictograms/1.png" alt=""/></td><td align="left"><font style="color:black"><b>Walking distance:</b> 0 mi. - 0 km.</font><br/><br/><b>Elevation min:</b> 209 meters <b>max:</b> 219 meters<br/><b>Uphill:</b> 7 meters <b>down:</b> 7 meters<br/><b>Type: </b>One way<br/></td></tr><tr><td colspan="2"> </td></tr><tr><td align="right" colspan="2"><br/><a style="color:#2B60DE"href="https://www.wikiloc.com/wikiloc/upload.do"><b>Upload your trail to wikiloc.com &rarr;</b></a></td></tr></table>]]></description>
+               <Point>
+                  <coordinates>2.069355,41.444691,214.0</coordinates>
+               </Point>
+            </Placemark>
+            <Placemark>
+               <name>Path</name>
+               <styleUrl>#lineStyle</styleUrl>
+               <MultiGeometry>
+                  <LineString>
+                     <coordinates>2.069355,41.444691,214.042 2.069453,41.444753,212.022 2.069559,41.444805,211.014 2.069628,41.444891,211.008 2.069636,41.444987,210.066 </coordinates>
+                  </LineString>
+               </MultiGeometry>
+            </Placemark>
+         </Folder>
+      </Folder>
+      <Style id="n21063457">
+         <Icon>
+            <href>https://sc.wklcdn.com/wikiloc/images/pictograms/ge/1.png</href>
+         </Icon>
+         <BalloonStyle>
+            <text>$[description]</text>
+         </BalloonStyle>
+         <LabelStyle>
+            <scale>0</scale>
+         </LabelStyle>
+      </Style>
+      <Style id="h21063457">
+         <IconStyle>
+            <Icon>
+               <href>https://sc.wklcdn.com/wikiloc/images/pictograms/ge/1.png</href>
+            </Icon>
+         </IconStyle>
+         <BalloonStyle>
+            <text>$[description]</text>
+         </BalloonStyle>
+      </Style>
+      <StyleMap id="m21063457">
+         <Pair>
+            <key>normal</key>
+            <styleUrl>#n21063457</styleUrl>
+         </Pair>
+         <Pair>
+            <key>highlight</key>
+            <styleUrl>#h21063457</styleUrl>
+         </Pair>
+      </StyleMap>
+      <LookAt>
+         <longitude>2.070742</longitude>
+         <latitude>41.4451415</latitude>
+         <range>15000.0</range>
+         <tilt>66.0</tilt>
+         <heading>3.0</heading>
+      </LookAt>
+   </Document>
+</kml>

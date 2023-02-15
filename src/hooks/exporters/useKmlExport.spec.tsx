@@ -168,7 +168,7 @@ describe('useKmlExport', () => {
   const sampleTrackWithoutTimestamp = trackWithoutTimestamp;
   const sampleTrackWithoutTimestampNorElevation = trackWithoutTimestampNorElevation;
 
-  it('useKmlExport should generate a valid KML from scopeId (tracks with lon,lat,ele,timestamp, points with lon,lat,ele)', async () => {
+  it('01useKmlExport should generate a valid KML from scopeId (tracks with lon,lat,ele,timestamp, points with lon,lat,ele)', async () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
@@ -199,7 +199,7 @@ describe('useKmlExport', () => {
     await resultScope.waitForNextUpdate();
   });
 
-  it('useKmlExport should generate a valid KML from scopeId (tracks with lon,lat,ele, points with lon,lat,ele)', async () => {
+  it('02useKmlExport should generate a valid KML from scopeId (tracks with lon,lat,ele, points with lon,lat,ele)', async () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
@@ -230,7 +230,7 @@ describe('useKmlExport', () => {
     await resultScope.waitForNextUpdate();
   });
 
-  it('useKmlExport should generate a valid KML from scopeId (tracks with lon,lat, points with lon,lat,ele)', async () => {
+  it('03useKmlExport should generate a valid KML from scopeId (tracks with lon,lat, points with lon,lat,ele)', async () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
@@ -261,7 +261,7 @@ describe('useKmlExport', () => {
     await resultScope.waitForNextUpdate();
   });
 
-  it('useKmlExport should generate a valid KML from scopeId (points with lon,lat, points with lon,lat)', async () => {
+  it('04useKmlExport should generate a valid KML from scopeId (points with lon,lat, tracks with lon,lat)', async () => {
 
     // WHEN
     const resultScope = renderHook(() => useScopes());
