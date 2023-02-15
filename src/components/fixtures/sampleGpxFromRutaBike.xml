@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="CompeGPS" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <link href="http://www.compegps.com">
+      <text>CompeGPS TEAM, SL</text>
+    </link>
+    <time>2012-06-29T09:54:57Z</time>
+    <bounds maxlat="42.439670" maxlon="3.058080" minlat="42.378370" minlon="3.001310"/>
+  </metadata>
+  <trk>
+    <name>Track 1</name>
+    <desc>A custom description</desc>
+    <trkseg>
+      <trkpt lat="42.403040" lon="3.007210">
+        <ele>180.4</ele>
+        <time>2005-05-27T18:19:11Z</time>
+      </trkpt>
+      <trkpt lat="42.402570" lon="3.007440">
+        <ele>179.8</ele>
+        <time>2005-05-27T18:19:22Z</time>
+      </trkpt>
+      <trkpt lat="42.402460" lon="3.007510">
+        <ele>179.5</ele>
+        <time>2005-05-27T18:19:27Z</time>
+      </trkpt>
+      <trkpt lat="42.402270" lon="3.007570">
+        <ele>176.2</ele>
+        <time>2005-05-27T18:19:33Z</time>
+      </trkpt>
+      <trkpt lat="42.401800" lon="3.007700">
+        <ele>171.3</ele>
+        <time>2005-05-27T18:19:42Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
