@@ -224,7 +224,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     onExportTrack={trackExport}
   />;
 
-  return <div>Error: the selected scope does not exist</div>;
+  return null;
 };
 
 export default ScopeFeatures;
