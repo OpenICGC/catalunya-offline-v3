@@ -11,8 +11,15 @@ const useShare = () => {
     });
   }, []);
 
+  const shareFile = useCallback(async (filePath: string) => {
+    await Share.share({
+      files: [filePath]
+    });
+  }, []);
+
   return {
-    sharePoint
+    sharePoint,
+    shareFile
   };
 };
 
