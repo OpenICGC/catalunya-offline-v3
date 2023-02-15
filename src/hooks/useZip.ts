@@ -54,7 +54,7 @@ export const useZip = (
   const [path, setPath] = useState<string|undefined>(undefined);
 
   const getPhotosPaths = (features: ScopeFeature[]): string[] | undefined  =>
-    features.flatMap(feature => feature.properties.images.map(image => image.replace('file://', '')));
+    features.flatMap(feature => feature.properties.images.map(image => image));
 
   useEffect(() => {
     if (!state && geojson && kml && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
