@@ -17,6 +17,7 @@ export interface ScopeMainProps {
   selectedPoint?: UUID,
   onPointSelected: (scopeId?: UUID) => void,
   selectedTrack?: UUID,
+  onSidePanelVisibility: () => void
   onTrackSelected: (scopeId?: UUID) => void
 }
 
@@ -26,6 +27,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
   selectedPoint,
   onPointSelected,
   selectedTrack,
+  onSidePanelVisibility,
   onTrackSelected
 }) => {
   const {t} = useTranslation();
@@ -108,6 +110,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
       selectedPoint={selectedPoint}
       onPointSelected={onPointSelected}
       selectedTrack={selectedTrack}
+      onSidePanelVisibility={onSidePanelVisibility}
       onTrackSelected={onTrackSelected}
     />;
 };

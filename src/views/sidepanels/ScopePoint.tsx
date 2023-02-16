@@ -10,12 +10,14 @@ export interface ScopePointProps {
   scopeId: UUID,
   pointId: UUID,
   onClose: () => void
+  onSidePanelVisibility: () => void
 }
 
 const ScopePoint: FC<ScopePointProps> = ({
   scopeId,
   pointId,
-  onClose
+  onClose,
+  onSidePanelVisibility
 }) => {
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(scopeId);
@@ -49,6 +51,7 @@ const ScopePoint: FC<ScopePointProps> = ({
     onBackButtonClick={onClose}
     onPointChange={pointChange}
     onGoTo={goTo}
+    onSidePanelVisibility={onSidePanelVisibility}
   /> : null;
 };
 

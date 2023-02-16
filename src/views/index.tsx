@@ -52,6 +52,7 @@ const Index: FC = () => {
         selectedPoint={point}
         onPointSelected={setPoint}
         selectedTrack={track}
+        onSidePanelVisibility={() => setSidePanelOpen(!isSidePanelOpen)}
         onTrackSelected={setTrack}
       />}
     </Stack>
@@ -67,6 +68,12 @@ const Index: FC = () => {
     selectedPointId={point}
     onPointSelected={setPoint}
     selectedTrackId={track}
+    onSidePanelVisibility={
+      () => {
+        setSidePanelOpen(!isSidePanelOpen);
+        setManager('SCOPES');
+      }
+    }
     /*onTrackSelected={setTrack}*/
   />;
 

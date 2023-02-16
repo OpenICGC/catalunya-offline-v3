@@ -50,6 +50,7 @@ export type TrackRecorderProps = {
   onPause: () => void,
   onResume: () => void,
   onStop: () => void
+  onSidePanelVisibility: () => void
 }
 
 const TrackRecorder: FC<TrackRecorderProps> = ({
@@ -59,7 +60,8 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
   elapsedTime,
   onPause,
   onResume,
-  onStop
+  onStop,
+  onSidePanelVisibility
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
@@ -77,11 +79,13 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
       onResume();
       break;
     case RECORDING_STATUS.STOPPED:
+      onSidePanelVisibility();
       onStop();
       setRecordingStatus(RECORDING_STATUS.RECORDING);
       break;
     }
   };
+
 
   const iconActive = {
     [RECORDING_STATUS.STOPPED]: <></>,
