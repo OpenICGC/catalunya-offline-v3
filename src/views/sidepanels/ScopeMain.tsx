@@ -15,9 +15,9 @@ export interface ScopeMainProps {
   selectedScope?: UUID,
   onScopeSelected: (scopeId: UUID) => void,
   selectedPoint?: UUID,
-  onPointSelected: (scopeId?: UUID) => void,
+  onPointSelected: (pointId?: UUID) => void,
   selectedTrack?: UUID,
-  onTrackSelected: (scopeId?: UUID) => void
+  onTrackSelected: (trackId?: UUID) => void
 }
 
 const ScopeMain: FC<ScopeMainProps> = ({

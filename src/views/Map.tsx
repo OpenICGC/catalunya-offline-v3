@@ -22,6 +22,8 @@ import {useTranslation} from 'react-i18next';
 import ScopeSelector from '../components/scope/ScopeSelector';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import TrackRecorder from '../components/map/TrackRecorder';
+import usePointNavigation from '../hooks/usePointNavigation';
+import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
 
 mbtiles(maplibregl);
 
@@ -34,6 +36,13 @@ const sources = {
     }
   },
   'recordingTrack': {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    }
+  },
+  'navigateToPointLine': {
     type: 'geojson',
     data: {
       type: 'FeatureCollection',
@@ -79,6 +88,20 @@ const layers = [{
     'line-width': 4
   }
 }, {
+  id: 'navigateToPointLine',
+  source: 'navigateToPointLine',
+  type: 'line',
+  paint: {
+    'line-color': '#000000',
+    'line-width': 4,
+    'line-opacity': 0.67,
+    'line-dasharray': [2, 2]
+  },
+  layout: {
+    'line-cap': 'round',
+    'line-join': 'round'
+  }
+}, {
   id: 'trackList',
   source: 'trackList',
   type: 'line',
@@ -95,9 +118,10 @@ export type MainContentProps = {
   selectedScopeId?: UUID,
   onScopeSelected: (scopeId: UUID) => void,
   selectedPointId?: UUID,
-  onPointSelected: (scopeId: UUID) => void,
+  onPointSelected: (pointId: UUID) => void,
+  onShowPointDetails: (pointId: UUID) => void,
   selectedTrackId?: UUID,
-  /*onTrackSelected: (pointId: UUID) => void*/
+  /*onTrackSelected: (trackId: UUID) => void*/
 };
 
 const Map: FC<MainContentProps> = ({
@@ -108,6 +132,7 @@ const Map: FC<MainContentProps> = ({
   onScopeSelected,
   selectedPointId,
   onPointSelected,
+  onShowPointDetails,
   selectedTrackId,
   /*onTrackSelected*/
 }) => {
@@ -117,6 +142,8 @@ const Map: FC<MainContentProps> = ({
   const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
   const {t} = useTranslation();
+
+  const pointNavigation = usePointNavigation();
 
   const scopeStore = useScopes();
   const pointStore = useScopePoints(selectedScopeId);
@@ -136,6 +163,9 @@ const Map: FC<MainContentProps> = ({
   const [pointIntent, setPointIntent] = useState<Position>();
 
   const recordingTrack = useRecordingTrack();
+
+  const [isFabOpen, setFabOpen] =useState<boolean>(false);
+  const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -246,6 +276,7 @@ const Map: FC<MainContentProps> = ({
 
   const changeManager = (clicked: Manager) => {
     onManagerChanged(clicked === manager ? undefined : clicked);
+    setFabOpen(false);
   };
 
   const selectPoint = (point: ScopePoint) => {
@@ -374,6 +405,39 @@ const Map: FC<MainContentProps> = ({
     addMapTrackList();
   }, [trackList, mapRef.current]);
 
+  const addNavigateToPoint = () => {
+    if (mapRef?.current) {
+      const map = mapRef.current;
+      const source = (map?.getSource('navigateToPointLine') as maplibregl.GeoJSONSource | undefined);
+      source?.setData({
+        type: 'FeatureCollection',
+        features: pointNavigation.feature ? [pointNavigation.feature] : []
+      });
+    }
+  };
+
+  useEffect(() => {
+    addNavigateToPoint();
+  }, [pointNavigation.feature, mapRef.current]);
+
+  const handleFitBounds = () => {
+    const bbox = pointNavigation.getBounds();
+    bbox && mapRef.current?.fitBounds(bbox, {padding: 100});
+  };
+
+  useEffect(() => {
+    if (pointNavigation.target) {
+      const deferredFitBounds = async () => {
+        await new Promise(r => setTimeout(r, 300));
+        handleFitBounds();
+        setFabOpen(false);
+      };
+      deferredFitBounds().catch(console.error);
+    }
+  }, [pointNavigation.target]);
+
+  const handleShowDetails = () => pointNavigation.target && onShowPointDetails(pointNavigation.target.id);
+
   return <>
     <GeocomponentMap
       {...MAP_PROPS}
@@ -401,6 +465,7 @@ const Map: FC<MainContentProps> = ({
       <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
       {!editingPosition.position && <FabButton
         isLeftHanded={false} isAccessibleSize={false}
+        isFabOpen={isFabOpen} onFabClick={toggleFabOpen}
         bearing={viewport.bearing} pitch={viewport.pitch}
         locationStatus={locationStatus}
         onOrientationClick={handleOrientationClick}
@@ -430,6 +495,15 @@ const Map: FC<MainContentProps> = ({
       scopes={scopeStore.list()}
       onScopeSelected={handleScopeSelected}
       onCancel={handleScopeSelectionCancelled}
+    />}
+    {pointNavigation.target && <PointNavigationBottomSheet
+      name={pointNavigation.target.name}
+      color={pointNavigation.target.color}
+      bearing={pointNavigation.feature?.properties.bearing || 0}
+      distance={pointNavigation.feature?.properties.distance || 0}
+      onStop={pointNavigation.stop}
+      onFitBounds={handleFitBounds}
+      onShowDetails={handleShowDetails}
     />}
   </>;
 };

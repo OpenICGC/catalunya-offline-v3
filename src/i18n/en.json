@@ -55,7 +55,7 @@
   "noScopeAlert": "Choose the point's scope",
   "point": "Point",
   "properties": {
-    "course": "Course",
+    "bearing": "Bearing",
     "date": "Date",
     "description": "Description",
     "detailsTrack": "Route details",

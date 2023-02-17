@@ -11,6 +11,7 @@ import Stack from '@mui/material/Stack';
 import useMapStyle from '../hooks/useMapStyle';
 import useEditingPosition from '../hooks/useEditingPosition';
 import useRecordingTrack from '../hooks/useRecordingTrack';
+import usePointNavigation from '../hooks/usePointNavigation';
 
 const stackSx = {
   height: '100%',
@@ -30,10 +31,11 @@ const Index: FC = () => {
 
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
+  const pointNavigatingTo = usePointNavigation().target;
 
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);
-    setManager(undefined);
+    //setManager(undefined);
   };
 
   useEffect(() => {
@@ -47,6 +49,15 @@ const Index: FC = () => {
   useEffect(() => {
     setSidePanelOpen(!isRecordingTrack); // Closes panel when recording starts, and opens it when recording stops.
   }, [isRecordingTrack]);
+
+  useEffect(() => {
+    pointNavigatingTo && setSidePanelOpen(false); // Closes panel when target point changes.
+  }, [pointNavigatingTo?.id]);
+
+  const handleShowPointDetails = (pointId: UUID) => {
+    setPoint(pointId);
+    setSidePanelOpen(true);
+  };
 
   const sidePanelContent = manager
     ? <Stack sx={stackSx}>
@@ -76,6 +87,7 @@ const Index: FC = () => {
     onScopeSelected={setScope}
     selectedPointId={point}
     onPointSelected={setPoint}
+    onShowPointDetails={handleShowPointDetails}
     selectedTrackId={track}
     /*onTrackSelected={setTrack}*/
   />;

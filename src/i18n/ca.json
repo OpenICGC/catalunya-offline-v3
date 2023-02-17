@@ -55,7 +55,7 @@
   "noScopeAlert": "Trieu un àmbit per al punt",
   "point": "Punt",
   "properties": {
-    "course": "Rumb",
+    "bearing": "Rumb",
     "date": "Data",
     "description": "Descripció",
     "detailsTrack": "Detalls de la ruta",

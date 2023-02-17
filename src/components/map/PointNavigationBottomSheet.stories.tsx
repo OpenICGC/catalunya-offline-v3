@@ -8,7 +8,7 @@ export default {
   component: PointNavigationBottomSheet,
   argTypes: {
     color: {control: 'color'},
-    course: {
+    bearing: {
       control: {
         type: 'range',
         min: 0,
@@ -25,6 +25,6 @@ export const Default = Template.bind({});
 Default.args = {
   name: 'Point 01',
   color: '#973572',
-  course: 73.5,
+  bearing: 73.5,
   distance: 120
 };
