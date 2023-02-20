@@ -8,7 +8,7 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import ShareIcon from '@mui/icons-material/Share';
 import FolderIcon from '@mui/icons-material/Folder';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
@@ -87,7 +87,7 @@ const MainPanel: FC<MainPanelProps> = ({
     }
   }, [contextualMenu]);
 
-  const actionIcons = useMemo(() => ([{id: 'export', activeIcon: <FileUploadIcon/>}]), []);
+  const actionIcons = useMemo(() => ([{id: 'export', activeIcon: <ShareIcon/>}]), []);
 
   return <>
     <Header
