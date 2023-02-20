@@ -13,9 +13,6 @@ const config: CapacitorConfig = {
   server: {
     errorPath: 'unsupported.html',
     ...remoteDebug
-  },
-  ios: {
-    contentInset: 'always'
   }
 };
 
