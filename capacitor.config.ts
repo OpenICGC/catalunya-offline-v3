@@ -13,6 +13,9 @@ const config: CapacitorConfig = {
   server: {
     errorPath: 'unsupported.html',
     ...remoteDebug
+  },
+  ios: {
+    contentInset: 'always' //https://forum.ionicframework.com/t/ios-notch-safe-area-inconsistent-behavior/203053/3
   }
 };
 
