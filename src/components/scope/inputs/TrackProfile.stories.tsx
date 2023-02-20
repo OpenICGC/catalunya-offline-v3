@@ -65,6 +65,15 @@ EmptyCoords.args = {
   }
 };
 
+export const ZeroHeightAllPoints = Template.bind({});
+ZeroHeightAllPoints.args = {
+  ...Default.args,
+  geometry: {
+    type: 'LineString',
+    coordinates: [[ 1.849509, 41.609283, 0 ], [ 1.849479, 41.60926, 0 ]],
+  }
+};
+
 export const Error_NullGeometry = Template.bind({});
 Error_NullGeometry.args = {
   ...Default.args,
