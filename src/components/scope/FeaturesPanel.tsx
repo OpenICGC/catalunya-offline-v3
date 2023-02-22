@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
 import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
@@ -157,8 +156,8 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       },
       {
         id: 'export',
-        label: t('actions.export'),
-        icon: <FileUploadIcon/>,
+        label: t('actions.share'),
+        icon: <ShareIcon/>,
         callbackProp: onExportTrack
       }
     ]
