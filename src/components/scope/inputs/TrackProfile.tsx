@@ -48,7 +48,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
   //VALIDATORS
   const isLongitudeValid = geometry?.coordinates.some(coord => (coord[0] >= -180 && coord[0] <= 180));
   const isLatitudeValid = geometry?.coordinates.some(coord => (coord[1] >= -90 && coord[1] <= 90));
-  const isHeightValid = geometry?.coordinates.some(coord => coord.length >= 3);
+  const isHeightValid = geometry?.coordinates.some(coord => coord.length >= 3) && !geometry?.coordinates.every(coord => coord[2] === 0);
   const isTrackValid = geometry && isHeightValid && isLongitudeValid && isLatitudeValid;
   {
     !isTrackValid && console.warn(t('trackAlert.noTrack'));

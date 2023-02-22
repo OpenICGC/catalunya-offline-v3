@@ -9,9 +9,11 @@ import {DRAWER_WIDTH} from '../../config';
 import GeoJSON from 'geojson';
 import sample from '../fixtures/sampleLineString.geo.json';
 import sampleWithoutHeight from '../fixtures/sampleLineStringWithoutHeight.geo.json';
+import sampleWithZeroHeight from '../fixtures/sampleLineStringWithZeroHeight.geo.json';
 import sampleWithoutTimestamp from '../fixtures/sampleLineStringWithoutTimestamp.geo.json';
 const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
 const sampleGeometryWithoutHeight: GeoJSON.LineString = sampleWithoutHeight as GeoJSON.LineString;
+const sampleGeometryWithZeroHeight: GeoJSON.LineString = sampleWithZeroHeight as GeoJSON.LineString;
 const sampleGeomatryWithoutTimestamp: GeoJSON.LineString = sampleWithoutTimestamp as GeoJSON.LineString;
 
 export default {
@@ -109,6 +111,24 @@ DeviceWithoutHeight.args = {
       isVisible: true
     },
     geometry: sampleGeometryWithoutHeight
+  },
+};
+
+export const DeviceWithoutZeroHeight = DeviceTemplate.bind({});
+DeviceWithoutZeroHeight.args = {
+  ...Default.args,
+  initialTrack: {
+    type: 'Feature',
+    id: uuid(),
+    properties: {
+      name: 'Mi traza 15',
+      timestamp: Date.now(),
+      description: 'Excursión con amigos de la infancia',
+      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
+      color: '#973572',
+      isVisible: true
+    },
+    geometry: sampleGeometryWithZeroHeight
   },
 };
 
