@@ -83,7 +83,6 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
     }
   };
 
-
   const iconActive = {
     [RECORDING_STATUS.STOPPED]: <></>,
     [RECORDING_STATUS.RECORDING]: <RecordingIcon/>,

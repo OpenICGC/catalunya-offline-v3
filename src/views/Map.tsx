@@ -108,7 +108,7 @@ const Map: FC<MainContentProps> = ({
   onScopeSelected,
   selectedPointId,
   onPointSelected,
-  selectedTrackId
+  selectedTrackId,
   /*onTrackSelected*/
 }) => {
   const mapRef = useRef<maplibregl.Map>();

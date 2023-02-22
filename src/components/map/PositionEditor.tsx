@@ -23,7 +23,7 @@ export type PositionEditorProps = {
   name?: string,
   color?: HEXColor,
   onAccept: () => void,
-  onCancel: () => void
+  onCancel: () => void,
 }
 
 const PositionEditor: FC<PositionEditorProps> = ({
@@ -35,12 +35,8 @@ const PositionEditor: FC<PositionEditorProps> = ({
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const handleAccept = () => {
-    onAccept();
-  };
-  const handleCancel = () => {
-    onCancel();
-  };
+  const handleAccept = () => onAccept();
+  const handleCancel = () => onCancel();
 
   const crosshairSize = 80;
 
