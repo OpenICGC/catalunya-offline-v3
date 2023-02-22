@@ -101,7 +101,6 @@ export type PointPanelProps = {
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void
-    onSidePanelVisibility: () => void
 };
 
 const PointPanel: FC<PointPanelProps> = ({
@@ -111,8 +110,7 @@ const PointPanel: FC<PointPanelProps> = ({
   numTracks,
   onBackButtonClick,
   onPointChange,
-  onGoTo,
-  onSidePanelVisibility
+  onGoTo
 }) => {
   const {t} = useTranslation();
 
@@ -250,7 +248,6 @@ const PointPanel: FC<PointPanelProps> = ({
   };
 
   const startEditingPosition = () => {
-    onSidePanelVisibility();
     editingPosition.start({
       initialPosition: point?.geometry.coordinates,
       onAccept: setPosition,

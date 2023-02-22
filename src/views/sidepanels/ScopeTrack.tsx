@@ -8,15 +8,13 @@ import useRecordingTrack from '../../hooks/useRecordingTrack';
 export interface ScopeTrackProps {
   scopeId: UUID,
   trackId: UUID,
-  onClose: () => void,
-  onSidePanelVisibility: () => void,
+  onClose: () => void
 }
 
 const ScopeTrack: FC<ScopeTrackProps> = ({
   scopeId, 
   trackId, 
-  onClose,
-  onSidePanelVisibility
+  onClose
 }) => {
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(scopeId);
@@ -35,10 +33,6 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     }
   };
 
-  const handleRecordTrack = () => {
-    onSidePanelVisibility();
-    recordTrack();
-  };
   const recordTrack = () => {
     recordingTrack.start({
       onStop: (coordinates) => {
@@ -63,7 +57,7 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     initialTrack={selectedTrack}
     numPoints={numPoints}
     numTracks={numTracks}
-    onRecordStart={handleRecordTrack}
+    onRecordStart={recordTrack}
     onBackButtonClick={onClose}
     onTrackChange={trackChange}
     onGoTo={goTo}

@@ -96,7 +96,6 @@ export type MainContentProps = {
   onScopeSelected: (scopeId: UUID) => void,
   selectedPointId?: UUID,
   onPointSelected: (scopeId: UUID) => void,
-  onSidePanelVisibility: () => void,
   selectedTrackId?: UUID,
   /*onTrackSelected: (pointId: UUID) => void*/
 };
@@ -109,8 +108,7 @@ const Map: FC<MainContentProps> = ({
   onScopeSelected,
   selectedPointId,
   onPointSelected,
-  selectedTrackId,
-  onSidePanelVisibility
+  selectedTrackId
   /*onTrackSelected*/
 }) => {
   const mapRef = useRef<maplibregl.Map>();
@@ -416,7 +414,6 @@ const Map: FC<MainContentProps> = ({
       color={pointColor}
       onAccept={editingPosition.accept}
       onCancel={editingPosition.cancel}
-      onSidePanelVisibility={onSidePanelVisibility}
     />}
     {recordingTrack.isRecording && <TrackRecorder
       isAccessibleSize={false}
@@ -426,7 +423,6 @@ const Map: FC<MainContentProps> = ({
       onPause={recordingTrack.pause}
       onResume={recordingTrack.resume}
       onStop={recordingTrack.stop}
-      onSidePanelVisibility={onSidePanelVisibility}
     />}
     {!!pointIntent && <ScopeSelector
       isAccesibleSize={false}

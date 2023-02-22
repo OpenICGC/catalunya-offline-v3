@@ -20,7 +20,6 @@ type ScopeFeaturesProps = {
   selectedPoint?: UUID,
   onPointSelected: (scopeId?: UUID) => void,
   selectedTrack?: UUID,
-  onSidePanelVisibility: () => void,
   onTrackSelected: (scopeId?: UUID) => void
 };
 
@@ -30,7 +29,6 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   selectedPoint,
   onPointSelected,
   selectedTrack,
-  onSidePanelVisibility,
   onTrackSelected
 }) => {
   const {t} = useTranslation();
@@ -73,11 +71,6 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         onPointSelected(id);
       }
     });
-  };
-
-  const handlePointAdd = () => {
-    onSidePanelVisibility();
-    pointAdd();
   };
 
   const pointColorChange = (pointId: UUID, newColor: HEXColor) => {
@@ -203,14 +196,12 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
     scopeId={scopeId}
     trackId={selectedTrack}
     onClose={unselectTrack}
-    onSidePanelVisibility={onSidePanelVisibility}
   />;
 
   if (selectedPoint) return <ScopePoint
     scopeId={scopeId}
     pointId={selectedPoint}
     onClose={unselectPoint}
-    onSidePanelVisibility={onSidePanelVisibility}
   />;
 
   if (selectedScope) return <>
@@ -221,7 +212,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
       onBackButtonClick={onClose}
 
       onSelectPoint={onPointSelected}
-      onAddPoint={handlePointAdd}
+      onAddPoint={pointAdd}
       onColorChangePoint={pointColorChange}
       onNameChangePoint={pointRename}
       onToggleVisibilityPoint={pointToggleVisibility}
