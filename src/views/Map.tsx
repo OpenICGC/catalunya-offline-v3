@@ -395,6 +395,7 @@ const Map: FC<MainContentProps> = ({
       onTouchCancel={clearLongTouchTimer}
       onDblClick={handleDoubleClick}
       doubleClickZoom={false}
+      attributionControl={false}
     >
       <LocationMarker geolocation={geolocation} heading={heading}/>
       <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
