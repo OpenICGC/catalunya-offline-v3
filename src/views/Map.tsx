@@ -8,7 +8,7 @@ import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
 import FabButton, {LOCATION_STATUS} from '../components/buttons/FabButton';
 import {mbtiles} from '../utils/mbtiles';
 import useCompass from '../hooks/useCompass';
-import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM, SM_BREAKPOINT} from '../config';
+import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import PositionEditor from '../components/map/PositionEditor';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
@@ -22,7 +22,6 @@ import {useTranslation} from 'react-i18next';
 import ScopeSelector from '../components/scope/ScopeSelector';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import TrackRecorder from '../components/map/TrackRecorder';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 mbtiles(maplibregl);
 
@@ -112,7 +111,6 @@ const Map: FC<MainContentProps> = ({
   selectedTrackId,
   /*onTrackSelected*/
 }) => {
-  const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
   const mapRef = useRef<maplibregl.Map>();
   const {viewport, setViewport} = useViewport();
   const {geolocation, error: geolocationError} = useGeolocation();
@@ -397,7 +395,7 @@ const Map: FC<MainContentProps> = ({
       onTouchCancel={clearLongTouchTimer}
       onDblClick={handleDoubleClick}
       doubleClickZoom={false}
-      attributionControl={widescreen}
+      attributionControl={false}
     >
       <LocationMarker geolocation={geolocation} heading={heading}/>
       <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
