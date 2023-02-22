@@ -3,14 +3,14 @@ import React, {FC, useEffect, useState} from 'react';
 import Layout from '../components/Layout';
 import Map from './Map';
 
-import {INITIAL_MANAGER, SM_BREAKPOINT} from '../config';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import {Manager, UUID} from '../types/commonTypes';
 import Layers from './sidepanels/Layers';
 import BaseMaps from './sidepanels/BaseMaps';
 import ScopeMain from './sidepanels/ScopeMain';
 import Stack from '@mui/material/Stack';
 import useMapStyle from '../hooks/useMapStyle';
+import useEditingPosition from '../hooks/useEditingPosition';
+import useRecordingTrack from '../hooks/useRecordingTrack';
 
 const stackSx = {
   height: '100%',
@@ -20,14 +20,16 @@ const stackSx = {
 };
 
 const Index: FC = () => {
-  const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
-  const [isSidePanelOpen, setSidePanelOpen] = useState(widescreen);
+  const [isSidePanelOpen, setSidePanelOpen] = useState(false);
 
   const {baseMapId, mapStyle, setBaseMapId, StyleOfflineDownloaderComponent} = useMapStyle();
-  const [manager, setManager] = useState<Manager>(widescreen ? INITIAL_MANAGER : undefined);
+  const [manager, setManager] = useState<Manager>(undefined);
   const [scope, setScope] = useState<UUID>();
   const [point, setPoint] = useState<UUID>();
   const [track, setTrack] = useState<UUID>();
+
+  const isEditingPosition = !!useEditingPosition().position;
+  const isRecordingTrack = useRecordingTrack().isRecording;
 
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);
@@ -37,6 +39,14 @@ const Index: FC = () => {
   useEffect(() => {
     setSidePanelOpen(!!manager);
   }, [manager]);
+
+  useEffect(() => {
+    setSidePanelOpen(!isEditingPosition); // Closes panel when editing starts, and opens it when editing stops.
+  }, [isEditingPosition]);
+
+  useEffect(() => {
+    setSidePanelOpen(!isRecordingTrack); // Closes panel when recording starts, and opens it when recording stops.
+  }, [isRecordingTrack]);
 
   const sidePanelContent = manager
     ? <Stack sx={stackSx}>
@@ -55,7 +65,7 @@ const Index: FC = () => {
         onTrackSelected={setTrack}
       />}
     </Stack>
-    : <></>
+    : null
   ;
 
   const mainContent = <Map

@@ -3,9 +3,6 @@ import {ViewportType} from './hooks/useViewport';
 import {Capacitor} from '@capacitor/core';
 
 export const DRAWER_WIDTH = 270;
-export const SM_BREAKPOINT = 850;
-
-export const INITIAL_MANAGER = 'SCOPES';
 
 export const INITIAL_VIEWPORT: ViewportType = {
   latitude: 42.1094,

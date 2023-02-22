@@ -1,14 +1,12 @@
 import React, {FC, ReactNode} from 'react';
 
 import styled from '@mui/styles/styled';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 
 import SidePanel from '@geomatico/geocomponents/SidePanel';
 
 import {
   DRAWER_WIDTH,
-  SM_BREAKPOINT,
 } from '../config';
 
 const Main = styled(Box)({
@@ -21,8 +19,10 @@ const Main = styled(Box)({
   left: 0
 }) as React.ElementType;
 
-const sidePanelSx = {
+const sidePanelSx = (isOpen: boolean) => ({
   '& .MuiDrawer-paper': {
+    transform: `translateX(${isOpen ? -DRAWER_WIDTH : 0}px)`,
+    transition: 'transform 0.1s',
     p: 0,
     top: 0,
     height: '100%',
@@ -32,7 +32,7 @@ const sidePanelSx = {
     top: 0,
     height: '100%',
   }
-};
+});
 
 export type LayoutProps = {
   mainContent: ReactNode,
@@ -42,22 +42,18 @@ export type LayoutProps = {
 };
 
 const Layout: FC<LayoutProps> = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
-  const widescreen = useMediaQuery(`@media (min-width:${SM_BREAKPOINT}px)`, {noSsr: true});
-
   return <>
-    {sidePanelContent && isSidePanelOpen &&
-      <SidePanel
-        sx={sidePanelSx}
-        drawerWidth={DRAWER_WIDTH + 'px'}
-        anchor="left"
-        isOpen={isSidePanelOpen}
-        onClose={onToggleSidePanel}
-        widescreen={widescreen}
-      >
-        {sidePanelContent}
-      </SidePanel>
-    }
-    <Main widescreen={widescreen.toString()} isleftdraweropen={(sidePanelContent && isSidePanelOpen)?.toString()}>
+    <SidePanel
+      sx={sidePanelSx(!!sidePanelContent && isSidePanelOpen)}
+      drawerWidth={DRAWER_WIDTH + 'px'}
+      anchor="left"
+      isOpen={!!sidePanelContent && isSidePanelOpen}
+      onClose={onToggleSidePanel}
+      widescreen={false}
+    >
+      {sidePanelContent}
+    </SidePanel>
+    <Main widescreen={false} isleftdraweropen={(!!sidePanelContent && isSidePanelOpen).toString()}>
       {mainContent}
     </Main>
   </>;
