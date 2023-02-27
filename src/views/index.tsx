@@ -53,8 +53,12 @@ const Index: FC = () => {
       {manager === 'LAYERS' && <Layers
       />}
       {manager === 'BASEMAPS' && <BaseMaps
+        isAccessibleSize={false}
+        isLeftHanded={false}
         baseMapId={baseMapId}
         onMapStyleChanged={setBaseMapId}
+        onMapStyleDeleted={() => console.log('Unimplemented')}//TODO
+        onMapStyleAdded={() => console.log('Unimplemented')}//TODO
       />}
       {manager === 'SCOPES' && <ScopeMain
         selectedScope={scope}

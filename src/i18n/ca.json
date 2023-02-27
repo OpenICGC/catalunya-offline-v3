@@ -19,7 +19,10 @@
     "sharing": "Compartint",
     "stopped": "Finalizat"
   },
-  "baseMapManager": "Mapes Base",
+  "baseMapManager": {
+    "title": "Mapes Base",
+    "userStyles": "Meus mapes base"
+  },
   "downloadingAlert": {
     "cancel": "S'ha cancel·lat la descàrrega",
     "content_01": "Per poder treballar en zones amb mala cobertura, és necessari descarregar-se les dades del Mapa topogràfic de Catalunya 1:25 000.",

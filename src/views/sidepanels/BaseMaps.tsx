@@ -1,42 +1,69 @@
 import React, {FC, useMemo} from 'react';
 
-import useTheme from '@mui/material/styles/useTheme';
+//MUI
+import Box from '@mui/material/Box';
+
+//MUI-ICONS
 import MapIcon from '@mui/icons-material/Map';
 
-import BaseMapList from '@geomatico/geocomponents/BaseMapList';
+//GEOCOMPONETS
+import BaseMapList from '../../components/common/BaseMapList';
 
+//CATOFFLINE
+import AddBaseMap from '../../components/icons/AddBaseMap';
+import AddButton from '../../components/buttons/AddButton';
 import Header from '../../components/common/Header';
+
+//UTILS
 import {useTranslation} from 'react-i18next';
+import useTheme from '@mui/material/styles/useTheme';
+import {styled} from '@mui/material/styles';
 import {BASEMAPS} from '../../config';
 
 export type BaseMapsProps = {
+  isAccessibleSize: boolean,
+  isLeftHanded: boolean,
   baseMapId: string,
   onMapStyleChanged: (newStyle: string) => void
+  onMapStyleDeleted: (newStyle: string) => void
+  onMapStyleAdded: () => void
 };
 
-const BaseMaps: FC<BaseMapsProps> = ({baseMapId, onMapStyleChanged}) => {
-  const {t, i18n} = useTranslation();
+const boxSx = {width: '100%', height: 0, pt: 5, pb: 1};
+const BaseMaps: FC<BaseMapsProps> = ({isAccessibleSize, isLeftHanded, baseMapId, onMapStyleChanged, onMapStyleDeleted, onMapStyleAdded}) => {
+  const {t} = useTranslation();
   const theme = useTheme();
-  const basemaps = useMemo(() =>
-    BASEMAPS.map((basemap) => ({
-      ...basemap,
-      label: basemap.labels[i18n.language.split('-')[0]]
-    }))
-  , []);
 
+  const ScrollableContent = useMemo(() => styled(Box)({
+    overflowY: 'auto',
+    padding: '0px',
+    marginBottom: isAccessibleSize ? '72px' : '64px'
+  }), [isAccessibleSize]);
+  
   return <>
     <Header
       startIcon={<MapIcon/>}
-      name={t('baseMapManager')}
+      name={t('baseMapManager.title')}
       color={`#${theme.palette.secondary.main}`}
     />
-
-    <BaseMapList
-      styles={basemaps}
-      selectedStyleId={baseMapId}
-      onStyleChange={onMapStyleChanged}
-      variant="list"
-    />
+    <ScrollableContent id='scrollable-baseMapList'>
+      <BaseMapList
+        coreStyles={BASEMAPS}
+        userStyles={undefined}//TODO
+        selectedStyleId={baseMapId}
+        onStyleChange={onMapStyleChanged}
+        onStyleDelete={onMapStyleDeleted}
+      />
+    </ScrollableContent>
+    <Box sx={boxSx}>
+      <AddButton
+        isAccessibleSize={isAccessibleSize}
+        isLeftHanded={isLeftHanded}
+        onClick={onMapStyleAdded}
+      >
+        <AddBaseMap/>
+      </AddButton>
+    </Box>
   </>;
 };
 

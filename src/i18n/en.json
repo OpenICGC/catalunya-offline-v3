@@ -19,7 +19,10 @@
     "sharing": "Sharing",
     "stopped": "Stopped"
   },
-  "baseMapManager": "Base Maps",
+  "baseMapManager": {
+    "title": "Base Maps",
+    "userStyles": "My base maps"
+  },
   "downloadingAlert": {
     "cancel": "Download has been canceled",
     "content_01": "Data downloading of the Topographic Map of Catalonia is needed to be able to work in areas with poor coverage.",
