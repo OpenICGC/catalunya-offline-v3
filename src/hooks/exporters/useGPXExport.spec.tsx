@@ -138,7 +138,7 @@ describe('useGPXExport', () => {
     act(() => resultTrack.result.current.create(sampleTrack));
     await resultTrack.waitForNextUpdate();
     
-    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope, track.id));
+    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope.id, track.id));
     await waitForNextUpdate();
     
     // THEN
@@ -171,7 +171,7 @@ describe('useGPXExport', () => {
     act(() => resultTrack.result.current.create(sampleTrack));
     await resultTrack.waitForNextUpdate();
 
-    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope, track.id, true));
+    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope.id, track.id, true));
     await waitForNextUpdate();
 
     // THEN
@@ -198,7 +198,7 @@ describe('useGPXExport', () => {
     act(() => resultTrackWithoutTimestamp.result.current.create(sampleTrackWithoutTimestamp));
     await resultTrackWithoutTimestamp.waitForNextUpdate();
 
-    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope, track.id));
+    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope.id, track.id));
     await waitForNextUpdate();
 
     // THEN
@@ -225,7 +225,7 @@ describe('useGPXExport', () => {
     act(() => resultTrackWithoutTimestampNorElevation.result.current.create(sampleTrackWithoutTimestampNorElevation));
     await resultTrackWithoutTimestampNorElevation.waitForNextUpdate();
 
-    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope, track.id));
+    const { result, waitForNextUpdate } = renderHook(() => useGPXExport(scope.id, track.id));
     await waitForNextUpdate();
 
     // THEN
