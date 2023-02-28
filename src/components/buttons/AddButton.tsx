@@ -12,7 +12,7 @@ export type AddButtonProps = {
     isAccessibleSize: boolean,
     isLeftHanded: boolean,
     onClick: () => void,
-    sx: SxProps
+    sx?: SxProps<Theme>
 }
 
 const AddButton: FC<AddButtonProps> = ({
@@ -30,7 +30,7 @@ const AddButton: FC<AddButtonProps> = ({
 
   const handleClick = () => onClick();
 
-  const fabSx = {
+  const fabSx: SxProps<Theme> = {
     width: fabSize,
     height: fabSize,
     bgcolor: fabColor,
