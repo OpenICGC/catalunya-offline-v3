@@ -12,7 +12,7 @@ export type AddButtonProps = {
     isAccessibleSize: boolean,
     isLeftHanded: boolean,
     onClick: () => void,
-  sx: SxProps
+    sx: SxProps
 }
 
 const AddButton: FC<AddButtonProps> = ({
