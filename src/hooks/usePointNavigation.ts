@@ -4,7 +4,7 @@ import {singletonHook} from 'react-singleton-hook';
 import {Scope, ScopePoint, UUID} from '../types/commonTypes';
 import useGeolocation from './useGeolocation';
 import {useScopePoints, useScopes} from './useStoredCollections';
-import navigateToPointFeature from '../utils/bearingAndDistance';
+import navigateToPointFeature from '../utils/navigateToPointFeature';
 
 type startFn = (scopeId: UUID, scopePointId: UUID) => void;
 
