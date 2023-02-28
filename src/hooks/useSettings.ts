@@ -22,7 +22,13 @@ const useSettingsImpl = () => {
 };
 
 const trivialImpl = {
-  ...DEFAULT_SETTINGS
+  ...DEFAULT_SETTINGS,
+  setGpsPositionColor: () => undefined,
+  setTrackTolerance: () => undefined,
+  setLeftHanded: () => undefined,
+  setButtonSize: () => undefined,
+  setColorPalette: () => undefined,
+  setLanguage: () => undefined
 };
 
 export const useSettings = singletonHook(trivialImpl, useSettingsImpl);
