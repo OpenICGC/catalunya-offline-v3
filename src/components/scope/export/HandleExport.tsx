@@ -4,6 +4,7 @@ import ShareDialog, {FEATURE_SHARED, SHARE_FORMAT} from '../../common/ShareDialo
 import HandleExportCompressed from './HandleExportCompressed';
 import useShare from '../../../hooks/useShare';
 import ProgressDialog from '../../common/ProgressDialog';
+import HandleExportGpx from './HandleExportGpx';
 
 
 export type HandleExportProps = {
@@ -43,8 +44,11 @@ const HandleExport: FC<HandleExportProps> = ({
   
   const ExportLogicComponent = useMemo(() => {
     if (state) {
-      if (state.format === SHARE_FORMAT.GPX) {
-        return 'Unimplemented';
+      if (state.format === SHARE_FORMAT.GPX && trackId) {
+        return <HandleExportGpx
+          scopeId={scopeId}
+          trackId={trackId}
+          onFileReady={setFilePath} />;
       } else {
         return <HandleExportCompressed 
           type={state.format}
