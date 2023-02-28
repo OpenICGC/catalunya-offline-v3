@@ -28,7 +28,8 @@ export const BASEMAPS: BaseMaps = [{
   },
   thumbnail: 'images/mtc25m.png',
   onlineStyle: 'mapstyles/mtc25m-online.json',
-  offlineAssets: 'https://cdn.geomatico.es/datasets/mtc25m/assets.json'
+  offlineAssets: 'https://cdn.geomatico.es/datasets/mtc25m/assets.json',
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
 },{
   id: 'contextmaps',
   labels: {
@@ -37,7 +38,8 @@ export const BASEMAPS: BaseMaps = [{
     es: 'ContextMaps'
   },
   thumbnail: 'https://visors.icgc.cat/contextmaps/imatges_estil/icgc_mapa_estandard.png',
-  onlineStyle: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json'
+  onlineStyle: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json',
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
 },{
   id: 'bt5m',
   labels: {
@@ -46,7 +48,8 @@ export const BASEMAPS: BaseMaps = [{
     es: 'bt5m Completo'
   },
   thumbnail: 'https://betaportal.icgc.cat/wordpress/wp-content/uploads/2017/03/bt5mnicetopo-150x150.png',
-  onlineStyle: 'mapstyles/bt5m-nice-alti.json'
+  onlineStyle: 'mapstyles/bt5m-nice-alti.json',
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
 },{
   id: 'galicia-osmbright',
   labels: {
@@ -56,7 +59,8 @@ export const BASEMAPS: BaseMaps = [{
   },
   thumbnail: 'https://tileserver.geomatico.es/styles/osm-bright/7/63/48.png',
   onlineStyle: 'https://tileserver.geomatico.es/styles/osm-bright/style.json',
-  offlineAssets: 'https://cdn.geomatico.es/datasets/galicia/assets.json'
+  offlineAssets: 'https://cdn.geomatico.es/datasets/galicia/assets.json',
+  attribution: 'OpenStreetMap'
 },{
   id: 'madrid-osmbright',
   labels: {
@@ -66,7 +70,8 @@ export const BASEMAPS: BaseMaps = [{
   },
   thumbnail: 'https://tileserver.geomatico.es/styles/osm-bright/7/63/48.png',
   onlineStyle: 'https://tileserver.geomatico.es/styles/osm-bright/style.json',
-  offlineAssets: 'https://cdn.geomatico.es/datasets/madrid/assets.json'
+  offlineAssets: 'https://cdn.geomatico.es/datasets/madrid/assets.json',
+  attribution: 'OpenStreetMap'
 }];
 
 export const INITIAL_BASEMAP = BASEMAPS[0];

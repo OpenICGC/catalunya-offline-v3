@@ -11,10 +11,28 @@ export type BaseMap = {
   },
   thumbnail: string,
   onlineStyle: string | StyleSpecification,
-  offlineAssets?: string
+  offlineAssets?: string,
+  attribution?: string
 }
 
 export type BaseMaps = Array<BaseMap>
+
+export type Style = {
+  id: string
+  labels: {
+    [index: string]: string;
+    ca: string;
+    en: string;
+    es: string;
+  },
+  label: string,
+  thumbnail: string,
+  onlineStyle: string | StyleSpecification,
+  offlineAssets?: string,
+  attribution?: string
+}
+
+export type Styles = Array<Style>
 
 export type Manager = 'LAYERS' | 'BASEMAPS' | 'SCOPES' | undefined;
 

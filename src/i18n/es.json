@@ -19,7 +19,10 @@
     "sharing": "Compartiendo",
     "stopped": "Finalizado"
   },
-  "baseMapManager": "Mapas Base",
+  "baseMapManager": {
+    "title": "Mapas Base",
+    "userStyles": "Mis mapas base"
+  },
   "downloadingAlert": {
     "cancel": "Se ha cancelado la descarga",
     "content_01": "Para poder trabajar en zonas con mala cobertura, es necesario descargarse los datos del Mapa topográfico de Catalunya 1:25.000.",
