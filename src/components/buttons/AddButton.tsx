@@ -5,19 +5,22 @@ import Fab from '@mui/material/Fab';
 
 //UTILS
 import {Theme} from '@mui/material';
+import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
 
 export type AddButtonProps = {
   children: ReactNode,
     isAccessibleSize: boolean,
     isLeftHanded: boolean,
     onClick: () => void,
+  sx: SxProps
 }
 
 const AddButton: FC<AddButtonProps> = ({
   children,
   isAccessibleSize, 
   isLeftHanded ,
-  onClick
+  onClick,
+  sx
 }) => {
 
   //STYLES
@@ -40,7 +43,8 @@ const AddButton: FC<AddButtonProps> = ({
     '& .MuiSvgIcon-root':{
       fontSize: iconSize,
       color: (theme: Theme) => theme.palette.getContrastText(fabColor)
-    }
+    },
+    ...sx
   };
 
   return <Fab sx={fabSx} onClick={handleClick}>

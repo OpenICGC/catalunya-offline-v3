@@ -88,5 +88,16 @@
   "trackAlert": {
     "noTrack": "No ji ja dades d'alçada",
     "outOfTrack": "Fora de traza"
+  },
+  "settings": {
+    "title": "Ajustaments",
+    "navigation": "Navegació",
+    "positionColor": "Color de la posició GPS",
+    "trackTolerance": "Tolerància traça (metres)",
+    "language": "Idioma",
+    "accessibility": "Accessibilitat",
+    "leftHanded": "Disseny per a esquerrans",
+    "buttonSize": "Grandària de botons",
+    "defaultPalette": "Paleta de colors"
   }
 }

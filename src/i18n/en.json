@@ -88,5 +88,16 @@
   "trackAlert": {
     "noTrack": "No height data",
     "outOfTrack": "Out of track"
+  },
+  "settings": {
+    "title": "Settings",
+    "navigation": "Navigation",
+    "positionColor": "GPS position color",
+    "trackTolerance": "Track tolerance (meters)",
+    "language": "Language",
+    "accessibility": "Accessibility",
+    "leftHanded": "Left handed design",
+    "buttonSize": "Button size",
+    "defaultPalette": "Color palette"
   }
 }

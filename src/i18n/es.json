@@ -88,5 +88,16 @@
   "trackAlert": {
     "noTrack": "No hay datos de altura",
     "outOfTrack": "Fuera de ruta"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "navigation": "Navegación",
+    "positionColor": "Color de la posición GPS",
+    "trackTolerance": "Tolerancia traza (metros)",
+    "language": "Idioma",
+    "accessibility": "Accesibilidad",
+    "leftHanded": "Diseño para zurdos",
+    "buttonSize": "Tamaño de botones",
+    "defaultPalette": "Paleta de colores"
   }
 }
