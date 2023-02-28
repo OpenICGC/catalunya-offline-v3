@@ -77,6 +77,17 @@
     "notFound": "No s'hi han trobat elements coincidents amb la cerca"
   },
   "scopeManager": "Àmbits",
+  "settings": {
+    "accessibility": "Accessibilitat",
+    "buttonSize": "Grandària de botons",
+    "defaultPalette": "Paleta de colors",
+    "language": "Idioma",
+    "leftHanded": "Disseny per a esquerrans",
+    "navigation": "Navegació",
+    "positionColor": "Color de la posició GPS",
+    "title": "Ajustaments",
+    "trackTolerance": "Tolerància traça (metres)"
+  },
   "share": {
     "includeVisiblePoints": "Incloure punts visibles?",
     "point": "Compartir Point",
@@ -88,16 +99,5 @@
   "trackAlert": {
     "noTrack": "No ji ja dades d'alçada",
     "outOfTrack": "Fora de traza"
-  },
-  "settings": {
-    "title": "Ajustaments",
-    "navigation": "Navegació",
-    "positionColor": "Color de la posició GPS",
-    "trackTolerance": "Tolerància traça (metres)",
-    "language": "Idioma",
-    "accessibility": "Accessibilitat",
-    "leftHanded": "Disseny per a esquerrans",
-    "buttonSize": "Grandària de botons",
-    "defaultPalette": "Paleta de colors"
   }
 }

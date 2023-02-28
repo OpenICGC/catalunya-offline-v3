@@ -1,9 +1,14 @@
-import React, {FC, ReactNode, useState} from 'react';
+import React, {FC} from 'react';
 
 //MUI
+import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -11,26 +16,21 @@ import Typography from '@mui/material/Typography';
 //GEOCOMPONENTS
 import ButtonGroup from '@geomatico/geocomponents/ButtonGroup';
 import ColorSwitch from '@geomatico/geocomponents/ColorSwitch';
-import ColorRampLegend from '@geomatico/geocomponents/ColorRampLegend';
 
+import {ColorFormat, ColorPicker, ColorPalette} from 'material-ui-color';
+
+//CATOFFLINE
+import InputNumber from './InputNumber';
+import AddTrack from '../icons/AddTrack';
+import AddButton from '../buttons/AddButton';
 //UTILS
 import {primaryColor} from '../../theme';
 import styled from '@mui/system/styled';
-import {ColorFormat, ColorPicker, ColorInput, ColorInputProps, ColorBox, ColorPalette, ColorButton} from 'material-ui-color';
 import {useTranslation} from 'react-i18next';
-import {HEXColor, UUID} from '../../types/commonTypes';
-import {COLOR_PALETTES, DEFAULT_TRACK_TOLERANCE, GPS_POSITION_COLOR} from '../../config';
-import InputNumber from './InputNumber';
-import LocationMarkerIcon from '../map/LocationMarkerIcon';
-import IconButton from '@mui/material/IconButton';
-import AddTrack from '../icons/AddTrack';
-import AddButton from '../buttons/AddButton';
-import FabButton from '../buttons/FabButton';
-import Box from '@mui/material/Box';
-import {FormControl, InputLabel, Select, SelectChangeEvent} from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
+import {HEXColor} from '../../types/commonTypes';
+import {COLOR_PALETTES, GPS_POSITION_COLOR} from '../../config';
+import {SelectChangeEvent} from '@mui/material';
 import useTheme from '@mui/material/styles/useTheme';
-import Divider from '@mui/material/Divider';
 
 //STYLES
 const dialogSx = {
@@ -68,8 +68,6 @@ const languages = [
     content: <Typography variant='caption'>EN</Typography>
   }
 ];
-
-
 
 //TYPES
 export type SettingsProps = {

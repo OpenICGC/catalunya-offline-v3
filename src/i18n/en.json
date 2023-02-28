@@ -77,6 +77,17 @@
     "notFound": "No elements found matching the search criteria"
   },
   "scopeManager": "Scopes",
+  "settings": {
+    "accessibility": "Accessibility",
+    "buttonSize": "Button size",
+    "defaultPalette": "Color palette",
+    "language": "Language",
+    "leftHanded": "Left handed design",
+    "navigation": "Navigation",
+    "positionColor": "GPS position color",
+    "title": "Settings",
+    "trackTolerance": "Track tolerance (meters)"
+  },
   "share": {
     "includeVisiblePoints": "Include visible points?",
     "point": "Share Point",
@@ -88,16 +99,5 @@
   "trackAlert": {
     "noTrack": "No height data",
     "outOfTrack": "Out of track"
-  },
-  "settings": {
-    "title": "Settings",
-    "navigation": "Navigation",
-    "positionColor": "GPS position color",
-    "trackTolerance": "Track tolerance (meters)",
-    "language": "Language",
-    "accessibility": "Accessibility",
-    "leftHanded": "Left handed design",
-    "buttonSize": "Button size",
-    "defaultPalette": "Color palette"
   }
 }

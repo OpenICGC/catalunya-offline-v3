@@ -77,6 +77,17 @@
     "notFound": "No coincide ningún elemento con la búsqueda"
   },
   "scopeManager": "Ámbitos",
+  "settings": {
+    "accessibility": "Accesibilidad",
+    "buttonSize": "Tamaño de botones",
+    "defaultPalette": "Paleta de colores",
+    "language": "Idioma",
+    "leftHanded": "Diseño para zurdos",
+    "navigation": "Navegación",
+    "positionColor": "Color de la posición GPS",
+    "title": "Ajustes",
+    "trackTolerance": "Tolerancia traza (metros)"
+  },
   "share": {
     "includeVisiblePoints": "¿Incluir puntos visibles?",
     "point": "Compartir Punto",
@@ -88,16 +99,5 @@
   "trackAlert": {
     "noTrack": "No hay datos de altura",
     "outOfTrack": "Fuera de ruta"
-  },
-  "settings": {
-    "title": "Ajustes",
-    "navigation": "Navegación",
-    "positionColor": "Color de la posición GPS",
-    "trackTolerance": "Tolerancia traza (metros)",
-    "language": "Idioma",
-    "accessibility": "Accesibilidad",
-    "leftHanded": "Diseño para zurdos",
-    "buttonSize": "Tamaño de botones",
-    "defaultPalette": "Paleta de colores"
   }
 }
