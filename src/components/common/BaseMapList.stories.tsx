@@ -74,7 +74,10 @@ export default {
   title: 'Common/BaseMapList',
   component: BaseMapList,
   argTypes: {
-    color: {control: 'color'}
+    selectedStyleId: {
+      control: 'select',
+      options: coreStyles.map(style => style.id).concat(userStyles.map(style => style.id))
+    }
   }
 } as Meta;
 

@@ -124,8 +124,9 @@ const BaseMapList: FC<BaseMapListProps> = ({coreStyles, userStyles, selectedStyl
   
   const renderStyles = (styles: Styles) => {
     return styles.map((style, index) => (
-      <Stack key={`${styles === userStylesFormatted && 'user'}-${index}`} alignItems='flex-start' className={classes.item} onClick={handleClick(style.id)}>
+      <Stack key={`${styles === userStylesFormatted && 'user'}-${index}`} alignItems='flex-start' className={classes.item} >
         <Avatar variant='square' alt={style.label} src={style.thumbnail}
+          onClick={handleClick(style.id)}
           className={`${classes.thumbnail} ${selectedStyleId === style.id ? classes.selected : ''}`}
         />
         <Box display='flex' flexDirection='row' justifyContent='space-between' width='100%'>
