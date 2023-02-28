@@ -8,15 +8,15 @@ import Typography from '@mui/material/Typography';
 //MUI-ICONS
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import StraightenIcon from '@mui/icons-material/Straighten';
-import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
+import FitBoundsIcon from '@mui/icons-material/ZoomOutMap';
 
 //GEOCOMPONETS
 import BottomSheet from '@geomatico/geocomponents/BottomSheet';
 
 //CATTOFFLINE
 import ListItem from '../scope/ListItem';
-import MarkerDetails from '../icons/MarkerDetails';
-import NoGoTo from '../icons/NoGoTo';
+import ShowDetailsIcon from '../icons/MarkerDetails';
+import StopIcon from '../icons/NoGoTo';
 
 //UTILS
 import {HEXColor} from '../../types/commonTypes';
@@ -26,35 +26,44 @@ import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUni
 export interface PointNavigationBottomSheetProps {
     name: string,
     color: HEXColor,
-    course: number,
+    bearing: number,
     distance: number,
-    onActionClick: () => void
+    onStop: () => void,
+    onShowDetails: () => void,
+    onFitBounds: () => void
 }
 
 const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
   name,
   color,
-  course,
+  bearing,
   distance,
-  onActionClick
+  onStop,
+  onShowDetails,
+  onFitBounds
 }) => {
   const {t} = useTranslation();
 
   const [isOpen, setOpen] = useState(true);
   const actionIcons = [
     {
-      id: 'noGoTo',
-      activeIcon: <NoGoTo/>
+      id: 'stop',
+      activeIcon: <StopIcon/>,
+      callback: onStop
     },
     {
-      id: 'details',
-      activeIcon: <MarkerDetails/>
+      id: 'showDetails',
+      activeIcon: <ShowDetailsIcon/>,
+      callback: onShowDetails
     },
     {
-      id: 'overview',
-      activeIcon: <ZoomOutMapIcon/>
+      id: 'fitBounds',
+      activeIcon: <FitBoundsIcon/>,
+      callback: onFitBounds
     }
   ];
+
+  const handleActionClick = (itemId: string, actionId: string) => actionIcons.find(actionIcons => actionIcons.id === actionId)?.callback();
 
   return <BottomSheet
     closedHeight={20}
@@ -67,14 +76,14 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
       name={name}
       color={color}
       actionIcons={actionIcons}
-      onActionClick={onActionClick}
+      onActionClick={handleActionClick}
     />
     <Stack direction="row" justifyContent='space-around' sx={{mt: 1}}>
       <Stack alignItems='center'>
-        <Typography variant='h6' component='p'>{course}º</Typography>
+        <Typography variant='h6' component='p'>{Math.round(bearing)}º</Typography>
         <Stack direction="row" spacing={1} alignItems='center'>
-          <ArrowUpwardIcon sx={{transform: `rotate(${course}deg)`, color: 'grey.600'}}/>
-          <Typography variant='body2' component='p' sx={{color: 'grey.600'}}>{t('properties.course')}</Typography>
+          <ArrowUpwardIcon sx={{transform: `rotate(${bearing}deg)`, color: 'grey.600'}}/>
+          <Typography variant='body2' component='p' sx={{color: 'grey.600'}}>{t('properties.bearing')}</Typography>
         </Stack>
       </Stack>
       <Divider flexItem orientation='vertical'/>

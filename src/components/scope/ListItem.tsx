@@ -153,6 +153,7 @@ const ListItem: FC<ListItemProps> = memo(({
             <Menu
               anchorEl={anchorEl}
               open={open}
+              onClick={handleClose}
               onClose={handleClose}
               sx={{zIndex: 2500}}
               anchorOrigin={{

@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -34,6 +34,8 @@ export enum LOCATION_STATUS {
 export type FabButtonProps = {
   isLeftHanded: boolean,
   isAccessibleSize: boolean,
+  isFabOpen: boolean,
+  onFabClick: () => void,
   bearing: number,
   pitch: number,
   locationStatus: LOCATION_STATUS,
@@ -47,6 +49,8 @@ export type FabButtonProps = {
 const FabButton: FC<FabButtonProps> = ({
   isLeftHanded = false,
   isAccessibleSize = false,
+  isFabOpen,
+  onFabClick ,
   bearing = 0,
   pitch = 0,
   locationStatus,
@@ -56,8 +60,6 @@ const FabButton: FC<FabButtonProps> = ({
   onBaseMapsClick,
   onScopesClick
 }) => {
-  const [isMenuOpen, setMenuOpen] = useState(false);
-
   //STYLES
   const fabSize = isAccessibleSize ? 72 : 56;
   const buttonSize = isAccessibleSize ? 50 : 40;
@@ -199,22 +201,22 @@ const FabButton: FC<FabButtonProps> = ({
   };
 
   return <Box sx={container}>
-    <Fab color="primary" sx={isMenuOpen ? fabOpen : fab} onClick={() => setMenuOpen(!isMenuOpen)}>
+    <Fab color="primary" sx={isFabOpen ? fabOpen : fab} onClick={onFabClick}>
       <FabIcon/>
     </Fab>
-    <IconButton sx={isMenuOpen ? orientationOpen : orientation} onClick={onOrientationClick}>
+    <IconButton sx={isFabOpen ? orientationOpen : orientation} onClick={onOrientationClick}>
       <OrientationIcon northColor={orientationNorthColor} southColor={orientationSouthColor}/>
     </IconButton>
-    <IconButton sx={isMenuOpen ? layersOpen : layers} onClick={onLayersClick}>
+    <IconButton sx={isFabOpen ? layersOpen : layers} onClick={onLayersClick}>
       <LayersIcon/>
     </IconButton>
-    <IconButton sx={isMenuOpen ? folderOpen : folder} onClick={onScopesClick}>
+    <IconButton sx={isFabOpen ? folderOpen : folder} onClick={onScopesClick}>
       <ScopesIcon/>
     </IconButton>
-    <IconButton sx={isMenuOpen ? baseMapsOpen : baseMaps} onClick={onBaseMapsClick}>
+    <IconButton sx={isFabOpen ? baseMapsOpen : baseMaps} onClick={onBaseMapsClick}>
       <BaseMapsIcon/>
     </IconButton>
-    <IconButton sx={isMenuOpen ? locationOpen : location} onClick={onLocationClick}>
+    <IconButton sx={isFabOpen ? locationOpen : location} onClick={onLocationClick}>
       {
         locationStatus === LOCATION_STATUS.DISABLED ? <LocationDisabledIcon/> :
           locationStatus === LOCATION_STATUS.NOT_TRACKING ? <NoTrackingIcon/> :

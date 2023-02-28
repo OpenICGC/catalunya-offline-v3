@@ -55,7 +55,7 @@
   "noScopeAlert": "Elige un ámbito para el punto",
   "point": "Punto",
   "properties": {
-    "course": "Rumbo",
+    "bearing": "Rumbo",
     "date": "Fecha",
     "description": "Descripción",
     "detailsTrack": "Detalles de la ruta",

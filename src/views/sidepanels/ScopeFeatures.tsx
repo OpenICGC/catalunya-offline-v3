@@ -8,11 +8,10 @@ import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCo
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
 import ScopeTrack from './ScopeTrack';
-import {useViewport} from '../../hooks/useViewport';
-import {MAP_PROPS} from '../../config';
 import useEditingPosition from '../../hooks/useEditingPosition';
 import useShare from '../../hooks/useShare';
 import HandleExport from '../../components/scope/export/HandleExport';
+import usePointNavigation from '../../hooks/usePointNavigation';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -32,22 +31,18 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   onTrackSelected
 }) => {
   const {t} = useTranslation();
-
   const scopeStore = useScopes();
-  const selectedScope = scopeStore.retrieve(scopeId);
-
   const pointStore = useScopePoints(scopeId);
   const trackStore = useScopeTracks(scopeId);
-
+  const pointNavigation = usePointNavigation();
   const {sharePoint}  = useShare();
   const [sharingTrackId, setSharingTrackId] = useState<UUID|undefined>(undefined);
 
+  const selectedScope = scopeStore.retrieve(scopeId);
   const editingPosition = useEditingPosition();
 
   const unselectPoint = () => onPointSelected();
   const unselectTrack = () => onTrackSelected();
-
-  const {setViewport} = useViewport();
 
   const pointAdd = () => {
     editingPosition.start({
@@ -112,12 +107,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   };
 
   const pointGoTo = (pointId: UUID) => {
-    const targetPosition = pointStore.retrieve(pointId)?.geometry.coordinates;
-    targetPosition && setViewport({
-      longitude: targetPosition[0],
-      latitude: targetPosition[1],
-      zoom: MAP_PROPS.maxZoom - 1
-    });
+    pointNavigation.start(scopeId, pointId);
   };
 
   const pointExport = (pointId: UUID) => {

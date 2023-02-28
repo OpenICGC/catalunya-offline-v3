@@ -40,6 +40,7 @@ export const Default = Template.bind({});
 Default.args = {
   isLeftHanded: false,
   isAccessibleSize: false,
+  isFabOpen: true,
   bearing: 0,
   pitch: 0,
   locationStatus: LOCATION_STATUS.NOT_TRACKING
