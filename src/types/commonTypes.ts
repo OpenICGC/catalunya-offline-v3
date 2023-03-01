@@ -73,3 +73,23 @@ export interface ScopeTrack extends ScopeFeature {
 }
 
 export type ImagePath = string
+
+export enum BUTTON_SIZE {
+  'small',
+  'large'
+}
+
+export enum LANGUAGE {
+  'ca',
+  'en',
+  'es'
+}
+
+export type Settings = {
+  gpsPositionColor: HEXColor,
+  trackTolerance: number,
+  isLeftHanded: boolean,
+  buttonSize: BUTTON_SIZE,
+  colorPalette: string
+  language: LANGUAGE
+}

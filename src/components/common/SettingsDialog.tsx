@@ -27,8 +27,8 @@ import AddButton from '../buttons/AddButton';
 import {primaryColor} from '../../theme';
 import styled from '@mui/system/styled';
 import {useTranslation} from 'react-i18next';
-import {HEXColor} from '../../types/commonTypes';
-import {COLOR_PALETTES, GPS_POSITION_COLOR} from '../../config';
+import {BUTTON_SIZE, HEXColor, LANGUAGE} from '../../types/commonTypes';
+import {COLOR_PALETTES} from '../../config';
 import {SelectChangeEvent} from '@mui/material';
 import useTheme from '@mui/material/styles/useTheme';
 
@@ -54,60 +54,61 @@ const SettingGroup = styled(Stack)(({theme}) => {
   };
 });
 
-const languages = [
-  {
-    id: 'ca',
-    content: <Typography variant='caption'>CA</Typography>
-  },
-  {
-    id: 'es',
-    content: <Typography variant='caption'>ES</Typography>
-  },
-  {
-    id: 'en',
-    content: <Typography variant='caption'>EN</Typography>
-  }
-];
-
-//TYPES
-export type SettingsProps = {
-  isLeftHanded: boolean,
-  positionColor: HEXColor,
-  trackTolerance: number,
-  selectedLanguageId: string,
-  selectedSizeId: string,
-  selectedPaletteIndex: number,
-  onColorChange: (color: HEXColor) => void,
-  onLanguageClick: (optionId: string) => void,
-  onLeftHandedChange: () => void,
-  onPaletteChange: (palette: string) => void,
-  onSizeChange: (size: string) => void,
-  onToleranceChange: (tolerance: number) => void,
-};
-
 const inputFormats: ColorFormat[] = [];
 
-const Settings: FC<SettingsProps> = ({
-  positionColor= GPS_POSITION_COLOR,
-  selectedPaletteIndex= 0,
-  isLeftHanded= false,
-  trackTolerance= 40,
-  selectedLanguageId,
-  selectedSizeId= 'small',
-  onColorChange,
-  onPaletteChange,
+const asColorPickerPalette = (name: string) => COLOR_PALETTES[name].reduce<Record<HEXColor, HEXColor>>(
+  (obj, color) => ({
+    ...obj,
+    [color]: color
+  }), {});
+
+const languageOptions = [{
+  id: LANGUAGE.ca,
+  content: <Typography variant='caption'>CA</Typography>
+}, {
+  id: LANGUAGE.en,
+  content: <Typography variant='caption'>EN</Typography>
+}, {
+  id: LANGUAGE.es,
+  content: <Typography variant='caption'>ES</Typography>
+}];
+
+//TYPES
+export type SettingsDialogProps = {
+  gpsPositionColor: HEXColor,
+  onGpsPositionColorChange: (gpsPositionColor: HEXColor) => void,
+  trackTolerance: number,
+  onTrackToleranceChange: (trackTolerance: number) => void,
+  isLeftHanded: boolean,
+  onLeftHandedChange: (isLeftHanded: boolean) => void,
+  buttonSize: BUTTON_SIZE,
+  onButtonSizeChange: (buttonSize: BUTTON_SIZE) => void,
+  colorPalette: string
+  onColorPaletteChange: (colorPalette: string) => void,
+  language: LANGUAGE,
+  onLanguageChange: (language: LANGUAGE) => void,
+};
+
+const SettingsDialog: FC<SettingsDialogProps> = ({
+  gpsPositionColor,
+  onGpsPositionColorChange,
+  trackTolerance,
+  onTrackToleranceChange,
+  isLeftHanded,
   onLeftHandedChange,
-  onToleranceChange,
-  onLanguageClick,
-  onSizeChange
+  buttonSize,
+  onButtonSizeChange,
+  colorPalette,
+  onColorPaletteChange,
+  language,
+  onLanguageChange
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const handleColorChange = (color: {hex: string}) => onColorChange(`#${color.hex}`);
-  const handlePaletteChange = (e: SelectChangeEvent) => onPaletteChange(e.target.value);
-  const handleSizeChange = (size: string) => onSizeChange(size);
+  const handleGpsPositionColorChange = (e: {hex: string}) => onGpsPositionColorChange(`#${e.hex}`);
+  const handlePaletteChange = (e: SelectChangeEvent) => onColorPaletteChange(e.target.value);
 
-
+  const handleLanguageChange = (lang: LANGUAGE | null) => lang !== null && onLanguageChange(lang);
 
   return <Dialog open={true} fullWidth PaperProps={{sx: {height: 'auto'}}}>
     <DialogTitle sx={dialogSx}>
@@ -121,15 +122,15 @@ const Settings: FC<SettingsProps> = ({
         <ColorPicker
           hideTextfield
           disableAlpha
-          value={positionColor}
+          value={gpsPositionColor}
           inputFormats={inputFormats}
-          onChange={handleColorChange}
-          palette={COLOR_PALETTES[selectedPaletteIndex]}
+          onChange={handleGpsPositionColorChange}
+          palette={asColorPickerPalette(colorPalette)}
         />
       </SettingGroup>
       <SettingGroup>
         <Typography>{t('settings.trackTolerance')}</Typography>
-        <InputNumber onChange={onToleranceChange} value={trackTolerance}/>
+        <InputNumber onChange={onTrackToleranceChange} value={trackTolerance}/>
       </SettingGroup>
       <Divider sx={{my: 1}}/>
       <Typography variant='caption' sx={{p: 2, fontWeight: 900}}>{t('settings.accessibility').toUpperCase()}</Typography>
@@ -143,21 +144,21 @@ const Settings: FC<SettingsProps> = ({
           <AddButton 
             isLeftHanded={false} 
             isAccessibleSize={true} 
-            onClick={() => handleSizeChange('large')}
+            onClick={() => onButtonSizeChange(BUTTON_SIZE.large)}
             sx={{
               bottom: 0, 
               m:0, 
-              border: selectedSizeId === 'large'? `4px solid ${theme.palette.primary.main}`: 0
+              border: buttonSize === BUTTON_SIZE.large ? `4px solid ${theme.palette.primary.main}`: 0
             }}
           ><AddTrack/>
           </AddButton>
           <AddButton 
             isLeftHanded={false} 
             isAccessibleSize={false} 
-            onClick={() => handleSizeChange('small')}
+            onClick={() => onButtonSizeChange(BUTTON_SIZE.small)}
             sx={{
               bottom: 0,
-              border: selectedSizeId === 'small'? `4px solid ${theme.palette.primary.main}`: 0
+              border: buttonSize === BUTTON_SIZE.small ? `4px solid ${theme.palette.primary.main}`: 0
             }}>
             <AddTrack/>
           </AddButton>
@@ -168,18 +169,19 @@ const Settings: FC<SettingsProps> = ({
           <Typography sx={{px:1}}>{t('settings.defaultPalette')}</Typography>
           <FormControl variant='standard' fullWidth>
             <Select
-              value={selectedPaletteIndex.toString()}
+              value={colorPalette}
               label="Palette"
               disableUnderline
               onChange={handlePaletteChange}
               sx={{px: 0}}
             >
               {
-                COLOR_PALETTES && COLOR_PALETTES.map((palette, index) => <MenuItem 
-                  key={index} 
-                  value={index}>
-                  <ColorPalette palette={palette}/>
-                </MenuItem>
+                Object.keys(COLOR_PALETTES).map((paletteName) =>
+                  <MenuItem
+                    key={paletteName}
+                    value={paletteName}>
+                    <ColorPalette palette={asColorPickerPalette(paletteName)}/>
+                  </MenuItem>
                 )
               }
             </Select>
@@ -191,9 +193,9 @@ const Settings: FC<SettingsProps> = ({
       <SettingGroup>
         <Typography>{t('settings.language')}</Typography>
         <ButtonGroup
-          selectedItemId={selectedLanguageId}
-          items={languages}
-          onItemClick={onLanguageClick}
+          selectedItemId={language}
+          items={languageOptions}
+          onItemClick={handleLanguageChange}
           color={primaryColor}
           variant='outlined'
         />
@@ -201,4 +203,4 @@ const Settings: FC<SettingsProps> = ({
     </DialogContent>
   </Dialog>;
 };
-export default Settings;
+export default SettingsDialog;
