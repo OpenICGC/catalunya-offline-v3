@@ -1,5 +1,6 @@
 # Catalunya Offline v2
 
+[![Frontend tests](https://github.com/OpenICGC/catalunya-offline-v2/actions/workflows/test-frontend.yml/badge.svg)](https://github.com/OpenICGC/catalunya-offline-v2/actions/workflows/test-frontend.yml)
 
 ## Setup development environment
 

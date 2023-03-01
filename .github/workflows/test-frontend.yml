@@ -1,0 +1,38 @@
+name: Frontend tests
+on:
+  pull_request:
+jobs:
+  frontend-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: browser-actions/setup-chrome@v1
+
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+
+    - name: Update npm
+      run: npm install -g npm@8.15.1
+
+    - name: Install depedencies
+      run: npm ci
+
+#    - name: Create env file
+#      run: |
+#        echo API_BASE_URL=http://localhost/api/v1 > .env
+#        echo GEOSERVER_BASE_URL=http://localhost/geoserver >> .env
+#        echo SENTRY_DSN= >> .env
+
+    - name: Launching tests
+      run: CHROME_BIN=$(which chrome) npm run test
+
+    - name: Building javascript
+      run: CHROME_BIN=$(which chrome) npm run build
