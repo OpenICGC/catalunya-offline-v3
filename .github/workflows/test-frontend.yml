@@ -32,7 +32,7 @@ jobs:
 #        echo SENTRY_DSN= >> .env
 
     - name: Launching tests
-      run: CHROMIUM_BIN=$(which chrome) npm run test
+      run: CHROME_BIN=$(which chrome) npm run test
 
     - name: Building javascript
-      run: CHROMIUM_BIN=$(which chrome) npm run build
+      run: CHROME_BIN=$(which chrome) npm run build
