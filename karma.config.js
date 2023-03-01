@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-undef
+const ExitOnErrorPlugin = require('exit-on-error-webpack-plugin');
 const webpackConfig = require('./webpack.config')({
   test: true,
 });
@@ -31,7 +31,13 @@ module.exports = (config) => {
     preprocessors: {
       'test.ts': ['webpack', 'sourcemap'],
     },
-    webpack: webpackConfig,
+    webpack: {
+      ...webpackConfig,
+      plugins: [
+        ...webpackConfig.plugins,
+        new ExitOnErrorPlugin()
+      ]
+    },
     webpackServer: {
       noInfo: true,
     },
