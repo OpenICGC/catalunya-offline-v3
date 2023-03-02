@@ -43,7 +43,6 @@ export enum RECORDING_STATUS {
 }
 
 export type TrackRecorderProps = {
-  isAccessibleSize: boolean,
   name?: string,
   color?: HEXColor,
   elapsedTime: number,
@@ -53,7 +52,6 @@ export type TrackRecorderProps = {
 }
 
 const TrackRecorder: FC<TrackRecorderProps> = ({
-  isAccessibleSize,
   name,
   color,
   elapsedTime,
@@ -112,7 +110,7 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
       variant='center'
     />
     <Stack direction='row' justifyContent='center' sx={buttonContainerSx}>
-      <RecordingButtonGroup isAccessibleSize={isAccessibleSize} recordingStatus={recordingStatus} onButtonClick={handleButtonGroupClick}/>
+      <RecordingButtonGroup recordingStatus={recordingStatus} onButtonClick={handleButtonGroupClick}/>
     </Stack>
   </>;
 };

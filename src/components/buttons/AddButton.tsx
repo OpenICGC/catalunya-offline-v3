@@ -6,22 +6,20 @@ import Fab from '@mui/material/Fab';
 //UTILS
 import {Theme} from '@mui/material';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
+import {useSettings} from '../../hooks/useSettings';
 
 export type AddButtonProps = {
   children: ReactNode,
-    isAccessibleSize: boolean,
-    isLeftHanded: boolean,
     onClick: () => void,
     sx?: SxProps<Theme>
 }
 
 const AddButton: FC<AddButtonProps> = ({
   children,
-  isAccessibleSize, 
-  isLeftHanded ,
   onClick,
   sx
 }) => {
+  const {isAccessibleSize, isLeftHanded} = useSettings();
 
   //STYLES
   const fabSize = isAccessibleSize ? 64 : 48;

@@ -29,7 +29,6 @@ const WithMapTemplate: Story<TrackRecorderProps> = ({...args}) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  isAccessibleSize: false,
   name: 'Traza 01',
   color: '#973572',
   elapsedTime: 3855

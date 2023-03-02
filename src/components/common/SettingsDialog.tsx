@@ -114,7 +114,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
   const handleLanguageChange = (lang: LANGUAGE | null) => lang !== null && onLanguageChange(lang);
   const handleClose = () => onClose();
 
-  return <Dialog open={true} fullWidth PaperProps={{sx: {height: 'auto'}}} onClose={handleClose}>
+  return <Dialog open={true} fullWidth PaperProps={{sx: {height: 'auto', m: 0, p:0}}} onClose={handleClose}>
     <DialogTitle sx={dialogSx}>
       <SettingsIcon sx={{mr: 2}}/>
       {t('settings.title')}
@@ -145,10 +145,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
       <SettingGroup>
         <Typography>{t('settings.buttonSize')}</Typography>
         <Box>
-          <AddButton 
-            isLeftHanded={false} 
-            isAccessibleSize={true} 
-            onClick={() => onButtonSizeChange(isAccessibleSize)}
+          <AddButton onClick={() => onButtonSizeChange(isAccessibleSize)}
             sx={{
               bottom: 0, 
               m:0, 
@@ -156,10 +153,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
             }}
           ><AddTrack/>
           </AddButton>
-          <AddButton 
-            isLeftHanded={false} 
-            isAccessibleSize={false} 
-            onClick={() => onButtonSizeChange(!isAccessibleSize)}
+          <AddButton onClick={() => onButtonSizeChange(!isAccessibleSize)}
             sx={{
               bottom: 0,
               border: !isAccessibleSize ? `4px solid ${theme.palette.primary.main}`: 0

@@ -8,6 +8,7 @@ import RecordIcon from '@mui/icons-material/FiberManualRecord';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
+import {useSettings} from '../../hooks/useSettings';
 
 const recButtonSx = {
   bgcolor: 'grey.700',
@@ -20,15 +21,15 @@ const recButtonSx = {
 };
 
 export interface RecordButtonProps {
-    isAccessibleSize: boolean,
     onClick: () => void
 }
 
 const RecordButton: FC<RecordButtonProps> = ({
-  isAccessibleSize,
   onClick
 }) => {
   const {t} = useTranslation();
+  const {isAccessibleSize} = useSettings();
+
   const size = isAccessibleSize ? 'large' : 'medium';
   const handleClick = () => onClick();
 

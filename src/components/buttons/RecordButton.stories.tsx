@@ -10,6 +10,4 @@ export default {
 const Template: Story<RecordButtonProps> = args => <RecordButton {...args}/>;
 
 export const Default = Template.bind({});
-Default.args = {
-  isAccessibleSize: false
-};
+Default.args = {};

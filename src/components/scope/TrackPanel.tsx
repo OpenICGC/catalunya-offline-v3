@@ -56,7 +56,6 @@ const sxInput = {
 };
 
 export type TrackPanelProps = {
-  isAccessibleSize: boolean,
   scope: Scope,
   initialTrack: ScopeTrack,
   numPoints: number,
@@ -68,7 +67,6 @@ export type TrackPanelProps = {
 };
 
 const TrackPanel: FC<TrackPanelProps> = ({
-  isAccessibleSize,
   scope,
   initialTrack,
   numPoints,
@@ -210,7 +208,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
             {t('properties.recordingTrack')}
           </Typography>
           <Box>
-            <RecordButton isAccessibleSize={isAccessibleSize} onClick={onRecordStart}/>
+            <RecordButton onClick={onRecordStart}/>
           </Box>
         </>}
         {track.geometry && track.geometry.coordinates.length && <>
@@ -250,8 +248,8 @@ const TrackPanel: FC<TrackPanelProps> = ({
     </ScrollableContent>
     {isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>
-        <CancelButton isAccessibleSize={false} onCancel={handleCancel}/>
-        <AcceptButton isAccessibleSize={false} disabled={false} onAccept={handleAccept}/>
+        <CancelButton onCancel={handleCancel}/>
+        <AcceptButton disabled={false} onAccept={handleAccept}/>
       </Stack>
     }
   </>;

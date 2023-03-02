@@ -24,6 +24,5 @@ const Template: Story<RecordingButtonGroupProps> = args => <RecordingButtonGroup
 
 export const Default = Template.bind({});
 Default.args = {
-  isAccessibleSize: false,
   recordingStatus: RECORDING_STATUS.RECORDING
 };

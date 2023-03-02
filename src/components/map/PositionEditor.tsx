@@ -19,7 +19,6 @@ import AcceptButton from '../buttons/AcceptButton';
 
 
 export type PositionEditorProps = {
-  isAccessibleSize?: boolean,
   name?: string,
   color?: HEXColor,
   onAccept: () => void,
@@ -27,7 +26,6 @@ export type PositionEditorProps = {
 }
 
 const PositionEditor: FC<PositionEditorProps> = ({
-  isAccessibleSize = false,
   name,
   color,
   onAccept,
@@ -76,8 +74,8 @@ const PositionEditor: FC<PositionEditorProps> = ({
     </Stack>
     <Stack direction='row' sx={buttonsContainer}>
       <Stack sx={buttonsPosition}>
-        <CancelButton isAccessibleSize={isAccessibleSize} onCancel={handleCancel} variant='contained'/>
-        <AcceptButton isAccessibleSize={isAccessibleSize} onAccept={handleAccept} variant='contained'/>
+        <CancelButton onCancel={handleCancel} variant='contained'/>
+        <AcceptButton onAccept={handleAccept} variant='contained'/>
       </Stack>
     </Stack>
   </>;

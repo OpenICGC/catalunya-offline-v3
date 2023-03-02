@@ -52,7 +52,6 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   };
 
   return selectedScope && selectedTrack ? <TrackPanel
-    isAccessibleSize={false}
     scope={selectedScope}
     initialTrack={selectedTrack}
     numPoints={numPoints}

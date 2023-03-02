@@ -60,7 +60,6 @@ export enum FEATURE_SHARED {
 
 export type ShareDialogProps = {
   featureShared: FEATURE_SHARED,
-  isAccessibleSize: boolean,
   onClick: (format: SHARE_FORMAT, shareVisiblePoints?: boolean) => void,
   onCancel: () => void,
 }
@@ -72,7 +71,6 @@ const formatsForEachFeature = {
 
 const ShareDialog: FC<ShareDialogProps> = ({
   featureShared,
-  isAccessibleSize,
   onClick,
   onCancel
 }) => {
@@ -146,7 +144,7 @@ const ShareDialog: FC<ShareDialogProps> = ({
       )
     }
     <DialogActions sx={{position: 'absolute', bottom: 0, right: 0}}>
-      <CancelButton isAccessibleSize={isAccessibleSize} onCancel={onCancel}/>
+      <CancelButton onCancel={onCancel}/>
     </DialogActions>
   </Dialog>;
 };

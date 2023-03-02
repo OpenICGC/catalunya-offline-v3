@@ -11,6 +11,4 @@ export default {
 const Template: Story = args => <OutOfTrackButton {...args}/>;
 
 export const Default = Template.bind({});
-Default.args = {
-  isAccessibleSize: false
-};
+Default.args = {};

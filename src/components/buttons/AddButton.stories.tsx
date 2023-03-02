@@ -17,8 +17,6 @@ const Template: Story<AddButtonProps> = args => <AddButton {...args}/>;
 
 export const Scope = Template.bind({});
 Scope.args = {
-  isAccessibleSize: false,
-  isLeftHanded: false,
   children: <CreateNewFolderIcon/>
 };
 
