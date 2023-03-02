@@ -20,6 +20,6 @@ const Template: Story<ShareDialogProps> = args => <ShareDialog {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  isAccesibleSize: false,
+  isAccessibleSize: false,
   featureShared: FEATURE_SHARED.SCOPE
 };

@@ -491,7 +491,7 @@ const Map: FC<MainContentProps> = ({
       onStop={recordingTrack.stop}
     />}
     {!!pointIntent && <ScopeSelector
-      isAccesibleSize={false}
+      isAccessibleSize={false}
       scopes={scopeStore.list()}
       onScopeSelected={handleScopeSelected}
       onCancel={handleScopeSelectionCancelled}

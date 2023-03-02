@@ -23,11 +23,12 @@ import {ColorFormat, ColorPicker, ColorPalette} from 'material-ui-color';
 import InputNumber from './InputNumber';
 import AddTrack from '../icons/AddTrack';
 import AddButton from '../buttons/AddButton';
+
 //UTILS
 import {primaryColor} from '../../theme';
 import styled from '@mui/system/styled';
 import {useTranslation} from 'react-i18next';
-import {BUTTON_SIZE, HEXColor, LANGUAGE} from '../../types/commonTypes';
+import {HEXColor, LANGUAGE} from '../../types/commonTypes';
 import {COLOR_PALETTES} from '../../config';
 import {SelectChangeEvent} from '@mui/material';
 import useTheme from '@mui/material/styles/useTheme';
@@ -81,8 +82,8 @@ export type SettingsDialogProps = {
   onTrackToleranceChange: (trackTolerance: number) => void,
   isLeftHanded: boolean,
   onLeftHandedChange: (isLeftHanded: boolean) => void,
-  buttonSize: BUTTON_SIZE,
-  onButtonSizeChange: (buttonSize: BUTTON_SIZE) => void,
+  isAccessibleSize: boolean,
+  onButtonSizeChange: (isAccessibleSize: boolean) => void,
   colorPalette: string
   onColorPaletteChange: (colorPalette: string) => void,
   language: LANGUAGE,
@@ -96,7 +97,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
   onTrackToleranceChange,
   isLeftHanded,
   onLeftHandedChange,
-  buttonSize,
+  isAccessibleSize,
   onButtonSizeChange,
   colorPalette,
   onColorPaletteChange,
@@ -144,21 +145,21 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
           <AddButton 
             isLeftHanded={false} 
             isAccessibleSize={true} 
-            onClick={() => onButtonSizeChange(BUTTON_SIZE.large)}
+            onClick={() => onButtonSizeChange(isAccessibleSize)}
             sx={{
               bottom: 0, 
               m:0, 
-              border: buttonSize === BUTTON_SIZE.large ? `4px solid ${theme.palette.primary.main}`: 0
+              border: isAccessibleSize ? `4px solid ${theme.palette.primary.main}`: 0
             }}
           ><AddTrack/>
           </AddButton>
           <AddButton 
             isLeftHanded={false} 
             isAccessibleSize={false} 
-            onClick={() => onButtonSizeChange(BUTTON_SIZE.small)}
+            onClick={() => onButtonSizeChange(!isAccessibleSize)}
             sx={{
               bottom: 0,
-              border: buttonSize === BUTTON_SIZE.small ? `4px solid ${theme.palette.primary.main}`: 0
+              border: !isAccessibleSize ? `4px solid ${theme.palette.primary.main}`: 0
             }}>
             <AddTrack/>
           </AddButton>

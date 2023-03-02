@@ -68,7 +68,7 @@ const HandleExport: FC<HandleExportProps> = ({
     :
     <ShareDialog
       featureShared={trackId ? FEATURE_SHARED.TRACK : FEATURE_SHARED.SCOPE}
-      isAccesibleSize={false}
+      isAccessibleSize={false}
       onClick={handleShareDialogOptionsSelected}
       onCancel={onSharedCancel}
     />;

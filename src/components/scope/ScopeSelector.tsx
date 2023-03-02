@@ -18,7 +18,7 @@ import {useTranslation} from 'react-i18next';
 import {Scope, UUID} from '../../types/commonTypes';
 
 export interface ScopeSelectorProps {
-    isAccesibleSize: boolean;
+    isAccessibleSize: boolean;
     isOpen?: boolean;
     scopes: Array<Scope>;
     onScopeSelected: (scope: UUID) => void;
@@ -26,7 +26,7 @@ export interface ScopeSelectorProps {
 }
 
 const ScopeSelector: FC<ScopeSelectorProps> = ({
-  isAccesibleSize,
+  isAccessibleSize,
   scopes,
   onScopeSelected,
   onCancel
@@ -41,14 +41,14 @@ const ScopeSelector: FC<ScopeSelectorProps> = ({
     </DialogTitle>
     <Divider/>
     <List
-      isAccessibleSize={isAccesibleSize}
+      isAccessibleSize={isAccessibleSize}
       items={scopes}
       onClick={onScopeSelected}
       searchSx={{pt: 2.5, px: 2.5}}
       listSx={{pb: 2.5, px: 2.5, m: 0}}
     />
     <DialogActions sx={{position: 'absolute', bottom: 0, right: 0}}>
-      <CancelButton isAccessibleSize={isAccesibleSize} onCancel={onCancel}/>
+      <CancelButton isAccessibleSize={isAccessibleSize} onCancel={onCancel}/>
     </DialogActions>
   </Dialog>;
 };
