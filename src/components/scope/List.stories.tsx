@@ -108,7 +108,7 @@ Default.args = {
       activeIcon: <FileUploadIcon/>
     }
   ],
-  isAccessibleSize: false
+  isAccessibleMode: false
 };
 
 export const Managed = ManagedTemplate.bind({});
@@ -159,7 +159,7 @@ PointOrTrack.args = {
       inactiveIcon: <VisibilityOffIcon color='disabled'/>,
     }
   ],
-  isAccessibleSize: false
+  isAccessibleMode: false
 };
 
 export const Device = DeviceTemplate.bind({});

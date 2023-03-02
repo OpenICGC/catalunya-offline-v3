@@ -7,15 +7,15 @@ export type SettingsViewProps = {
 };
 const SettingsView: FC<SettingsViewProps> = ({onClose}) => {
   const {
-    gpsPositionColor, trackTolerance, isLeftHanded, isAccessibleSize, colorPalette, language,
-    setGpsPositionColor, setTrackTolerance, setLeftHanded, setIsAccessibleSize, setColorPalette, setLanguage
+    gpsPositionColor, trackTolerance, isLeftHanded, isAccessibleMode, colorPalette, language,
+    setGpsPositionColor, setTrackTolerance, setLeftHanded, setIsAccessibleMode, setColorPalette, setLanguage
   } = useSettings();
 
   return <SettingsDialog
     gpsPositionColor={gpsPositionColor} onGpsPositionColorChange={setGpsPositionColor}
     trackTolerance={trackTolerance} onTrackToleranceChange={setTrackTolerance}
     isLeftHanded={isLeftHanded} onLeftHandedChange={setLeftHanded}
-    isAccessibleSize={isAccessibleSize} onButtonSizeChange={setIsAccessibleSize}
+    isAccessibleMode={isAccessibleMode} onButtonSizeChange={setIsAccessibleMode}
     colorPalette={colorPalette} onColorPaletteChange={setColorPalette}
     language={language} onLanguageChange={setLanguage}
     onClose={onClose}

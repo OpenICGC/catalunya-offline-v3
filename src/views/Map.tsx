@@ -171,7 +171,7 @@ const Map: FC<MainContentProps> = ({
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
-  const {isAccessibleSize} = useSettings();
+  const {isAccessibleMode} = useSettings();
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
     const {latitude, longitude} = geolocation;
@@ -507,7 +507,7 @@ const Map: FC<MainContentProps> = ({
       onStop={recordingTrack.stop}
     />}
     {!!pointIntent && <ScopeSelector
-      isAccessibleSize={isAccessibleSize}
+      isAccessibleMode={isAccessibleMode}
       scopes={scopeStore.list()}
       onScopeSelected={handleScopeSelected}
       onCancel={handleScopeSelectionCancelled}

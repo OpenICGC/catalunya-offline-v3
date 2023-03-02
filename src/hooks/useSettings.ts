@@ -7,7 +7,7 @@ const useSettingsImpl = () => {
   const [gpsPositionColor, setGpsPositionColor] = usePersistenceData<HEXColor>('settings:gpsPositionColor', DEFAULT_SETTINGS.gpsPositionColor);
   const [trackTolerance, setTrackTolerance] = usePersistenceData<number>('settings:trackTolerance', DEFAULT_SETTINGS.trackTolerance);
   const [isLeftHanded, setLeftHanded] = usePersistenceData<boolean>('settings:isLeftHanded', DEFAULT_SETTINGS.isLeftHanded);
-  const [isAccessibleSize, setIsAccessibleSize] = usePersistenceData<boolean>('settings:isAccessibleSize', DEFAULT_SETTINGS.isAccessibleSize);
+  const [isAccessibleMode, setIsAccessibleMode] = usePersistenceData<boolean>('settings:isAccessibleMode', DEFAULT_SETTINGS.isAccessibleMode);
   const [colorPalette, setColorPalette] = usePersistenceData<string>('settings:colorPalette', DEFAULT_SETTINGS.colorPalette);
   const [language, setLanguage] = usePersistenceData<LANGUAGE>('settings:language', DEFAULT_SETTINGS.language);
 
@@ -15,7 +15,7 @@ const useSettingsImpl = () => {
     gpsPositionColor, setGpsPositionColor,
     trackTolerance, setTrackTolerance,
     isLeftHanded, setLeftHanded,
-    isAccessibleSize, setIsAccessibleSize,
+    isAccessibleMode, setIsAccessibleMode,
     colorPalette, setColorPalette,
     language, setLanguage
   };
@@ -26,7 +26,7 @@ const trivialImpl = {
   setGpsPositionColor: () => undefined,
   setTrackTolerance: () => undefined,
   setLeftHanded: () => undefined,
-  setIsAccessibleSize: () => undefined,
+  setIsAccessibleMode: () => undefined,
   setColorPalette: () => undefined,
   setLanguage: () => undefined
 };

@@ -17,7 +17,7 @@ const AcceptButton: FC<AcceptButtonProps> = ({
 }) => {
     
   const {t} = useTranslation();
-  const {isAccessibleSize} = useSettings();
+  const {isAccessibleMode} = useSettings();
   const acceptButton = {
     color: variant === 'contained' ? 'common.white' : undefined,
     minWidth: '120px',
@@ -27,7 +27,7 @@ const AcceptButton: FC<AcceptButtonProps> = ({
   };
   
   return <Button 
-    size={isAccessibleSize ? 'large' : 'medium'} 
+    size={isAccessibleMode ? 'large' : 'medium'}
     startIcon={<CheckCircleIcon/>} 
     variant={variant}
     disabled={disabled}

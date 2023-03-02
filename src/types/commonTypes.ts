@@ -84,7 +84,7 @@ export type Settings = {
   gpsPositionColor: HEXColor,
   trackTolerance: number,
   isLeftHanded: boolean,
-  isAccessibleSize: boolean,
+  isAccessibleMode: boolean,
   colorPalette: string
   language: LANGUAGE
 }

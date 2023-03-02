@@ -49,7 +49,7 @@ export interface actionIconType {
 }
 
 export type ListProps = {
-  isAccessibleSize: boolean,
+  isAccessibleMode: boolean,
   items: Array<listItemType>, //Required: items may not exist yet => items.length === 0
   actionIcons?: Array<actionIconType>,
   contextualMenu?: Array<contextualMenuEntry>,
@@ -63,7 +63,7 @@ export type ListProps = {
 };
 
 const List: FC<ListProps> = ({
-  isAccessibleSize = false,
+  isAccessibleMode = false,
   items,
   contextualMenu,
   actionIcons,
@@ -94,8 +94,8 @@ const List: FC<ListProps> = ({
   const ScrollableContent = useMemo(() => styled(Box)({
     overflow: 'auto',
     padding: '0px',
-    marginBottom: isAccessibleSize ? '72px' : '64px',
-  }), [isAccessibleSize]);
+    marginBottom: isAccessibleMode ? '72px' : '64px',
+  }), [isAccessibleMode]);
     
   const {t} = useTranslation();
   const [searchText, setSearchText] = useState('');
