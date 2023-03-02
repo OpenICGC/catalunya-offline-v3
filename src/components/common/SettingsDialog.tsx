@@ -63,13 +63,13 @@ const asColorPickerPalette = (name: string) => COLOR_PALETTES[name].reduce<Recor
   }), {});
 
 const languageOptions = [{
-  id: LANGUAGE.ca.toString(),
+  id: LANGUAGE[LANGUAGE.ca],
   content: <Typography variant='caption'>CA</Typography>
 }, {
-  id: LANGUAGE.en.toString(),
+  id: LANGUAGE[LANGUAGE.en],
   content: <Typography variant='caption'>EN</Typography>
 }, {
-  id: LANGUAGE.es.toString(),
+  id: LANGUAGE[LANGUAGE.es],
   content: <Typography variant='caption'>ES</Typography>
 }];
 
@@ -196,7 +196,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
       <SettingGroup>
         <Typography>{t('settings.language')}</Typography>
         <ButtonGroup
-          selectedItemId={language.toString()}
+          selectedItemId={LANGUAGE[language]}
           items={languageOptions}
           onItemClick={handleLanguageChange}
           color={primaryColor}
