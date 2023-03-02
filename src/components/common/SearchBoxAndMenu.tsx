@@ -35,11 +35,11 @@ const contextualMenu = [
 ];
 
 //STYLES
-const searchSx = (theme: Theme, isEditingPosition: boolean, isRecordingTrack: boolean) => ({
+const searchSx = (theme: Theme, isHeaderVisible: boolean) => ({
   '&.SearchBox-root': {
     zIndex: 1001,
     position: 'absolute',
-    top: isEditingPosition || isRecordingTrack ? 48 : 0,
+    top: isHeaderVisible ? 48 : 0,
     m: 1,
     maxWidth: {
       xs: `calc(100% - ${theme.spacing(2)})`,
@@ -49,11 +49,11 @@ const searchSx = (theme: Theme, isEditingPosition: boolean, isRecordingTrack: bo
   }
 });
 
-const contextualMenuSx = (isEditingPosition: boolean, isRecordingTrack: boolean) => ({
+const contextualMenuSx = (isHeaderVisible: boolean) => ({
   mt: 1,
   boxShadow: 5,
   position: 'absolute',
-  top: isEditingPosition || isRecordingTrack ? 96 : 48,
+  top: isHeaderVisible ? 96 : 48,
   right: 8,
   zIndex: 1001
 });
@@ -67,6 +67,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
 
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
+  const isHeaderVisible = isEditingPosition || isRecordingTrack;
 
   //CONTEXTUAL MENU
   const [isOpen, setIsOpen] = useState(false);
@@ -84,10 +85,10 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
       onTextChange={() => console.log('writing')}
       onSearchClick={() => console.log('search')}
       placeholder={placeholder}
-      sx={searchSx(theme, isEditingPosition, isRecordingTrack)}
+      sx={searchSx(theme, isHeaderVisible)}
     />
     {
-      isOpen && <Paper sx={contextualMenuSx(isEditingPosition, isRecordingTrack)}>
+      isOpen && <Paper sx={contextualMenuSx(isHeaderVisible)}>
         <MenuList dense sx={{p: 0}}>
           {
             contextualMenu?.map(({id, label, icon}) => <MenuItem key={id} onClick={() => handleAction(id)}>
