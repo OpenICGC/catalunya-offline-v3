@@ -13,6 +13,8 @@ import useEditingPosition from '../hooks/useEditingPosition';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import usePointNavigation from '../hooks/usePointNavigation';
 
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const stackSx = {
   height: '100%',
   overflow: 'hidden',
@@ -32,6 +34,30 @@ const Index: FC = () => {
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
   const pointNavigatingTo = usePointNavigation().target;
+  
+  useEffect(() => {
+    const pickFiles = async () => {
+      const result = await FilePicker.pickFiles({
+        types: [
+          'application/vnd.geo+json',
+          'application/geo+json',
+          'application/vnd.google-earth.kml+xml',
+          'vnd.gpxsee.map+xml',
+          'application/gpx+xml',
+          'application/octet-stream'
+        ],
+        multiple: false,
+        readData: true
+      });
+
+      console.log('Picked File: ', result);
+      if (result.files.length && result.files[0].data) {
+        console.log('Readed File: ', window.atob(result.files[0].data));
+      }
+    };
+
+    pickFiles();
+  }, []);
 
   const toggleSidePanel = () => {
     setSidePanelOpen(!isSidePanelOpen);
