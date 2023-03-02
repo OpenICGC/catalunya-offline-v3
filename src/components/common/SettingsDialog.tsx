@@ -47,7 +47,7 @@ const SettingGroup = styled(Stack)(({theme}) => {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: theme.spacing(1, 2),
-    '&:nth-child(8)': {
+    '&#default-palette-form': {
       paddingLeft: '8px',
       paddingRight: '0px',
     }
@@ -63,13 +63,13 @@ const asColorPickerPalette = (name: string) => COLOR_PALETTES[name].reduce<Recor
   }), {});
 
 const languageOptions = [{
-  id: LANGUAGE.ca,
+  id: LANGUAGE[LANGUAGE.ca],
   content: <Typography variant='caption'>CA</Typography>
 }, {
-  id: LANGUAGE.en,
+  id: LANGUAGE[LANGUAGE.en],
   content: <Typography variant='caption'>EN</Typography>
 }, {
-  id: LANGUAGE.es,
+  id: LANGUAGE[LANGUAGE.es],
   content: <Typography variant='caption'>ES</Typography>
 }];
 
@@ -87,6 +87,7 @@ export type SettingsDialogProps = {
   onColorPaletteChange: (colorPalette: string) => void,
   language: LANGUAGE,
   onLanguageChange: (language: LANGUAGE) => void,
+  onClose: () => void,
 };
 
 const SettingsDialog: FC<SettingsDialogProps> = ({
@@ -101,7 +102,8 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
   colorPalette,
   onColorPaletteChange,
   language,
-  onLanguageChange
+  onLanguageChange,
+  onClose
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
@@ -109,8 +111,9 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
   const handlePaletteChange = (e: SelectChangeEvent) => onColorPaletteChange(e.target.value);
 
   const handleLanguageChange = (lang: LANGUAGE | null) => lang !== null && onLanguageChange(lang);
+  const handleClose = () => onClose();
 
-  return <Dialog open={true} fullWidth PaperProps={{sx: {height: 'auto'}}}>
+  return <Dialog open={true} fullWidth PaperProps={{sx: {height: 'auto'}}} onClose={handleClose}>
     <DialogTitle sx={dialogSx}>
       <SettingsIcon sx={{mr: 2}}/>
       {t('settings.title')}
@@ -164,7 +167,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
           </AddButton>
         </Box>
       </SettingGroup>
-      <SettingGroup>
+      <SettingGroup id='default-palette-form'>
         <Stack p={0}>
           <Typography sx={{px:1}}>{t('settings.defaultPalette')}</Typography>
           <FormControl variant='standard' fullWidth>
@@ -193,7 +196,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
       <SettingGroup>
         <Typography>{t('settings.language')}</Typography>
         <ButtonGroup
-          selectedItemId={language}
+          selectedItemId={LANGUAGE[language]}
           items={languageOptions}
           onItemClick={handleLanguageChange}
           color={primaryColor}
