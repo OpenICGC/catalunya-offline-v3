@@ -19,6 +19,8 @@ import {ColorFormat, ColorPicker} from 'material-ui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import Box from '@mui/material/Box';
 import {ClickAwayListener} from '@mui/material';
+import {COLOR_PALETTES} from '../../config';
+import {useSettings} from '../../hooks/useSettings';
 
 const muiListItemSx = {height: '48px', p: 0, m: 0};
 const listItemIconSx = {minWidth: '24px', p: 0};
@@ -57,6 +59,12 @@ export type ListItemProps = {
   onStopEditing?: () => void
 }
 
+const asColorPickerPalette = (name: string) => COLOR_PALETTES[name].reduce<Record<HEXColor, HEXColor>>(
+  (obj, color) => ({
+    ...obj,
+    [color]: color
+  }), {});
+
 // eslint-disable-next-line react/display-name
 const ListItem: FC<ListItemProps> = memo(({
   itemId,
@@ -74,7 +82,7 @@ const ListItem: FC<ListItemProps> = memo(({
   onStopEditing = () => undefined
 }) => {
   const {t} = useTranslation();
-
+  const {colorPalette} = useSettings();
   //STYLES
   const actionIconSx = useMemo(() => ({
     m: 0,
@@ -118,6 +126,7 @@ const ListItem: FC<ListItemProps> = memo(({
             value={color}
             inputFormats={inputFormats}
             onChange={handleColorChange}
+            palette={asColorPickerPalette(colorPalette)}
           />
           :
           <Box sx={colorBoxSx}/>

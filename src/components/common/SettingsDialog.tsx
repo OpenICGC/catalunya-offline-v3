@@ -23,7 +23,6 @@ import {ColorFormat, ColorPicker, ColorPalette} from 'material-ui-color';
 //CATOFFLINE
 import InputNumber from './InputNumber';
 import AddTrack from '../icons/AddTrack';
-import AddButton from '../buttons/AddButton';
 
 //UTILS
 import {primaryColor} from '../../theme';
