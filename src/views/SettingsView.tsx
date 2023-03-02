@@ -2,7 +2,10 @@ import React, {FC} from 'react';
 import {useSettings} from '../hooks/useSettings';
 import SettingsDialog from '../components/common/SettingsDialog';
 
-const SettingsView: FC = () => {
+export type SettingsViewProps = {
+  onClose: () => void,
+};
+const SettingsView: FC<SettingsViewProps> = ({onClose}) => {
   const {
     gpsPositionColor, trackTolerance, isLeftHanded, isAccessibleSize, colorPalette, language,
     setGpsPositionColor, setTrackTolerance, setLeftHanded, setIsAccessibleSize, setColorPalette, setLanguage
@@ -15,6 +18,7 @@ const SettingsView: FC = () => {
     isAccessibleSize={isAccessibleSize} onButtonSizeChange={setIsAccessibleSize}
     colorPalette={colorPalette} onColorPaletteChange={setColorPalette}
     language={language} onLanguageChange={setLanguage}
+    onClose={onClose}
   />;
 };
 

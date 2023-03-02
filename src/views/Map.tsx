@@ -24,6 +24,8 @@ import useRecordingTrack from '../hooks/useRecordingTrack';
 import TrackRecorder from '../components/map/TrackRecorder';
 import usePointNavigation from '../hooks/usePointNavigation';
 import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
+import SearchBoxAndMenu from '../components/common/SearchBoxAndMenu';
+import SettingsView from './SettingsView';
 
 mbtiles(maplibregl);
 
@@ -166,6 +168,8 @@ const Map: FC<MainContentProps> = ({
 
   const [isFabOpen, setFabOpen] =useState<boolean>(false);
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
+
+  const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
 
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
@@ -438,7 +442,19 @@ const Map: FC<MainContentProps> = ({
 
   const handleShowDetails = () => pointNavigation.target && onShowPointDetails(pointNavigation.target.id);
 
+  const handleContextualMenu = (menuId: string) => {
+    menuId === 'settings'
+      ? setSettingsDialogOpen(true)
+      : menuId === 'about' 
+        ? console.log('Unimplemented about') 
+        : undefined;
+  };
+  
   return <>
+    <SearchBoxAndMenu 
+      placeholder={t('actions.search')} 
+      onContextualMenuClick={handleContextualMenu}
+    />
     <GeocomponentMap
       {...MAP_PROPS}
       reuseMaps
@@ -475,6 +491,7 @@ const Map: FC<MainContentProps> = ({
         onScopesClick={() => changeManager('SCOPES')}
       />}
     </GeocomponentMap>
+    
     {!!editingPosition.position && <PositionEditor
       name={selectedPoint?.properties.name}
       color={pointColor}
@@ -504,6 +521,9 @@ const Map: FC<MainContentProps> = ({
       onStop={pointNavigation.stop}
       onFitBounds={handleFitBounds}
       onShowDetails={handleShowDetails}
+    />}
+    {isSettingsDialogOpen && <SettingsView
+      onClose={() => setSettingsDialogOpen(false)}
     />}
   </>;
 };
