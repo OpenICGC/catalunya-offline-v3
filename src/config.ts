@@ -116,7 +116,7 @@ export const DEFAULT_SETTINGS: Settings = {
   gpsPositionColor: GPS_POSITION_COLOR,
   trackTolerance: 40,
   isLeftHanded: false,
-  isAccessibleMode: false,
+  isLargeSize: false,
   colorPalette: 'BrewerSet19',
   language: LANGUAGE.ca
 };

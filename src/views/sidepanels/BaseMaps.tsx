@@ -32,13 +32,13 @@ const boxSx = {width: '100%', height: 0, pt: 5, pb: 1};
 const BaseMaps: FC<BaseMapsProps> = ({baseMapId, onMapStyleChanged, onMapStyleDeleted, onMapStyleAdded}) => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const {isAccessibleMode} = useSettings();
+  const {isLargeSize} = useSettings();
 
   const ScrollableContent = useMemo(() => styled(Box)({
     overflowY: 'auto',
     padding: '0px',
-    marginBottom: isAccessibleMode ? '72px' : '64px'
-  }), [isAccessibleMode]);
+    marginBottom: isLargeSize ? '72px' : '64px'
+  }), [isLargeSize]);
   
   return <>
     <Header

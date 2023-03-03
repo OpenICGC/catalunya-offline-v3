@@ -19,10 +19,10 @@ const AddButton: FC<AddButtonProps> = ({
   onClick,
   sx
 }) => {
-  const {isAccessibleMode, isLeftHanded} = useSettings();
+  const {isLargeSize, isLeftHanded} = useSettings();
 
   //STYLES
-  const fabSize = isAccessibleMode ? 64 : 48;
+  const fabSize = isLargeSize ? 64 : 48;
   const iconSize = fabSize / 2;
   const fabColor = '#424242'; //grey.800 getContrast does not support 'grey.800' as a parameter
 
@@ -33,7 +33,7 @@ const AddButton: FC<AddButtonProps> = ({
     height: fabSize,
     bgcolor: fabColor,
     m: 1,
-    bottom: isAccessibleMode ? '80px' : '64px',
+    bottom: isLargeSize ? '80px' : '64px',
     float: isLeftHanded ? 'left' : 'right',
     '&:hover': {
       bgcolor: fabColor,

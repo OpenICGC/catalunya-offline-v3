@@ -81,7 +81,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
 }) => {
   const {t} = useTranslation();
   const [tabValue, setTabValue] = useState(0);
-  const {isAccessibleMode} = useSettings();
+  const {isLargeSize} = useSettings();
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
   const handleActionPointClick = (pointId: UUID) => {
@@ -222,7 +222,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     </Tabs>
     {
       tabValue === 0 && <><List
-        isAccessibleMode={isAccessibleMode}
+        isLargeSize={isLargeSize}
         items={pointItems}
         contextualMenu={contextualMenu.point}
         actionIcons={actionIcons}
@@ -241,7 +241,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     {
       tabValue === 1 && <>
         <List
-          isAccessibleMode={isAccessibleMode}
+          isLargeSize={isLargeSize}
           items={trackItems}
           contextualMenu={contextualMenu.track}
           actionIcons={actionIcons}

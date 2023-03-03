@@ -23,9 +23,9 @@ const PointMarkers: FC<PointMarkersProps> = ({
   onClick= () => undefined
 }) => {
 
-  const {isAccessibleMode} = useSettings();
+  const {isLargeSize} = useSettings();
 
-  const markerSize = isAccessibleMode ? ACCESSIBLE_MARKER_SIZE : MARKER_SIZE;
+  const markerSize = isLargeSize ? ACCESSIBLE_MARKER_SIZE : MARKER_SIZE;
   const visiblePoints = points?.filter(point => point.properties.isVisible);
 
   return <>{

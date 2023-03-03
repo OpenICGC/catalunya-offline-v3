@@ -21,19 +21,6 @@ export type SearchBoxAndMenuProps = {
   onContextualMenuClick?: (menuId: string) => void,
 };
 
-const contextualMenu = [
-  {
-    id: 'settings',
-    label: 'Ajustes',
-    icon: <SettingsIcon/>
-  },
-  {
-    id: 'about',
-    label: 'Acerca de...',
-    icon: <InfoIcon/>
-  }
-];
-
 //STYLES
 const searchSx = (theme: Theme, isHeaderVisible: boolean) => ({
   '&.SearchBox-root': {
@@ -77,6 +64,19 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
     onContextualMenuClick(actionId);
   };
 
+  const contextualMenu = [
+    {
+      id: 'settings',
+      label: t('settings.title'),
+      icon: <SettingsIcon/>
+    },
+    {
+      id: 'about',
+      label: t('about.title'),
+      icon: <InfoIcon/>
+    }
+  ];
+  
   return <>
     <SearchBox
       id='search-box'        

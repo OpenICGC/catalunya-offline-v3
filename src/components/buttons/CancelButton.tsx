@@ -20,7 +20,7 @@ const CancelButton: FC<CancelButtonProps> = ({
 }) => {
     
   const {t} = useTranslation();
-  const {isAccessibleMode} = useSettings();
+  const {isLargeSize} = useSettings();
   const cancelButton = {
     bgcolor: variant === 'contained' ? 'common.white' : undefined,
     color: `grey.${greyColor}`,
@@ -33,7 +33,7 @@ const CancelButton: FC<CancelButtonProps> = ({
   };
   
   return <Button 
-    size={isAccessibleMode ? 'large' : 'medium'}
+    size={isLargeSize ? 'large' : 'medium'}
     startIcon={<CancelIcon sx={{color: disabled ? 'action.disabled' : `grey.${greyColor}`}}/>}
     variant={variant}
     disabled={disabled}

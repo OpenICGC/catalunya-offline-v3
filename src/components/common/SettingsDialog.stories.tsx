@@ -45,7 +45,7 @@ Default.args = {
   gpsPositionColor: GPS_POSITION_COLOR,
   trackTolerance: 40,
   isLeftHanded: true,
-  isAccessibleMode: false,
+  isLargeSize: false,
   colorPalette: 'BrewerSpectral9',
   language: LANGUAGE.ca
 };

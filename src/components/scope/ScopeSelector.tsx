@@ -19,7 +19,7 @@ import {Scope, UUID} from '../../types/commonTypes';
 import {useSettings} from '../../hooks/useSettings';
 
 export interface ScopeSelectorProps {
-    isAccessibleMode: boolean;
+    isLargeSize: boolean;
     isOpen?: boolean;
     scopes: Array<Scope>;
     onScopeSelected: (scope: UUID) => void;
@@ -32,7 +32,7 @@ const ScopeSelector: FC<ScopeSelectorProps> = ({
   onCancel
 }) => {
   const {t} = useTranslation();
-  const {isAccessibleMode} = useSettings();
+  const {isLargeSize} = useSettings();
 
   return <Dialog open={true} onClose={() => onCancel()} fullWidth PaperProps={{sx: {height: '500px'}}}>
     <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.35}}>
@@ -41,7 +41,7 @@ const ScopeSelector: FC<ScopeSelectorProps> = ({
     </DialogTitle>
     <Divider/>
     <List
-      isAccessibleMode={isAccessibleMode}
+      isLargeSize={isLargeSize}
       items={scopes}
       onClick={onScopeSelected}
       searchSx={{pt: 2.5, px: 2.5}}

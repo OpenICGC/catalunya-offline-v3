@@ -9,10 +9,13 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import SettingsIcon from '@mui/icons-material/Settings';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Fab from '@mui/material/Fab';
+
+//MUI-ICONS
+import CloseIcon from '@mui/icons-material/Close';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 //GEOCOMPONENTS
 import ButtonGroup from '@geomatico/geocomponents/ButtonGroup';
@@ -32,7 +35,7 @@ import {HEXColor, LANGUAGE} from '../../types/commonTypes';
 import {COLOR_PALETTES} from '../../config';
 import {SelectChangeEvent, Theme} from '@mui/material';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
-
+import IconButton from '@mui/material/IconButton';
 
 //STYLES
 const dialogSx = {
@@ -83,8 +86,8 @@ export type SettingsDialogProps = {
   onTrackToleranceChange: (trackTolerance: number) => void,
   isLeftHanded: boolean,
   onLeftHandedChange: (isLeftHanded: boolean) => void,
-  isAccessibleMode: boolean,
-  onButtonSizeChange: (isSelectedSizeAccessible: boolean) => void,
+  isLargeSize: boolean,
+  onButtonSizeChange: (isLargeSize: boolean) => void,
   colorPalette: string
   onColorPaletteChange: (colorPalette: string) => void,
   language: LANGUAGE,
@@ -108,7 +111,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
   onTrackToleranceChange,
   isLeftHanded,
   onLeftHandedChange,
-  isAccessibleMode,
+  isLargeSize,
   onButtonSizeChange,
   colorPalette,
   onColorPaletteChange,
@@ -126,7 +129,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
     m: 1,
     mr: 0,
     bottom: 0,
-    border: isAccessibleMode ? 0 : `4px solid ${primaryColor}`,
+    border: isLargeSize ? 0 : `4px solid ${primaryColor}`,
     '&:hover': {
       bgcolor: '#424242',
     },
@@ -134,7 +137,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
       fontSize: 24,
       color: (theme: Theme) => theme.palette.getContrastText('#424242')
     }
-  }), [isAccessibleMode]);
+  }), [isLargeSize]);
   const largeButtonSx = useMemo(() => ({
     width: 64,
     height: 64,
@@ -142,7 +145,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
     m: 1,
     mr: 0,
     bottom: 0,
-    border: isAccessibleMode ? `4px solid ${primaryColor}` : 0,
+    border: isLargeSize ? `4px solid ${primaryColor}` : 0,
     '&:hover': {
       bgcolor: '#424242',
     },
@@ -150,7 +153,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
       fontSize: 32,
       color: (theme: Theme) => theme.palette.getContrastText('#424242')
     }
-  }), [isAccessibleMode]);
+  }), [isLargeSize]);
   
   
   const handleGpsPositionColorChange = (e: {hex: string}) => onGpsPositionColorChange(`#${e.hex}`);
@@ -163,6 +166,17 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
     <DialogTitle sx={dialogSx}>
       <SettingsIcon sx={{mr: 2}}/>
       {t('settings.title')}
+      <IconButton
+        onClick={handleClose}
+        sx={{
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          color: (theme) => theme.palette.common.black,
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
     </DialogTitle>
     <DialogContent sx={{mt: 2, py: 2, px: 0}}>
       <Typography variant='caption' sx={{p: 2, fontWeight: 900}}>{t('settings.navigation').toUpperCase()}</Typography>

@@ -28,9 +28,9 @@ const RecordButton: FC<RecordButtonProps> = ({
   onClick
 }) => {
   const {t} = useTranslation();
-  const {isAccessibleMode} = useSettings();
+  const {isLargeSize} = useSettings();
 
-  const size = isAccessibleMode ? 'large' : 'medium';
+  const size = isLargeSize ? 'large' : 'medium';
   const handleClick = () => onClick();
 
   return <Button

@@ -50,7 +50,7 @@ const MainPanel: FC<MainPanelProps> = ({
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const {isAccessibleMode} = useSettings();
+  const {isLargeSize} = useSettings();
 
   const contextualMenu = useMemo(() => ([
     {
@@ -94,7 +94,7 @@ const MainPanel: FC<MainPanelProps> = ({
       color={`#${theme.palette.secondary.main}`}
     />
     <List
-      isAccessibleMode={isAccessibleMode}
+      isLargeSize={isLargeSize}
       items={scopes}
       contextualMenu={contextualMenu}
       actionIcons={actionIcons}

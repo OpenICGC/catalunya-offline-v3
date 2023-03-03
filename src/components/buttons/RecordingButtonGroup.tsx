@@ -24,7 +24,7 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
   onButtonClick
 }) => {
 
-  const {isAccessibleMode} = useSettings();
+  const {isLargeSize} = useSettings();
 
   const pauseIconSx = {color: recordingStatus === RECORDING_STATUS.PAUSED ? 'white': 'grey.700'};
   const stopIconSx = {color: recordingStatus === RECORDING_STATUS.STOPPED ? 'white': 'grey.700'};
@@ -51,8 +51,8 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
       '&.MuiButtonBase-root': {
         borderColor: 'grey.700',
         borderWidth: '1px',
-        width: isAccessibleMode ? '64px' : '56px',
-        height: isAccessibleMode ? '42px' : '37px',
+        width: isLargeSize ? '64px' : '56px',
+        height: isLargeSize ? '42px' : '37px',
         '&:hover': {
           borderColor: 'grey.700',
           borderWidth: '1px',

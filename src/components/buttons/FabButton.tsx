@@ -58,13 +58,13 @@ const FabButton: FC<FabButtonProps> = ({
   onScopesClick
 }) => {
 
-  const {isAccessibleMode, isLeftHanded} = useSettings();
+  const {isLargeSize, isLeftHanded} = useSettings();
 
   //STYLES
-  const fabSize = isAccessibleMode ? 72 : 56;
-  const buttonSize = isAccessibleMode ? 50 : 40;
-  const iconSize = isAccessibleMode ? 32 : undefined;
-  const radius = isAccessibleMode ? 80 : 60;
+  const fabSize = isLargeSize ? 72 : 56;
+  const buttonSize = isLargeSize ? 50 : 40;
+  const iconSize = isLargeSize ? 32 : undefined;
+  const radius = isLargeSize ? 80 : 60;
 
   const container: SxProps = {
     height: '100%',
