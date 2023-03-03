@@ -209,7 +209,7 @@ const FabButton: FC<FabButtonProps> = ({
 
   const fabHidden = {
     ...fab,
-    transform: 'translateX(100px)'
+    transform: isLeftHanded ? 'translateX(-100px)' : 'translateX(100px)'
   };
 
   return <Box sx={container}>

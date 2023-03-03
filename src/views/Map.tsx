@@ -169,6 +169,7 @@ const Map: FC<MainContentProps> = ({
 
   const [isFabOpen, setFabOpen] =useState<boolean>(false);
   const [isFabHidden, setFabHidden] =useState<boolean>(false);
+  const [isSearchBoxHidden, setSearchBoxHidden] =useState<boolean>(false);
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
@@ -332,7 +333,6 @@ const Map: FC<MainContentProps> = ({
   const longTouchTimer = useRef<number>();
 
   const handleTouchStart = (e: MapTouchEvent) => {
-    isFabOpen ? setFabOpen(false) : setFabHidden(!isFabHidden);
     if (e.originalEvent.touches.length > 1) {
       return;
     }
@@ -348,7 +348,10 @@ const Map: FC<MainContentProps> = ({
       longTouchTimer.current = undefined;
     }
   };
-
+  const handleClick = () => {
+    setSearchBoxHidden(!isSearchBoxHidden);
+    isFabOpen ? setFabOpen(false) : setFabHidden(!isFabHidden);
+  };
   const handleDoubleClick = (e: MapLayerMouseEvent) => {
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
   };
@@ -455,8 +458,9 @@ const Map: FC<MainContentProps> = ({
   
   return <>
     <SearchBoxAndMenu 
-      placeholder={t('actions.search')} 
+      placeholder={t('actions.search')}
       onContextualMenuClick={handleContextualMenu}
+      isSearchBoxHidden={isSearchBoxHidden}
     />
     <GeocomponentMap
       {...MAP_PROPS}
@@ -476,6 +480,7 @@ const Map: FC<MainContentProps> = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={clearLongTouchTimer}
       onTouchCancel={clearLongTouchTimer}
+      onClick={handleClick}
       onDblClick={handleDoubleClick}
       doubleClickZoom={false}
       attributionControl={false}
