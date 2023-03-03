@@ -168,6 +168,7 @@ const Map: FC<MainContentProps> = ({
   const recordingTrack = useRecordingTrack();
 
   const [isFabOpen, setFabOpen] =useState<boolean>(false);
+  const [isFabHidden, setFabHidden] =useState<boolean>(false);
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
@@ -331,6 +332,7 @@ const Map: FC<MainContentProps> = ({
   const longTouchTimer = useRef<number>();
 
   const handleTouchStart = (e: MapTouchEvent) => {
+    isFabOpen ? setFabOpen(false) : setFabHidden(!isFabHidden);
     if (e.originalEvent.touches.length > 1) {
       return;
     }
@@ -481,7 +483,7 @@ const Map: FC<MainContentProps> = ({
       <LocationMarker geolocation={geolocation} heading={heading}/>
       <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
       {!editingPosition.position && <FabButton
-        isFabOpen={isFabOpen} onFabClick={toggleFabOpen}
+        isFabOpen={isFabOpen} onFabClick={toggleFabOpen} isFabHidden={isFabHidden}
         bearing={viewport.bearing} pitch={viewport.pitch}
         locationStatus={locationStatus}
         onOrientationClick={handleOrientationClick}

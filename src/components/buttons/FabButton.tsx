@@ -34,6 +34,7 @@ export enum LOCATION_STATUS {
 
 export type FabButtonProps = {
   isFabOpen: boolean,
+  isFabHidden: boolean,
   onFabClick: () => void,
   bearing: number,
   pitch: number,
@@ -47,6 +48,7 @@ export type FabButtonProps = {
 
 const FabButton: FC<FabButtonProps> = ({
   isFabOpen,
+  isFabHidden,
   onFabClick ,
   bearing = 0,
   pitch = 0,
@@ -106,6 +108,7 @@ const FabButton: FC<FabButtonProps> = ({
     ...buttonBase,
     transitionDelay: `${0 * delay}ms`,
     bgcolor: orientationBgcolor,
+    opacity: !isFabOpen ? 0 : 1,
     '&:hover': {
       bgcolor: orientationBgcolor
     },
@@ -131,6 +134,7 @@ const FabButton: FC<FabButtonProps> = ({
     ...buttonBase,
     transitionDelay: `${1 * delay}ms`,
     bgcolor: locationBgcolor,
+    opacity: !isFabOpen ? 0 : 1,
     '&:hover': {
       bgcolor: locationBgcolor
     }
@@ -144,7 +148,8 @@ const FabButton: FC<FabButtonProps> = ({
 
   const layers = {
     ...buttonBase,
-    transitionDelay: `${2 * delay}ms`
+    transitionDelay: `${2 * delay}ms`,
+    opacity: !isFabOpen ? 0 : 1
   };
 
   const layersOpen = {
@@ -155,7 +160,8 @@ const FabButton: FC<FabButtonProps> = ({
 
   const baseMaps = {
     ...buttonBase,
-    transitionDelay: `${3 * delay}ms`
+    transitionDelay: `${3 * delay}ms`,
+    opacity: !isFabOpen ? 0 : 1
   };
 
   const baseMapsOpen = {
@@ -166,7 +172,8 @@ const FabButton: FC<FabButtonProps> = ({
 
   const folder = {
     ...buttonBase,
-    transitionDelay: `${4 * delay}ms`
+    transitionDelay: `${4 * delay}ms`,
+    opacity: !isFabOpen ? 0 : 1
   };
 
   const folderOpen = {
@@ -200,8 +207,13 @@ const FabButton: FC<FabButtonProps> = ({
     transform: 'rotate(45deg)'
   };
 
+  const fabHidden = {
+    ...fab,
+    transform: 'translateX(100px)'
+  };
+
   return <Box sx={container}>
-    <Fab color="primary" sx={isFabOpen ? fabOpen : fab} onClick={onFabClick}>
+    <Fab color="primary" sx={isFabOpen ? fabOpen : isFabHidden ? fabHidden : fab} onClick={onFabClick}>
       <FabIcon/>
     </Fab>
     <IconButton sx={isFabOpen ? orientationOpen : orientation} onClick={onOrientationClick}>
