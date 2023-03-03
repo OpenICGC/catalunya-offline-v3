@@ -19,6 +19,5 @@ const Template: Story<CancelButtonProps> = args => <CancelButton {...args}/>;
 export const Default = Template.bind({});
 Default.args = {
   variant: 'text',
-  isAccessibleSize: false,
   disabled: false
 };

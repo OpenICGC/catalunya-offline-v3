@@ -21,12 +21,11 @@ import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID, Scope} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
 import Header from '../common/Header';
+import {useSettings} from '../../hooks/useSettings';
 
 const boxSx = {width: '100%', height: 0};
 
 export type MainPanelProps = {
-  isAccessibleSize?: boolean,
-  isLeftHanded?: boolean,
   scopes: Array<Scope>,
   onAdd: () => void,
   onSelect: (scopeId: UUID) => void,
@@ -39,8 +38,6 @@ export type MainPanelProps = {
 };
 
 const MainPanel: FC<MainPanelProps> = ({
-  isAccessibleSize = false,
-  isLeftHanded = false,
   scopes,
   onAdd,
   onSelect,
@@ -53,6 +50,7 @@ const MainPanel: FC<MainPanelProps> = ({
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
+  const {isLargeSize} = useSettings();
 
   const contextualMenu = useMemo(() => ([
     {
@@ -96,7 +94,7 @@ const MainPanel: FC<MainPanelProps> = ({
       color={`#${theme.palette.secondary.main}`}
     />
     <List
-      isAccessibleSize={isAccessibleSize}
+      isLargeSize={isLargeSize}
       items={scopes}
       contextualMenu={contextualMenu}
       actionIcons={actionIcons}
@@ -107,11 +105,7 @@ const MainPanel: FC<MainPanelProps> = ({
       onNameChange={onRename}
     />
     <Box sx={boxSx}>
-      <AddButton
-        isAccessibleSize={isAccessibleSize}
-        isLeftHanded={isLeftHanded}
-        onClick={onAdd}
-      >
+      <AddButton onClick={onAdd}>
         <CreateNewFolderIcon/>
       </AddButton>
     </Box>

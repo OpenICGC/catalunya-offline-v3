@@ -32,10 +32,9 @@ import {Theme} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import FeaturesSummary from './FeaturesSummary';
 import ShareIcon from '@mui/icons-material/Share';
+import {useSettings} from '../../hooks/useSettings';
 
 export type FeaturesPanelProps = {
-  isAccessibleSize?: boolean,
-  isLeftHanded?: boolean,
   scope: Scope,
   scopePoints: Array<ScopePoint>,
   scopeTracks: Array<ScopeTrack>,
@@ -59,8 +58,6 @@ export type FeaturesPanelProps = {
 };
 
 const FeaturesPanel: FC<FeaturesPanelProps> = ({
-  isAccessibleSize = false,
-  isLeftHanded = false,
   scope,
   scopePoints,
   scopeTracks,
@@ -84,7 +81,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
 }) => {
   const {t} = useTranslation();
   const [tabValue, setTabValue] = useState(0);
-
+  const {isLargeSize} = useSettings();
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
   const handleActionPointClick = (pointId: UUID) => {
@@ -225,7 +222,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     </Tabs>
     {
       tabValue === 0 && <><List
-        isAccessibleSize={isAccessibleSize}
+        isLargeSize={isLargeSize}
         items={pointItems}
         contextualMenu={contextualMenu.point}
         actionIcons={actionIcons}
@@ -236,11 +233,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         onNameChange={onNameChangePoint}
       />
       <Box sx={{width: '100%', height: 0}}>
-        <AddButton
-          isAccessibleSize={isAccessibleSize}
-          isLeftHanded={isLeftHanded}
-          onClick={onAddPoint}
-        >
+        <AddButton onClick={onAddPoint}>
           <AddLocationAltIcon/>
         </AddButton>
       </Box></>
@@ -248,7 +241,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     {
       tabValue === 1 && <>
         <List
-          isAccessibleSize={isAccessibleSize}
+          isLargeSize={isLargeSize}
           items={trackItems}
           contextualMenu={contextualMenu.track}
           actionIcons={actionIcons}
@@ -259,11 +252,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
           onNameChange={onNameChangeTrack}
         />
         <Box sx={{width: '100%', height: 0}}>
-          <AddButton
-            isAccessibleSize={isAccessibleSize}
-            isLeftHanded={isLeftHanded}
-            onClick={onAddTrack}
-          >
+          <AddButton onClick={onAddTrack}>
             <AddTrack/>
           </AddButton>
         </Box>

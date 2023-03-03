@@ -66,9 +66,7 @@ Default.args = {
       color: Math.random() < 0.5 ? palette[i % palette.length] : undefined, // Color asignado la mitad de las veces
       isVisible: Math.random() < 0.5
     }
-  })),
-  isAccessibleSize: false,
-  isLeftHanded: false
+  }))
 };
 
 export const Device = DeviceTemplate.bind({});

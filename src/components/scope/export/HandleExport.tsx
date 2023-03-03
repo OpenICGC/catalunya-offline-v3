@@ -6,7 +6,6 @@ import useShare from '../../../hooks/useShare';
 import ProgressDialog from '../../common/ProgressDialog';
 import HandleExportGpx from './HandleExportGpx';
 
-
 export type HandleExportProps = {
   scopeId: UUID,
   trackId?: UUID,
@@ -30,7 +29,6 @@ const HandleExport: FC<HandleExportProps> = ({
   const [filePath, setFilePath] = useState<string|undefined>(undefined);
 
   const {shareFile} = useShare();
-
   const handleShareDialogOptionsSelected = (format: SHARE_FORMAT, shareVisiblePoints = false) => {
     setState({format: format, shareVisiblePoints: shareVisiblePoints});
   };
@@ -68,7 +66,6 @@ const HandleExport: FC<HandleExportProps> = ({
     :
     <ShareDialog
       featureShared={trackId ? FEATURE_SHARED.TRACK : FEATURE_SHARED.SCOPE}
-      isAccesibleSize={false}
       onClick={handleShareDialogOptionsSelected}
       onCancel={onSharedCancel}
     />;

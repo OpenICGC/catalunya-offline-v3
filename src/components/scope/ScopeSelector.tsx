@@ -16,9 +16,10 @@ import List from './List';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {Scope, UUID} from '../../types/commonTypes';
+import {useSettings} from '../../hooks/useSettings';
 
 export interface ScopeSelectorProps {
-    isAccesibleSize: boolean;
+    isLargeSize: boolean;
     isOpen?: boolean;
     scopes: Array<Scope>;
     onScopeSelected: (scope: UUID) => void;
@@ -26,14 +27,13 @@ export interface ScopeSelectorProps {
 }
 
 const ScopeSelector: FC<ScopeSelectorProps> = ({
-  isAccesibleSize,
   scopes,
   onScopeSelected,
   onCancel
 }) => {
-    
   const {t} = useTranslation();
-    
+  const {isLargeSize} = useSettings();
+
   return <Dialog open={true} onClose={() => onCancel()} fullWidth PaperProps={{sx: {height: '500px'}}}>
     <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.35}}>
       <ReportProblemIcon sx={{mr: 1}}/>
@@ -41,14 +41,14 @@ const ScopeSelector: FC<ScopeSelectorProps> = ({
     </DialogTitle>
     <Divider/>
     <List
-      isAccessibleSize={isAccesibleSize}
+      isLargeSize={isLargeSize}
       items={scopes}
       onClick={onScopeSelected}
       searchSx={{pt: 2.5, px: 2.5}}
       listSx={{pb: 2.5, px: 2.5, m: 0}}
     />
     <DialogActions sx={{position: 'absolute', bottom: 0, right: 0}}>
-      <CancelButton isAccessibleSize={isAccesibleSize} onCancel={onCancel}/>
+      <CancelButton onCancel={onCancel}/>
     </DialogActions>
   </Dialog>;
 };

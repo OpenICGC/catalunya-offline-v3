@@ -10,20 +10,22 @@ import ButtonGroup from '@geomatico/geocomponents/ButtonGroup';
 
 //UTILS
 import {RECORDING_STATUS} from '../map/TrackRecorder';
+import {useSettings} from '../../hooks/useSettings';
 
 const recordIconSx = {color: '#d32f2f'};
 
 export interface RecordingButtonGroupProps {
-  isAccessibleSize: boolean,
   recordingStatus: RECORDING_STATUS,
   onButtonClick: (id: RECORDING_STATUS) => void
 }
 
 const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
-  isAccessibleSize,
   recordingStatus,
   onButtonClick
 }) => {
+
+  const {isLargeSize} = useSettings();
+
   const pauseIconSx = {color: recordingStatus === RECORDING_STATUS.PAUSED ? 'white': 'grey.700'};
   const stopIconSx = {color: recordingStatus === RECORDING_STATUS.STOPPED ? 'white': 'grey.700'};
 
@@ -49,8 +51,8 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
       '&.MuiButtonBase-root': {
         borderColor: 'grey.700',
         borderWidth: '1px',
-        width: isAccessibleSize ? '64px' : '56px',
-        height: isAccessibleSize ? '42px' : '37px',
+        width: isLargeSize ? '64px' : '56px',
+        height: isLargeSize ? '42px' : '37px',
         '&:hover': {
           borderColor: 'grey.700',
           borderWidth: '1px',

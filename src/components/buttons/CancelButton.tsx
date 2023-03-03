@@ -3,9 +3,9 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import Button from '@mui/material/Button';
 import {Theme} from '@mui/material';
 import {useTranslation} from 'react-i18next';
+import {useSettings} from '../../hooks/useSettings';
 
 export interface CancelButtonProps {
- isAccessibleSize: boolean,
     variant?: 'text' | 'outlined' | 'contained',
     disabled?: boolean
  onCancel: () => void
@@ -14,14 +14,13 @@ export interface CancelButtonProps {
 const greyColor = 700;
 
 const CancelButton: FC<CancelButtonProps> = ({
-  isAccessibleSize,
   variant = 'text',
   disabled= false,
   onCancel
 }) => {
     
   const {t} = useTranslation();
-
+  const {isLargeSize} = useSettings();
   const cancelButton = {
     bgcolor: variant === 'contained' ? 'common.white' : undefined,
     color: `grey.${greyColor}`,
@@ -34,7 +33,7 @@ const CancelButton: FC<CancelButtonProps> = ({
   };
   
   return <Button 
-    size={isAccessibleSize ? 'large' : 'medium'} 
+    size={isLargeSize ? 'large' : 'medium'}
     startIcon={<CancelIcon sx={{color: disabled ? 'action.disabled' : `grey.${greyColor}`}}/>}
     variant={variant}
     disabled={disabled}

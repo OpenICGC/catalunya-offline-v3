@@ -18,6 +18,7 @@ import NavigatingIcon from '@mui/icons-material/Explore';
 import LayersIcon from '@mui/icons-material/Layers';
 import BaseMapsIcon from '@mui/icons-material/Map';
 import ScopesIcon from '@mui/icons-material/Folder';
+import {useSettings} from '../../hooks/useSettings';
 
 //STYLES
 const fabTransition = 'transform 360ms linear';
@@ -32,8 +33,6 @@ export enum LOCATION_STATUS {
 }
 
 export type FabButtonProps = {
-  isLeftHanded: boolean,
-  isAccessibleSize: boolean,
   isFabOpen: boolean,
   onFabClick: () => void,
   bearing: number,
@@ -47,8 +46,6 @@ export type FabButtonProps = {
 }
 
 const FabButton: FC<FabButtonProps> = ({
-  isLeftHanded = false,
-  isAccessibleSize = false,
   isFabOpen,
   onFabClick ,
   bearing = 0,
@@ -60,11 +57,14 @@ const FabButton: FC<FabButtonProps> = ({
   onBaseMapsClick,
   onScopesClick
 }) => {
+
+  const {isLargeSize, isLeftHanded} = useSettings();
+
   //STYLES
-  const fabSize = isAccessibleSize ? 72 : 56;
-  const buttonSize = isAccessibleSize ? 50 : 40;
-  const iconSize = isAccessibleSize ? 32 : undefined;
-  const radius = isAccessibleSize ? 80 : 60;
+  const fabSize = isLargeSize ? 72 : 56;
+  const buttonSize = isLargeSize ? 50 : 40;
+  const iconSize = isLargeSize ? 32 : undefined;
+  const radius = isLargeSize ? 80 : 60;
 
   const container: SxProps = {
     height: '100%',

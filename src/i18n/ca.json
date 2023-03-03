@@ -1,4 +1,7 @@
 {
+  "about": {
+    "title": "Sobre..."
+  },
   "actions": {
     "accept": "Accepta",
     "addPoint": "Afegir punt",

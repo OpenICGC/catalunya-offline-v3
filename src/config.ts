@@ -1,4 +1,4 @@
-import {BaseMaps, BUTTON_SIZE, HEXColor, LANGUAGE, Settings} from './types/commonTypes';
+import {BaseMaps, HEXColor, LANGUAGE, Settings} from './types/commonTypes';
 import {ViewportType} from './hooks/useViewport';
 import {Capacitor} from '@capacitor/core';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
@@ -116,7 +116,7 @@ export const DEFAULT_SETTINGS: Settings = {
   gpsPositionColor: GPS_POSITION_COLOR,
   trackTolerance: 40,
   isLeftHanded: false,
-  buttonSize: BUTTON_SIZE.small,
+  isLargeSize: false,
   colorPalette: 'BrewerSet19',
   language: LANGUAGE.ca
 };

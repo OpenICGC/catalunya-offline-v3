@@ -38,8 +38,6 @@ const Template: Story<FabButtonProps> = args => <FabButton {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  isLeftHanded: false,
-  isAccessibleSize: false,
   isFabOpen: true,
   bearing: 0,
   pitch: 0,
@@ -73,11 +71,9 @@ Navigating.args = {
 export const LeftHanded = Template.bind({});
 LeftHanded.args = {
   ...Default.args,
-  isLeftHanded: true
 };
 
 export const Accessible = Template.bind({});
 Accessible.args = {
   ...Default.args,
-  isAccessibleSize: true
 };

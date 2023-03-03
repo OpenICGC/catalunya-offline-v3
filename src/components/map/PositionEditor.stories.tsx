@@ -26,7 +26,6 @@ const WithMapTemplate: Story<PositionEditorProps> = ({...args}) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  isAccessibleSize: false,
   name: 'Montseny',
   color: '#973572'
 };

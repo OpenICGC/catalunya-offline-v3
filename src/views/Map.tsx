@@ -26,6 +26,7 @@ import usePointNavigation from '../hooks/usePointNavigation';
 import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
 import SearchBoxAndMenu from '../components/common/SearchBoxAndMenu';
 import SettingsView from './SettingsView';
+import {useSettings} from '../hooks/useSettings';
 
 mbtiles(maplibregl);
 
@@ -170,7 +171,7 @@ const Map: FC<MainContentProps> = ({
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
-
+  const {isLargeSize} = useSettings();
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
     const {latitude, longitude} = geolocation;
@@ -478,9 +479,8 @@ const Map: FC<MainContentProps> = ({
       attributionControl={false}
     >
       <LocationMarker geolocation={geolocation} heading={heading}/>
-      <PointMarkers isAccessibleSize={false} points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
+      <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
       {!editingPosition.position && <FabButton
-        isLeftHanded={false} isAccessibleSize={false}
         isFabOpen={isFabOpen} onFabClick={toggleFabOpen}
         bearing={viewport.bearing} pitch={viewport.pitch}
         locationStatus={locationStatus}
@@ -499,7 +499,6 @@ const Map: FC<MainContentProps> = ({
       onCancel={editingPosition.cancel}
     />}
     {recordingTrack.isRecording && <TrackRecorder
-      isAccessibleSize={false}
       name={selectedTrack?.properties.name}
       color={trackColor}
       elapsedTime={recordingTrack.elapsedTime}
@@ -508,7 +507,7 @@ const Map: FC<MainContentProps> = ({
       onStop={recordingTrack.stop}
     />}
     {!!pointIntent && <ScopeSelector
-      isAccesibleSize={false}
+      isLargeSize={isLargeSize}
       scopes={scopeStore.list()}
       onScopeSelected={handleScopeSelected}
       onCancel={handleScopeSelectionCancelled}

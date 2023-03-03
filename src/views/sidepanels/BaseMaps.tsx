@@ -19,10 +19,9 @@ import {useTranslation} from 'react-i18next';
 import useTheme from '@mui/material/styles/useTheme';
 import {styled} from '@mui/material/styles';
 import {BASEMAPS} from '../../config';
+import {useSettings} from '../../hooks/useSettings';
 
 export type BaseMapsProps = {
-  isAccessibleSize: boolean,
-  isLeftHanded: boolean,
   baseMapId: string,
   onMapStyleChanged: (newStyle: string) => void
   onMapStyleDeleted: (newStyle: string) => void
@@ -30,15 +29,16 @@ export type BaseMapsProps = {
 };
 
 const boxSx = {width: '100%', height: 0, pt: 5, pb: 1};
-const BaseMaps: FC<BaseMapsProps> = ({isAccessibleSize, isLeftHanded, baseMapId, onMapStyleChanged, onMapStyleDeleted, onMapStyleAdded}) => {
+const BaseMaps: FC<BaseMapsProps> = ({baseMapId, onMapStyleChanged, onMapStyleDeleted, onMapStyleAdded}) => {
   const {t} = useTranslation();
   const theme = useTheme();
+  const {isLargeSize} = useSettings();
 
   const ScrollableContent = useMemo(() => styled(Box)({
     overflowY: 'auto',
     padding: '0px',
-    marginBottom: isAccessibleSize ? '72px' : '64px'
-  }), [isAccessibleSize]);
+    marginBottom: isLargeSize ? '72px' : '64px'
+  }), [isLargeSize]);
   
   return <>
     <Header
@@ -56,11 +56,7 @@ const BaseMaps: FC<BaseMapsProps> = ({isAccessibleSize, isLeftHanded, baseMapId,
       />
     </ScrollableContent>
     <Box sx={boxSx}>
-      <AddButton
-        isAccessibleSize={isAccessibleSize}
-        isLeftHanded={isLeftHanded}
-        onClick={onMapStyleAdded}
-      >
+      <AddButton onClick={onMapStyleAdded}>
         <AddBaseMap/>
       </AddButton>
     </Box>

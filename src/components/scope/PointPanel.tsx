@@ -352,8 +352,8 @@ const PointPanel: FC<PointPanelProps> = ({
     </ScrollableContent>
     { isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>
-        <CancelButton isAccessibleSize={false} onCancel={handleCancel}/>
-        <AcceptButton isAccessibleSize={false} disabled={!isFormValid} onAccept={handleAccept}/>
+        <CancelButton onCancel={handleCancel}/>
+        <AcceptButton disabled={!isFormValid} onAccept={handleAccept}/>
       </Stack>
     }
   </>;
