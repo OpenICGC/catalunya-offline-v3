@@ -168,6 +168,8 @@ const Map: FC<MainContentProps> = ({
   const recordingTrack = useRecordingTrack();
 
   const [isFabOpen, setFabOpen] =useState<boolean>(false);
+  const [isFabHidden, setFabHidden] =useState<boolean>(false);
+  const [isSearchBoxHidden, setSearchBoxHidden] =useState<boolean>(false);
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
@@ -346,7 +348,10 @@ const Map: FC<MainContentProps> = ({
       longTouchTimer.current = undefined;
     }
   };
-
+  const handleClick = () => {
+    setSearchBoxHidden(!isSearchBoxHidden);
+    isFabOpen ? setFabOpen(false) : setFabHidden(!isFabHidden);
+  };
   const handleDoubleClick = (e: MapLayerMouseEvent) => {
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
   };
@@ -453,8 +458,9 @@ const Map: FC<MainContentProps> = ({
   
   return <>
     <SearchBoxAndMenu 
-      placeholder={t('actions.search')} 
+      placeholder={t('actions.search')}
       onContextualMenuClick={handleContextualMenu}
+      isSearchBoxHidden={isSearchBoxHidden}
     />
     <GeocomponentMap
       {...MAP_PROPS}
@@ -474,6 +480,7 @@ const Map: FC<MainContentProps> = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={clearLongTouchTimer}
       onTouchCancel={clearLongTouchTimer}
+      onClick={handleClick}
       onDblClick={handleDoubleClick}
       doubleClickZoom={false}
       attributionControl={false}
@@ -481,7 +488,7 @@ const Map: FC<MainContentProps> = ({
       <LocationMarker geolocation={geolocation} heading={heading}/>
       <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
       {!editingPosition.position && <FabButton
-        isFabOpen={isFabOpen} onFabClick={toggleFabOpen}
+        isFabOpen={isFabOpen} onFabClick={toggleFabOpen} isFabHidden={isFabHidden}
         bearing={viewport.bearing} pitch={viewport.pitch}
         locationStatus={locationStatus}
         onOrientationClick={handleOrientationClick}
