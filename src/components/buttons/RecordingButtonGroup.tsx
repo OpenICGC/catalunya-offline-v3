@@ -6,7 +6,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
 
 //OTHERS
-import ButtonGroup from '@geomatico/geocomponents/ButtonGroup';
+import ButtonGroup from '@geomatico/geocomponents/Forms/ButtonGroup';
 
 //UTILS
 import {RECORDING_STATUS} from '../map/TrackRecorder';

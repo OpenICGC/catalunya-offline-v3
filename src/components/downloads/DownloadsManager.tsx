@@ -1,10 +1,10 @@
 import React, {FC, useEffect, useReducer, useState} from 'react';
+import {MapboxStyle} from 'react-map-gl';
 
 import {FileInfo} from '@capacitor/filesystem';
 import {Capacitor} from '@capacitor/core';
 import {useTranslation} from 'react-i18next';
 import useFetch from '@geomatico/geocomponents/hooks/useFetch';
-import {StyleSpecification} from 'maplibre-gl';
 
 import { compareVersions } from 'compare-versions';
 
@@ -24,7 +24,7 @@ import {
 
 export type DownloadsManagerProps = {
   baseMap: BaseMap,
-  onStyleReady: (mapStyle: StyleSpecification | string) => void
+  onStyleReady: (mapStyle: MapboxStyle | string) => void
 };
 
 export type MbTilesMetadata = {
@@ -89,7 +89,7 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
   const [assetsDownloads, dispatch] = useReducer(reducer, initialState, initState);
   const [downloadDescription, setDownloadDescription] = useState<string>('');
 
-  const {data: onlineMetadata} = useFetch(baseMap.offlineAssets);
+  const {data: onlineMetadata} = useFetch<AssetsMetadata>(baseMap.offlineAssets);
 
   const {
     download,
@@ -325,9 +325,9 @@ const DownloadsManager: FC<DownloadsManagerProps> = ({baseMap, onStyleReady}) =>
     if (styleAsset.uri){
       const url = Capacitor.convertFileSrc(styleAsset.uri);
       const res = await fetch(url);
-      const style: StyleSpecification = await res.json();
+      const style: MapboxStyle = await res.json();
 
-      let newStyle = {...style} as StyleSpecification;
+      let newStyle = {...style} as MapboxStyle;
       if (glyphsAsset?.uri) newStyle = {...newStyle, glyphs: Capacitor.convertFileSrc(glyphsAsset.uri) + '/{fontstack}/{range}.pbf'};
       if (spritesAssets?.uri) newStyle = {...newStyle, sprite: Capacitor.convertFileSrc(spritesAssets.uri) + '/sprites'};
 

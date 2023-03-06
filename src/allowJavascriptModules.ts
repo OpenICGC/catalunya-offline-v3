@@ -2,7 +2,7 @@
 //declare module '*';
 
 // Declare untyped modules, explicitly
-declare module '@geomatico/geocomponents/*';
+//declare module '@geomatico/geocomponents/*';
 
 declare module '*.xml' {
   const doc: string;

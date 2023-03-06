@@ -4,7 +4,7 @@ import {Meta, Story} from '@storybook/react';
 import LocationMarker, {LocationMarkerProps} from './LocationMarker';
 import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
 import Box from '@mui/material/Box';
-import Map from '@geomatico/geocomponents/Map';
+import Map from '@geomatico/geocomponents/Map/Map';
 
 export default {
   title: 'Map/LocationMarker',

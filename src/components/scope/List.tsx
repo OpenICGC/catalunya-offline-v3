@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 //GEOCOMPONETS
-import SearchBox from '@geomatico/geocomponents/SearchBox';
+import SearchBox from '@geomatico/geocomponents/Search/SearchBox';
 
 //CATOFFLINE
 import ListItem from './ListItem';

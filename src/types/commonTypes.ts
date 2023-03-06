@@ -1,5 +1,5 @@
 import GeoJSON from 'geojson';
-import {StyleSpecification} from 'maplibre-gl';
+import { MapboxStyle } from 'react-map-gl';
 
 export type BaseMap = {
   id: string
@@ -10,7 +10,7 @@ export type BaseMap = {
     es: string;
   },
   thumbnail: string,
-  onlineStyle: string | StyleSpecification,
+  onlineStyle: string | MapboxStyle,
   offlineAssets?: string,
   attribution?: string
 }
@@ -27,7 +27,7 @@ export type Style = {
   },
   label: string,
   thumbnail: string,
-  onlineStyle: string | StyleSpecification,
+  onlineStyle: string | MapboxStyle,
   offlineAssets?: string,
   attribution?: string
 }
