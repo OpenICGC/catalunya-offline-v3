@@ -173,7 +173,7 @@ const Map: FC<MainContentProps> = ({
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
-  const {isLargeSize} = useSettings();
+  const {isLargeSize, gpsPositionColor} = useSettings();
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
     const {latitude, longitude} = geolocation;
@@ -485,7 +485,7 @@ const Map: FC<MainContentProps> = ({
       doubleClickZoom={false}
       attributionControl={false}
     >
-      <LocationMarker geolocation={geolocation} heading={heading}/>
+      <LocationMarker geolocation={geolocation} heading={heading} gpsPositionColor={gpsPositionColor}/>
       <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
       {!editingPosition.position && <FabButton
         isFabOpen={isFabOpen} onFabClick={toggleFabOpen} isFabHidden={isFabHidden}
