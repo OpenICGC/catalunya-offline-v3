@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
-import maplibregl, {StyleSpecification} from 'maplibre-gl';
+import maplibregl from 'maplibre-gl';
 
-import GeocomponentMap from '@geomatico/geocomponents/Map';
+import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
 
 import {Manager, ScopePoint, UUID} from '../types/commonTypes';
 import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
@@ -15,7 +15,7 @@ import PointMarkers from '../components/map/PointMarkers';
 import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
 import useEditingPosition from '../hooks/useEditingPosition';
-import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
+import {AnyLayer, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
 import {Position, Feature} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
@@ -27,10 +27,11 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 import SearchBoxAndMenu from '../components/common/SearchBoxAndMenu';
 import SettingsView from './SettingsView';
 import {useSettings} from '../hooks/useSettings';
+import { MapboxStyle, MapRef, MapboxMap} from 'react-map-gl';
 
 mbtiles(maplibregl);
 
-const sources = {
+const sources: Sources = {
   'geolocation': {
     type: 'geojson',
     data: {
@@ -61,7 +62,7 @@ const sources = {
   },
 };
 
-const layers = [{
+const layers: Array<AnyLayer> = [{
   id: 'geolocation-precision',
   source: 'geolocation',
   type: 'circle',
@@ -115,7 +116,7 @@ const layers = [{
 }];
 
 export type MainContentProps = {
-  mapStyle: string | StyleSpecification,
+  mapStyle: string | MapboxStyle,
   manager: Manager,
   onManagerChanged: (newManager: Manager) => void,
   selectedScopeId?: UUID,
@@ -139,7 +140,7 @@ const Map: FC<MainContentProps> = ({
   selectedTrackId,
   /*onTrackSelected*/
 }) => {
-  const mapRef = useRef<maplibregl.Map>();
+  const mapRef = useRef<MapRef>(null);
   const {viewport, setViewport} = useViewport();
   const {geolocation, error: geolocationError} = useGeolocation();
   const heading = useCompass();
@@ -175,7 +176,7 @@ const Map: FC<MainContentProps> = ({
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
   const {isLargeSize} = useSettings();
   // Set blue dot location on geolocation updates
-  const setMapGeolocation = (map: maplibregl.Map | undefined, geolocation: Geolocation) => {
+  const setMapGeolocation = (map: MapboxMap | undefined, geolocation: Geolocation) => {
     const {latitude, longitude} = geolocation;
     const source = (map?.getSource('geolocation') as maplibregl.GeoJSONSource | undefined);
     source?.setData({
@@ -192,12 +193,12 @@ const Map: FC<MainContentProps> = ({
   };
 
   useEffect(() => {
-    setMapGeolocation(mapRef?.current, geolocation);
+    setMapGeolocation(mapRef?.current?.getMap(), geolocation);
   }, [geolocation, mapRef.current]);
 
   useEffect(() => {
     mapRef.current?.once('styledata', () => {
-      setMapGeolocation(mapRef.current, geolocation);
+      setMapGeolocation(mapRef.current?.getMap(), geolocation);
       addMapRecordingTrack();
       addMapTrackList();
     });

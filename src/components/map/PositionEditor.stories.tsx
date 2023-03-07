@@ -3,7 +3,7 @@ import {Meta, Story} from '@storybook/react';
 
 import PositionEditor, {PositionEditorProps} from './PositionEditor';
 import Box from '@mui/material/Box';
-import GeocomponentMap from '@geomatico/geocomponents/Map';
+import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
 import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
 
 export default {

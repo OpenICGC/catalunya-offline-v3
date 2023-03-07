@@ -11,7 +11,7 @@ import TransferWithinAStationIcon from '@mui/icons-material/TransferWithinAStati
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 
 //GEOCOMPONETS
-import BottomSheet from '@geomatico/geocomponents/BottomSheet';
+import BottomSheet from '@geomatico/geocomponents/Layout/BottomSheet';
 
 //CATTOFFLINE
 import ListItem from '../scope/ListItem';
@@ -103,6 +103,7 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
     openHeight={'85vh'}
     onToggle={() => setOpen(!isOpen)}
     isOpen={isOpen}
+    onTopChanged={() => undefined}
   >
     <ListItem
       itemId="track"

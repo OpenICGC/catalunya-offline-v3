@@ -15,7 +15,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 //GEOCOMPONENTS
-import SearchBox from '@geomatico/geocomponents/SearchBox';
+import SearchBox from '@geomatico/geocomponents/Search/SearchBox';
 
 //UTILS
 import {ClickAwayListener} from '@mui/material';

@@ -11,7 +11,7 @@ import StraightenIcon from '@mui/icons-material/Straighten';
 import FitBoundsIcon from '@mui/icons-material/ZoomOutMap';
 
 //GEOCOMPONETS
-import BottomSheet from '@geomatico/geocomponents/BottomSheet';
+import BottomSheet from '@geomatico/geocomponents/Layout/BottomSheet';
 
 //CATTOFFLINE
 import ListItem from '../scope/ListItem';
@@ -70,6 +70,7 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
     openHeight={'80vh'}
     onToggle={() => setOpen(!isOpen)}
     isOpen={isOpen}
+    onTopChanged={() => undefined}
   >
     <ListItem
       itemId="point"

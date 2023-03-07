@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 
-import {StyleSpecification} from 'maplibre-gl';
+import {MapboxStyle} from 'react-map-gl';
 
 import {BaseMap} from '../types/commonTypes';
 import {BASEMAPS, INITIAL_BASEMAP, IS_WEB} from '../config';
@@ -8,7 +8,7 @@ import DownloadsManager from '../components/downloads/DownloadsManager';
 
 interface useMapStyle {
   baseMapId: string;
-  mapStyle: string | StyleSpecification;
+  mapStyle: string | MapboxStyle;
   setBaseMapId: (baseMapId: string ) => void;
   StyleOfflineDownloaderComponent: FC | JSX.Element
 }

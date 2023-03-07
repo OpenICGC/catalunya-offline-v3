@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import Box from '@mui/material/Box';
-import Map from '@geomatico/geocomponents/Map';
+import Map from '@geomatico/geocomponents/Map/Map';
 
 import PointMarkers, {PointMarkersProps} from './PointMarkers';
 import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';

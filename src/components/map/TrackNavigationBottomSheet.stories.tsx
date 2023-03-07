@@ -9,7 +9,7 @@ const sampleGeometryWithoutHeight: GeoJSON.LineString = sampleWithoutHeight as G
 import {v4 as uuid} from 'uuid';
 import {BASEMAPS, INITIAL_VIEWPORT} from '../../config';
 import Box from '@mui/material/Box';
-import GeocomponentMap from '@geomatico/geocomponents/Map';
+import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
 
 export default {
   title: 'Map/TrackNavigationBottomSheet',
