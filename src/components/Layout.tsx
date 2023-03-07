@@ -3,7 +3,7 @@ import React, {FC, ReactNode} from 'react';
 import styled from '@mui/styles/styled';
 import Box from '@mui/material/Box';
 
-import SidePanel from '@geomatico/geocomponents/SidePanel';
+import SidePanel from '@geomatico/geocomponents/Layout/SidePanel';
 
 import {
   DRAWER_WIDTH,

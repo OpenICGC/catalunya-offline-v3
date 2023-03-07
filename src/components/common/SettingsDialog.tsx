@@ -18,8 +18,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 //GEOCOMPONENTS
-import ButtonGroup from '@geomatico/geocomponents/ButtonGroup';
-import ColorSwitch from '@geomatico/geocomponents/ColorSwitch';
+import ButtonGroup from '@geomatico/geocomponents/Forms/ButtonGroup';
+import ColorSwitch from '@geomatico/geocomponents/Forms/ColorSwitch';
 
 import {ColorFormat, ColorPicker, ColorPalette} from 'material-ui-color';
 
@@ -234,7 +234,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
         <ButtonGroup
           selectedItemId={LANGUAGE[language]}
           items={languageOptions}
-          onItemClick={handleLanguageChange}
+          onItemClick={optionId => optionId !== null && handleLanguageChange(LANGUAGE[optionId as keyof typeof LANGUAGE])}
           color={primaryColor}
           variant='outlined'
         />

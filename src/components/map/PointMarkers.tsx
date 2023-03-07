@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Marker} from 'react-map-gl';
-import MarkerIcon from '@geomatico/geocomponents/components/MarkerIcon';
+import MarkerIcon from '@geomatico/geocomponents/Map/MarkerIcon';
 import {HEXColor, ScopePoint} from '../../types/commonTypes';
 import {useSettings} from '../../hooks/useSettings';
 
