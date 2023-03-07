@@ -10,6 +10,7 @@
     "downloading": "Descarregant...",
     "edit": "Edita",
     "goTo": "Anar a",
+    "import": "Importar",
     "instamaps": "Instamaps",
     "paused": "Pausat",
     "rec": "Grava",
@@ -35,6 +36,13 @@
     "sprites": "Icones",
     "style": "Estil",
     "title": "Descàrrega de dades offline"
+  },
+  "errors": {
+    "import": {
+      "format": "Format no suportat.",
+      "length": "No es poden importar més de {{max_features}} entitats.",
+      "unmanaged_errors": "S'han processat {{totalFeatures}} entitats de les quals {{numberOfErrors}} han donat un error en importar."
+    }
   },
   "features": {
     "points": "Punts",

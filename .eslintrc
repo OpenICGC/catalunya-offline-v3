@@ -34,6 +34,9 @@
     "i18n-json/identical-keys": [2, {
       "filePath": "../../../../src/i18n/ca.json"
     }],
+    "i18n-json/valid-message-syntax": [2, {
+      "syntax": "non-empty-string"
+    }],
     "react/prop-types": 0
   },
   "settings": {

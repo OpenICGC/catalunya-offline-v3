@@ -93,3 +93,8 @@ export type Settings = {
   colorPalette: string
   language: LANGUAGE
 }
+
+export type Error = {
+  name: string,
+  message: string
+}

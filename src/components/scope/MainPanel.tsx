@@ -4,6 +4,7 @@ import React, {FC, useCallback, useMemo} from 'react';
 import Box from '@mui/material/Box';
 
 //MUI-ICONS
+import AddIcon from '@mui/icons-material/Add';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -35,7 +36,8 @@ export type MainPanelProps = {
   onShare: (scopeId: UUID) => void,
   onDelete: (scopeId: UUID) => void,
   onInstamaps: (scopeId: UUID) => void,
-  onDataSchema: (scopeId: UUID) => void
+  onDataSchema: (scopeId: UUID) => void,
+  onImport: (scopeId: UUID) => void
 };
 
 const MainPanel: FC<MainPanelProps> = ({
@@ -49,7 +51,8 @@ const MainPanel: FC<MainPanelProps> = ({
   onShare,
   onDelete,
   onInstamaps,
-  onDataSchema
+  onDataSchema,
+  onImport
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
@@ -77,6 +80,12 @@ const MainPanel: FC<MainPanelProps> = ({
       label: t('actions.dataSchema'),
       icon: <DashboardIcon/>,
       callbackProp: onDataSchema
+    },
+    {
+      id: 'import',
+      label: t('actions.import'),
+      icon: <AddIcon/>,
+      callbackProp: onImport
     }
   ]), [onDelete, onInstamaps, onDataSchema, t]);
 

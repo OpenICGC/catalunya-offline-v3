@@ -10,6 +10,7 @@
     "downloading": "Downloading...",
     "edit": "Edit",
     "goTo": "Go to",
+    "import": "Import",
     "instamaps": "Instamaps",
     "paused": "Paused",
     "rec": "Rec",
@@ -35,6 +36,13 @@
     "sprites": "Icons",
     "style": "Style",
     "title": "Offline data download"
+  },
+  "errors": {
+    "import": {
+      "format": "Unsupported file extension.",
+      "length": "Importing more than {{max_features}} features is not allowed.",
+      "unmanaged_errors": "{{totalFeatures}} entities have been processed for which {{numberOfErrors}} failed to import."
+    }
   },
   "features": {
     "points": "Points",

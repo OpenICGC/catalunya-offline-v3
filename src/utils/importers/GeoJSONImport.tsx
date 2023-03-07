@@ -9,13 +9,18 @@ interface ScopeImportResults {
   numberOfErrors: number
 }
 
-export const GeoJSONImport = (data: GeoJSON.FeatureCollection) => {
+export const GeoJSONImport = (data: string | GeoJSON.FeatureCollection) => {
   const hexColorRegex = /^#([0-9a-f]{3}){1,2}$/i;
   const objImport: ScopeImportResults = {
     points: [],
     tracks: [],
     numberOfErrors: 0
   };
+  if (typeof data === 'string') {
+    data = JSON.parse(data) as GeoJSON.FeatureCollection;
+  }
+
+
   data.features.map(feature => {
     if (feature.geometry.type === 'Point') {
       const featureId = uuidv4();

@@ -5,11 +5,13 @@ import {useTranslation} from 'react-i18next';
 
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 
-import {HEXColor, UUID} from '../../types/commonTypes';
+import {Error, HEXColor, UUID} from '../../types/commonTypes';
 import {useScopes} from '../../hooks/useStoredCollections';
 import MainPanel from '../../components/scope/MainPanel';
 import ScopeFeatures from './ScopeFeatures';
 import HandleExport from '../../components/scope/export/HandleExport';
+import HandleImport from '../../components/scope/import/HandleImport';
+import Notification from '../../components/notifications/Notification';
 
 export interface ScopeMainProps {
   selectedScope?: UUID,
@@ -32,6 +34,8 @@ const ScopeMain: FC<ScopeMainProps> = ({
   const {hexColors: palette} = useColorRamp('BrewerDark27');
   
   const [sharingScopeId, setSharingScopeId] = useState<UUID|undefined>(undefined);
+  const [importingScopeId, setImportingScopeId] = useState<UUID|undefined>(undefined);
+  const [importErrors, setImportErrors] = useState<Error | undefined>(undefined);
 
   const scopeStore = useScopes();
   const unselectScope = () => onScopeSelected('');
@@ -69,6 +73,10 @@ const ScopeMain: FC<ScopeMainProps> = ({
     setSharingScopeId(scopeId);
   };
 
+  const importFile = (scopeId: UUID) => {
+    setImportingScopeId(scopeId);
+  };
+
   const instamaps = (scopeId: UUID) => {
     console.log('Unimplemented Instamaps, Scope', scopeId); // TODO
   };
@@ -78,7 +86,12 @@ const ScopeMain: FC<ScopeMainProps> = ({
   };
 
   const closeHandleExport = () => setSharingScopeId(undefined);
-
+  const closeHandleImport = () => setImportingScopeId(undefined);
+  const handleImportError = (error: Error) => {
+    closeHandleImport();
+    setImportErrors(error);
+  };
+  console.log(importErrors?.message);
   return !selectedScope ?
     <>
       <MainPanel
@@ -91,6 +104,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
         onShare={share}
         onInstamaps={instamaps}
         onDataSchema={dataSchema}
+        onImport={importFile}
       />
       {
         sharingScopeId &&
@@ -99,6 +113,22 @@ const ScopeMain: FC<ScopeMainProps> = ({
           onSharedStarted={closeHandleExport}
           onSharedCancel={closeHandleExport}
         />
+      }
+      {
+        importingScopeId &&
+        <HandleImport
+          scopeId={importingScopeId}
+          onImportEnds={closeHandleImport}
+          onError={handleImportError}
+        />
+      }
+      {
+        importErrors &&
+        <Notification
+          message={importErrors.message}
+          isOpen={true}
+          isPersistent={true}
+          onClose={() => setImportErrors(undefined)} />
       }
     </>
     :

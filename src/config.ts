@@ -120,3 +120,5 @@ export const DEFAULT_SETTINGS: Settings = {
   colorPalette: 'BrewerSet19',
   language: LANGUAGE.ca
 };
+
+export const MAX_ALLOWED_IMPORT_FEATURES = 100;
