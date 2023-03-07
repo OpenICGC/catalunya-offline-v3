@@ -1,6 +1,7 @@
 import React, {FC, useMemo} from 'react';
 import {HEXColor} from '../../types/commonTypes';
-import {GPS_POSITION_COLOR, GPS_POSITION_INACTIVE_COLOR} from '../../config';
+import {GPS_POSITION_INACTIVE_COLOR} from '../../config';
+import {useSettings} from '../../hooks/useSettings';
 
 function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegrees: number) {
   const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
@@ -60,7 +61,10 @@ const LocationMarkerIcon: FC<LocationMarkerIconProps> = ({
   headingAccuracy= DEFAULT_HEADING_ACCURACY,
   isStale = false
 }) => {
-  const dotColor: HEXColor = isStale ? GPS_POSITION_INACTIVE_COLOR : GPS_POSITION_COLOR;
+
+  const {gpsPositionColor} = useSettings();
+
+  const dotColor: HEXColor = isStale ? GPS_POSITION_INACTIVE_COLOR : gpsPositionColor;
 
   const beam = useMemo(() => {
     if (heading === undefined) {
