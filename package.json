@@ -38,7 +38,7 @@
     "@date-io/moment": "^2.16.1",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
-    "@geomatico/geocomponents": "file:../../geomatico/geocomponents/geomatico-geocomponents-2.0.10.tgz",
+    "@geomatico/geocomponents": "3.0.2",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.1.0",
     "@mui/styles": "^5.1.0",
