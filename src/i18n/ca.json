@@ -45,6 +45,9 @@
       "format": "Format no suportat.",
       "length": "No es poden importar més de {{max_features}} entitats.",
       "unmanaged_errors": "S'han processat {{totalFeatures}} entitats de les quals {{numberOfErrors}} han donat un error en importar."
+    },
+    "search": {
+      "noConnectivity": "No es pot fer la cerca perquè no hi ha connexió."
     }
   },
   "features": {
