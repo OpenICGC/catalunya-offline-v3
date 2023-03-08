@@ -28,12 +28,6 @@ import useRecordingTrack from '../../hooks/useRecordingTrack';
 const BASE_URL = 'https://www.instamaps.cat/geocat/aplications/map/search.action';
 
 //TYPES
-export type SearchBoxAndMenuProps = {
-  placeholder: string,
-  isSearchBoxHidden?: boolean,
-  onContextualMenuClick?: (menuId: string) => void
-};
-
 type ContextMapsResult = {
   nom: string,
   coordenades: string
@@ -55,9 +49,15 @@ const listSx = {
   cursor: 'pointer'
 };
 
+export type SearchBoxAndMenuProps = {
+  placeholder: string,
+  isHidden?: boolean,
+  onContextualMenuClick?: (menuId: string) => void
+};
+
 const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   placeholder,
-  isSearchBoxHidden = false,
+  isHidden = false,
   onContextualMenuClick = () => undefined
 }) => {
   const {t} = useTranslation();
@@ -180,7 +180,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
       onTextChange={handleTextChange}
       onSearchClick={handleSearchClick}
       placeholder={placeholder}
-      sx={isSearchBoxHidden ? searchHiddenSx : searchSx}
+      sx={isHidden ? searchHiddenSx : searchSx}
     />
 
     {
