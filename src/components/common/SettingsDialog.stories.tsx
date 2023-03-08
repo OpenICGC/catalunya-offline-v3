@@ -2,7 +2,7 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import SettingsDialog, {SettingsDialogProps} from './SettingsDialog';
-import {COLOR_PALETTES, GPS_POSITION_COLOR} from '../../config';
+import {COLOR_PALETTES, GPS_POSITION_DEFAULT_COLOR} from '../../config';
 import {LANGUAGE} from '../../types/commonTypes';
 
 export default {
@@ -42,7 +42,7 @@ export default {
 const Template: Story<SettingsDialogProps> = args => <SettingsDialog {...args}/>;
 export const Default = Template.bind({});
 Default.args = {
-  gpsPositionColor: GPS_POSITION_COLOR,
+  gpsPositionColor: GPS_POSITION_DEFAULT_COLOR,
   trackTolerance: 40,
   isLeftHanded: true,
   isLargeSize: false,

@@ -79,8 +79,8 @@ export const INITIAL_BASEMAP = BASEMAPS[0];
 
 export const MIN_TRACKING_ZOOM = 14;
 
-export const GPS_POSITION_COLOR = '#4286f5';
-export const GPS_POSITION_INACTIVE_COLOR = '#9b9b9b';
+export const GPS_POSITION_DEFAULT_COLOR = '#4286f5';
+export const GPS_POSITION_STALE_COLOR = '#9b9b9b';
 
 export const OFFLINE_DATADIR_NAME = 'offlineData';
 export const EXPORT_DIR_NAME = 'exports';
@@ -113,7 +113,7 @@ export const COLOR_PALETTES = [
 }), {});
 
 export const DEFAULT_SETTINGS: Settings = {
-  gpsPositionColor: GPS_POSITION_COLOR,
+  gpsPositionColor: GPS_POSITION_DEFAULT_COLOR,
   trackTolerance: 40,
   isLeftHanded: false,
   isLargeSize: false,

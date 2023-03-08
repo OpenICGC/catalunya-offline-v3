@@ -2,6 +2,7 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import LocationMarkerIcon, {LocationMarkerIconProps} from './LocationMarkerIcon';
+import {GPS_POSITION_DEFAULT_COLOR} from '../../config';
 
 export default {
   title: 'Map/LocationMarkerIcon',
@@ -12,7 +13,8 @@ export default {
     },
     headingAccuracy: {
       control: { type: 'range', min: 0, max: 359, step: 1}
-    }
+    },
+    color: {control: 'color'}
   }
 } as Meta;
 
@@ -22,17 +24,18 @@ export const Default = Template.bind({});
 Default.args = {
   heading: 30,
   headingAccuracy: 75,
-  isStale: false
+  isStale: false,
+  color: GPS_POSITION_DEFAULT_COLOR
 };
 
 export const Stale = Template.bind({});
 Stale.args = {
-  heading: 30,
-  headingAccuracy: 75,
+  ...Default.args,
   isStale: true
 };
 
 export const NoHeading = Template.bind({});
 NoHeading.args = {
-  isStale: false
+  ...Default.args,
+  heading: undefined
 };
