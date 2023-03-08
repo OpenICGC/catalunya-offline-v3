@@ -30,7 +30,7 @@ const BASE_URL = 'https://www.instamaps.cat/geocat/aplications/map/search.action
 //TYPES
 export type SearchBoxAndMenuProps = {
   placeholder: string,
-  isSearchBoxHidden: boolean,
+  isSearchBoxHidden?: boolean,
   onContextualMenuClick?: (menuId: string) => void
 };
 
@@ -57,7 +57,7 @@ const listSx = {
 
 const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   placeholder,
-  isSearchBoxHidden,
+  isSearchBoxHidden = false,
   onContextualMenuClick = () => undefined
 }) => {
   const {t} = useTranslation();
