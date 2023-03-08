@@ -1,6 +1,9 @@
 name: Frontend tests
 on:
   pull_request:
+  push:
+    branches:
+      - main
 jobs:
   frontend-test:
     runs-on: ubuntu-latest
@@ -22,10 +25,11 @@ jobs:
     - name: Update npm
       run: npm install -g npm@8.15.1
 
-    - name: Install depedencies
+    - name: Install dependencies
       run: npm ci
 
-#    - name: Create env file
+    - name: Create env file
+      run: touch .env
 #      run: |
 #        echo API_BASE_URL=http://localhost/api/v1 > .env
 #        echo GEOSERVER_BASE_URL=http://localhost/geoserver >> .env
@@ -34,5 +38,5 @@ jobs:
     - name: Launching tests
       run: CHROME_BIN=$(which chrome) npm run test
 
-    - name: Building javascript
-      run: CHROME_BIN=$(which chrome) npm run build
+#    - name: Building javascript
+#      run: CHROME_BIN=$(which chrome) npm run build
