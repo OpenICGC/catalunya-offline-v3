@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 
 //UTILS
 import {HEXColor} from '../../../types/commonTypes';
-import {GPS_POSITION_COLOR} from '../../../config';
+import {GPS_POSITION_DEFAULT_COLOR} from '../../../config';
 import {useTranslation} from 'react-i18next';
 import GeoJSON from 'geojson';
 import OutOfTrackButton from '../../buttons/OutOfTrackButton';
@@ -167,7 +167,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
         },
         encoding: {
           color: {
-            value: GPS_POSITION_COLOR,
+            value: GPS_POSITION_DEFAULT_COLOR,
           },
           x: {
             field: 'length',

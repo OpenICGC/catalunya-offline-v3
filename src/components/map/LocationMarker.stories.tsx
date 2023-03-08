@@ -2,13 +2,22 @@ import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import LocationMarker, {LocationMarkerProps} from './LocationMarker';
-import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
+import {INITIAL_VIEWPORT, BASEMAPS, GPS_POSITION_DEFAULT_COLOR} from '../../config';
 import Box from '@mui/material/Box';
 import Map from '@geomatico/geocomponents/Map/Map';
 
 export default {
   title: 'Map/LocationMarker',
-  component: LocationMarker
+  component: LocationMarker,
+  argTypes: {
+    heading: {
+      control: { type: 'range', min: 0, max: 359, step: 1}
+    },
+    headingAccuracy: {
+      control: { type: 'range', min: 0, max: 359, step: 1}
+    },
+    color: {control: 'color'}
+  }
 } as Meta;
 
 const Template: Story<LocationMarkerProps> = args => {
@@ -22,6 +31,9 @@ const Template: Story<LocationMarkerProps> = args => {
 
 export const Default = Template.bind({});
 Default.args = {
+  heading: 45,
+  headingAccuracy: 45,
+  color: GPS_POSITION_DEFAULT_COLOR,
   geolocation: {
     accuracy: null,
     altitude: null,
@@ -31,6 +43,5 @@ Default.args = {
     longitude: 1.3705,
     speed: null,
     timestamp: Date.now()
-  },
-  heading: 45
+  }
 };

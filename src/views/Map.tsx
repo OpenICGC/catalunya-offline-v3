@@ -8,7 +8,7 @@ import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
 import FabButton, {LOCATION_STATUS} from '../components/buttons/FabButton';
 import {mbtiles} from '../utils/mbtiles';
 import useCompass from '../hooks/useCompass';
-import {GPS_POSITION_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
+import {GPS_POSITION_DEFAULT_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import PositionEditor from '../components/map/PositionEditor';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
@@ -67,7 +67,7 @@ const layers: Array<AnyLayer> = [{
   source: 'geolocation',
   type: 'circle',
   paint: {
-    'circle-color': GPS_POSITION_COLOR,
+    'circle-color': GPS_POSITION_DEFAULT_COLOR,
     'circle-opacity': 0.33,
     'circle-radius': [
       'interpolate',
@@ -78,7 +78,7 @@ const layers: Array<AnyLayer> = [{
       15,
       ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI / 180))]
     ],
-    'circle-stroke-color': GPS_POSITION_COLOR,
+    'circle-stroke-color': GPS_POSITION_DEFAULT_COLOR,
     'circle-stroke-opacity': 0.67,
     'circle-stroke-width': 1,
     'circle-pitch-alignment': 'map'
@@ -174,7 +174,7 @@ const Map: FC<MainContentProps> = ({
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
-  const {isLargeSize} = useSettings();
+  const {isLargeSize, gpsPositionColor} = useSettings();
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: MapboxMap | undefined, geolocation: Geolocation) => {
     const {latitude, longitude} = geolocation;
@@ -486,7 +486,7 @@ const Map: FC<MainContentProps> = ({
       doubleClickZoom={false}
       attributionControl={false}
     >
-      <LocationMarker geolocation={geolocation} heading={heading}/>
+      <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>
       <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
       {!editingPosition.position && <FabButton
         isFabOpen={isFabOpen} onFabClick={toggleFabOpen} isFabHidden={isFabHidden}
