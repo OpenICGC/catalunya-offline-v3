@@ -461,7 +461,7 @@ const Map: FC<MainContentProps> = ({
     <SearchBoxAndMenu 
       placeholder={t('actions.search')}
       onContextualMenuClick={handleContextualMenu}
-      isSearchBoxHidden={isSearchBoxHidden}
+      isHidden={isSearchBoxHidden}
     />
     <GeocomponentMap
       {...MAP_PROPS}
