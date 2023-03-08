@@ -3,7 +3,6 @@ import {GeoJSONImport} from './GeoJSONImport';
 
 import sampleGeoJSONExportedFromCatOffline from '../../components/fixtures/sampleGeoJSONExportedFromCatOffline.geo.json';
 import sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries from '../../components/fixtures/sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries.geo.json';
-import GeoJSON from 'geojson';
 
 const expectedImportedFromCatOffline = {
   points: [
@@ -140,7 +139,7 @@ describe('useGeoJSONImport', () => {
 
   it('useGeoJSONImport should import a GeoJSON previously exported with CatOffline', async () => {
     // GIVEN
-    const data: GeoJSON.FeatureCollection = sampleGeoJSONExportedFromCatOffline as GeoJSON.FeatureCollection;
+    const data = JSON.stringify(sampleGeoJSONExportedFromCatOffline);
 
     //WHEN
     const computedData = GeoJSONImport(data);
@@ -152,7 +151,7 @@ describe('useGeoJSONImport', () => {
   it('useGeoJSONImport should import a GeoJSON with empty properties', async () => {
     
     // WHEN
-    const computedData = GeoJSONImport(sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries as GeoJSON.FeatureCollection);
+    const computedData = GeoJSONImport(JSON.stringify(sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries));
       
     const partialComputedData = {
       points: computedData.points.map(point => (

@@ -8,7 +8,7 @@ type CollectionItem = {
 
 interface collectionStorage<ItemType extends CollectionItem> {
   list: () => Array<ItemType>;
-  create: (created: ItemType) => void;
+  create: (created: ItemType | Array<ItemType>) => void;
   retrieve: (id: UUID) => ItemType | undefined;
   update: (updated: ItemType) => void;
   delete: (id: UUID) => void;
@@ -20,7 +20,9 @@ export const useLocalCollectionStore = <ItemType extends CollectionItem>(collect
 
   return {
     list: () => items,
-    create: created => setItems(prevData => [...prevData, created]),
+    create: created => Array.isArray(created) ?
+      setItems(prevData => [...prevData, ...created ]) :
+      setItems(prevData => [...prevData, created ]),
     retrieve: (id: UUID) => items.find(item => item.id === id),
     update: updated => setItems(prevData => prevData.map(item => item.id === updated.id ? updated : item)),
     delete: id => setItems(prevData => prevData.filter(item => item.id !== id)),
@@ -33,7 +35,9 @@ export const useLocalCollectionStoreScopes = (collectionId: string): collectionS
 
   return {
     list: () => items,
-    create: created => setItems(prevData => [...prevData, created]),
+    create: created => Array.isArray(created) ?
+      setItems(prevData => [...prevData, ...created ]) :
+      setItems(prevData => [...prevData, created ]),
     retrieve: (id: UUID) => items.find(item => item.id === id),
     update: updated => setItems(prevData => prevData.map(item => item.id === updated.id ? updated : item)),
     delete: (id) => {
