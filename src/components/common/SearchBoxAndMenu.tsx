@@ -174,7 +174,6 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
 
   return <>
     <SearchBox
-      id="search-box"
       text={text}
       AdvanceSearchIcon={MoreVertIcon}
       onAdvanceSearchClick={handleContextualMenu}
