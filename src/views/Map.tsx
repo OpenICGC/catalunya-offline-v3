@@ -28,6 +28,7 @@ import SearchBoxAndMenu from '../components/common/SearchBoxAndMenu';
 import SettingsView from './SettingsView';
 import {useSettings} from '../hooks/useSettings';
 import { MapboxStyle, MapRef, MapboxMap} from 'react-map-gl';
+/*import {useStatus} from '@capacitor-community/network-react';*/
 
 mbtiles(maplibregl);
 
@@ -83,7 +84,8 @@ const layers: Array<AnyLayer> = [{
     'circle-stroke-width': 1,
     'circle-pitch-alignment': 'map'
   }
-}, {
+}, 
+{
   id: 'recordingTrack',
   source: 'recordingTrack',
   type: 'line',
@@ -91,7 +93,8 @@ const layers: Array<AnyLayer> = [{
     'line-color': '#d32f2f',
     'line-width': 4
   }
-}, {
+}, 
+{
   id: 'navigateToPointLine',
   source: 'navigateToPointLine',
   type: 'line',
@@ -105,7 +108,8 @@ const layers: Array<AnyLayer> = [{
     'line-cap': 'round',
     'line-join': 'round'
   }
-}, {
+}, 
+{
   id: 'trackList',
   source: 'trackList',
   type: 'line',
@@ -167,7 +171,15 @@ const Map: FC<MainContentProps> = ({
   const [pointIntent, setPointIntent] = useState<Position>();
 
   const recordingTrack = useRecordingTrack();
+  /*const {networkStatus} = useStatus();
 
+  useEffect(() => {
+    if(networkStatus) {
+      console.log('networkStatusMap', networkStatus);
+      //setHasConnectivity(networkStatus.connected);
+    }
+  }, [networkStatus]);*/
+  
   const [isFabOpen, setFabOpen] =useState<boolean>(false);
   const [isFabHidden, setFabHidden] =useState<boolean>(false);
   const [isSearchBoxHidden, setSearchBoxHidden] =useState<boolean>(false);

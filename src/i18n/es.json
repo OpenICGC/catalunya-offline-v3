@@ -45,6 +45,9 @@
       "format": "Formato no soportado",
       "length": "No se pueden importar más de {{max_features}} entidades.",
       "unmanaged_errors": "Se han procesado {{totalFeatures}} entidades de las cuales {{numberOfErrors}} han dado error al importar."
+    },
+    "search": {
+      "noConnectivity": "No se puede realizar la búsqueda porque no hay conexión."
     }
   },
   "features": {

@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 
 //MUI
 import List from '@mui/material/List';
@@ -24,6 +24,7 @@ import {useTranslation} from 'react-i18next';
 import useTheme from '@mui/material/styles/useTheme';
 import useEditingPosition from '../../hooks/useEditingPosition';
 import useRecordingTrack from '../../hooks/useRecordingTrack';
+import {useStatus} from '@capacitor-community/network-react';
 
 const BASE_URL = 'https://www.instamaps.cat/geocat/aplications/map/search.action';
 
@@ -46,7 +47,8 @@ const contextualMenuSx = (isHeaderVisible: boolean) => ({
 const listSx = {
   overflow: 'auto',
   maxHeight: 300,
-  cursor: 'pointer'
+  cursor: 'pointer',
+  width: '500px'
 };
 
 export type SearchBoxAndMenuProps = {
@@ -63,7 +65,10 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   const {t} = useTranslation();
   const theme = useTheme();
   const {setViewport} = useViewport();
+  const {networkStatus} = useStatus();
 
+  //CONNECTIVITY
+  const hasConnectivity = networkStatus?.connected;
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
   const isHeaderVisible = isEditingPosition || isRecordingTrack;
@@ -71,6 +76,13 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   //SEARCH
   const [text, setText] = useState('');
   const [results, setResults] = useState<Array<ContextMapsResult>>([]);
+  const [showConnectivityError, setConnectivityError] = useState(false);
+
+  useEffect(() => {
+    if(hasConnectivity) {
+      setConnectivityError(false);
+    } else setResults([]);
+  }, [hasConnectivity]);
 
   const clearResults = () => setResults([]);
 
@@ -78,12 +90,16 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
     setText(newText);
     clearResults();
   };
+
   const handleSearchClick = () => {
-    const url = `${BASE_URL}?searchInput=${text}`;
-    fetch(url)
-      .then(res => res.json())
-      .then(res => JSON.parse(res.resposta))
-      .then(res => setResults(res.resultats));
+    if (hasConnectivity) {
+      setConnectivityError(false);
+      const url = `${BASE_URL}?searchInput=${text}`;
+      fetch(url)
+        .then(res => res.json())
+        .then(res => JSON.parse(res.resposta))
+        .then(res => setResults(res.resultats));
+    } else setConnectivityError(true);
   };
 
   const handleResultClick = (result: ContextMapsResult) => {
@@ -97,7 +113,6 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
     setText('');
   };
 
-
   //CONTEXTUAL MENU
   const [isOpen, setIsOpen] = useState(false);
   const handleContextualMenu = () => setIsOpen(!isOpen);
@@ -109,7 +124,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   const searchSx = {
     '&.SearchBox-root': {
       transition: 'transform 360ms linear',
-      zIndex: 1001,
+      zIndex: 1200,
       position: 'absolute',
       top: isHeaderVisible ? 48 : 0,
       m: 1,
@@ -141,8 +156,9 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
 
   const resultsSx = {
     position: 'absolute',
+    transition: 'transform 360ms linear',
     top: 48,
-    zIndex: 1000,
+    zIndex: 1100,
     m: 1,
     maxWidth: {
       xs: `calc(100% - ${theme.spacing(2)})`,
@@ -152,7 +168,12 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
     borderRadius: 3
   };
 
-  const renderResults = () => results.map((result, index) => (
+  const resultsHiddenSx = {
+    ...resultsSx,
+    transform: 'translateY(-100px)'
+  };
+
+  const renderResults = results.map((result, index) => (
     <ListItem
       dense
       key={index}
@@ -172,6 +193,18 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
     </ListItem>
   ));
 
+  const renderConnectivityError = (
+    <ListItem dense>
+      <ListItemText
+        primary={t('errors.search.noConnectivity')}
+        primaryTypographyProps={{
+          noWrap: true,
+          color: 'error.main'
+        }}
+      />
+    </ListItem>
+  );
+
   return <>
     <SearchBox
       text={text}
@@ -182,15 +215,20 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
       placeholder={placeholder}
       sx={isHidden ? searchHiddenSx : searchSx}
     />
-
     {
-      results.length
-        ? <Paper elevation={3} sx={resultsSx}>
+      showConnectivityError ?
+        <Paper elevation={3} sx={isHidden || hasConnectivity ? resultsHiddenSx : resultsSx}>
           <ClickAwayListener onClickAway={clearResults}>
-            <List dense sx={listSx}>{renderResults()}</List>
+            <List dense sx={listSx}>{renderConnectivityError}</List>
           </ClickAwayListener>
-        </Paper>
-        : null
+        </Paper> :
+        results.length ?
+          <Paper elevation={3} sx={resultsSx}>
+            <ClickAwayListener onClickAway={clearResults}>
+              <List dense sx={listSx}>{renderResults}</List>
+            </ClickAwayListener>
+          </Paper>
+          :  null
     }
     {
       isOpen && <Paper sx={contextualMenuSx(isHeaderVisible)}>
