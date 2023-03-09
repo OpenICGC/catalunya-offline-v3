@@ -8,9 +8,6 @@ const LangSetter: FC = ({children}) => {
   const {language} = useSettings();
   const {i18n} = useTranslation();
 
-  console.log('i18n.resolvedLanguage', i18n.resolvedLanguage);
-  console.log('LANGUAGE[language]', LANGUAGE[language]);
-
   if (i18n.resolvedLanguage !== LANGUAGE[language]) {
     i18n.changeLanguage(LANGUAGE[language]);
   }
