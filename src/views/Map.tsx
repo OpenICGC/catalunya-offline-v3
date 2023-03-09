@@ -170,18 +170,11 @@ const Map: FC<MainContentProps> = ({
   const [pointIntent, setPointIntent] = useState<Position>();
 
   const recordingTrack = useRecordingTrack();
-  /*const {networkStatus} = useStatus();
-
-  useEffect(() => {
-    if(networkStatus) {
-      console.log('networkStatusMap', networkStatus);
-      //setHasConnectivity(networkStatus.connected);
-    }
-  }, [networkStatus]);*/
   
   const [isFabOpen, setFabOpen] =useState<boolean>(false);
   const [isFabHidden, setFabHidden] =useState<boolean>(false);
   const [isSearchBoxHidden, setSearchBoxHidden] =useState<boolean>(false);
+  const [isContextualMenuOpen, setContextualMenuOpen] = useState(false);
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
@@ -361,8 +354,10 @@ const Map: FC<MainContentProps> = ({
     }
   };
   const handleClick = () => {
+    setContextualMenuOpen(false);
     setSearchBoxHidden(!isSearchBoxHidden);
-    isFabOpen ? setFabOpen(false) : setFabHidden(!isFabHidden);
+    setFabOpen(false);
+    setFabHidden(!isFabHidden);
   };
   const handleDoubleClick = (e: MapLayerMouseEvent) => {
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
@@ -473,6 +468,8 @@ const Map: FC<MainContentProps> = ({
       placeholder={t('actions.search')}
       onContextualMenuClick={handleContextualMenu}
       isHidden={isSearchBoxHidden}
+      isContextualMenuOpen={isContextualMenuOpen}
+      toogleContextualMenu={() => setContextualMenuOpen(!isContextualMenuOpen)}
     />
     <GeocomponentMap
       {...MAP_PROPS}

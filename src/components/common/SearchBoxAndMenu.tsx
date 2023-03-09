@@ -41,7 +41,13 @@ const contextualMenuSx = (isHeaderVisible: boolean) => ({
   position: 'absolute',
   top: isHeaderVisible ? 96 : 48,
   right: 8,
-  zIndex: 1001
+  zIndex: 1201,
+  transition: 'transform 360ms linear',
+});
+
+const contextualMenuHiddenSx = (isHeaderVisible: boolean) => ({
+  ...contextualMenuSx(isHeaderVisible),
+  transform: 'translateY(-100px)'
 });
 
 const listSx = {
@@ -52,15 +58,19 @@ const listSx = {
 };
 
 export type SearchBoxAndMenuProps = {
+  isContextualMenuOpen: boolean,
   placeholder: string,
   isHidden?: boolean,
-  onContextualMenuClick?: (menuId: string) => void
+  onContextualMenuClick?: (menuId: string) => void,
+  toogleContextualMenu: () => void
 };
 
 const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
+  isContextualMenuOpen,
   placeholder,
   isHidden = false,
-  onContextualMenuClick = () => undefined
+  onContextualMenuClick = () => undefined,
+  toogleContextualMenu
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
@@ -103,6 +113,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   };
 
   const handleResultClick = (result: ContextMapsResult) => {
+    toogleContextualMenu();
     const coords = result.coordenades.split(',');
     setViewport({
       latitude: parseFloat(coords[1]),
@@ -114,10 +125,9 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   };
 
   //CONTEXTUAL MENU
-  const [isOpen, setIsOpen] = useState(false);
-  const handleContextualMenu = () => setIsOpen(!isOpen);
+  const handleContextualMenu = () => toogleContextualMenu();
   const handleAction = (actionId: string) => {
-    setIsOpen(false);
+    toogleContextualMenu();
     onContextualMenuClick(actionId);
   };
 
@@ -231,7 +241,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
           :  null
     }
     {
-      isOpen && <Paper sx={contextualMenuSx(isHeaderVisible)}>
+      isContextualMenuOpen && !isHidden && <Paper sx={isHidden ? contextualMenuHiddenSx(isHeaderVisible) : contextualMenuSx(isHeaderVisible)}>
         <MenuList dense sx={{p: 0}}>
           {
             contextualMenu?.map(({id, label, icon}) => <MenuItem key={id} onClick={() => handleAction(id)}>
