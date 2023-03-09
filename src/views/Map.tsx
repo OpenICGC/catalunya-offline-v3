@@ -150,7 +150,6 @@ const Map: FC<MainContentProps> = ({
   const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
   const {t} = useTranslation();
-
   const pointNavigation = usePointNavigation();
 
   const scopeStore = useScopes();
