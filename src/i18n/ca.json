@@ -1,6 +1,14 @@
 {
   "about": {
-    "title": "Sobre..."
+    "content_01": "Catalunya Offline és una aplicació per mòbil feta per l’Institut Cartogràfic i Geològic de Catalunya (ICGC) que us permet moure-us pel territori català, prendre punts i gravar les vostres rutes i excursions amb el GPS encara que no tingueu cobertura de dades al vostre mòbil.",
+    "content_02": "L’aplicació permet la descàrrega i visualització de la cartografia de l’ICGC, tant del mapa topogràfic com de l’ortofotomapa.",
+    "moreInfo": "Sobre l'ICGC",
+    "otherApps": "Altres apps",
+    "otherApps_link": "https://www.icgc.cat/Aplicacions/Apps",
+    "presentation_link": "https://www.icgc.cat/ca/L-ICGC/Sobre-l-ICGC/Presentacio ",
+    "title": "Sobre...",
+    "version": "Versió",
+    "video-tutorial": "Vídeo tutorial"
   },
   "actions": {
     "accept": "Accepta",
