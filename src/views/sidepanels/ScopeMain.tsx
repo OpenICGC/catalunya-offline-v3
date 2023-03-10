@@ -91,7 +91,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
     closeHandleImport();
     setImportErrors(error);
   };
-  console.log(importErrors?.message);
+
   return !selectedScope ?
     <>
       <MainPanel
