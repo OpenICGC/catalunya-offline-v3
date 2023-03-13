@@ -22,14 +22,14 @@ import {useTranslation} from 'react-i18next';
 import {HEXColor} from '../../types/commonTypes';
 import useTheme from '@mui/material/styles/useTheme';
 
-const buttonContainerSx = {
+const buttonContainerSx = (bottomMargin: number | undefined) => ({
   position: 'absolute',
-  bottom: '8px',
+  bottom: bottomMargin ? `${bottomMargin+8}px` : '8px',
   left: 0,
   py: 1,
   zIndex: 1000,
   width: '100vw'
-};
+});
 const headerSx = {
   '&.Header-root': {
     position: 'absolute', top: 0
@@ -45,6 +45,7 @@ export enum RECORDING_STATUS {
 export type TrackRecorderProps = {
   name?: string,
   color?: HEXColor,
+  bottomMargin?: number,
   elapsedTime: number,
   onPause: () => void,
   onResume: () => void,
@@ -54,6 +55,7 @@ export type TrackRecorderProps = {
 const TrackRecorder: FC<TrackRecorderProps> = ({
   name,
   color,
+  bottomMargin,
   elapsedTime,
   onPause,
   onResume,
@@ -109,7 +111,7 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
       isOpen={isNotificationOpen}
       variant='center'
     />
-    <Stack direction='row' justifyContent='center' sx={buttonContainerSx}>
+    <Stack direction='row' justifyContent='center' sx={buttonContainerSx(bottomMargin)}>
       <RecordingButtonGroup recordingStatus={recordingStatus} onButtonClick={handleButtonGroupClick}/>
     </Stack>
   </>;

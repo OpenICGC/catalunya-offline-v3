@@ -20,6 +20,7 @@ import AcceptButton from '../buttons/AcceptButton';
 
 export type PositionEditorProps = {
   name?: string,
+  bottomMargin?: number,
   color?: HEXColor,
   onAccept: () => void,
   onCancel: () => void,
@@ -27,6 +28,7 @@ export type PositionEditorProps = {
 
 const PositionEditor: FC<PositionEditorProps> = ({
   name,
+  bottomMargin,
   color,
   onAccept,
   onCancel
@@ -37,7 +39,6 @@ const PositionEditor: FC<PositionEditorProps> = ({
   const handleCancel = () => onCancel();
 
   const crosshairSize = 80;
-
   const precisePositionIcon = {
     pointerEvents: 'none', 
     width: `${crosshairSize}px`,
@@ -47,8 +48,8 @@ const PositionEditor: FC<PositionEditorProps> = ({
   };
   
   const buttonsContainer = {
-    position: 'absolute', 
-    bottom: '8px',
+    position: 'absolute',
+    bottom: bottomMargin ? `${bottomMargin+8}px` : '8px',
     left: 0,
     py: 1,
     zIndex: 1000, 
@@ -59,7 +60,9 @@ const PositionEditor: FC<PositionEditorProps> = ({
     flexDirection: 'row', 
     justifyContent: 'center',
     gap: 2,
-    width: '100%'
+    width: '100%',
+
+    zIndex: 1000,
   };
   
   const headerName = (name ? `${name.toUpperCase()} - ` : '') + t('actions.addPoint');
@@ -78,7 +81,8 @@ const PositionEditor: FC<PositionEditorProps> = ({
         <AcceptButton onAccept={handleAccept} variant='contained'/>
       </Stack>
     </Stack>
-  </>;
+  </>
+  ;
 };
 
 export default PositionEditor;
