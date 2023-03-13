@@ -13,12 +13,12 @@ const TrackProperty: FC<TrackPropertyProps> = ({
   value
 }) => {
   return <Stack direction='row' alignItems='center'>
-    <IconButton size='small' disabled={!value}>
+    <IconButton size='small' disabled={!value} disableFocusRipple disableRipple sx={{cursor: 'default'}}>
       {icon}
     </IconButton>
     {value ? 
-      <Typography noWrap variant="caption" sx={{px: 0, color: undefined }}>{value}</Typography> :
-      <Typography noWrap variant="caption" sx={{px: 2, color: 'action.disabled'}}>{'-'}</Typography>
+      <Typography noWrap variant="caption" sx={{px: 0, color: undefined, cursor: 'default' }}>{value}</Typography> :
+      <Typography noWrap variant="caption" sx={{px: 2, color: 'action.disabled', cursor: 'default'}}>{'-'}</Typography>
     }
   </Stack>;
 };
