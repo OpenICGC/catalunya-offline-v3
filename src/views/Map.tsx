@@ -16,7 +16,7 @@ import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
 import useEditingPosition from '../hooks/useEditingPosition';
 import {AnyLayer, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
-import {Position, Feature} from 'geojson';
+import {Feature, Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 import ScopeSelector from '../components/scope/ScopeSelector';
@@ -27,7 +27,7 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 import SearchBoxAndMenu from '../components/common/SearchBoxAndMenu';
 import SettingsView from './SettingsView';
 import {useSettings} from '../hooks/useSettings';
-import { MapboxStyle, MapRef, MapboxMap} from 'react-map-gl';
+import {MapboxMap, MapboxStyle, MapRef} from 'react-map-gl';
 /*import {useStatus} from '@capacitor-community/network-react';*/
 
 mbtiles(maplibregl);
@@ -469,7 +469,8 @@ const Map: FC<MainContentProps> = ({
       onContextualMenuClick={handleContextualMenu}
       isHidden={isSearchBoxHidden}
       isContextualMenuOpen={isContextualMenuOpen}
-      toogleContextualMenu={() => setContextualMenuOpen(!isContextualMenuOpen)}
+      toogleContextualMenu={() => setContextualMenuOpen(false)}
+      onSearchClick={() => setLocationStatus(LOCATION_STATUS.NOT_TRACKING)}
     />
     <GeocomponentMap
       {...MAP_PROPS}

@@ -62,6 +62,7 @@ export type SearchBoxAndMenuProps = {
   placeholder: string,
   isHidden?: boolean,
   onContextualMenuClick?: (menuId: string) => void,
+  onSearchClick: () => void,
   toogleContextualMenu: () => void
 };
 
@@ -70,6 +71,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   placeholder,
   isHidden = false,
   onContextualMenuClick = () => undefined,
+  onSearchClick,
   toogleContextualMenu
 }) => {
   const {t} = useTranslation();
@@ -114,6 +116,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
 
   const handleResultClick = (result: ContextMapsResult) => {
     toogleContextualMenu();
+    onSearchClick();
     const coords = result.coordenades.split(',');
     setViewport({
       latitude: parseFloat(coords[1]),
