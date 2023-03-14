@@ -32,7 +32,8 @@ const buttonContainerSx = (bottomMargin: number | undefined) => ({
 });
 const headerSx = {
   '&.Header-root': {
-    position: 'absolute', top: 0
+    position: 'absolute',
+    top: 0
   }
 };
 
@@ -98,7 +99,9 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
   const headerColor = color ? color : (theme.palette.secondary.main as HEXColor);
 
   const timeSx = {
-    color: theme.palette.getContrastText(headerColor)
+    color: theme.palette.getContrastText(headerColor),
+    minWidth: 100,
+    textAlign: 'right'
   };
 
   return <>
