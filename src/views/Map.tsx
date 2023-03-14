@@ -462,7 +462,27 @@ const Map: FC<MainContentProps> = ({
         ? console.log('Unimplemented about') 
         : undefined;
   };
-  
+
+  const [bottomMargin, setBottomMargin] = useState(0);
+  const handleTopChanged = (height: number) => {
+    setBottomMargin(height);
+  };
+
+  const handleEditingPositionAccept = () => {
+    setBottomMargin(0);
+    editingPosition.accept();
+  };
+
+  const handleEditingPositionCancel = () => {
+    setBottomMargin(0);
+    editingPosition.cancel();
+  };
+
+  const handleRecordingTrackStop = () => {
+    setBottomMargin(0);
+    recordingTrack.stop();
+  };
+
   return <>
     <SearchBoxAndMenu 
       placeholder={t('actions.search')}
@@ -511,17 +531,19 @@ const Map: FC<MainContentProps> = ({
     
     {!!editingPosition.position && <PositionEditor
       name={selectedPoint?.properties.name}
+      bottomMargin={bottomMargin}
       color={pointColor}
-      onAccept={editingPosition.accept}
-      onCancel={editingPosition.cancel}
+      onAccept={handleEditingPositionAccept}
+      onCancel={handleEditingPositionCancel}
     />}
     {recordingTrack.isRecording && <TrackRecorder
       name={selectedTrack?.properties.name}
+      bottomMargin={bottomMargin}
       color={trackColor}
       elapsedTime={recordingTrack.elapsedTime}
       onPause={recordingTrack.pause}
       onResume={recordingTrack.resume}
-      onStop={recordingTrack.stop}
+      onStop={handleRecordingTrackStop}
     />}
     {!!pointIntent && <ScopeSelector
       isLargeSize={isLargeSize}
@@ -537,6 +559,7 @@ const Map: FC<MainContentProps> = ({
       onStop={pointNavigation.stop}
       onFitBounds={handleFitBounds}
       onShowDetails={handleShowDetails}
+      onTopChanged={handleTopChanged}
     />}
     {isSettingsDialogOpen && <SettingsView
       onClose={() => setSettingsDialogOpen(false)}

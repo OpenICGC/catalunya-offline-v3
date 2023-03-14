@@ -30,7 +30,8 @@ export interface PointNavigationBottomSheetProps {
     distance: number,
     onStop: () => void,
     onShowDetails: () => void,
-    onFitBounds: () => void
+    onFitBounds: () => void,
+    onTopChanged: (height: number) => void
 }
 
 const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
@@ -40,7 +41,8 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
   distance,
   onStop,
   onShowDetails,
-  onFitBounds
+  onFitBounds,
+  onTopChanged
 }) => {
   const {t} = useTranslation();
 
@@ -67,10 +69,10 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
 
   return <BottomSheet
     closedHeight={20}
-    openHeight={'80vh'}
+    openHeight={80}
     onToggle={() => setOpen(!isOpen)}
     isOpen={isOpen}
-    onTopChanged={() => undefined}
+    onTopChanged={(height) => onTopChanged(height)}
   >
     <ListItem
       itemId="point"
