@@ -11,15 +11,15 @@ import theme from './theme';
 
 import './i18n';
 
-/*import LangSetter from './views/LangSetter';*/
+import LangSetter from './views/LangSetter';
 
 const App = () =>
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme()}>
       <CssBaseline/>
-      {/*<LangSetter>*/}
-      <Routes/>
-      {/*</LangSetter>*/}
+      <LangSetter>
+        <Routes/>
+      </LangSetter>
     </ThemeProvider>
   </StyledEngineProvider>;
 

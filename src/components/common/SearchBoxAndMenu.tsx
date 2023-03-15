@@ -63,7 +63,7 @@ export type SearchBoxAndMenuProps = {
   isHidden?: boolean,
   onContextualMenuClick?: (menuId: string) => void,
   onSearchClick: () => void,
-  toogleContextualMenu: () => void
+  toggleContextualMenu: () => void
 };
 
 const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
@@ -72,7 +72,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   isHidden = false,
   onContextualMenuClick = () => undefined,
   onSearchClick,
-  toogleContextualMenu
+  toggleContextualMenu
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
@@ -99,6 +99,9 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   const clearResults = () => setResults([]);
 
   const handleTextChange = (newText: string) => {
+    if(isContextualMenuOpen) {
+      toggleContextualMenu();
+    }
     setText(newText);
     clearResults();
   };
@@ -115,7 +118,6 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   };
 
   const handleResultClick = (result: ContextMapsResult) => {
-    toogleContextualMenu();
     onSearchClick();
     const coords = result.coordenades.split(',');
     setViewport({
@@ -128,9 +130,9 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   };
 
   //CONTEXTUAL MENU
-  const handleContextualMenu = () => toogleContextualMenu();
+  const handleContextualMenu = () => toggleContextualMenu();
   const handleAction = (actionId: string) => {
-    toogleContextualMenu();
+    toggleContextualMenu();
     onContextualMenuClick(actionId);
   };
 

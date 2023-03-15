@@ -80,7 +80,6 @@
     "html-webpack-plugin": "^5.3.1",
     "husky": "^7.0.4",
     "i18next": "^21.5.2",
-    "i18next-browser-languagedetector": "^6.1.2",
     "karma": "^6.3.6",
     "karma-chrome-launcher": "^3.1.0",
     "karma-mocha": "^2.0.1",

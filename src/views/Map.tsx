@@ -489,7 +489,7 @@ const Map: FC<MainContentProps> = ({
       onContextualMenuClick={handleContextualMenu}
       isHidden={isSearchBoxHidden}
       isContextualMenuOpen={isContextualMenuOpen}
-      toogleContextualMenu={() => setContextualMenuOpen(false)}
+      toggleContextualMenu={() => setContextualMenuOpen(!isContextualMenuOpen)}
       onSearchClick={() => setLocationStatus(LOCATION_STATUS.NOT_TRACKING)}
     />
     <GeocomponentMap
