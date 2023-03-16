@@ -24,6 +24,8 @@ import useRecordingTrack from '../hooks/useRecordingTrack';
 import TrackRecorder from '../components/map/TrackRecorder';
 import usePointNavigation from '../hooks/usePointNavigation';
 import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
+import useTrackNavigation from '../hooks/useTrackNavigation';
+import TrackNavigationBottomSheet from '../components/map/TrackNavigationBottomSheet';
 import SearchBoxAndMenu from '../components/common/SearchBoxAndMenu';
 import SettingsView from './SettingsView';
 import {useSettings} from '../hooks/useSettings';
@@ -129,7 +131,8 @@ export type MainContentProps = {
   onPointSelected: (pointId: UUID) => void,
   onShowPointDetails: (pointId: UUID) => void,
   selectedTrackId?: UUID,
-  /*onTrackSelected: (trackId: UUID) => void*/
+  onTrackSelected: (trackId: UUID) => void,
+  onShowTrackDetails: (trackId: UUID) => void
 };
 
 const Map: FC<MainContentProps> = ({
@@ -142,7 +145,8 @@ const Map: FC<MainContentProps> = ({
   onPointSelected,
   onShowPointDetails,
   selectedTrackId,
-  /*onTrackSelected*/
+  onTrackSelected,
+  onShowTrackDetails
 }) => {
   const mapRef = useRef<MapRef>(null);
   const {viewport, setViewport} = useViewport();
@@ -151,6 +155,7 @@ const Map: FC<MainContentProps> = ({
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
   const {t} = useTranslation();
   const pointNavigation = usePointNavigation();
+  const trackNavigation = useTrackNavigation();
 
   const scopeStore = useScopes();
   const pointStore = useScopePoints(selectedScopeId);
@@ -437,23 +442,42 @@ const Map: FC<MainContentProps> = ({
     addNavigateToPoint();
   }, [pointNavigation.feature, mapRef.current]);
 
-  const handleFitBounds = () => {
+  const handlePointNavigationFitBounds = () => {
     const bbox = pointNavigation.getBounds();
-    bbox && mapRef.current?.fitBounds(bbox, {padding: 100});
+    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50, bottom: 50 + bottomMargin, left: 50, right: 50}});
   };
 
   useEffect(() => {
     if (pointNavigation.target) {
       const deferredFitBounds = async () => {
         await new Promise(r => setTimeout(r, 300));
-        handleFitBounds();
+        handlePointNavigationFitBounds();
         setFabOpen(false);
       };
       deferredFitBounds().catch(console.error);
     }
   }, [pointNavigation.target]);
 
-  const handleShowDetails = () => pointNavigation.target && onShowPointDetails(pointNavigation.target.id);
+  const handlePointNavigationShowDetails = () => pointNavigation.target && onShowPointDetails(pointNavigation.target.id);
+
+  const handleTrackNavigationFitBounds = () => {
+    const bbox = trackNavigation.getBounds();
+    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50, bottom: 50 + bottomMargin, left: 50, right: 50}});
+  };
+
+  useEffect(() => {
+    if (trackNavigation.target) {
+      const deferredFitBounds = async () => {
+        await new Promise(r => setTimeout(r, 300));
+        handleTrackNavigationFitBounds();
+        setFabOpen(false);
+      };
+      deferredFitBounds().catch(console.error);
+    }
+  }, [trackNavigation.target]);
+
+  const handleTrackNavigationShowDetails = () => trackNavigation.target && onShowTrackDetails(trackNavigation.target.id);
+
 
   const handleContextualMenu = (menuId: string) => {
     menuId === 'settings'
@@ -557,8 +581,19 @@ const Map: FC<MainContentProps> = ({
       bearing={pointNavigation.feature?.properties.bearing || 0}
       distance={pointNavigation.feature?.properties.distance || 0}
       onStop={pointNavigation.stop}
-      onFitBounds={handleFitBounds}
-      onShowDetails={handleShowDetails}
+      onFitBounds={handlePointNavigationFitBounds}
+      onShowDetails={handlePointNavigationShowDetails}
+      onTopChanged={handleTopChanged}
+    />}
+    {trackNavigation.target && <TrackNavigationBottomSheet
+      track={trackNavigation.target}
+      currentPositionIndex={trackNavigation.currentPositionIndex}
+      isOutOfTrack={trackNavigation.isOutOfTrack}
+      isReverseDirection={trackNavigation.isReverseDirection}
+      onReverseDirection={trackNavigation.toggleReverseDirection}
+      onStop={trackNavigation.stop}
+      onFitBounds={handleTrackNavigationFitBounds}
+      onShowDetails={handleTrackNavigationShowDetails}
       onTopChanged={handleTopChanged}
     />}
     {isSettingsDialogOpen && <SettingsView

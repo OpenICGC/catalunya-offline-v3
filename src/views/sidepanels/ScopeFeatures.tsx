@@ -12,6 +12,7 @@ import useEditingPosition from '../../hooks/useEditingPosition';
 import useShare from '../../hooks/useShare';
 import HandleExport from '../../components/scope/export/HandleExport';
 import usePointNavigation from '../../hooks/usePointNavigation';
+import useTrackNavigation from '../../hooks/useTrackNavigation';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -35,6 +36,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const pointStore = useScopePoints(scopeId);
   const trackStore = useScopeTracks(scopeId);
   const pointNavigation = usePointNavigation();
+  const trackNavigation = useTrackNavigation();
   const {sharePoint}  = useShare();
   const [sharingTrackId, setSharingTrackId] = useState<UUID|undefined>(undefined);
 
@@ -172,7 +174,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   };
 
   const trackGoTo = (trackId: UUID) => {
-    console.log('Unimplemented Go To, track', trackId); // TODO
+    trackNavigation.start(scopeId, trackId);
   };
 
   const trackExport = (trackId: UUID) => {

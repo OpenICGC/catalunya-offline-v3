@@ -4,6 +4,7 @@ import {ScopeTrack, UUID} from '../../types/commonTypes';
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import TrackPanel from '../../components/scope/TrackPanel';
 import useRecordingTrack from '../../hooks/useRecordingTrack';
+import useTrackNavigation from '../../hooks/useTrackNavigation';
 
 export interface ScopeTrackProps {
   scopeId: UUID,
@@ -19,6 +20,7 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
+  const trackNavigation = useTrackNavigation();
 
   const recordingTrack = useRecordingTrack();
 
@@ -47,8 +49,8 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     });
   };
 
-  const goTo = () => {
-    console.log('Unimplemented go to Track'); // TODO
+  const goTo = (trackId: UUID) => {
+    trackNavigation.start(scopeId, trackId);
   };
 
   return selectedScope && selectedTrack ? <TrackPanel
