@@ -70,18 +70,6 @@ const TrackProfile: FC<TrackProfileProps> = ({
     } else return [];
   }, [coordinates]);
 
-  
-  const trackReverse = (track: vegaTrackType) => {
-    const allReversed = [...track].reverse();
-    return allReversed.reduce((acc: vegaTrackType, item, i, track) => {
-      acc.push({
-        length: track[0].length-item.length,
-        height: item.height
-      });
-      return acc;
-    }, []);
-  };
-
   const arrayHeightsTrack: Array<number> = vegaTrack && vegaTrack.map(coord => coord.height);
   const minHeight: number = Math.min(...arrayHeightsTrack);
   const maxHeight: number = Math.max(...arrayHeightsTrack);

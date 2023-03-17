@@ -99,7 +99,7 @@ const Index: FC = () => {
     onPointSelected={setPoint}
     onShowPointDetails={handleShowPointDetails}
     selectedTrackId={track}
-    onTrackSelected={setTrack}
+    //onTrackSelected={setTrack}
     onShowTrackDetails={handleShowTrackDetails}
   />;
 

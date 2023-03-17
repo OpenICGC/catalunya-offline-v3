@@ -131,7 +131,7 @@ export type MainContentProps = {
   onPointSelected: (pointId: UUID) => void,
   onShowPointDetails: (pointId: UUID) => void,
   selectedTrackId?: UUID,
-  onTrackSelected: (trackId: UUID) => void,
+  //onTrackSelected: (trackId: UUID) => void,
   onShowTrackDetails: (trackId: UUID) => void
 };
 
@@ -145,7 +145,7 @@ const Map: FC<MainContentProps> = ({
   onPointSelected,
   onShowPointDetails,
   selectedTrackId,
-  onTrackSelected, // TODO
+  //onTrackSelected, // TODO
   onShowTrackDetails
 }) => {
   const mapRef = useRef<MapRef>(null);
