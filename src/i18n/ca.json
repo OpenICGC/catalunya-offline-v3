@@ -6,7 +6,7 @@
     "otherApps": "Altres apps",
     "otherApps_link": "https://www.icgc.cat/Aplicacions/Apps",
     "presentation_link": "https://www.icgc.cat/ca/L-ICGC/Sobre-l-ICGC/Presentacio ",
-    "title": "Sobre...",
+    "title": "Quant a...",
     "version": "Versió",
     "video-tutorial": "Vídeo tutorial"
   },
@@ -115,14 +115,14 @@
   },
   "share": {
     "includeVisiblePoints": "Incloure punts visibles?",
-    "point": "Compartir Point",
+    "point": "Compartir Punt",
     "scope": "Compartir Àmbit",
-    "track": "Compartir Track"
+    "track": "Compartir Traça"
   },
   "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
   "track": "Traça",
   "trackAlert": {
-    "noTrack": "No ji ja dades d'alçada",
-    "outOfTrack": "Fora de traza"
+    "noTrack": "No hi ha dades d'alçada",
+    "outOfTrack": "Fora de traça"
   }
 }

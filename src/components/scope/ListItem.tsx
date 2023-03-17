@@ -146,7 +146,7 @@ const ListItem: FC<ListItemProps> = memo(({
           <TextField size='small' label='' variant='outlined' sx={noEditableTextField}
             onClick={() => onClick(itemId)}
             inputProps={{ readOnly: true }}
-            defaultValue={name}
+            value={name}
           />
           {
             actionIcons?.map(actionIcon =>

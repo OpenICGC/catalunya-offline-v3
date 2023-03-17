@@ -36,7 +36,7 @@ import 'moment-duration-format';
 import {HEXColor, Scope, ImagePath, ScopeTrack, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/styles/styled';
-import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProperties';
+import {getAccumulatedProfileProperties} from '../../utils/getAccumulatedProfileProperties';
 import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';
 import {openPhoto} from '../../utils/camera';
@@ -82,7 +82,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const [track, setTrack] = useState(initialTrack);
   const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
 
-  const accums = useMemo(() => getAccumulatedTrackProperties(track), [track]);
+  const accums = useMemo(() => getAccumulatedProfileProperties(track.geometry?.coordinates), [track]);
   const distance: string | undefined = accums ? getSignificantDistanceUnits(accums.distance) : undefined;
   const ascent: string | undefined = accums ? getSignificantDistanceUnits(accums.ascent) : undefined;
   const descent: string | undefined = accums ? getSignificantDistanceUnits(accums.descent) : undefined;
@@ -232,7 +232,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
                 </Stack>
               </Stack>
             </Stack>
-            <TrackProfile geometry={track.geometry} color={track.properties.color || scope.color} isOutOfTrack={false}/>
+            <TrackProfile coordinates={track.geometry.coordinates} color={track.properties.color || scope.color} isOutOfTrack={false}/>
           </Stack>
         </>}
       </Stack>

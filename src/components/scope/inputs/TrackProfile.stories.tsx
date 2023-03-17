@@ -2,10 +2,10 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import TrackProfile, {TrackProfileProps} from './TrackProfile';
-import GeoJSON from 'geojson';
+import {Position} from 'geojson';
 
 import sample from '../../fixtures/sampleLineString.geo.json';
-const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
+const sampleCoordinates: Position[] = sample.coordinates as Position[];
 
 export default {
   title: 'Scope/Inputs/TrackProfile',
@@ -16,7 +16,7 @@ export default {
       control: {
         type: 'range',
         min: 0,
-        max: sampleGeometry && sampleGeometry.coordinates.length - 1,
+        max: sampleCoordinates && sampleCoordinates.length - 1,
         step: 1
       }
     }
@@ -27,11 +27,10 @@ const Template: Story<TrackProfileProps> = args => <TrackProfile {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  geometry: sampleGeometry,
+  coordinates: sampleCoordinates,
   color: '#4d0330',
   currentPositionIndex: undefined,
-  isOutOfTrack: false,
-  isReverseDirection: false
+  isOutOfTrack: false
 };
 
 export const Navigate = Template.bind({});
@@ -50,62 +49,50 @@ NavigateOutOfTrack.args = {
 export const WithoutHeight = Template.bind({});
 WithoutHeight.args = {
   ...Default.args,
-  geometry: {
-    type: 'LineString',
-    coordinates: [[ 1.849509, 41.609283 ], [ 1.849479, 41.60926 ]],
-  }
+  coordinates: [[ 1.849509, 41.609283 ], [ 1.849479, 41.60926 ]]
 };
 
 export const EmptyCoords = Template.bind({});
 EmptyCoords.args = {
   ...Default.args,
-  geometry: {
-    type: 'LineString',
-    coordinates: [],
-  }
+  coordinates: []
 };
 
 export const ZeroHeightAllPoints = Template.bind({});
 ZeroHeightAllPoints.args = {
   ...Default.args,
-  geometry: {
-    type: 'LineString',
-    coordinates: [[ 1.849509, 41.609283, 0 ], [ 1.849479, 41.60926, 0 ]],
-  }
+  coordinates: [[ 1.849509, 41.609283, 0 ], [ 1.849479, 41.60926, 0 ]]
 };
 
 export const Error_NullGeometry = Template.bind({});
 Error_NullGeometry.args = {
   ...Default.args,
-  geometry: null
+  coordinates: undefined
 };
 
 export const InvalidCoords = Template.bind({});
 InvalidCoords.args = {
   ...Default.args,
-  geometry: {
-    type: 'LineString',
-    coordinates: [[-250, 200, -50], [-200, 210, -55]],
-  }
+  coordinates: [[-250, 200, -50], [-200, 210, -55]]
 };
 
 export const NavigateFirstIndex = Template.bind({});
 NavigateFirstIndex.args = {
-  geometry: sampleGeometry,
+  coordinates: sampleCoordinates,
   color: '#973572',
   currentPositionIndex: 0
 };
 
 export const NavigateLastIndex = Template.bind({});
 NavigateLastIndex.args = {
-  geometry: sampleGeometry,
+  coordinates: sampleCoordinates,
   color: '#973572',
-  currentPositionIndex: sampleGeometry?.coordinates.length - 1
+  currentPositionIndex: sampleCoordinates.length - 1
 };
 
 export const NavigateOutOfRange = Template.bind({});
 NavigateOutOfRange.args = {
-  geometry: sampleGeometry,
+  coordinates: sampleCoordinates,
   color: '#973572',
   currentPositionIndex: 1000
 };

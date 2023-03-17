@@ -12,6 +12,7 @@ import useMapStyle from '../hooks/useMapStyle';
 import useEditingPosition from '../hooks/useEditingPosition';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import usePointNavigation from '../hooks/usePointNavigation';
+import useTrackNavigation from '../hooks/useTrackNavigation';
 
 const stackSx = {
   height: '100%',
@@ -32,11 +33,9 @@ const Index: FC = () => {
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
   const pointNavigatingTo = usePointNavigation().target;
+  const trackNavigatingTo = useTrackNavigation().target;
 
-  const toggleSidePanel = () => {
-    setSidePanelOpen(!isSidePanelOpen);
-    //setManager(undefined);
-  };
+  const toggleSidePanel = () => setSidePanelOpen(!isSidePanelOpen);
 
   useEffect(() => {
     setSidePanelOpen(!!manager);
@@ -54,8 +53,17 @@ const Index: FC = () => {
     pointNavigatingTo && setSidePanelOpen(false); // Closes panel when target point changes.
   }, [pointNavigatingTo?.id]);
 
+  useEffect(() => {
+    trackNavigatingTo && setSidePanelOpen(false); // Closes panel when target track changes.
+  }, [trackNavigatingTo?.id]);
+
   const handleShowPointDetails = (pointId: UUID) => {
     setPoint(pointId);
+    setSidePanelOpen(true);
+  };
+
+  const handleShowTrackDetails = (trackId: UUID) => {
+    setTrack(trackId);
     setSidePanelOpen(true);
   };
 
@@ -91,7 +99,8 @@ const Index: FC = () => {
     onPointSelected={setPoint}
     onShowPointDetails={handleShowPointDetails}
     selectedTrackId={track}
-    /*onTrackSelected={setTrack}*/
+    //onTrackSelected={setTrack}
+    onShowTrackDetails={handleShowTrackDetails}
   />;
 
   return <>
