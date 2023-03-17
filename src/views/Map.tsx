@@ -145,7 +145,7 @@ const Map: FC<MainContentProps> = ({
   onPointSelected,
   onShowPointDetails,
   selectedTrackId,
-  onTrackSelected,
+  onTrackSelected, // TODO
   onShowTrackDetails
 }) => {
   const mapRef = useRef<MapRef>(null);
@@ -586,7 +586,9 @@ const Map: FC<MainContentProps> = ({
       onTopChanged={handleTopChanged}
     />}
     {trackNavigation.target && <TrackNavigationBottomSheet
-      track={trackNavigation.target}
+      name={trackNavigation.target.name}
+      color={trackNavigation.target.color}
+      coordinates={trackNavigation.target.coordinates}
       currentPositionIndex={trackNavigation.currentPositionIndex}
       isOutOfTrack={trackNavigation.isOutOfTrack}
       isReverseDirection={trackNavigation.isReverseDirection}

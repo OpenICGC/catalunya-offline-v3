@@ -1,40 +1,23 @@
 import {expect} from 'chai';
-import {getAccumulatedTrackProperties} from './getAccumulatedTrackProperties';
-import {v4 as uuid} from 'uuid';
-import {ScopeTrack} from '../types/commonTypes';
+import {getAccumulatedProfileProperties} from './getAccumulatedProfileProperties';
+import {Position} from 'geojson';
 
 describe('getAccumulatedAscent', () => {
-  const scopeId = uuid();
 
   it('getAccumulatedAscent should get the ascending accumulative difference', () => {
 
     // GIVEN
-    const sampleScopeTrack: ScopeTrack = {
-      type: 'Feature',
-      id: scopeId,
-      properties: {
-        name: 'Mi traza 15',
-        timestamp: Date.now(),
-        description: '',
-        images: [],
-        color: '#973572',
-        isVisible: true
-      },
-      geometry: {
-        type: 'LineString',
-        coordinates: [
-          [2, 1, 2, 0],
-          [2, 4, 5, 20],
-          [4, 4, 0, 40],
-          [4, 6, 1, 55],
-          [6, 6, 2, 70],
-          [6, 2, 8, 90]
-        ]
-      }
-    };
+    const sampleCoordinates: Position[] = [
+      [2, 1, 2, 0],
+      [2, 4, 5, 20],
+      [4, 4, 0, 40],
+      [4, 6, 1, 55],
+      [6, 6, 2, 70],
+      [6, 2, 8, 90]
+    ];
 
     // WHEN
-    const computedIndex = getAccumulatedTrackProperties(sampleScopeTrack);
+    const computedIndex = getAccumulatedProfileProperties(sampleCoordinates);
 
     // THEN
     // eslint-disable-next-line @typescript-eslint/no-loss-of-precision

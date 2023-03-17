@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import {HEXColor} from '../../../types/commonTypes';
 import {GPS_POSITION_DEFAULT_COLOR} from '../../../config';
 import {useTranslation} from 'react-i18next';
-import GeoJSON from 'geojson';
+import {Position} from 'geojson';
 import OutOfTrackButton from '../../buttons/OutOfTrackButton';
 import Typography from '@mui/material/Typography';
 
@@ -23,11 +23,10 @@ const profileContainerSx = {
 };
 
 export interface TrackProfileProps {
-    geometry: GeoJSON.LineString | null,
+    coordinates?: Position[],
     color?: HEXColor,
     currentPositionIndex?: number,
-    isOutOfTrack: boolean,
-    isReverseDirection?: boolean
+    isOutOfTrack: boolean
 }
         
 export type vegaTrackType = Array<{
@@ -36,28 +35,27 @@ export type vegaTrackType = Array<{
 }>
 
 const TrackProfile: FC<TrackProfileProps> = ({
-  geometry,
+  coordinates,
   color = '#2f2f2f',
   currentPositionIndex,
-  isOutOfTrack,
-  isReverseDirection= false
+  isOutOfTrack
 }) => {
 
   const {t} = useTranslation();
     
   //VALIDATORS
-  const isLongitudeValid = geometry?.coordinates.some(coord => (coord[0] >= -180 && coord[0] <= 180));
-  const isLatitudeValid = geometry?.coordinates.some(coord => (coord[1] >= -90 && coord[1] <= 90));
-  const isHeightValid = geometry?.coordinates.some(coord => coord.length >= 3) && !geometry?.coordinates.every(coord => coord[2] === 0);
-  const isTrackValid = geometry && isHeightValid && isLongitudeValid && isLatitudeValid;
+  const isLongitudeValid = coordinates?.some(coord => (coord[0] >= -180 && coord[0] <= 180));
+  const isLatitudeValid = coordinates?.some(coord => (coord[1] >= -90 && coord[1] <= 90));
+  const isHeightValid = coordinates?.some(coord => coord.length >= 3) && !coordinates?.every(coord => coord[2] === 0);
+  const isTrackValid = coordinates && isHeightValid && isLongitudeValid && isLatitudeValid;
   {
     !isTrackValid && console.warn(t('trackAlert.noTrack'));
   }
-  const isNavigateMode: boolean = geometry ?
-    (currentPositionIndex !== undefined && currentPositionIndex >= 0 && currentPositionIndex < geometry.coordinates.length)
+  const isNavigateMode: boolean = coordinates ?
+    (currentPositionIndex !== undefined && currentPositionIndex >= 0 && currentPositionIndex < coordinates.length)
     : false;
   const vegaTrack: vegaTrackType = useMemo(() => {
-    const coords = geometry?.coordinates;
+    const coords = coordinates;
     let cumulativeLength = 0;
     if (coords && coords.length) {
       return coords.map((c, i) => {
@@ -70,7 +68,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
         };
       });
     } else return [];
-  }, [geometry]);
+  }, [coordinates]);
 
   
   const trackReverse = (track: vegaTrackType) => {
@@ -92,9 +90,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
   const maxLength: number = Math.max(...arrayLengthsTrack);
 
   const travelled: vegaTrackType = isNavigateMode && currentPositionIndex !== undefined ?
-    isReverseDirection ?
-      trackReverse(vegaTrack).slice(0, currentPositionIndex + 1) :
-      vegaTrack.slice(0, currentPositionIndex + 1) : 
+    vegaTrack.slice(0, currentPositionIndex + 1) :
     [];
   
   const spec: TopLevelSpec = {
@@ -107,7 +103,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
           type: 'line',
           opacity: isOutOfTrack? 0.25 : 1
         },
-        data: { values: isReverseDirection ? trackReverse(vegaTrack) : vegaTrack },
+        data: { values: vegaTrack },
         encoding: {
           color: {
             value: color,
@@ -160,9 +156,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
         },
         data: { 
           values: currentPositionIndex !== undefined ? 
-            isReverseDirection? 
-              trackReverse(vegaTrack)[currentPositionIndex] : 
-              vegaTrack[currentPositionIndex] : 
+            vegaTrack[currentPositionIndex] :
             [] 
         },
         encoding: {
@@ -206,7 +200,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
     ] : [
       {
         mark: 'line',
-        data: { values: isReverseDirection ? trackReverse(vegaTrack) : vegaTrack },
+        data: { values: vegaTrack },
         encoding: {
           color: {
             value: color,

@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
+import {Position} from 'geojson';
 import TrackNavigationBottomSheet, {TrackNavigationBottomSheetProps} from './TrackNavigationBottomSheet';
 import sample from '../fixtures/sampleLineString.geo.json';
 import sampleWithoutHeight from '../fixtures/sampleLineStringWithoutHeight.geo.json';
-const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
-const sampleGeometryWithoutHeight: GeoJSON.LineString = sampleWithoutHeight as GeoJSON.LineString;
-import {v4 as uuid} from 'uuid';
+const sampleCoordinates: Position[] = sample.coordinates as Position[];
+const sampleCoordinatesWithoutHeight: Position[] = sampleWithoutHeight.coordinates as Position[];
 import {BASEMAPS, INITIAL_VIEWPORT} from '../../config';
 import Box from '@mui/material/Box';
 import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
+
 
 export default {
   title: 'Map/TrackNavigationBottomSheet',
@@ -19,7 +20,7 @@ export default {
       control: {
         type: 'range',
         min: 0,
-        max: sampleGeometry && sampleGeometry.coordinates.length - 1,
+        max: sampleCoordinates && sampleCoordinates.length - 1,
         step: 1
       }
     }
@@ -38,19 +39,9 @@ const WithMapTemplate: Story<TrackNavigationBottomSheetProps> = ({...args}) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  track: {
-    type: 'Feature',
-    id: uuid(),
-    properties: {
-      name: 'Mi traza 01',
-      timestamp: Date.now(),
-      description: 'Excursión con amigos de la infancia',
-      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
-      color: '#973572',
-      isVisible: true
-    },
-    geometry: sampleGeometry
-  },
+  name: 'Mi traza 01',
+  color: '#973572',
+  coordinates: sampleCoordinates,
   currentPositionIndex: 24,
   isOutOfTrack: false,
   isReverseDirection: false
@@ -59,19 +50,9 @@ Default.args = {
 export const WithoutHeight = Template.bind({});
 WithoutHeight.args = {
   ...Default.args,
-  track: {
-    type: 'Feature',
-    id: uuid(),
-    properties: {
-      name: 'Mi traza 01',
-      timestamp: Date.now(),
-      description: 'Excursión con amigos de la infancia',
-      images: [...Array(3).keys()].map(i => `https://picsum.photos/300/20${i}`),
-      color: '#973572',
-      isVisible: true
-    },
-    geometry: sampleGeometryWithoutHeight
-  },
+  name: 'Mi traza 01',
+  color: '#973572',
+  coordinates: sampleCoordinatesWithoutHeight
 };
 
 export const WithMap = WithMapTemplate.bind({});

@@ -23,11 +23,12 @@ import TrackProfile from '../scope/inputs/TrackProfile';
 import TrackProperty from '../scope/inputs/TrackProperty';
 
 //UTILS
-import {HEXColor, ScopeTrack} from '../../types/commonTypes';
+import {HEXColor} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
-import {getAccumulatedTrackProperties} from '../../utils/getAccumulatedTrackProperties';
+import {getAccumulatedProfileProperties} from '../../utils/getAccumulatedProfileProperties';
 import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
 import OutOfTrackButton from '../buttons/OutOfTrackButton';
+import {Position} from 'geojson';
 
 //STYLES
 const sectionTitleSx = {
@@ -35,7 +36,10 @@ const sectionTitleSx = {
 };
 
 export interface TrackNavigationBottomSheetProps {
-    track: ScopeTrack,
+    //track: ScopeTrack,
+    name: string,
+    color: HEXColor,
+    coordinates?: Position[],
     currentPositionIndex?: number,
     isOutOfTrack: boolean,
     isReverseDirection: boolean,
@@ -47,7 +51,9 @@ export interface TrackNavigationBottomSheetProps {
 }
 
 const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
-  track,
+  name,
+  color,
+  coordinates,
   currentPositionIndex,
   isOutOfTrack,
   isReverseDirection,
@@ -87,26 +93,19 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
     }
   ];
 
-  const coordinatesRemaining = track.geometry ? 
-    track.geometry.coordinates.slice(currentPositionIndex, track.geometry.coordinates.length) 
+  const coordinatesRemaining = coordinates ?
+    coordinates.slice(currentPositionIndex, coordinates.length)
     : [];
-  const trackRemaining: ScopeTrack = {
-    ...track,
-    geometry: {
-      type: 'LineString',
-      coordinates: coordinatesRemaining
-    }
-  };
-  
-  const accumsRemaining = useMemo(() => getAccumulatedTrackProperties(trackRemaining), [trackRemaining]);
-  const distanceRemaining: string | undefined = accumsRemaining?.distance ? getSignificantDistanceUnits(accumsRemaining.distance) : undefined;
-  const ascentRemaining: string | undefined = accumsRemaining?.ascent + 'm';
-  const descentRemaining: string | undefined = accumsRemaining?.descent + 'm';
 
-  const accums = useMemo(() => getAccumulatedTrackProperties(track), [track]);
+  const accumsRemaining = useMemo(() => getAccumulatedProfileProperties(coordinatesRemaining), [coordinatesRemaining]);
+  const distanceRemaining: string | undefined = accumsRemaining?.distance ? getSignificantDistanceUnits(accumsRemaining.distance) : undefined;
+  const ascentRemaining: string | undefined = accumsRemaining?.ascent ? getSignificantDistanceUnits(accumsRemaining.ascent) : undefined;
+  const descentRemaining: string | undefined = accumsRemaining?.descent  ? getSignificantDistanceUnits(accumsRemaining.descent) : undefined;
+
+  const accums = useMemo(() => getAccumulatedProfileProperties(coordinates), [coordinates]);
   const distance: string | undefined = accums?.distance ? getSignificantDistanceUnits(accums.distance) : undefined;
 
-  const hasElevation = track.geometry ? track.geometry.coordinates.some(coord => coord.length >= 3) : false;
+  const hasElevation = coordinates ? coordinates.some(coord => coord.length >= 3) : false;
 
   const handleActionClick = (itemId: string, actionId: string) => actionIcons.find(actionIcons => actionIcons.id === actionId)?.callback();
 
@@ -119,18 +118,17 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
   >
     <ListItem
       itemId="track"
-      name={track.properties.name}
-      color={track.properties.color || '#000000'}
+      name={name}
+      color={color}
       actionIcons={actionIcons}
       onActionClick={handleActionClick}
     />
     <Stack direction="column" sx={{mt: 1}}>
       <TrackProfile 
-        geometry={track.geometry} 
-        color={track.properties.color} 
+        coordinates={coordinates}
+        color={color}
         currentPositionIndex={currentPositionIndex} 
-        isOutOfTrack={isOutOfTrack} 
-        isReverseDirection={isReverseDirection}
+        isOutOfTrack={isOutOfTrack}
       />
       <Typography sx={sectionTitleSx} variant="caption">{t('properties.remainingToGo')}</Typography>
       {

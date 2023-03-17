@@ -35,7 +35,7 @@ const useTrackNavigationImpl = () => {
   const toTrack: LineString | undefined = scopeTrack?.geometry ?
     isReverseDirection ? {
       ...scopeTrack.geometry,
-      coordinates: scopeTrack.geometry.coordinates.reverse()
+      coordinates: [...scopeTrack.geometry.coordinates].reverse()
     } : scopeTrack.geometry
     : undefined;
 
@@ -46,12 +46,11 @@ const useTrackNavigationImpl = () => {
   const currentPositionIndex: number | undefined = snappedFeature?.properties?.index;
   const isOutOfTrack: boolean = snappedDistance ? snappedDistance > trackTolerance : false;
 
-  const target = scopeTrack ? {
-    ...scopeTrack,
-    properties: {
-      ...scopeTrack.properties,
-      color: scopeTrack.properties.color || scope?.color
-    }
+  const target = scopeTrack && toTrack ? {
+    id: scopeTrack.id,
+    name: scopeTrack.properties.name,
+    color: scopeTrack.properties.color || scope?.color || '#000000',
+    coordinates: toTrack.coordinates
   } : undefined;
 
   const start: startFn = (scopeId, scopeTrackId) => {
