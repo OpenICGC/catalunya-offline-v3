@@ -50,12 +50,12 @@ const contextualMenuHiddenSx = (isHeaderVisible: boolean) => ({
   transform: 'translateY(-100px)'
 });
 
-const listSx = {
+const listSx = (componentWidth: object) => ({
   overflow: 'auto',
   maxHeight: 300,
   cursor: 'pointer',
-  width: '500px'
-};
+  width: componentWidth
+});
 
 export type SearchBoxAndMenuProps = {
   isContextualMenuOpen: boolean,
@@ -78,7 +78,13 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   const theme = useTheme();
   const {setViewport} = useViewport();
   const {networkStatus} = useStatus();
-
+  
+  //STYLES
+  const componentWidth = {
+    xs: `calc(100% - ${theme.spacing(2)})`,
+    md: '30vw'
+  };
+  
   //CONNECTIVITY
   const hasConnectivity = networkStatus?.connected;
   const isEditingPosition = !!useEditingPosition().position;
@@ -143,10 +149,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
       position: 'absolute',
       top: isHeaderVisible ? 48 : 0,
       m: 1,
-      maxWidth: {
-        xs: `calc(100% - ${theme.spacing(2)})`,
-        md: '30vw'
-      },
+      maxWidth: componentWidth,
       right: 0
     }
   };
@@ -194,6 +197,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
       key={index}
       onClick={() => handleResultClick(result)}
       sx={{
+        width: '100%',
         '&:hover': {
           bgcolor: 'grey.100'
         }
@@ -234,13 +238,13 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
       showConnectivityError ?
         <Paper elevation={3} sx={isHidden || hasConnectivity ? resultsHiddenSx : resultsSx}>
           <ClickAwayListener onClickAway={clearResults}>
-            <List dense sx={listSx}>{renderConnectivityError}</List>
+            <List dense sx={listSx(componentWidth)}>{renderConnectivityError}</List>
           </ClickAwayListener>
         </Paper> :
         results.length ?
           <Paper elevation={3} sx={resultsSx}>
             <ClickAwayListener onClickAway={clearResults}>
-              <List dense sx={listSx}>{renderResults}</List>
+              <List dense sx={listSx(componentWidth)}>{renderResults}</List>
             </ClickAwayListener>
           </Paper>
           :  null
