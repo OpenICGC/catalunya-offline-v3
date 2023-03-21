@@ -10,8 +10,8 @@ import MapIcon from '@mui/icons-material/Map';
 import BaseMapList from '../../components/common/BaseMapList';
 
 //CATOFFLINE
-import AddBaseMap from '../../components/icons/AddBaseMap';
-import AddButton from '../../components/buttons/AddButton';
+/*import AddBaseMap from '../../components/icons/AddBaseMap';
+import AddButton from '../../components/buttons/AddButton';*/
 import Header from '../../components/common/Header';
 
 //UTILS
@@ -25,11 +25,16 @@ export type BaseMapsProps = {
   baseMapId: string,
   onMapStyleChanged: (newStyle: string) => void
   onMapStyleDeleted: (newStyle: string) => void
-  onMapStyleAdded: () => void
+  /*onMapStyleAdded: () => void*/
 };
 
-const boxSx = {width: '100%', height: 0, pt: 5, pb: 1};
-const BaseMaps: FC<BaseMapsProps> = ({baseMapId, onMapStyleChanged, onMapStyleDeleted, onMapStyleAdded}) => {
+/*const boxSx = {width: '100%', height: 0, pt: 5, pb: 1};*/
+const BaseMaps: FC<BaseMapsProps> = ({
+  baseMapId,
+  onMapStyleChanged,
+  onMapStyleDeleted,
+  /*onMapStyleAdded*/
+}) => {
   const {t} = useTranslation();
   const theme = useTheme();
   const {isLargeSize} = useSettings();
@@ -55,11 +60,11 @@ const BaseMaps: FC<BaseMapsProps> = ({baseMapId, onMapStyleChanged, onMapStyleDe
         onStyleDelete={onMapStyleDeleted}
       />
     </ScrollableContent>
-    <Box sx={boxSx}>
+    {/*<Box sx={boxSx}>
       <AddButton onClick={onMapStyleAdded}>
         <AddBaseMap/>
       </AddButton>
-    </Box>
+    </Box>*/}
   </>;
 };
 
