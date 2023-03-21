@@ -6,12 +6,12 @@ import Box from '@mui/material/Box';
 //MUI-ICONS
 import AddIcon from '@mui/icons-material/Add';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+/*import DashboardIcon from '@mui/icons-material/Dashboard';*/
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
 import FolderIcon from '@mui/icons-material/Folder';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+/*import MoreHorizIcon from '@mui/icons-material/MoreHoriz';*/
 
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
@@ -34,8 +34,8 @@ export type MainPanelProps = {
   onRename: (scopeId: UUID, name: string) => void,
   onShare: (scopeId: UUID) => void,
   onDelete: (scopeId: UUID) => void,
-  onInstamaps: (scopeId: UUID) => void,
-  onDataSchema: (scopeId: UUID) => void,
+  /*onInstamaps: (scopeId: UUID) => void,*/
+  /*onDataSchema: (scopeId: UUID) => void,*/
   onImport: (scopeId: UUID) => void
 };
 
@@ -47,8 +47,8 @@ const MainPanel: FC<MainPanelProps> = ({
   onRename,
   onShare,
   onDelete,
-  onInstamaps,
-  onDataSchema,
+  /*onInstamaps,*/
+  /*onDataSchema,*/
   onImport
 }) => {
   const {t} = useTranslation();
@@ -67,7 +67,7 @@ const MainPanel: FC<MainPanelProps> = ({
       icon: <DeleteIcon/>,
       callbackProp: onDelete
     },
-    {
+    /*{
       id: 'instamaps',
       label: t('actions.instamaps'),
       icon: <MoreHorizIcon/>,
@@ -78,14 +78,14 @@ const MainPanel: FC<MainPanelProps> = ({
       label: t('actions.dataSchema'),
       icon: <DashboardIcon/>,
       callbackProp: onDataSchema
-    },
+    },*/
     {
       id: 'import',
       label: t('actions.import'),
       icon: <AddIcon/>,
       callbackProp: onImport
     }
-  ]), [onDelete, onInstamaps, onDataSchema, t]);
+  ]), [onDelete, /*onInstamaps, onDataSchema,*/ t]);
 
   const handleContextualMenuClick = useCallback((scopeId: UUID, menuId: string) => {
     const menuEntry = contextualMenu.find(({id}) => id === menuId);
