@@ -23,7 +23,7 @@ export default {
 const Template: Story<LocationMarkerProps> = args => {
   const [getViewport, setViewport] = useState(DEFAULT_VIEWPORT);
   return <Box sx={{width: '100vw', height: '100vh', position: 'relative', boxShadow: 1}}>
-    <Map mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}>
+    <Map mapStyle={BASEMAPS[1].style} onViewportChange={setViewport} viewport={getViewport}>
       <LocationMarker {...args}/>
     </Map>
   </Box>;

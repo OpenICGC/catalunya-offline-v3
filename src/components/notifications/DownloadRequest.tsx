@@ -17,14 +17,16 @@ import AcceptButton from '../buttons/AcceptButton';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
+import {bytesToSize} from '../../utils/filesystem';
 
 export type DownloadRequestProps = {
   isOpen: boolean,
   onClose: () => void,
-  onDownload: () => void
+  onDownload: () => void,
+  bytes: number
 };
 
-const DownloadRequest: FC<DownloadRequestProps> = ({isOpen= false, onClose, onDownload}) => {
+const DownloadRequest: FC<DownloadRequestProps> = ({isOpen= false, onClose, onDownload, bytes}) => {
   const {t} = useTranslation();
   return <Dialog open={isOpen} onClose={onClose} fullWidth>
     <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.05, bgcolor: 'secondary.main'}}>
@@ -40,7 +42,7 @@ const DownloadRequest: FC<DownloadRequestProps> = ({isOpen= false, onClose, onDo
         {t('downloadingAlert.content_02')}
       </DialogContentText>
       <DialogContentText gutterBottom sx={{color: 'text.primary', textAlign: 'justify'}}>
-        {t('downloadingAlert.content_03')}
+        {t('downloadingAlert.content_03', {pendingSize: bytesToSize(bytes)})}
       </DialogContentText>
     </DialogContent>
     <DialogActions>

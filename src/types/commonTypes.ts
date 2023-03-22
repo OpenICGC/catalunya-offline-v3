@@ -1,5 +1,4 @@
 import GeoJSON from 'geojson';
-import { MapboxStyle } from 'react-map-gl';
 
 export type BaseMap = {
   id: string
@@ -10,12 +9,24 @@ export type BaseMap = {
     es: string;
   },
   thumbnail: string,
-  onlineStyle: string | MapboxStyle,
-  offlineAssets?: string,
-  attribution?: string
+  style: string,
+  sprites?: string
 }
 
 export type BaseMaps = Array<BaseMap>
+
+export type OfflineDatasource = {
+  id: string,
+  url: string,
+  labels: {
+    [index: string]: string;
+    ca: string;
+    en: string;
+    es: string;
+  }
+}
+
+export type OfflineDatasources = Array<OfflineDatasource>
 
 export type Style = {
   id: string
@@ -27,8 +38,8 @@ export type Style = {
   },
   label: string,
   thumbnail: string,
-  onlineStyle: string | MapboxStyle,
-  offlineAssets?: string,
+  style: string,
+  sprites?: string
   attribution?: string
 }
 

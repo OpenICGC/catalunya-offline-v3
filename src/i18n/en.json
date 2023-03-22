@@ -38,9 +38,9 @@
   },
   "downloadingAlert": {
     "cancel": "Download has been canceled",
-    "content_01": "Data downloading of the Topographic Map of Catalonia is needed to be able to work in areas with poor coverage.",
-    "content_02": "If you don't want to download the data now, you can continue navigating with an online version, and you will be prompted to download them afterwards.",
-    "content_03": "Download now the Topographic Map of Catalonia? (350 MB)",
+    "content_01": "The offline data pack is needed to work in areas with poor coverage, and we strongly encourage you to download it as soon as possible.",
+    "content_02": "However, if it isn't downloaded now, you can still continue navigating with the online version. You will be prompted to download it in the future.",
+    "content_03": "Do you want to download the offline data pack now? {{pendingSize}}",
     "error": "Error downloading cartography",
     "glyphs": "Fonts",
     "mbtiles": "Cartography",
@@ -131,7 +131,6 @@
     "scope": "Share Scope",
     "track": "Share Track"
   },
-  "topographicMap": "Topographic Map of Catalonia 1:25 000",
   "track": "Track",
   "trackAlert": {
     "noTrack": "No height data",

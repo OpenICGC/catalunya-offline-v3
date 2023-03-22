@@ -29,7 +29,7 @@ export const listOfflineDir = async (directory?:string) => {
 
 export const offlineDirExists = async (directory:string) => {
   try {
-    await Filesystem.readdir({
+    await Filesystem.stat({
       path: OFFLINE_DATADIR_NAME + '/' + directory,
       directory: Directory.Data
     });
@@ -140,6 +140,13 @@ export const readFile = async (uri: string) => {
   });
 };
 
+export const renameFile = async (from: string, to: string) => {
+  return await Filesystem.rename({
+    from: from,
+    to: to
+  });
+};
+
 export const writeFile = async (content: string, path: string, encoding: Encoding = Encoding.UTF8) => {
   return await Filesystem.writeFile({
     path: path,
@@ -224,4 +231,22 @@ export const generateZip = async (source: string, path: string, fromType: Folder
 
     return destinationFile.uri;
   }
+};
+
+export const onlineFileSize = async (url: string) => {
+  const response = await fetch(url, {method: 'HEAD'});
+  const size = response.headers.get('content-length');
+  if (size) {
+    return parseInt(size);
+  } else {
+    return undefined;
+  }
+};
+
+export const bytesToSize = (bytes: number): string => {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) return 'n/a';
+  const i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), sizes.length - 1);
+  if (i === 0) return `${bytes} ${sizes[i]}`;
+  return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
 };
