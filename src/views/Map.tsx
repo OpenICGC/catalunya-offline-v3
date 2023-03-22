@@ -1,35 +1,40 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 
+//GEOCOMPONENTS
 import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
 
-import {Manager, ScopePoint, UUID} from '../types/commonTypes';
-import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
+//CATOFFLINE
+import AboutDialog from '../components/common/AboutDialog';
 import FabButton, {LOCATION_STATUS} from '../components/buttons/FabButton';
-import {mbtiles} from '../utils/mbtiles';
-import useCompass from '../hooks/useCompass';
-import {GPS_POSITION_DEFAULT_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import PositionEditor from '../components/map/PositionEditor';
-import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
 import PointMarkers from '../components/map/PointMarkers';
-import {useViewport} from '../hooks/useViewport';
 import LocationMarker from '../components/map/LocationMarker';
-import useEditingPosition from '../hooks/useEditingPosition';
+import ScopeSelector from '../components/scope/ScopeSelector';
+import TrackRecorder from '../components/map/TrackRecorder';
+import TrackNavigationBottomSheet from '../components/map/TrackNavigationBottomSheet';
+import SearchBoxAndMenu from '../components/common/SearchBoxAndMenu';
+import SettingsView from './SettingsView';
+import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
+
+//UTILS
+import {MapboxMap, MapboxStyle, MapRef} from 'react-map-gl';
+import {mbtiles} from '../utils/mbtiles';
+import {GPS_POSITION_DEFAULT_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
+import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
 import {AnyLayer, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
 import {Feature, Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
-import ScopeSelector from '../components/scope/ScopeSelector';
-import useRecordingTrack from '../hooks/useRecordingTrack';
-import TrackRecorder from '../components/map/TrackRecorder';
+import {useViewport} from '../hooks/useViewport';
+import useEditingPosition from '../hooks/useEditingPosition';
+import useCompass from '../hooks/useCompass';
+import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
 import usePointNavigation from '../hooks/usePointNavigation';
-import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
+import useRecordingTrack from '../hooks/useRecordingTrack';
 import useTrackNavigation from '../hooks/useTrackNavigation';
-import TrackNavigationBottomSheet from '../components/map/TrackNavigationBottomSheet';
-import SearchBoxAndMenu from '../components/common/SearchBoxAndMenu';
-import SettingsView from './SettingsView';
 import {useSettings} from '../hooks/useSettings';
-import {MapboxMap, MapboxStyle, MapRef} from 'react-map-gl';
+import {Manager, ScopePoint, UUID} from '../types/commonTypes';
 /*import {useStatus} from '@capacitor-community/network-react';*/
 
 mbtiles(maplibregl);
@@ -182,7 +187,7 @@ const Map: FC<MainContentProps> = ({
   const [isContextualMenuOpen, setContextualMenuOpen] = useState(false);
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
-  const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
+  
   const {isLargeSize, gpsPositionColor} = useSettings();
   // Set blue dot location on geolocation updates
   const setMapGeolocation = (map: MapboxMap | undefined, geolocation: Geolocation) => {
@@ -478,12 +483,13 @@ const Map: FC<MainContentProps> = ({
 
   const handleTrackNavigationShowDetails = () => trackNavigation.target && onShowTrackDetails(trackNavigation.target.id);
 
-
+  const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
+  const [isAboutDialogOpen, setAboutDialogOpen] =useState<boolean>(false);
   const handleContextualMenu = (menuId: string) => {
     menuId === 'settings'
       ? setSettingsDialogOpen(true)
       : menuId === 'about' 
-        ? console.log('Unimplemented about') 
+        ? setAboutDialogOpen(true)
         : undefined;
   };
 
@@ -600,6 +606,9 @@ const Map: FC<MainContentProps> = ({
     />}
     {isSettingsDialogOpen && <SettingsView
       onClose={() => setSettingsDialogOpen(false)}
+    />}
+    {isAboutDialogOpen && <AboutDialog
+      onClose={() => setAboutDialogOpen(false)}
     />}
   </>;
 };
