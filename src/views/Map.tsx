@@ -68,6 +68,10 @@ const sources: Sources = {
       features: []
     }
   },
+  'extraLayers': {
+    type: 'geojson',
+    data: 'extra-layers.json'
+  }
 };
 
 const layers: Array<AnyLayer> = [{
@@ -123,6 +127,37 @@ const layers: Array<AnyLayer> = [{
   paint: {
     'line-color': ['get', 'color'],
     'line-width': 4
+  }
+},
+{
+  id: 'extraLayers',
+  source: 'extraLayers',
+  type: 'symbol',
+  layout: {
+    'text-font': ['pictos_25_icgc-Regular'],
+    'text-size': 14,
+    'text-anchor': 'center',
+    'text-justify': 'center',
+    'symbol-placement': 'point',
+    'text-allow-overlap': true,
+    'text-field': ['match', ['get', 't'], // Tipus
+      0, '\u0055', // Refugi
+      1, '\u0062', // Camping
+      2, '\u002C', // Turisme Rural
+      3, '\u003A', // Alberg
+      '#FF00FF' // Default
+    ]
+  },
+  paint: {
+    'text-halo-width': 1,
+    'text-halo-color': '#444444',
+    'text-color': ['match', ['get', 't'], // Tipus
+      0, '#FE946C', // Refugi
+      1, '#6FC6B5', // Camping
+      2, '#8DA0CB', // Turisme Rural
+      3, '#E78AC3', // Alberg
+      '#FF00FF' // Default
+    ]
   }
 }];
 
