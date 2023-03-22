@@ -1,14 +1,14 @@
 import {CapacitorSQLite, SQLiteConnection} from '@capacitor-community/sqlite';
 import { defineCustomElements as jeepSqlite, applyPolyfills} from 'jeep-sqlite/loader';
-import {inflate} from 'pako';
 import maplibregl from 'maplibre-gl';
 
-import hex2dec from './hex2dec';
 import {IS_WEB} from '../config';
 
 applyPolyfills().then(() => {
   jeepSqlite(window);
 });
+
+const decodeTileWorker = new Worker(new URL('./decodeTileWorker.js', import.meta.url));
 
 const sqlite = new SQLiteConnection(CapacitorSQLite);
 const query = 'SELECT HEX(tile_data) as tile_data_hex FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ? limit 1';
@@ -46,11 +46,11 @@ const getTileFromDatabase = async (dbName: string, z: number, x: number, y: numb
   const params = [z, x, Math.pow(2, z) - y - 1];
   const queryresults = await db.query(query, params);
   if (queryresults.values.length === 1) { // Tile found
-    let binData = await hex2dec(queryresults.values[0].tile_data_hex);
-    if (binData[0] === 0x1f && binData[1] === 0x8b) { // is GZipped
-      binData = inflate(binData);
-    }
-    return binData.buffer;
+    const channel = new MessageChannel();
+    decodeTileWorker.postMessage(queryresults.values[0].tile_data_hex, [channel.port2]);
+    return await new Promise((resolve) => channel.port1.onmessage = (e) => {
+      resolve(e.data.buffer);
+    });
   }
 };
 
