@@ -69,7 +69,7 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
 
   return <BottomSheet
     closedHeight={20}
-    openHeight={80}
+    openHeight={'85vh'}
     onToggle={() => setOpen(!isOpen)}
     isOpen={isOpen}
     onTopChanged={onTopChanged}
