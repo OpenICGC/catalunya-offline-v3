@@ -145,7 +145,7 @@ const layers: Array<AnyLayer> = [{
       1, '\u0062', // Camping
       2, '\u002C', // Turisme Rural
       3, '\u003A', // Alberg
-      '#FF00FF' // Default
+      '\u0020' // Default
     ]
   },
   paint: {
@@ -156,7 +156,7 @@ const layers: Array<AnyLayer> = [{
       1, '#F1BE25', // 1, '#6FC6B5', // Camping
       2, '#4A8A63', // 2, '#8DA0CB', // Turisme Rural
       3, '#1FA1E2', // 3, '#E78AC3', // Alberg
-      '#FF00FF' // Default
+      '#000000' // Default
     ]
   }
 }];
