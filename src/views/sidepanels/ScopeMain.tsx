@@ -77,13 +77,13 @@ const ScopeMain: FC<ScopeMainProps> = ({
     setImportingScopeId(scopeId);
   };
 
-  const instamaps = (scopeId: UUID) => {
+  /*const instamaps = (scopeId: UUID) => {
     console.log('Unimplemented Instamaps, Scope', scopeId); // TODO
-  };
+  };*/
 
-  const dataSchema = (id: UUID) => {
+  /*const dataSchema = (id: UUID) => {
     console.log('Unimplemented Data Schema, Scope', id); // TODO
-  };
+  };*/
 
   const closeHandleExport = () => setSharingScopeId(undefined);
   const closeHandleImport = () => setImportingScopeId(undefined);
@@ -102,8 +102,8 @@ const ScopeMain: FC<ScopeMainProps> = ({
         onRename={scopeRename}
         onDelete={scopeDelete}
         onShare={share}
-        onInstamaps={instamaps}
-        onDataSchema={dataSchema}
+        /*onInstamaps={instamaps}*/
+        /*onDataSchema={dataSchema}*/
         onImport={importFile}
       />
       {

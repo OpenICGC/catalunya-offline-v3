@@ -114,22 +114,7 @@ const mbtiles = (ml: typeof maplibregl) => {
   });
 };
 
-const isMbtilesDownloaded = async (dbName: string) => {
-  await init;
-  const {result} = await sqlite.isDatabase(dbName);
-  console.debug(`[mbtiles] Database ${dbName} is ${result ? '' : 'not '}downloaded`);
-  return result;
-};
-
-const downloadMbtiles = async (url: string) => {
-  await init;
-  // TODO COF-5 Create a better download manager for Web (indexedDB) and Android/iOS, with progress
-  await sqlite.getFromHTTPRequest(url, true).catch(err => console.error(err));
-};
-
 export {
   mbtiles,
-  isMbtilesDownloaded,
-  downloadMbtiles,
   getDatabase
 };
