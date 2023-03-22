@@ -179,7 +179,6 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
 
   const trackExport = (trackId: UUID) => {
     setSharingTrackId(trackId);
-    console.log('Unimplemented Export, track', trackId); // TODO
   };
 
   const closeHandleExport = () => setSharingTrackId(undefined);
