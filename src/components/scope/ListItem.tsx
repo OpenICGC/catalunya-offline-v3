@@ -1,10 +1,11 @@
 import React, {KeyboardEvent, FC, ChangeEvent, SyntheticEvent, useState, ReactNode, memo, useMemo} from 'react';
 
 //MUI
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import MuiListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import MuiListItem from '@mui/material/ListItem';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
@@ -17,7 +18,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useTranslation} from 'react-i18next';
 import {ColorFormat, ColorPicker} from 'material-ui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
-import Box from '@mui/material/Box';
 import {ClickAwayListener} from '@mui/material';
 import {COLOR_PALETTES} from '../../config';
 import {useSettings} from '../../hooks/useSettings';
