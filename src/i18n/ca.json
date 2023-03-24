@@ -76,7 +76,13 @@
       "message": "Fitxer comprimit que conté un GeoJSON i una carpeta amb fotos"
     }
   },
-  "layerManager": "Capes",
+  "layerManager": {
+    "camping": "Camping",
+    "mountainHut": "Refugi",
+    "ruralAccommodation": "Turisme Rural",
+    "title": "Capes",
+    "youthHostel": "Alberg"
+  },
   "noScopeAlert": "Trieu un àmbit per al punt",
   "point": "Punt",
   "properties": {

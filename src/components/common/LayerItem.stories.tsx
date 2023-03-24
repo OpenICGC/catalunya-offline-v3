@@ -17,5 +17,5 @@ Default.args = {
   itemId: uuidv4(),
   icon: <HouseIcon/>,
   name: 'Refugios',
-  isActive: true
+  isVisible: true
 };

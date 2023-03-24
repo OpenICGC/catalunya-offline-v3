@@ -19,31 +19,30 @@ const Template: Story<LayerListProps> = args => <LayerList {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  isLargeSize: false,
   items: [
     {
       id: uuidv4(),
       icon: <RuralAccommodation sx={{color: '#4A8A63'}}/>,
-      name: 'Alojamientos rurales',
-      isActive: true
+      name: 'layerManager.ruralAccommodation',
+      isVisible: true
     },
     {
       id: uuidv4(),
       icon: <MountainHut sx={{color: '#D4121E'}}/>,
-      name: 'Refugios',
-      isActive: false
+      name: 'layerManager.mountainHut',
+      isVisible: false
     },
     {
       id: uuidv4(),
       icon: <YouthHostel sx={{color: '#1FA1E2'}}/>,
-      name: 'Albergues',
-      isActive: true
+      name: 'layerManager.youthHostel',
+      isVisible: true
     },
     {
       id: uuidv4(),
       icon: <Camping sx={{color: '#F1BE25'}}/>,
-      name: 'Campings',
-      isActive: false
+      name: 'layerManager.camping',
+      isVisible: false
     }
   ]
 };

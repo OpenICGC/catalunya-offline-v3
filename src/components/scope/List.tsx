@@ -33,7 +33,7 @@ export interface listItemType {
   id: UUID;
   name: string;
   color: HEXColor;
-  isActive?: boolean;
+  isVisible?: boolean;
 }
 
 export interface contextualMenuEntry {
@@ -144,7 +144,7 @@ const List: FC<ListProps> = ({
             name={item.name}
             color={item.color}
             isEditing={item.id === getEditingId}
-            isActive={item.isActive}
+            isVisible={item.isVisible}
             actionIcons={actionIcons}
             contextualMenu={contextualMenu}
             onActionClick={onActionClick}

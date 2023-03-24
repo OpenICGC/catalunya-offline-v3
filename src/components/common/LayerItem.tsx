@@ -16,7 +16,7 @@ export type LayerItemProps = {
   itemId: UUID,
   icon: ReactNode,
   name: string
-  isActive: boolean
+  isVisible: boolean
   onActionClick: (itemId: UUID, actionId: string) => void,
 };
 
@@ -41,7 +41,7 @@ const LayerItem: FC<LayerItemProps> = ({
   itemId,
   icon,
   name,
-  isActive= true,
+  isVisible= true,
   onActionClick,
 }) => {
 
@@ -55,9 +55,9 @@ const LayerItem: FC<LayerItemProps> = ({
   const actionIconSx = useMemo(() => ({
     m: 0,
     p: 0.5,
-    '& ..MuiIconButton-root': { color: isActive ? 'action.active' : 'action.disabled' },
+    '& ..MuiIconButton-root': { color: isVisible ? 'action.active' : 'action.disabled' },
     '&.Mui-disabled': {color: 'action.disabled'}
-  }), [isActive]);
+  }), [isVisible]);
 
   return <MuiListItem sx={muiListItemSx}>
     <ListItemIcon sx={listItemIconSx}>
@@ -70,7 +70,7 @@ const LayerItem: FC<LayerItemProps> = ({
     {
       actionIcons?.map(actionIcon =>
         <IconButton key={actionIcon.id} onClick={() => onActionClick(itemId, actionIcon?.id)} sx={actionIconSx}>
-          {isActive ? actionIcon.activeIcon : actionIcon.inactiveIcon}
+          {isVisible ? actionIcon.activeIcon : actionIcon.inactiveIcon}
         </IconButton>
       )
     }

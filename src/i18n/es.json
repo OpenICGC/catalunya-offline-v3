@@ -76,7 +76,13 @@
       "message": "Archivo comprimido que contiene un GeoJSON y una carpeta con fotos"
     }
   },
-  "layerManager": "Capas",
+  "layerManager": {
+    "camping": "Camping",
+    "mountainHut": "Refugio",
+    "ruralAccommodation": "Turismo Rural",
+    "title": "Capas",
+    "youthHostel": "Albergue"
+  },
   "noScopeAlert": "Elige un ámbito para el punto",
   "point": "Punto",
   "properties": {
