@@ -5,10 +5,10 @@ import LayerList, {LayerListProps} from './LayerList';
 import {v4 as uuidv4} from 'uuid';
 
 //ICONS
-import Hostel from '../icons/Hostel';
+import YouthHostel from '../icons/YouthHostel';
 import Camping from '../icons/Camping';
-import Refuge from '../icons/Refuge';
-import RuralTurism from '../icons/RuralTurism';
+import MountainHut from '../icons/MountainHut';
+import RuralAccommodation from '../icons/RuralAccommodation';
 
 export default {
   title: 'Common/LayerList',
@@ -23,19 +23,19 @@ Default.args = {
   items: [
     {
       id: uuidv4(),
-      icon: <RuralTurism sx={{color: '#4A8A63'}}/>,
+      icon: <RuralAccommodation sx={{color: '#4A8A63'}}/>,
       name: 'Alojamientos rurales',
       isActive: true
     },
     {
       id: uuidv4(),
-      icon: <Refuge sx={{color: '#D4121E'}}/>,
+      icon: <MountainHut sx={{color: '#D4121E'}}/>,
       name: 'Refugios',
       isActive: false
     },
     {
       id: uuidv4(),
-      icon: <Hostel sx={{color: '#1FA1E2'}}/>,
+      icon: <YouthHostel sx={{color: '#1FA1E2'}}/>,
       name: 'Albergues',
       isActive: true
     },
