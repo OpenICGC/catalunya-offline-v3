@@ -77,11 +77,11 @@
     }
   },
   "layerManager": {
-    "camping": "Camping",
-    "mountainHut": "Mountain Hut",
-    "ruralAccommodation": "Rural Accommodation",
+    "camping": "Campings",
+    "mountainHut": "Mountain Huts",
+    "ruralAccommodation": "Rural Accommodations",
     "title": "Layers",
-    "youthHostel": "Youth Hostel"
+    "youthHostel": "Youth Hostels"
   },
   "noScopeAlert": "Choose the point's scope",
   "point": "Point",

@@ -30,6 +30,15 @@ const Index: FC = () => {
   const [point, setPoint] = useState<UUID>();
   const [track, setTrack] = useState<UUID>();
 
+  const [layerVisibility, setLayerVisibility] = useState<Record<number, boolean>>({
+    0: false,
+    1: false,
+    2: false,
+    3: false
+  });
+
+  const toggleLayerVisibility = (layerId: number) => setLayerVisibility(prevState => ({...prevState, [layerId]: !prevState[layerId]}));
+
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
   const pointNavigatingTo = usePointNavigation().target;
@@ -70,6 +79,8 @@ const Index: FC = () => {
   const sidePanelContent = manager
     ? <Stack sx={stackSx}>
       {manager === 'LAYERS' && <Layers
+        layerVisibility={layerVisibility}
+        toggleLayerVisibility={toggleLayerVisibility}
       />}
       {manager === 'BASEMAPS' && <BaseMaps
         baseMapId={baseMapId}
@@ -101,6 +112,7 @@ const Index: FC = () => {
     selectedTrackId={track}
     //onTrackSelected={setTrack}
     onShowTrackDetails={handleShowTrackDetails}
+    layerVisibility={layerVisibility}
   />;
 
   return <>

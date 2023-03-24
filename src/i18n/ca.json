@@ -77,11 +77,11 @@
     }
   },
   "layerManager": {
-    "camping": "Camping",
-    "mountainHut": "Refugi",
+    "camping": "Campings",
+    "mountainHut": "Refugis",
     "ruralAccommodation": "Turisme Rural",
     "title": "Capes",
-    "youthHostel": "Alberg"
+    "youthHostel": "Albergs"
   },
   "noScopeAlert": "Trieu un àmbit per al punt",
   "point": "Punt",
