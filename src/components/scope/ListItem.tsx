@@ -1,10 +1,11 @@
 import React, {KeyboardEvent, FC, ChangeEvent, SyntheticEvent, useState, ReactNode, memo, useMemo} from 'react';
 
 //MUI
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import MuiListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import MuiListItem from '@mui/material/ListItem';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
@@ -17,7 +18,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useTranslation} from 'react-i18next';
 import {ColorFormat, ColorPicker} from 'material-ui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
-import Box from '@mui/material/Box';
 import {ClickAwayListener} from '@mui/material';
 import {COLOR_PALETTES} from '../../config';
 import {useSettings} from '../../hooks/useSettings';
@@ -47,7 +47,7 @@ export type ListItemProps = {
   itemId: UUID,
   name: string,
   color: HEXColor,
-  isActive?: boolean,
+  isVisible?: boolean,
   isEditing?: boolean,
   actionIcons?: Array<{ id: string, activeIcon: ReactNode, inactiveIcon?: ReactNode, disabled?: boolean }>,
   contextualMenu?: Array<{ id: string, label: string, icon?: ReactNode }>,
@@ -70,7 +70,7 @@ const ListItem: FC<ListItemProps> = memo(({
   itemId,
   name,
   color,
-  isActive = true,
+  isVisible = true,
   isEditing = false,
   actionIcons = [],
   contextualMenu = [],
@@ -87,9 +87,9 @@ const ListItem: FC<ListItemProps> = memo(({
   const actionIconSx = useMemo(() => ({
     m: 0,
     p: 0.5,
-    '& ..MuiIconButton-root': { color: isActive ? 'action.active' : 'action.disabled' },
+    '& ..MuiIconButton-root': { color: isVisible ? 'action.active' : 'action.disabled' },
     '&.Mui-disabled': {color: 'action.disabled'}
-  }), [isActive]);
+  }), [isVisible]);
 
   const colorBoxSx = useMemo(() => ({
     width: 24, height: 24, bgcolor: color, borderRadius: 1, mx: 0.75
@@ -151,7 +151,7 @@ const ListItem: FC<ListItemProps> = memo(({
           {
             actionIcons?.map(actionIcon =>
               <IconButton key={actionIcon.id} onClick={() => onActionClick(itemId, actionIcon?.id)} sx={actionIconSx} disabled={actionIcon.disabled}>
-                {isActive ? actionIcon.activeIcon : actionIcon.inactiveIcon}
+                {isVisible ? actionIcon.activeIcon : actionIcon.inactiveIcon}
               </IconButton>
             )
           }

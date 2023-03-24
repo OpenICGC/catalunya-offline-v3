@@ -128,7 +128,7 @@ PointOrTrack.args = {
     id: uuidv4(),
     name: `Mi punto o traza ${i}`,
     color: palette[Math.floor(Math.random() * palette.length)], // Color asignado la mitad de las veces
-    isActive: Math.random() < 0.5
+    isVisible: Math.random() < 0.5
   })),
   contextualMenu: [
     {

@@ -76,7 +76,13 @@
       "message": "Compressed file containing a GeoJSON and a folder with photos"
     }
   },
-  "layerManager": "Layers",
+  "layerManager": {
+    "camping": "Camping",
+    "mountainHut": "Mountain Hut",
+    "ruralAccommodation": "Rural Accommodation",
+    "title": "Layers",
+    "youthHostel": "Youth Hostel"
+  },
   "noScopeAlert": "Choose the point's scope",
   "point": "Point",
   "properties": {

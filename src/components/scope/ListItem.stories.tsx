@@ -26,11 +26,11 @@ export default {
 const Template: Story<ListItemProps> = args => <ListItem {...args}/>;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ManagedTemplate: Story<ListItemProps> = ({isEditing, color, name, isActive, onColorChange, onNameChange, onActionClick, onContextualMenuClick, onStopEditing, ...args }) => {
+const ManagedTemplate: Story<ListItemProps> = ({isEditing, color, name, isVisible, onColorChange, onNameChange, onActionClick, onContextualMenuClick, onStopEditing, ...args }) => {
   const [getEditing, setEditing] = useState(isEditing);
   const [getColor, setNewColor] = useState(color);
   const [getName, setNewName] = useState(name);
-  const [getActive, setActive] = useState(isActive);
+  const [getVisibility, setVisibility] = useState(isVisible);
 
   const handleContextualMenuClick = (id: UUID, action: string) => {
     if (action == 'edit') {
@@ -46,8 +46,8 @@ const ManagedTemplate: Story<ListItemProps> = ({isEditing, color, name, isActive
     onColorChange={(id, value) => setNewColor(value)}
     name={getName}
     onNameChange={(id, value) => setNewName(value)}
-    isActive={getActive}
-    onActionClick={() => setActive(!getActive)}
+    isVisible={getVisibility}
+    onActionClick={() => setVisibility(!getVisibility)}
     {...args} />;
 };
 
@@ -58,7 +58,7 @@ Default.args = {
   itemId: uuidv4(),
   name: 'Mi Ámbito, Punto o Traza',
   color: '#247a44',
-  isActive: true,
+  isVisible: true,
   isEditing: false,
   actionIcons: [
     {

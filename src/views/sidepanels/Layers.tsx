@@ -17,7 +17,7 @@ const Layers: FC<LayersProps> = () => {
   return <>
     <Header
       startIcon={<LayersIcon/>}
-      name={t('layerManager')}
+      name={t('layerManager.title')}
       color={`#${theme.palette.secondary.main}`}
     />
     <div>TODO: Layer Manager</div>

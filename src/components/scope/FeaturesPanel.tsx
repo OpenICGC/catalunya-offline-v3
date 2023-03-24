@@ -175,14 +175,14 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     id: scopePoint.id,
     name: scopePoint.properties.name,
     color: scopePoint.properties.color || scope.color, // Inherits color from scope
-    isActive: scopePoint.properties.isVisible
+    isVisible: scopePoint.properties.isVisible
   }));
 
   const trackItems: Array<listItemType> = scopeTracks.map(scopeTrack => ({
     id: scopeTrack.id,
     name: scopeTrack.properties.name,
     color: scopeTrack.properties.color || scope.color, // Inherits color from scope
-    isActive: scopeTrack.properties.isVisible
+    isVisible: scopeTrack.properties.isVisible
   }));
 
   const actionIcons = [{id: 'visibility', activeIcon: <VisibilityIcon/>, inactiveIcon: <VisibilityOffIcon/>}];

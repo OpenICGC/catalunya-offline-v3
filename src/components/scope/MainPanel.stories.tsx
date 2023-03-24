@@ -71,7 +71,7 @@ Default.args = {
     id: uuidv4(),
     name: `Mi ámbito ${i}`,
     color: '#973572',
-    isActive: true,
+    isVisible: true,
     isEditing: false
   }))
 };
