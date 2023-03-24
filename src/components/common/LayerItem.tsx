@@ -53,7 +53,7 @@ const LayerItem: FC<LayerItemProps> = ({
   ];
   const actionIconSx = useMemo(() => ({
     m: 0,
-    p: 0.5,
+    p: 1,
     '& ..MuiIconButton-root': { color: isVisible ? 'action.active' : 'action.disabled' },
     '&.Mui-disabled': {color: 'action.disabled'}
   }), [isVisible]);
