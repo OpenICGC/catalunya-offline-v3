@@ -1,5 +1,4 @@
 import React, {FC, ReactNode, useMemo} from 'react';
-import {UUID} from '../../types/commonTypes';
 
 //MUI
 import IconButton from '@mui/material/IconButton';
@@ -13,11 +12,11 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 //TYPES
 export type LayerItemProps = {
-  itemId: UUID,
+  itemId: number,
   icon: ReactNode,
   name: string
   isVisible: boolean
-  onActionClick: (itemId: UUID, actionId: string) => void,
+  onActionClick: (itemId: number, actionId: string) => void,
 };
 
 //STYLES
@@ -54,7 +53,7 @@ const LayerItem: FC<LayerItemProps> = ({
   ];
   const actionIconSx = useMemo(() => ({
     m: 0,
-    p: 0.5,
+    p: 1,
     '& ..MuiIconButton-root': { color: isVisible ? 'action.active' : 'action.disabled' },
     '&.Mui-disabled': {color: 'action.disabled'}
   }), [isVisible]);

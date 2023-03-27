@@ -2,7 +2,6 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import LayerItem, {LayerItemProps} from './LayerItem';
-import {v4 as uuidv4} from 'uuid';
 import HouseIcon from '@mui/icons-material/House';
 
 export default {
@@ -14,7 +13,7 @@ const Template: Story<LayerItemProps> = args => <LayerItem {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-  itemId: uuidv4(),
+  itemId: 666,
   icon: <HouseIcon/>,
   name: 'Refugios',
   isVisible: true

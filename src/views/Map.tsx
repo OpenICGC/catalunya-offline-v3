@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 
 //GEOCOMPONENTS
@@ -135,7 +135,7 @@ const layers: Array<AnyLayer> = [{
   type: 'symbol',
   layout: {
     'text-font': ['pictos_25_icgc-Regular'],
-    'text-size': 14,
+    'text-size': 18,
     'text-anchor': 'center',
     'text-justify': 'center',
     'symbol-placement': 'point',
@@ -150,7 +150,7 @@ const layers: Array<AnyLayer> = [{
   },
   paint: {
     'text-halo-width': 1,
-    'text-halo-color': '#444444',
+    'text-halo-color': '#fff',
     'text-color': ['match', ['get', 't'], // Tipus
       0, '#D4121E', // 0, '#FE946C', // Refugi
       1, '#F1BE25', // 1, '#6FC6B5', // Camping
@@ -172,7 +172,8 @@ export type MainContentProps = {
   onShowPointDetails: (pointId: UUID) => void,
   selectedTrackId?: UUID,
   //onTrackSelected: (trackId: UUID) => void,
-  onShowTrackDetails: (trackId: UUID) => void
+  onShowTrackDetails: (trackId: UUID) => void,
+  layerVisibility: Record<number, boolean>,
 };
 
 const Map: FC<MainContentProps> = ({
@@ -186,7 +187,8 @@ const Map: FC<MainContentProps> = ({
   onShowPointDetails,
   selectedTrackId,
   //onTrackSelected, // TODO
-  onShowTrackDetails
+  onShowTrackDetails,
+  layerVisibility
 }) => {
   const mapRef = useRef<MapRef>(null);
   const {viewport, setViewport} = useViewport();
@@ -548,6 +550,17 @@ const Map: FC<MainContentProps> = ({
     recordingTrack.stop();
   };
 
+  const dynamicLayers = useMemo(() => {
+    const visibleLayerIds = Object.entries(layerVisibility)
+      .filter(([, v]) => v)
+      .map(([k, ]) => Number(k));
+    return layers.map(layer =>
+      layer.id === 'extraLayers' ? {
+        ...layer,
+        filter: ['in', ['get', 't'], ['literal', visibleLayerIds]]
+      } : layer);
+  }, [layerVisibility]);
+
   return <>
     <SearchBoxAndMenu 
       placeholder={t('actions.search')}
@@ -558,12 +571,13 @@ const Map: FC<MainContentProps> = ({
       onSearchClick={() => setLocationStatus(LOCATION_STATUS.NOT_TRACKING)}
     />
     <GeocomponentMap
+      styleDiffing={true}
       {...MAP_PROPS}
-      reuseMaps
+      //reuseMaps
       ref={mapRef}
       mapStyle={mapStyle}
       sources={sources}
-      layers={layers}
+      layers={dynamicLayers}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}

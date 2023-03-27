@@ -77,11 +77,11 @@
     }
   },
   "layerManager": {
-    "camping": "Camping",
-    "mountainHut": "Refugio",
+    "camping": "Campings",
+    "mountainHut": "Refugios",
     "ruralAccommodation": "Turismo Rural",
     "title": "Capas",
-    "youthHostel": "Albergue"
+    "youthHostel": "Albergues"
   },
   "noScopeAlert": "Elige un ámbito para el punto",
   "point": "Punto",

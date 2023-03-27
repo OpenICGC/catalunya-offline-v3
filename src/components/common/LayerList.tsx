@@ -7,13 +7,12 @@ import MuiList from '@mui/material/List';
 import LayerItem from './LayerItem';
 
 //UTILS
-import {UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 
 //TYPES
 export type LayerListProps = {
-  items: Array<{id: UUID, icon: ReactNode, name: string, isVisible: boolean}>,
-  onActionClick?: (itemId: UUID, actionId: string) => void,
+  items: Array<{id: number, icon: ReactNode, name: string, isVisible: boolean}>,
+  onActionClick?: (itemId: number, actionId: string) => void,
 };
 
 //STYLES
