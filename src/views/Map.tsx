@@ -39,6 +39,12 @@ import {Manager, ScopePoint, UUID} from '../types/commonTypes';
 
 mbtiles(maplibregl);
 
+// This is a hack to apply the fix
+// https://github.com/mapbox/mapbox-gl-js/pull/4852/files#diff-3209d9864922146ac92cd50a2993cb7274ea92ffb28544ed574fa54ebbc23ef5
+// To raster-dem layers.
+// See https://github.com/mapbox/mapbox-gl-js/issues/3893
+maplibregl.RasterDEMTileSource.prototype.serialize = maplibregl.RasterTileSource.prototype.serialize;
+
 const sources: Sources = {
   'geolocation': {
     type: 'geojson',
