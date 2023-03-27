@@ -16,12 +16,12 @@ const query = 'SELECT HEX(tile_data) as tile_data_hex FROM tiles WHERE zoom_leve
 const init = (async () => {
   if (IS_WEB) {
     try {
-      console.debug('[mbtiles] Initializing Offline Web Storage');
+      //console.debug('[mbtiles] Initializing Offline Web Storage');
       const jeepEl = document.createElement('jeep-sqlite');
       document.body.appendChild(jeepEl);
       await customElements.whenDefined('jeep-sqlite');
       await sqlite.initWebStore();
-      console.debug('[mbtiles] Offline Web Storage initialized');
+      //console.debug('[mbtiles] Offline Web Storage initialized');
     } catch (err) {
       console.error('[mbtiles] Error initializing Offline Web Storage', err);
     }
@@ -63,13 +63,13 @@ const getDatabase = async (dbName: string) => {
       } catch {
       // Pos vale
       }
-      console.debug(`[mbtiles] creating connection to ${dbName}`);
+      //console.debug(`[mbtiles] creating connection to ${dbName}`);
       sourceDatabases.set(dbName, sqlite
         .createConnection(dbName, false, 'no-encryption', 1, true)
         .then(async db => {
-          console.debug(`[mbtiles] opening ${dbName}`);
+          //console.debug(`[mbtiles] opening ${dbName}`);
           await db.open();
-          console.debug(`[mbtiles] opened ${dbName}`);
+          //console.debug(`[mbtiles] opened ${dbName}`);
           return db;
         })
       );
@@ -81,14 +81,14 @@ const getDatabase = async (dbName: string) => {
       } catch {
       // Pos vale
       }
-      console.debug(`[mbtiles] creating connection to ${dbName}`);
-      console.log(sqlite.isDatabase(dbName));
+      //console.debug(`[mbtiles] creating connection to ${dbName}`);
+      //console.log(sqlite.isDatabase(dbName));
       sourceDatabases.set(dbName, sqlite
         .createNCConnection(dbName, 1)
         .then(async db => {
-          console.debug(`[mbtiles] opening ${dbName}`);
+          //console.debug(`[mbtiles] opening ${dbName}`);
           await db.open();
-          console.debug(`[mbtiles] opened ${dbName}`);
+          //console.debug(`[mbtiles] opened ${dbName}`);
           return db;
         })
       );
@@ -104,7 +104,7 @@ const mbtiles = (ml: typeof maplibregl) => {
       if (tileBuffer) {
         callback(null, tileBuffer);
       } else {
-        console.info(`[mbtiles] Tile not found: ${params.url}`);
+        //console.info(`[mbtiles] Tile not found: ${params.url}`);
         callback();
       }
     });

@@ -96,7 +96,7 @@ const AboutDialog: FC<AboutDialogProps> = ({
       <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', spacing: 10}}>
 
         <Link
-          href='https://www.youtube.com/watch?v=3IRHWWXVoyE&ab_channel=ICGCCatalunya'
+          href={t('about.tutorial_link')}
           target='_blank' rel='noreferrer' underline='hover' sx={iconLinkSx}>
           <IconButton>
             <OndemandVideoIcon color='primary'/>

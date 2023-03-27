@@ -4,6 +4,7 @@ import {CatOfflineError} from '../types/commonTypes';
 import {BackgroundGeolocationPlugin, CallbackError, Location} from '@capacitor-community/background-geolocation';
 import useAppState, {AppState} from './useAppState';
 import {IS_WEB} from '../config';
+import {useTranslation} from 'react-i18next';
 
 const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>('BackgroundGeolocation');
 
@@ -26,21 +27,6 @@ const webConfig = {
 
 const POSITION_TIMEOUT = 300; // Seconds
 
-const handleCapacitorPermission = (error: CallbackError) => {
-  if (error.code === 'NOT_AUTHORIZED') {
-    if (error.message === 'Location services disabled.') {
-      /*window.alert('El servei de localització del dispositiu està desactivat');*/
-      // The other possible "NOT_AUTHORIZED" messages are: "Permission denied." and "User denied location permission".
-    } else if (window.confirm(
-      'Catalunya Offline necessita accedir a la geolocalització, ' +
-      'però aquest permís ha estat denegat.\n\n' +
-      'Voleu accedir a la configuració?'
-    )) {
-      BackgroundGeolocation.openSettings();
-    }
-  }
-};
-
 const nullGeolocation = () => ({
   accuracy: null,
   altitude: null,
@@ -57,14 +43,25 @@ const useGeolocation = (watchInBackground = false) => {
   const [error, setError] = useState<CatOfflineError>();
   const [geolocation, setGeolocation] = useState<Geolocation>(nullGeolocation);
   const appState = useAppState();
+  const {t} = useTranslation();
 
   const capacitorConfig = {
     // backgroundMessage is required to guarantee a background location
-    backgroundMessage: watchInBackground ? 'La localització roman activa mentre es graven o segueixen traces' : undefined,
-    backgroundTitle: watchInBackground ? 'Geolocalització activa en segon pla' : undefined,
+    backgroundTitle: watchInBackground ? t('geolocation.backgroundTitle') : undefined,
+    backgroundMessage: watchInBackground ? t('geolocation.backgroundMessage') : undefined,
     requestPermissions: true,
     stale: false,
     distanceFilter: 1
+  };
+
+  const handleCapacitorPermission = (error: CallbackError) => {
+    if (
+      error.code === 'NOT_AUTHORIZED' &&
+      error.message !== 'Location services disabled.' &&
+      window.confirm(t('geolocation.requestPermission'))
+    ) {
+      BackgroundGeolocation.openSettings();
+    }
   };
 
   useEffect(() => {
@@ -98,7 +95,7 @@ const useGeolocation = (watchInBackground = false) => {
       speed: position.coords.speed,
       timestamp: position.timestamp // milliseconds
     };
-    console.debug('[Geolocation] Got Web Geolocation', geolocation);
+    //console.debug('[Geolocation] Got Web Geolocation', geolocation);
     setError(undefined);
     setGeolocation(geolocation);
   };
@@ -114,7 +111,7 @@ const useGeolocation = (watchInBackground = false) => {
       speed: location.speed,
       timestamp: location.time // milliseconds
     };
-    console.debug('[Geolocation] Got Capacitor Geolocation', location);
+    //console.debug('[Geolocation] Got Capacitor Geolocation', location);
     setError(undefined);
     setGeolocation(geolocation);
   };
@@ -145,7 +142,7 @@ const useGeolocation = (watchInBackground = false) => {
       navigator.geolocation.getCurrentPosition(handleWebGeolocation, handleWebError, webConfig);
       const id = navigator.geolocation.watchPosition(handleWebGeolocation, handleWebError, webConfig);
       setWatcherId(id.toString());
-      console.debug('[Geolocation] Started Web watching', id);
+      //console.debug('[Geolocation] Started Web watching', id);
     } else {
       BackgroundGeolocation.addWatcher(capacitorConfig, (capacitorGeolocation?: Location, capacitorError?: CallbackError) => {
         if (capacitorError) {
@@ -156,7 +153,7 @@ const useGeolocation = (watchInBackground = false) => {
         }
       }).then((id: string) => {
         setWatcherId(id);
-        console.debug('[Geolocation] Started Capacitor watching', id);
+        //console.debug('[Geolocation] Started Capacitor watching', id);
       });
     }
   };
@@ -166,11 +163,11 @@ const useGeolocation = (watchInBackground = false) => {
       if (IS_WEB) {
         navigator.geolocation.clearWatch(Number(watcherId));
         setWatcherId(undefined);
-        console.debug('[Geolocation] Stopped Web watching', watcherId);
+        //console.debug('[Geolocation] Stopped Web watching', watcherId);
       } else {
         BackgroundGeolocation.removeWatcher({id: watcherId}).then(() => {
           setWatcherId(undefined);
-          console.debug('[Geolocation] Stopped Capacitor watching', watcherId);
+          //console.debug('[Geolocation] Stopped Capacitor watching', watcherId);
         });
       }
     }

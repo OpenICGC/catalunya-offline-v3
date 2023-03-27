@@ -46,7 +46,7 @@ const useRecordingTrackImpl = () => {
 
   const start: startFn = ({onStop}) => {
     if (state.isRecording) {
-      console.error('Cannot record track. Another track is being recorded.');
+      console.info('Cannot record track. Another track is being recorded.');
       return false;
     } else {
       stopWatch.start();

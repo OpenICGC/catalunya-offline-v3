@@ -47,9 +47,11 @@ const useCompass = () => {
     }
   }, []);
 
+  /*
   useEffect(() => {
     console.debug('[compass] Got Heading: ', heading);
   }, [heading]);
+  */
 
   return heading;
 };
