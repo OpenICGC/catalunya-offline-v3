@@ -77,7 +77,7 @@ export const BASEMAPS: BaseMaps = [{
 
 export const INITIAL_BASEMAP = BASEMAPS[0];
 
-export const MIN_TRACKING_ZOOM = 14;
+export const MIN_TRACKING_ZOOM = 10;
 
 export const GPS_POSITION_DEFAULT_COLOR = '#4286f5';
 export const GPS_POSITION_STALE_COLOR = '#9b9b9b';
