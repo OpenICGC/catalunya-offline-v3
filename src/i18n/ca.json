@@ -7,6 +7,7 @@
     "otherApps_link": "https://www.icgc.cat/Aplicacions/Apps",
     "presentation_link": "https://www.icgc.cat/ca/L-ICGC/Sobre-l-ICGC/Presentacio ",
     "title": "Quant a...",
+    "tutorial_link": "https://www.youtube.com/watch?v=3IRHWWXVoyE&ab_channel=ICGCCatalunya",
     "version": "Versió",
     "video-tutorial": "Vídeo tutorial"
   },
@@ -75,6 +76,11 @@
       "label": "Arxiu ZIP",
       "message": "Fitxer comprimit que conté un GeoJSON i una carpeta amb fotos"
     }
+  },
+  "geolocation": {
+    "backgroundMessage": "La localització roman activa mentre es graven o segueixen traces",
+    "backgroundTitle": "Geolocalització activa en segon pla",
+    "requestPermission": "Catalunya Offline necessita accedir a la geolocalització, però s'ha denegat el permís.\n\nVoleu canviar aquesta configuració?"
   },
   "layerManager": {
     "camping": "Campings",

@@ -32,7 +32,7 @@ const useEditingPositionImpl = () => {
 
   const start: startFn = ({initialPosition, onAccept, onCancel}) => {
     if (state.isEditing) {
-      console.error('Cannot edit position. Another position is being edited.');
+      console.info('Cannot edit position. Another position is being edited.');
       return false;
     } else {
       setViewport({

@@ -7,6 +7,7 @@
     "otherApps_link": "https://www.icgc.cat/en/Applications/Apps",
     "presentation_link": "https://www.icgc.cat/en/The-ICGC/About-the-ICGC/Presentation",
     "title": "About...",
+    "tutorial_link": "https://www.youtube.com/watch?v=3IRHWWXVoyE&ab_channel=ICGCCatalunya",
     "version": "Version",
     "video-tutorial": "Video-tutorial"
   },
@@ -75,6 +76,11 @@
       "label": "ZIP file",
       "message": "Compressed file containing a GeoJSON and a folder with photos"
     }
+  },
+  "geolocation": {
+    "backgroundMessage": "The geolocation will remain active while tracks are being followed or recorded",
+    "backgroundTitle": "Background geolocation is active",
+    "requestPermission": "Catalunya Offline needs access to geolocation, but access has been denied.\n\nDo you want to change this setting?"
   },
   "layerManager": {
     "camping": "Campings",

@@ -5,10 +5,10 @@ import {Scope, ScopeTrack, ScopePoint} from '../types/commonTypes';
 import {v4 as uuidv4} from 'uuid';
 import {PERSISTENCE_NAMESPACE} from '../config';
 
-describe('usePersitedCollection',() => {
+describe('useStoredCollections',() => {
   const scopeId = uuidv4();
 
-  it('useScopes should list, create, retrieve, update and delete Scopes from localStorage', () => {
+  it('useScopes should list, create, retrieve, update and delete Scopes from localStorage', async () => {
 
     // GIVEN
     const sampleScope: Scope = {
@@ -25,7 +25,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.create(sampleScope));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([sampleScope]);
@@ -35,7 +35,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.update(modifiedScope));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([modifiedScope]);
@@ -44,7 +44,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.delete(modifiedScope.id));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([]);
@@ -52,7 +52,7 @@ describe('usePersitedCollection',() => {
       });
   });
 
-  it('useScopePoints should list, create, retrieve, update and delete ScopePoints from localStorage', () => {
+  it('useScopePoints should list, create, retrieve, update and delete ScopePoints from localStorage', async () => {
 
     // GIVEN
     const samplePoint: ScopePoint = {
@@ -87,7 +87,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.create(samplePoint));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([samplePoint]);
@@ -97,7 +97,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.update(modifiedPoint));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([modifiedPoint]);
@@ -106,7 +106,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.delete(modifiedPoint.id));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([]);
@@ -114,7 +114,7 @@ describe('usePersitedCollection',() => {
       });
   });
 
-  it('useScopeTracks should list, create, retrieve, update and delete ScopeTracks from localStorage', () => {
+  it('useScopeTracks should list, create, retrieve, update and delete ScopeTracks from localStorage', async () => {
 
     // GIVEN
     const sampleTrack: ScopeTrack = {
@@ -149,7 +149,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.create(sampleTrack));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([sampleTrack]);
@@ -159,7 +159,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.update(modifiedTrack));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([modifiedTrack]);
@@ -168,7 +168,7 @@ describe('usePersitedCollection',() => {
 
     // WHEN
     act(() => result.current.delete(modifiedTrack.id));
-    waitForNextUpdate()
+    await waitForNextUpdate()
       .then(() => {
         // THEN
         expect(result.current.list()).to.deep.equal([]);

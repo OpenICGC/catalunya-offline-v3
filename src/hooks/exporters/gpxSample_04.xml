@@ -2,7 +2,6 @@
 <gpx creator="fabulator:gpx-builder" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
   <metadata>
     <name>Scope 1</name>
-    <link href="https://www.icgc.cat/ca/"></link>
   </metadata>
   <trk>
     <name>Track without timestamp nor elevation</name>

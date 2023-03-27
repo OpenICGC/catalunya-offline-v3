@@ -6,7 +6,7 @@ import {useEffect, useState} from 'react';
 import {PersistenceStatus} from '../usePersistenceData';
 
 export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?: boolean) => {
-  const {Point, Metadata, Track, Link} = BaseBuilder.MODELS;
+  const {Point, Metadata, Track} = BaseBuilder.MODELS;
   
   const [gpx, setGpx] = useState<string|undefined>(undefined);
   
@@ -25,8 +25,7 @@ export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?
     if (!gpx && scope && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
       const meta = new Metadata(
         {
-          name: scope.name,
-          link: new Link('https://www.icgc.cat/ca/')
+          name: scope.name
         }
       );
 
