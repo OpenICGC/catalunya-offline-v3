@@ -1,7 +1,8 @@
 import {singletonHook} from 'react-singleton-hook';
 import usePersistedState from '../usePersistedState';
 
-type Type = string;
+type Type = string
+
 const key = 'settings.colorPalette';
 const defaultValue = 'BrewerSet19';
 
