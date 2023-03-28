@@ -9,11 +9,11 @@ import Box from '@mui/material/Box';
 
 //UTILS
 import {HEXColor} from '../../../types/commonTypes';
-import {GPS_POSITION_DEFAULT_COLOR} from '../../../config';
 import {useTranslation} from 'react-i18next';
 import {Position} from 'geojson';
 import OutOfTrackButton from '../../buttons/OutOfTrackButton';
 import Typography from '@mui/material/Typography';
+import useGpsPositionColor from '../../../hooks/settings/useGpsPositionColor';
 
 //STYLES
 const profileContainerSx = {
@@ -42,6 +42,8 @@ const TrackProfile: FC<TrackProfileProps> = ({
 }) => {
 
   const {t} = useTranslation();
+
+  const [gpsPositionColor] = useGpsPositionColor();
     
   //VALIDATORS
   const isLongitudeValid = coordinates?.some(coord => (coord[0] >= -180 && coord[0] <= 180));
@@ -149,7 +151,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
         },
         encoding: {
           color: {
-            value: GPS_POSITION_DEFAULT_COLOR,
+            value: gpsPositionColor,
           },
           x: {
             field: 'length',

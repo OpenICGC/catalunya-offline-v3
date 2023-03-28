@@ -1,17 +1,23 @@
-import {BaseMaps, HEXColor, LANGUAGE, Settings} from './types/commonTypes';
+import {AppState, BaseMaps, HEXColor, SCOPE_FEATURES_PANEL_TAB} from './types/commonTypes';
 import {ViewportType} from './hooks/useViewport';
 import {Capacitor} from '@capacitor/core';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 
 export const DRAWER_WIDTH = 270;
 
-export const INITIAL_VIEWPORT: ViewportType = {
-  latitude: 42.1094,
-  longitude: 1.3705,
-  zoom: 9,
-  bearing: 0,
-  pitch: 0,
-};
+export const MIN_TRACKING_ZOOM = 10;
+
+export const GPS_POSITION_STALE_COLOR = '#9b9b9b';
+
+export const OFFLINE_DATADIR_NAME = 'offlineData';
+export const EXPORT_DIR_NAME = 'exports';
+
+export const PLATFORM = Capacitor.getPlatform();
+export const IS_WEB = PLATFORM === 'web';
+
+export const PERSISTENCE_NAMESPACE = 'catoffline';
+
+export const MAX_ALLOWED_IMPORT_FEATURES = 100;
 
 export const MAP_PROPS = {
   minZoom: 7,
@@ -19,6 +25,15 @@ export const MAP_PROPS = {
   maxPitch: 60,
   hash: false
 };
+
+export const DEFAULT_VIEWPORT: ViewportType = {
+  latitude: 42.1094,
+  longitude: 1.3705,
+  zoom: 9,
+  bearing: 0,
+  pitch: 0
+};
+
 
 export const BASEMAPS: BaseMaps = [{
   id: 'mtc25m',
@@ -75,21 +90,6 @@ export const BASEMAPS: BaseMaps = [{
   attribution: 'OpenStreetMap'
 }];
 
-export const INITIAL_BASEMAP = BASEMAPS[0];
-
-export const MIN_TRACKING_ZOOM = 10;
-
-export const GPS_POSITION_DEFAULT_COLOR = '#4286f5';
-export const GPS_POSITION_STALE_COLOR = '#9b9b9b';
-
-export const OFFLINE_DATADIR_NAME = 'offlineData';
-export const EXPORT_DIR_NAME = 'exports';
-
-export const PLATFORM = Capacitor.getPlatform();
-export const IS_WEB = PLATFORM === 'web';
-
-export const PERSISTENCE_NAMESPACE = 'catoffline';
-
 export const COLOR_PALETTES = [
   'BrewerPastel19',
   'BrewerSet39',
@@ -111,14 +111,3 @@ export const COLOR_PALETTES = [
   ...obj,
   [paletteName]: useColorRamp(paletteName).hexColors
 }), {});
-
-export const DEFAULT_SETTINGS: Settings = {
-  gpsPositionColor: GPS_POSITION_DEFAULT_COLOR,
-  trackTolerance: 40,
-  isLeftHanded: false,
-  isLargeSize: false,
-  colorPalette: 'BrewerSet19',
-  language: LANGUAGE.ca
-};
-
-export const MAX_ALLOWED_IMPORT_FEATURES = 100;

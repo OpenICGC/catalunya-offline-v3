@@ -18,7 +18,8 @@ import NavigatingIcon from '@mui/icons-material/Explore';
 import LayersIcon from '@mui/icons-material/Layers';
 import BaseMapsIcon from '@mui/icons-material/Map';
 import ScopesIcon from '@mui/icons-material/Folder';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
+import useIsLeftHanded from '../../hooks/settings/useIsLeftHanded';
 
 //STYLES
 const fabTransition = 'transform 360ms linear';
@@ -60,7 +61,8 @@ const FabButton: FC<FabButtonProps> = ({
   onScopesClick
 }) => {
 
-  const {isLargeSize, isLeftHanded} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
+  const [isLeftHanded] = useIsLeftHanded();
 
   //STYLES
   const fabSize = isLargeSize ? 72 : 56;

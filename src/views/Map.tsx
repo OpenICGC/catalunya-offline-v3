@@ -20,7 +20,7 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 //UTILS
 import {MapboxMap, MapboxStyle, MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
-import {GPS_POSITION_DEFAULT_COLOR, INITIAL_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
+import {DEFAULT_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
 import {AnyLayer, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
 import {Feature, Position} from 'geojson';
@@ -33,8 +33,9 @@ import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
 import usePointNavigation from '../hooks/usePointNavigation';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import useTrackNavigation from '../hooks/useTrackNavigation';
-import {useSettings} from '../hooks/useSettings';
 import {Manager, ScopePoint, UUID} from '../types/commonTypes';
+import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
+import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 /*import {useStatus} from '@capacitor-community/network-react';*/
 
 mbtiles(maplibregl);
@@ -80,93 +81,6 @@ const sources: Sources = {
   }
 };
 
-const layers: Array<AnyLayer> = [{
-  id: 'geolocation-precision',
-  source: 'geolocation',
-  type: 'circle',
-  paint: {
-    'circle-color': GPS_POSITION_DEFAULT_COLOR,
-    'circle-opacity': 0.33,
-    'circle-radius': [
-      'interpolate',
-      ['exponential', 2],
-      ['zoom'],
-      7, // Beware: this formula works only for latitudes around initial viewport's latitude
-      ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI / 180))],
-      15,
-      ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(INITIAL_VIEWPORT.latitude * (Math.PI / 180))]
-    ],
-    'circle-stroke-color': GPS_POSITION_DEFAULT_COLOR,
-    'circle-stroke-opacity': 0.67,
-    'circle-stroke-width': 1,
-    'circle-pitch-alignment': 'map'
-  }
-}, 
-{
-  id: 'recordingTrack',
-  source: 'recordingTrack',
-  type: 'line',
-  paint: {
-    'line-color': '#d32f2f',
-    'line-width': 4
-  }
-}, 
-{
-  id: 'navigateToPointLine',
-  source: 'navigateToPointLine',
-  type: 'line',
-  paint: {
-    'line-color': '#000000',
-    'line-width': 4,
-    'line-opacity': 0.67,
-    'line-dasharray': [2, 2]
-  },
-  layout: {
-    'line-cap': 'round',
-    'line-join': 'round'
-  }
-}, 
-{
-  id: 'trackList',
-  source: 'trackList',
-  type: 'line',
-  paint: {
-    'line-color': ['get', 'color'],
-    'line-width': 4
-  }
-},
-{
-  id: 'extraLayers',
-  source: 'extraLayers',
-  type: 'symbol',
-  layout: {
-    'text-font': ['pictos_25_icgc-Regular'],
-    'text-size': 18,
-    'text-anchor': 'center',
-    'text-justify': 'center',
-    'symbol-placement': 'point',
-    'text-allow-overlap': true,
-    'text-field': ['match', ['get', 't'], // Tipus
-      0, '\u0055', // Refugi
-      1, '\u0062', // Camping
-      2, '\u002C', // Turisme Rural
-      3, '\u003A', // Alberg
-      '\u0020' // Default
-    ]
-  },
-  paint: {
-    'text-halo-width': 1,
-    'text-halo-color': '#fff',
-    'text-color': ['match', ['get', 't'], // Tipus
-      0, '#D4121E', // 0, '#FE946C', // Refugi
-      1, '#F1BE25', // 1, '#6FC6B5', // Camping
-      2, '#4A8A63', // 2, '#8DA0CB', // Turisme Rural
-      3, '#1FA1E2', // 3, '#E78AC3', // Alberg
-      '#000000' // Default
-    ]
-  }
-}];
-
 export type MainContentProps = {
   mapStyle: string | MapboxStyle,
   manager: Manager,
@@ -179,7 +93,7 @@ export type MainContentProps = {
   selectedTrackId?: UUID,
   //onTrackSelected: (trackId: UUID) => void,
   onShowTrackDetails: (trackId: UUID) => void,
-  layerVisibility: Record<number, boolean>,
+  visibleLayers: Array<number>,
 };
 
 const Map: FC<MainContentProps> = ({
@@ -194,7 +108,7 @@ const Map: FC<MainContentProps> = ({
   selectedTrackId,
   //onTrackSelected, // TODO
   onShowTrackDetails,
-  layerVisibility
+  visibleLayers
 }) => {
   const mapRef = useRef<MapRef>(null);
   const {viewport, setViewport} = useViewport();
@@ -230,9 +144,100 @@ const Map: FC<MainContentProps> = ({
   const [isContextualMenuOpen, setContextualMenuOpen] = useState(false);
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
-  
-  const {isLargeSize, gpsPositionColor} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
+  const [gpsPositionColor] = useGpsPositionColor();
   // Set blue dot location on geolocation updates
+
+  const layers: Array<AnyLayer> = useMemo(() => {
+    return [{
+      id: 'geolocation-precision',
+      source: 'geolocation',
+      type: 'circle',
+      paint: {
+        'circle-color': gpsPositionColor,
+        'circle-opacity': 0.33,
+        'circle-radius': [
+          'interpolate',
+          ['exponential', 2],
+          ['zoom'],
+          7, // Beware: this formula works only for latitudes around initial viewport's latitude
+          ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))],
+          15,
+          ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))]
+        ],
+        'circle-stroke-color': gpsPositionColor,
+        'circle-stroke-opacity': 0.67,
+        'circle-stroke-width': 1,
+        'circle-pitch-alignment': 'map'
+      }
+    },
+    {
+      id: 'recordingTrack',
+      source: 'recordingTrack',
+      type: 'line',
+      paint: {
+        'line-color': '#d32f2f',
+        'line-width': 4
+      }
+    },
+    {
+      id: 'navigateToPointLine',
+      source: 'navigateToPointLine',
+      type: 'line',
+      paint: {
+        'line-color': '#000000',
+        'line-width': 4,
+        'line-opacity': 0.67,
+        'line-dasharray': [2, 2]
+      },
+      layout: {
+        'line-cap': 'round',
+        'line-join': 'round'
+      }
+    },
+    {
+      id: 'trackList',
+      source: 'trackList',
+      type: 'line',
+      paint: {
+        'line-color': ['get', 'color'],
+        'line-width': 4
+      }
+    },
+    {
+      id: 'extraLayers',
+      source: 'extraLayers',
+      type: 'symbol',
+      filter: ['in', ['get', 't'], ['literal', visibleLayers]],
+      layout: {
+        'text-font': ['pictos_25_icgc-Regular'],
+        'text-size': 18,
+        'text-anchor': 'center',
+        'text-justify': 'center',
+        'symbol-placement': 'point',
+        'text-allow-overlap': true,
+        'text-field': ['match', ['get', 't'], // Tipus
+          0, '\u0055', // Refugi
+          1, '\u0062', // Camping
+          2, '\u002C', // Turisme Rural
+          3, '\u003A', // Alberg
+          '\u0020' // Default
+        ]
+      },
+      paint: {
+        'text-halo-width': 1,
+        'text-halo-color': '#fff',
+        'text-color': ['match', ['get', 't'], // Tipus
+          0, '#D4121E', // 0, '#FE946C', // Refugi
+          1, '#F1BE25', // 1, '#6FC6B5', // Camping
+          2, '#4A8A63', // 2, '#8DA0CB', // Turisme Rural
+          3, '#1FA1E2', // 3, '#E78AC3', // Alberg
+          '#000000' // Default
+        ]
+      }
+    }];
+  }, [gpsPositionColor, visibleLayers]);
+
   const setMapGeolocation = (map: MapboxMap | undefined, geolocation: Geolocation) => {
     const {latitude, longitude} = geolocation;
     const source = (map?.getSource('geolocation') as maplibregl.GeoJSONSource | undefined);
@@ -556,17 +561,6 @@ const Map: FC<MainContentProps> = ({
     recordingTrack.stop();
   };
 
-  const dynamicLayers = useMemo(() => {
-    const visibleLayerIds = Object.entries(layerVisibility)
-      .filter(([, v]) => v)
-      .map(([k, ]) => Number(k));
-    return layers.map(layer =>
-      layer.id === 'extraLayers' ? {
-        ...layer,
-        filter: ['in', ['get', 't'], ['literal', visibleLayerIds]]
-      } : layer);
-  }, [layerVisibility]);
-
   return <>
     <SearchBoxAndMenu 
       placeholder={t('actions.search')}
@@ -583,7 +577,7 @@ const Map: FC<MainContentProps> = ({
       ref={mapRef}
       mapStyle={mapStyle}
       sources={sources}
-      layers={dynamicLayers}
+      layers={layers}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}

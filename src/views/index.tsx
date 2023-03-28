@@ -13,6 +13,10 @@ import useEditingPosition from '../hooks/useEditingPosition';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import usePointNavigation from '../hooks/usePointNavigation';
 import useTrackNavigation from '../hooks/useTrackNavigation';
+import useSelectedScopeId from '../hooks/appState/useSelectedScopeId';
+import useSelectedPointId from '../hooks/appState/useSelectedPointId';
+import useSelectedTrackId from '../hooks/appState/useSelectedTrackId';
+import useVisibleLayers from '../hooks/appState/useVisibleLayers';
 
 const stackSx = {
   height: '100%',
@@ -26,18 +30,19 @@ const Index: FC = () => {
 
   const {baseMapId, mapStyle, setBaseMapId, StyleOfflineDownloaderComponent} = useMapStyle();
   const [manager, setManager] = useState<Manager>(undefined);
-  const [scope, setScope] = useState<UUID>();
-  const [point, setPoint] = useState<UUID>();
-  const [track, setTrack] = useState<UUID>();
+  const [scope, setScope] = useSelectedScopeId();
+  const [point, setPoint] = useSelectedPointId();
+  const [track, setTrack] = useSelectedTrackId();
 
-  const [layerVisibility, setLayerVisibility] = useState<Record<number, boolean>>({
-    0: false,
-    1: false,
-    2: false,
-    3: false
-  });
+  const [visibleLayers, setVisibleLayers] = useVisibleLayers();
 
-  const toggleLayerVisibility = (layerId: number) => setLayerVisibility(prevState => ({...prevState, [layerId]: !prevState[layerId]}));
+  const toggleLayerVisibility = (layerId: number) => {
+    if(visibleLayers.includes(layerId)) {
+      setVisibleLayers(visibleLayers.filter(layer => layer !== layerId));
+    } else {
+      setVisibleLayers([...visibleLayers, layerId].sort());
+    }
+  };
 
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
@@ -79,7 +84,7 @@ const Index: FC = () => {
   const sidePanelContent = manager
     ? <Stack sx={stackSx}>
       {manager === 'LAYERS' && <Layers
-        layerVisibility={layerVisibility}
+        visibleLayers={visibleLayers}
         toggleLayerVisibility={toggleLayerVisibility}
       />}
       {manager === 'BASEMAPS' && <BaseMaps
@@ -112,7 +117,7 @@ const Index: FC = () => {
     selectedTrackId={track}
     //onTrackSelected={setTrack}
     onShowTrackDetails={handleShowTrackDetails}
-    layerVisibility={layerVisibility}
+    visibleLayers={visibleLayers}
   />;
 
   return <>

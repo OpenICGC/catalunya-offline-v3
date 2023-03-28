@@ -1,4 +1,4 @@
-import React, {FC, SyntheticEvent, useState} from 'react';
+import React, {FC, SyntheticEvent} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -25,14 +25,14 @@ import Header from '../common/Header';
 import List, {listItemType} from './List';
 
 //UTILS
-import {HEXColor, Scope, ScopeTrack, ScopePoint, UUID} from '../../types/commonTypes';
+import {HEXColor, Scope, ScopeTrack, ScopePoint, UUID, SCOPE_FEATURES_PANEL_TAB} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {lighten} from '@mui/system/colorManipulator';
 import {Theme} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import FeaturesSummary from './FeaturesSummary';
 import ShareIcon from '@mui/icons-material/Share';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 export type FeaturesPanelProps = {
   scope: Scope,
@@ -54,7 +54,9 @@ export type FeaturesPanelProps = {
   onDeleteTrack: (trackId: UUID) => void,
   onExportTrack: (trackId: UUID) => void,
   onNameChangeTrack: (trackId: UUID, name: string) => void
-  onToggleVisibilityTrack: (trackId: UUID) => void
+  onToggleVisibilityTrack: (trackId: UUID) => void,
+  tabValue: SCOPE_FEATURES_PANEL_TAB,
+  setTabValue: (newValue: SCOPE_FEATURES_PANEL_TAB) => void
 };
 
 const FeaturesPanel: FC<FeaturesPanelProps> = ({
@@ -77,11 +79,12 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   onDeleteTrack,
   onExportTrack,
   onNameChangeTrack,
-  onToggleVisibilityTrack
+  onToggleVisibilityTrack,
+  tabValue,
+  setTabValue
 }) => {
   const {t} = useTranslation();
-  const [tabValue, setTabValue] = useState(0);
-  const {isLargeSize} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
   const handleActionPointClick = (pointId: UUID) => {
@@ -221,7 +224,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       } value={1}/>
     </Tabs>
     {
-      tabValue === 0 && <><List
+      tabValue === SCOPE_FEATURES_PANEL_TAB.POINTS && <><List
         isLargeSize={isLargeSize}
         items={pointItems}
         contextualMenu={contextualMenu.point}
@@ -239,7 +242,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       </Box></>
     }
     {
-      tabValue === 1 && <>
+      tabValue === SCOPE_FEATURES_PANEL_TAB.TRACKS && <>
         <List
           isLargeSize={isLargeSize}
           items={trackItems}

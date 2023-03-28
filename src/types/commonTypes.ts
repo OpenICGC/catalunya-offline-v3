@@ -1,5 +1,7 @@
 import GeoJSON from 'geojson';
 import { MapboxStyle } from 'react-map-gl';
+import {LOCATION_STATUS} from '../components/buttons/FabButton';
+import {BASEMAPS} from '../config';
 
 export type BaseMap = {
   id: string
@@ -80,13 +82,18 @@ export enum LANGUAGE {
   'es'
 }
 
-export interface Settings {
-  gpsPositionColor: HEXColor,
-  trackTolerance: number,
-  isLeftHanded: boolean,
-  isLargeSize: boolean,
-  colorPalette: string
-  language: LANGUAGE
+export enum SCOPE_FEATURES_PANEL_TAB {
+  POINTS,
+  TRACKS
+}
+
+export interface AppState {
+  basemapId: string,
+  selectedScopeId?: UUID,
+  selectedPointId?: UUID,
+  selectedTrackId?: UUID,
+  visibleLayers: Array<number>,
+  scopeFeaturesPanelTab: SCOPE_FEATURES_PANEL_TAB
 }
 
 export type Error = {

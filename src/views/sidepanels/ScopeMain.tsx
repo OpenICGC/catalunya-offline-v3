@@ -12,7 +12,7 @@ import ScopeFeatures from './ScopeFeatures';
 import HandleExport from '../../components/scope/export/HandleExport';
 import HandleImport from '../../components/scope/import/HandleImport';
 import Notification from '../../components/notifications/Notification';
-import {useSettings} from '../../hooks/useSettings';
+import useColorPalette from '../../hooks/settings/useColorPalette';
 
 export interface ScopeMainProps {
   selectedScope?: UUID,
@@ -32,7 +32,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
   onTrackSelected
 }) => {
   const {t} = useTranslation();
-  const {colorPalette} = useSettings();
+  const [colorPalette] = useColorPalette();
   const {hexColors: palette} = useColorRamp(colorPalette);
 
   const [sharingScopeId, setSharingScopeId] = useState<UUID|undefined>(undefined);

@@ -22,7 +22,7 @@ import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID, Scope} from '../../types/commonTypes';
 import {useTheme} from '@mui/material';
 import Header from '../common/Header';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 const boxSx = {width: '100%', height: 0};
 
@@ -53,7 +53,7 @@ const MainPanel: FC<MainPanelProps> = ({
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const {isLargeSize} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
 
   const contextualMenu = useMemo(() => ([
     {

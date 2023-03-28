@@ -4,7 +4,7 @@ import {Meta, Story} from '@storybook/react';
 import PositionEditor, {PositionEditorProps} from './PositionEditor';
 import Box from '@mui/material/Box';
 import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
-import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
+import {DEFAULT_VIEWPORT, BASEMAPS} from '../../config';
 
 export default {
   title: 'Map/PositionEditor',
@@ -17,7 +17,7 @@ export default {
 const Template: Story<PositionEditorProps> = args => <PositionEditor {...args}/>;
 
 const WithMapTemplate: Story<PositionEditorProps> = ({...args}) => {
-  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
+  const [getViewport, setViewport] = useState(DEFAULT_VIEWPORT);
   return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
     <GeocomponentMap mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}/>
     <PositionEditor {...args}/>
