@@ -432,13 +432,25 @@ const Map: FC<MainContentProps> = ({
     setPointIntent(undefined);
   };
 
+  const handlePointNavigationStop = () => {
+    pointNavigation.stop();
+    setBottomMargin(0);
+  };
+
   const handlePointNavigationFitBounds = () => {
     const bbox = pointNavigation.getBounds();
-    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50, bottom: 50 + bottomMargin, left: 50, right: 50}});
+    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50 + topMargin, bottom: 50 + bottomMargin, left: 50, right: 50}});
   };
 
   useEffect(() => {
+    if(recordingTrack.isRecording){
+      setTopMargin(300);
+    } else setTopMargin(0);
+  }, [recordingTrack]);
+
+  useEffect(() => {
     if (pointNavigation.target) {
+      setBottomMargin(125);
       const deferredFitBounds = async () => {
         await new Promise(r => setTimeout(r, 300));
         handlePointNavigationFitBounds();
@@ -449,14 +461,18 @@ const Map: FC<MainContentProps> = ({
   }, [pointNavigation.target]);
 
   const handlePointNavigationShowDetails = () => pointNavigation.target && onShowPointDetails(pointNavigation.target.id);
-
+  const handleTrackNavigationStop = () => {
+    trackNavigation.stop();
+    setBottomMargin(0);
+  };
   const handleTrackNavigationFitBounds = () => {
     const bbox = trackNavigation.getBounds();
-    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50, bottom: 50 + bottomMargin, left: 50, right: 50}});
+    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50 + topMargin, bottom: 50 + bottomMargin, left: 50, right: 50}});
   };
 
   useEffect(() => {
     if (trackNavigation.target) {
+      setBottomMargin(250);
       const deferredFitBounds = async () => {
         await new Promise(r => setTimeout(r, 300));
         handleTrackNavigationFitBounds();
@@ -479,6 +495,7 @@ const Map: FC<MainContentProps> = ({
   };
 
   const [bottomMargin, setBottomMargin] = useState(0);
+  const [topMargin, setTopMargin] = useState(0);
   const handleTopChanged = (height: number) => {
     setBottomMargin(height);
   };
@@ -572,7 +589,7 @@ const Map: FC<MainContentProps> = ({
       color={pointNavigation.target.color}
       bearing={pointNavigation.feature?.properties.bearing || 0}
       distance={pointNavigation.feature?.properties.distance || 0}
-      onStop={pointNavigation.stop}
+      onStop={handlePointNavigationStop}
       onFitBounds={handlePointNavigationFitBounds}
       onShowDetails={handlePointNavigationShowDetails}
       onTopChanged={handleTopChanged}
@@ -585,7 +602,7 @@ const Map: FC<MainContentProps> = ({
       isOutOfTrack={trackNavigation.isOutOfTrack}
       isReverseDirection={trackNavigation.isReverseDirection}
       onReverseDirection={trackNavigation.toggleReverseDirection}
-      onStop={trackNavigation.stop}
+      onStop={handleTrackNavigationStop}
       onFitBounds={handleTrackNavigationFitBounds}
       onShowDetails={handleTrackNavigationShowDetails}
       onTopChanged={handleTopChanged}
