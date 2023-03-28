@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import LocationMarker, {LocationMarkerProps} from './LocationMarker';
-import {INITIAL_VIEWPORT, BASEMAPS, GPS_POSITION_DEFAULT_COLOR} from '../../config';
+import {DEFAULT_VIEWPORT, BASEMAPS} from '../../config';
 import Box from '@mui/material/Box';
 import Map from '@geomatico/geocomponents/Map/Map';
 
@@ -21,7 +21,7 @@ export default {
 } as Meta;
 
 const Template: Story<LocationMarkerProps> = args => {
-  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
+  const [getViewport, setViewport] = useState(DEFAULT_VIEWPORT);
   return <Box sx={{width: '100vw', height: '100vh', position: 'relative', boxShadow: 1}}>
     <Map mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}>
       <LocationMarker {...args}/>
@@ -33,7 +33,7 @@ export const Default = Template.bind({});
 Default.args = {
   heading: 45,
   headingAccuracy: 45,
-  color: GPS_POSITION_DEFAULT_COLOR,
+  color: '#4286f5',
   geolocation: {
     accuracy: null,
     altitude: null,

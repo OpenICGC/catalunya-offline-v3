@@ -8,7 +8,7 @@ import SidePanel from '@geomatico/geocomponents/Layout/SidePanel';
 import {
   DRAWER_WIDTH,
 } from '../config';
-import {useSettings} from '../hooks/useSettings';
+import useIsLeftHanded from '../hooks/settings/useIsLeftHanded';
 
 const Main = styled(Box)({
   flexGrow: 1,
@@ -43,7 +43,7 @@ export type LayoutProps = {
 };
 
 const Layout: FC<LayoutProps> = ({mainContent, sidePanelContent, isSidePanelOpen, onToggleSidePanel}) => {
-  const { isLeftHanded } = useSettings();
+  const [isLeftHanded] = useIsLeftHanded();
   return <>
     <SidePanel
       sx={sidePanelSx(!!sidePanelContent && isSidePanelOpen)}

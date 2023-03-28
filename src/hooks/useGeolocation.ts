@@ -2,7 +2,7 @@ import {registerPlugin} from '@capacitor/core';
 import {useEffect, useState} from 'react';
 import {CatOfflineError} from '../types/commonTypes';
 import {BackgroundGeolocationPlugin, CallbackError, Location} from '@capacitor-community/background-geolocation';
-import useAppState, {AppState} from './useAppState';
+import useIsActive from './useIsActive';
 import {IS_WEB} from '../config';
 import {useTranslation} from 'react-i18next';
 
@@ -42,7 +42,7 @@ const useGeolocation = (watchInBackground = false) => {
   const [watcherId, setWatcherId] = useState<string>();
   const [error, setError] = useState<CatOfflineError>();
   const [geolocation, setGeolocation] = useState<Geolocation>(nullGeolocation);
-  const appState = useAppState();
+  const isActive = useIsActive();
   const {t} = useTranslation();
 
   const capacitorConfig = {
@@ -65,13 +65,13 @@ const useGeolocation = (watchInBackground = false) => {
   };
 
   useEffect(() => {
-    if (appState === AppState.BACKGROUND && !watchInBackground) {
+    if (!isActive && !watchInBackground) {
       stopWatching(); // Going background and no need to watch.
     } else {
       startWatching(); // (Re)start watching in any other case.
     }
     return () => stopWatching();
-  }, [appState, watchInBackground]);
+  }, [isActive, watchInBackground]);
 
 
   const [positionTimeout, setPositionTimeout] = useState<number>();

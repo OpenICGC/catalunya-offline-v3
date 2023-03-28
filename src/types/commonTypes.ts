@@ -80,13 +80,18 @@ export enum LANGUAGE {
   'es'
 }
 
-export interface Settings {
-  gpsPositionColor: HEXColor,
-  trackTolerance: number,
-  isLeftHanded: boolean,
-  isLargeSize: boolean,
-  colorPalette: string
-  language: LANGUAGE
+export enum SCOPE_FEATURES_PANEL_TAB {
+  POINTS,
+  TRACKS
+}
+
+export interface AppState {
+  basemapId: string,
+  selectedScopeId?: UUID,
+  selectedPointId?: UUID,
+  selectedTrackId?: UUID,
+  visibleLayers: Array<number>,
+  scopeFeaturesPanelTab: SCOPE_FEATURES_PANEL_TAB
 }
 
 export type Error = {

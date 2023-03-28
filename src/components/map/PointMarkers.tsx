@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Marker} from 'react-map-gl';
 import MarkerIcon from '@geomatico/geocomponents/Map/MarkerIcon';
 import {HEXColor, ScopePoint} from '../../types/commonTypes';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 const MARKER_SIZE = 32;
 const ACCESSIBLE_MARKER_SIZE = 48;
@@ -23,7 +23,7 @@ const PointMarkers: FC<PointMarkersProps> = ({
   onClick= () => undefined
 }) => {
 
-  const {isLargeSize} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
 
   const markerSize = isLargeSize ? ACCESSIBLE_MARKER_SIZE : MARKER_SIZE;
   const visiblePoints = points?.filter(point => point.properties.isVisible);

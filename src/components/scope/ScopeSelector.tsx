@@ -16,7 +16,7 @@ import List from './List';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {Scope, UUID} from '../../types/commonTypes';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 export interface ScopeSelectorProps {
     isLargeSize: boolean;
@@ -32,7 +32,7 @@ const ScopeSelector: FC<ScopeSelectorProps> = ({
   onCancel
 }) => {
   const {t} = useTranslation();
-  const {isLargeSize} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
 
   return <Dialog open={true} onClose={() => onCancel()} fullWidth PaperProps={{sx: {height: '500px'}}}>
     <DialogTitle sx={{display: 'flex', alignItems: 'center', letterSpacing: 1.35}}>

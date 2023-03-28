@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Map from '@geomatico/geocomponents/Map/Map';
 
 import PointMarkers, {PointMarkersProps} from './PointMarkers';
-import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
+import {DEFAULT_VIEWPORT, BASEMAPS} from '../../config';
 
 
 export default {
@@ -14,7 +14,7 @@ export default {
 } as Meta;
 
 const Template: Story<PointMarkersProps> = args => {
-  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
+  const [getViewport, setViewport] = useState(DEFAULT_VIEWPORT);
   return <Box sx={{width: '100vw', height: '100vh', position: 'relative', boxShadow: 1}}>
     <Map mapStyle={BASEMAPS[1].id} onViewportChange={setViewport} viewport={getViewport}>
       <PointMarkers {...args}/>

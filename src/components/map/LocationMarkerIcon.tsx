@@ -1,6 +1,6 @@
 import React, {FC, useMemo} from 'react';
 import {HEXColor} from '../../types/commonTypes';
-import {GPS_POSITION_DEFAULT_COLOR, GPS_POSITION_STALE_COLOR} from '../../config';
+import {GPS_POSITION_STALE_COLOR} from '../../config';
 
 function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegrees: number) {
   const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
@@ -57,7 +57,7 @@ export interface LocationMarkerIconProps {
 }
 
 const LocationMarkerIcon: FC<LocationMarkerIconProps> = ({
-  color = GPS_POSITION_DEFAULT_COLOR,
+  color = '#4286f5',
   heading,
   headingAccuracy= DEFAULT_HEADING_ACCURACY,
   isStale = false

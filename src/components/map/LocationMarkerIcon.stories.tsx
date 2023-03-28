@@ -2,7 +2,6 @@ import React from 'react';
 import {Meta, Story} from '@storybook/react';
 
 import LocationMarkerIcon, {LocationMarkerIconProps} from './LocationMarkerIcon';
-import {GPS_POSITION_DEFAULT_COLOR} from '../../config';
 
 export default {
   title: 'Map/LocationMarkerIcon',
@@ -25,7 +24,7 @@ Default.args = {
   heading: 30,
   headingAccuracy: 75,
   isStale: false,
-  color: GPS_POSITION_DEFAULT_COLOR
+  color: '#4286f5'
 };
 
 export const Stale = Template.bind({});

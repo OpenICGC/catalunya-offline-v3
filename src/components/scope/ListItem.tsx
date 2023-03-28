@@ -20,7 +20,7 @@ import {ColorFormat, ColorPicker} from 'material-ui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {ClickAwayListener} from '@mui/material';
 import {COLOR_PALETTES} from '../../config';
-import {useSettings} from '../../hooks/useSettings';
+import useColorPalette from '../../hooks/settings/useColorPalette';
 
 const muiListItemSx = {height: '48px', p: 0, m: 0};
 const listItemIconSx = {minWidth: '24px', p: 0};
@@ -82,7 +82,7 @@ const ListItem: FC<ListItemProps> = memo(({
   onStopEditing = () => undefined
 }) => {
   const {t} = useTranslation();
-  const {colorPalette} = useSettings();
+  const [colorPalette] = useColorPalette();
   //STYLES
   const actionIconSx = useMemo(() => ({
     m: 0,

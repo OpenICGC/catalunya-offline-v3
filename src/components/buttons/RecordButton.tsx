@@ -8,7 +8,7 @@ import RecordIcon from '@mui/icons-material/FiberManualRecord';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 const recButtonSx = {
   bgcolor: 'grey.700',
@@ -28,7 +28,7 @@ const RecordButton: FC<RecordButtonProps> = ({
   onClick
 }) => {
   const {t} = useTranslation();
-  const {isLargeSize} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
 
   const size = isLargeSize ? 'large' : 'medium';
   const handleClick = () => onClick();

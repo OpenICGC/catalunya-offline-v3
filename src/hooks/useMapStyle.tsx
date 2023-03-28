@@ -2,9 +2,9 @@ import React, {FC, useEffect, useMemo, useState} from 'react';
 
 import {MapboxStyle} from 'react-map-gl';
 
-import {BaseMap} from '../types/commonTypes';
-import {BASEMAPS, INITIAL_BASEMAP, IS_WEB} from '../config';
+import {BASEMAPS, IS_WEB} from '../config';
 import DownloadsManager from '../components/downloads/DownloadsManager';
+import useBasemapId from './appState/useBasemapId';
 
 interface useMapStyle {
   baseMapId: string;
@@ -14,25 +14,26 @@ interface useMapStyle {
 }
 
 const useMapStyle = (): useMapStyle => {
-  
-  const [baseMap, setBaseMap] = useState<BaseMap>(INITIAL_BASEMAP);
-  const [mapStyle, setMapStyle] = useState(INITIAL_BASEMAP.onlineStyle);
+
+  const [basemapId, setBaseMapId] = useBasemapId();
+  const baseMap = BASEMAPS.find(bm => bm.id === basemapId);
+
+  const [mapStyle, setMapStyle] = useState(baseMap?.onlineStyle);
 
   const handleChangeBaseMapId = (baseMapId: string) => {
-    const newBaseMap = BASEMAPS.find(({id}) => id === baseMapId);
-    newBaseMap && setBaseMap(newBaseMap);
+    setBaseMapId(baseMapId);
   };
 
   const handleStyleDownloaded = setMapStyle;
 
   useEffect(() => {
-    if (baseMap.onlineStyle) {
+    if (baseMap?.onlineStyle) {
       setMapStyle(baseMap.onlineStyle);
     }
   }, [baseMap]);
   
   const StyleOfflineDownloaderComponent = useMemo(() =>
-    baseMap.offlineAssets && !IS_WEB ?
+    baseMap?.offlineAssets && !IS_WEB ?
       <DownloadsManager baseMap={baseMap} onStyleReady={handleStyleDownloaded}/>
       : 
       <></>
@@ -41,8 +42,8 @@ const useMapStyle = (): useMapStyle => {
   
   
   return {
-    baseMapId: baseMap.id,
-    mapStyle,
+    baseMapId: basemapId,
+    mapStyle: mapStyle || '',
     setBaseMapId: handleChangeBaseMapId,
     StyleOfflineDownloaderComponent
   };

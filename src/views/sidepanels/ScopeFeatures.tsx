@@ -13,6 +13,7 @@ import useShare from '../../hooks/useShare';
 import HandleExport from '../../components/scope/export/HandleExport';
 import usePointNavigation from '../../hooks/usePointNavigation';
 import useTrackNavigation from '../../hooks/useTrackNavigation';
+import useScopeFeaturesPanelTab from '../../hooks/appState/useScopeFeaturesPanelTab';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -39,6 +40,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const trackNavigation = useTrackNavigation();
   const {sharePoint}  = useShare();
   const [sharingTrackId, setSharingTrackId] = useState<UUID|undefined>(undefined);
+
+  const [tabValue, setTabValue] = useScopeFeaturesPanelTab();
 
   const selectedScope = scopeStore.retrieve(scopeId);
   const editingPosition = useEditingPosition();
@@ -219,6 +222,9 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
       onDeleteTrack={trackDelete}
       onGoToTrack={trackGoTo}
       onExportTrack={trackExport}
+
+      tabValue={tabValue}
+      setTabValue={setTabValue}
     />
     {
       sharingTrackId &&

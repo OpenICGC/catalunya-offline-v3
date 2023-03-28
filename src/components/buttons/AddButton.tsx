@@ -6,7 +6,8 @@ import Fab from '@mui/material/Fab';
 //UTILS
 import {Theme} from '@mui/material';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
+import useIsLeftHanded from '../../hooks/settings/useIsLeftHanded';
 
 export type AddButtonProps = {
   children: ReactNode,
@@ -19,7 +20,8 @@ const AddButton: FC<AddButtonProps> = ({
   onClick,
   sx
 }) => {
-  const {isLargeSize, isLeftHanded} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
+  const [isLeftHanded] = useIsLeftHanded();
 
   //STYLES
   const fabSize = isLargeSize ? 64 : 48;

@@ -3,7 +3,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import Button from '@mui/material/Button';
 import {Theme} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 export interface CancelButtonProps {
     variant?: 'text' | 'outlined' | 'contained',
@@ -20,7 +20,7 @@ const CancelButton: FC<CancelButtonProps> = ({
 }) => {
     
   const {t} = useTranslation();
-  const {isLargeSize} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
   const cancelButton = {
     bgcolor: variant === 'contained' ? 'common.white' : undefined,
     color: `grey.${greyColor}`,

@@ -4,7 +4,7 @@ import {Meta, Story} from '@storybook/react';
 import Box from '@mui/material/Box';
 import TrackRecorder, {TrackRecorderProps} from './TrackRecorder';
 import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
-import {INITIAL_VIEWPORT, BASEMAPS} from '../../config';
+import {DEFAULT_VIEWPORT, BASEMAPS} from '../../config';
 
 export default {
   title: 'Map/TrackRecorder',
@@ -20,7 +20,7 @@ const Template: Story<TrackRecorderProps> = args => <TrackRecorder {...args}/>;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const WithMapTemplate: Story<TrackRecorderProps> = ({...args}) => {
-  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
+  const [getViewport, setViewport] = useState(DEFAULT_VIEWPORT);
   return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
     <GeocomponentMap mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}/>
     <TrackRecorder {...args}/>

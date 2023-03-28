@@ -10,7 +10,7 @@ import ButtonGroup from '@geomatico/geocomponents/Forms/ButtonGroup';
 
 //UTILS
 import {RECORDING_STATUS} from '../map/TrackRecorder';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 const recordIconSx = {color: '#d32f2f'};
 
@@ -24,7 +24,7 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
   onButtonClick
 }) => {
 
-  const {isLargeSize} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
 
   const pauseIconSx = {color: recordingStatus === RECORDING_STATUS.PAUSED ? 'white': 'grey.700'};
   const stopIconSx = {color: recordingStatus === RECORDING_STATUS.STOPPED ? 'white': 'grey.700'};

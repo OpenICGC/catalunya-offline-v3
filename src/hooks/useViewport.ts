@@ -1,7 +1,8 @@
-import {INITIAL_VIEWPORT} from '../config';
-import {useCallback, useState} from 'react';
+import {DEFAULT_VIEWPORT} from '../config';
+import {useCallback} from 'react';
 import {singletonHook} from 'react-singleton-hook';
 import {WebMercatorViewport} from '@math.gl/web-mercator';
+import usePersistedState from './usePersistedState';
 
 export type ViewportType = {
   latitude: number,
@@ -27,15 +28,9 @@ export type FitBoundsOptions = {
 };
 
 const useViewportImpl = () => {
-  const [viewport, setViewport] = useState<ViewportType>(INITIAL_VIEWPORT);
+  const [viewport, setViewport] = usePersistedState<ViewportType>('state.viewport', DEFAULT_VIEWPORT);
 
-  const updateViewport = useCallback(
-    (newViewport: Partial<ViewportType>) => setViewport(
-      prevViewport => ({
-        ...prevViewport,
-        ...newViewport
-      })
-    ), []);
+  const updateViewport = (newViewport: Partial<ViewportType>) => setViewport({...viewport, ...newViewport});
 
   const fitBounds = useCallback(
     (bbox?: [xmin: number, ymin: number, xmax: number, ymax: number], options?: FitBoundsOptions) => {
@@ -59,7 +54,7 @@ const useViewportImpl = () => {
 };
 
 const trivialImpl = {
-  viewport: INITIAL_VIEWPORT,
+  viewport: DEFAULT_VIEWPORT,
   setViewport: () => undefined,
   fitBounds: () => undefined
 };

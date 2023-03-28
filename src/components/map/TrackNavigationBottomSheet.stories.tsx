@@ -7,7 +7,7 @@ import sample from '../fixtures/sampleLineString.geo.json';
 import sampleWithoutHeight from '../fixtures/sampleLineStringWithoutHeight.geo.json';
 const sampleCoordinates: Position[] = sample.coordinates as Position[];
 const sampleCoordinatesWithoutHeight: Position[] = sampleWithoutHeight.coordinates as Position[];
-import {BASEMAPS, INITIAL_VIEWPORT} from '../../config';
+import {BASEMAPS, DEFAULT_VIEWPORT} from '../../config';
 import Box from '@mui/material/Box';
 import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
 
@@ -30,7 +30,7 @@ export default {
 const Template: Story<TrackNavigationBottomSheetProps> = args => <TrackNavigationBottomSheet {...args}/>;
 
 const WithMapTemplate: Story<TrackNavigationBottomSheetProps> = ({...args}) => {
-  const [getViewport, setViewport] = useState(INITIAL_VIEWPORT);
+  const [getViewport, setViewport] = useState(DEFAULT_VIEWPORT);
   return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
     <GeocomponentMap mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}/>
     <TrackNavigationBottomSheet {...args}/>

@@ -5,7 +5,7 @@ import {Scope, ScopeTrack, UUID} from '../types/commonTypes';
 import useGeolocation from './useGeolocation';
 import {useScopes, useScopeTracks} from './useStoredCollections';
 import turfNearestPointOnLine from '@turf/nearest-point-on-line';
-import {useSettings} from './useSettings';
+import useTrackTolerance from './settings/useTrackTolerance';
 
 type startFn = (scopeId: UUID, scopePointId: UUID) => void;
 
@@ -20,7 +20,7 @@ const initialState: navigationState = {
 };
 
 const useTrackNavigationImpl = () => {
-  const { trackTolerance } = useSettings();
+  const [trackTolerance] = useTrackTolerance();
   const [state, setState] = useState<navigationState>(initialState);
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(state.scopeId);

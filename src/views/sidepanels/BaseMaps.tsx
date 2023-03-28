@@ -19,7 +19,7 @@ import {useTranslation} from 'react-i18next';
 import useTheme from '@mui/material/styles/useTheme';
 import {styled} from '@mui/material/styles';
 import {BASEMAPS} from '../../config';
-import {useSettings} from '../../hooks/useSettings';
+import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 export type BaseMapsProps = {
   baseMapId: string,
@@ -37,7 +37,7 @@ const BaseMaps: FC<BaseMapsProps> = ({
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const {isLargeSize} = useSettings();
+  const [isLargeSize] = useIsLargeSize();
 
   const ScrollableContent = useMemo(() => styled(Box)({
     overflowY: 'auto',

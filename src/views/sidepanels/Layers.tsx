@@ -36,17 +36,17 @@ const itemConfig = [
 ];
 
 export type LayersProps = {
-  layerVisibility: Record<number, boolean>,
+  visibleLayers: Array<number>,
   toggleLayerVisibility: (id: number) => void
 };
 
-const Layers: FC<LayersProps> = ({layerVisibility, toggleLayerVisibility}) => {
+const Layers: FC<LayersProps> = ({visibleLayers, toggleLayerVisibility}) => {
   const {t} = useTranslation();
   const theme = useTheme();
 
   const items = itemConfig.map(item => ({
     ...item,
-    isVisible: layerVisibility[item.id]
+    isVisible: visibleLayers.includes(item.id)
   }));
 
   const actionCallbacks: Record<string, (itemId: number) => void> = {
