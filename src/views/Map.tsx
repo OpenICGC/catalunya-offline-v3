@@ -492,7 +492,7 @@ const Map: FC<MainContentProps> = ({
 
   const handlePointNavigationFitBounds = () => {
     const bbox = pointNavigation.getBounds();
-    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50, bottom: 50 + bottomMargin, left: 50, right: 50}});
+    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 100, bottom: 200 + bottomMargin, left: 50, right: 50}});
   };
 
   useEffect(() => {
@@ -510,7 +510,7 @@ const Map: FC<MainContentProps> = ({
 
   const handleTrackNavigationFitBounds = () => {
     const bbox = trackNavigation.getBounds();
-    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50, bottom: 50 + bottomMargin, left: 50, right: 50}});
+    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 100, bottom: 300 + bottomMargin, left: 50, right: 50}});
   };
 
   useEffect(() => {
