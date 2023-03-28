@@ -18,7 +18,7 @@ import SettingsView from './SettingsView';
 import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
 
 //UTILS
-import {MapboxMap, MapboxStyle, MapRef} from 'react-map-gl';
+import {MapboxStyle, MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
 import {DEFAULT_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
@@ -29,7 +29,7 @@ import {useTranslation} from 'react-i18next';
 import {useViewport} from '../hooks/useViewport';
 import useEditingPosition from '../hooks/useEditingPosition';
 import useCompass from '../hooks/useCompass';
-import useGeolocation, {Geolocation} from '../hooks/useGeolocation';
+import useGeolocation from '../hooks/useGeolocation';
 import usePointNavigation from '../hooks/usePointNavigation';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import useTrackNavigation from '../hooks/useTrackNavigation';
@@ -45,41 +45,6 @@ mbtiles(maplibregl);
 // To raster-dem layers.
 // See https://github.com/mapbox/mapbox-gl-js/issues/3893
 maplibregl.RasterDEMTileSource.prototype.serialize = maplibregl.RasterTileSource.prototype.serialize;
-
-const sources: Sources = {
-  'geolocation': {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: []
-    }
-  },
-  'recordingTrack': {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: []
-    }
-  },
-  'navigateToPointLine': {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: []
-    }
-  },
-  'trackList': {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: []
-    }
-  },
-  'extraLayers': {
-    type: 'geojson',
-    data: 'extra-layers.json'
-  }
-};
 
 export type MainContentProps = {
   mapStyle: string | MapboxStyle,
@@ -146,7 +111,68 @@ const Map: FC<MainContentProps> = ({
 
   const [isLargeSize] = useIsLargeSize();
   const [gpsPositionColor] = useGpsPositionColor();
-  // Set blue dot location on geolocation updates
+
+  const sources: Sources = useMemo(() => {
+    const {latitude, longitude} = geolocation;
+
+    return {
+      'geolocation': {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: latitude && longitude ? [{
+            type: 'Feature',
+            properties: {...geolocation},
+            geometry: {
+              type: 'Point',
+              coordinates: [longitude, latitude]
+            }
+          }] : []
+        }
+      },
+      'recordingTrack': {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: recordingTrack.coordinates.length ? [{
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: recordingTrack.coordinates
+            }
+          }] : []
+        }
+      },
+      'navigateToPointLine': {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: pointNavigation.feature ? [pointNavigation.feature] : []
+        }
+      },
+      'trackList': {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: trackList.filter(track =>
+            track.geometry !== null &&
+            track.properties.isVisible
+          ).map(track => ({
+            ...track,
+            properties: {
+              ...track.properties,
+              color: track.properties.color || scopeColor
+            }
+          }) as Feature)
+        }
+      },
+      'extraLayers': {
+        type: 'geojson',
+        data: 'extra-layers.json'
+      }
+    };
+  }, [geolocation, recordingTrack.coordinates, pointNavigation.feature, trackList]);
 
   const layers: Array<AnyLayer> = useMemo(() => {
     return [{
@@ -237,34 +263,6 @@ const Map: FC<MainContentProps> = ({
       }
     }];
   }, [gpsPositionColor, visibleLayers]);
-
-  const setMapGeolocation = (map: MapboxMap | undefined, geolocation: Geolocation) => {
-    const {latitude, longitude} = geolocation;
-    const source = (map?.getSource('geolocation') as maplibregl.GeoJSONSource | undefined);
-    source?.setData({
-      type: 'FeatureCollection',
-      features: latitude && longitude ? [{
-        type: 'Feature',
-        properties: {...geolocation},
-        geometry: {
-          type: 'Point',
-          coordinates: [longitude, latitude]
-        }
-      }] : []
-    });
-  };
-
-  useEffect(() => {
-    setMapGeolocation(mapRef?.current?.getMap(), geolocation);
-  }, [geolocation, mapRef.current]);
-
-  useEffect(() => {
-    mapRef.current?.once('styledata', () => {
-      setMapGeolocation(mapRef.current?.getMap(), geolocation);
-      addMapRecordingTrack();
-      addMapTrackList();
-    });
-  }, [mapStyle]);
 
   ////// Handle orientation & navigation state transitions
   const handleOrientationClick = () => {
@@ -433,67 +431,6 @@ const Map: FC<MainContentProps> = ({
     // TODO cancel the point intent
     setPointIntent(undefined);
   };
-
-  const addMapRecordingTrack = () => {
-    if (mapRef?.current && recordingTrack.coordinates.length) {
-      const map = mapRef.current;
-      const source = (map?.getSource('recordingTrack') as maplibregl.GeoJSONSource | undefined);
-      source?.setData({
-        type: 'FeatureCollection',
-        features: [{
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'LineString',
-            coordinates: recordingTrack.coordinates
-          }
-        }]
-      });
-    }
-  };
-
-  useEffect(() => {
-    addMapRecordingTrack();
-  }, [recordingTrack.coordinates, mapRef.current]);
-
-  const addMapTrackList = () => {
-    if (mapRef?.current) {
-      const map = mapRef.current;
-      const source = (map?.getSource('trackList') as maplibregl.GeoJSONSource | undefined);
-      source?.setData({
-        type: 'FeatureCollection',
-        features: trackList.filter(track =>
-          track.geometry !== null &&
-          track.properties.isVisible
-        ).map(track => ({
-          ...track,
-          properties: {
-            ...track.properties,
-            color: track.properties.color || scopeColor
-          }
-        })) as Array<Feature>
-      });
-    }
-  };
-
-  useEffect(() => {
-    addMapTrackList();
-  }, [trackList, mapRef.current]);
-
-  const addNavigateToPoint = () => {
-    if (mapRef?.current) {
-      const map = mapRef.current;
-      const source = (map?.getSource('navigateToPointLine') as maplibregl.GeoJSONSource | undefined);
-      source?.setData({
-        type: 'FeatureCollection',
-        features: pointNavigation.feature ? [pointNavigation.feature] : []
-      });
-    }
-  };
-
-  useEffect(() => {
-    addNavigateToPoint();
-  }, [pointNavigation.feature, mapRef.current]);
 
   const handlePointNavigationFitBounds = () => {
     const bbox = pointNavigation.getBounds();
