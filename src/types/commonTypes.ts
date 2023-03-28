@@ -80,7 +80,7 @@ export enum LANGUAGE {
   'es'
 }
 
-export type Settings = {
+export interface Settings {
   gpsPositionColor: HEXColor,
   trackTolerance: number,
   isLeftHanded: boolean,
