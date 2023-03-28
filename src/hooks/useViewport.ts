@@ -1,5 +1,5 @@
 import {DEFAULT_VIEWPORT} from '../config';
-import {useCallback, useState} from 'react';
+import {useCallback} from 'react';
 import {singletonHook} from 'react-singleton-hook';
 import {WebMercatorViewport} from '@math.gl/web-mercator';
 import usePersistedState from './usePersistedState';

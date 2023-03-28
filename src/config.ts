@@ -1,4 +1,4 @@
-import {AppState, BaseMaps, HEXColor, SCOPE_FEATURES_PANEL_TAB} from './types/commonTypes';
+import {BaseMaps, HEXColor} from './types/commonTypes';
 import {ViewportType} from './hooks/useViewport';
 import {Capacitor} from '@capacitor/core';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';

@@ -2,7 +2,6 @@ import React, {FC, useEffect, useMemo, useState} from 'react';
 
 import {MapboxStyle} from 'react-map-gl';
 
-import {BaseMap} from '../types/commonTypes';
 import {BASEMAPS, IS_WEB} from '../config';
 import DownloadsManager from '../components/downloads/DownloadsManager';
 import useBasemapId from './appState/useBasemapId';

@@ -1,7 +1,5 @@
 import GeoJSON from 'geojson';
 import { MapboxStyle } from 'react-map-gl';
-import {LOCATION_STATUS} from '../components/buttons/FabButton';
-import {BASEMAPS} from '../config';
 
 export type BaseMap = {
   id: string
