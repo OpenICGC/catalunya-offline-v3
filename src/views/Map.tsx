@@ -38,6 +38,11 @@ import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
 import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 /*import {useStatus} from '@capacitor-community/network-react';*/
 
+const HEADER_HEIGHT = 48;
+const SEARCHBOX_HEIGHT = 64;
+const POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT= 144;
+const TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT = 283;
+
 mbtiles(maplibregl);
 
 // This is a hack to apply the fix
@@ -107,6 +112,11 @@ const Map: FC<MainContentProps> = ({
   const [isFabHidden, setFabHidden] =useState<boolean>(false);
   const [isSearchBoxHidden, setSearchBoxHidden] =useState<boolean>(false);
   const [isContextualMenuOpen, setContextualMenuOpen] = useState(false);
+
+  const [bottomMargin, setBottomMargin] = useState(0);
+  const [topMargin, setTopMargin] = useState(SEARCHBOX_HEIGHT);
+  const [fitBounds, setFitBounds] = useState<[number, number, number, number]>();
+
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
   const [isLargeSize] = useIsLargeSize();
@@ -433,40 +443,48 @@ const Map: FC<MainContentProps> = ({
   };
 
   const handlePointNavigationFitBounds = () => {
-    const bbox = pointNavigation.getBounds();
-    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50, bottom: 50 + bottomMargin, left: 50, right: 50}});
+    setFitBounds(pointNavigation.getBounds());
   };
 
   useEffect(() => {
+    if (recordingTrack.isRecording) {
+      setTopMargin(SEARCHBOX_HEIGHT + HEADER_HEIGHT);
+    } else {
+      setTopMargin(SEARCHBOX_HEIGHT);
+    }
+  }, [recordingTrack.isRecording]);
+
+  useEffect(() => {
     if (pointNavigation.target) {
-      const deferredFitBounds = async () => {
-        await new Promise(r => setTimeout(r, 300));
-        handlePointNavigationFitBounds();
-        setFabOpen(false);
-        setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
-      };
-      deferredFitBounds().catch(console.error);
+      setBottomMargin(POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT);
+      setFitBounds(pointNavigation.getBounds());
+    } else {
+      setBottomMargin(0);
     }
   }, [pointNavigation.target]);
 
   const handlePointNavigationShowDetails = () => pointNavigation.target && onShowPointDetails(pointNavigation.target.id);
 
   const handleTrackNavigationFitBounds = () => {
-    const bbox = trackNavigation.getBounds();
-    bbox && mapRef.current?.fitBounds(bbox, {padding: {top: 50, bottom: 50 + bottomMargin, left: 50, right: 50}});
+    setFitBounds(trackNavigation.getBounds());
   };
 
   useEffect(() => {
     if (trackNavigation.target) {
-      const deferredFitBounds = async () => {
-        await new Promise(r => setTimeout(r, 300));
-        handleTrackNavigationFitBounds();
-        setFabOpen(false);
-        setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
-      };
-      deferredFitBounds().catch(console.error);
+      setBottomMargin(TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT);
+      setFitBounds(trackNavigation.getBounds());
+    } else {
+      setBottomMargin(0);
     }
   }, [trackNavigation.target]);
+
+  useEffect(() => {
+    if (fitBounds !== undefined) {
+      mapRef.current?.fitBounds(fitBounds, {padding: {top: 50 + topMargin, bottom: 50 + bottomMargin, left: 50, right: 50}});
+      setFitBounds(undefined);
+      setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
+    }
+  }, [fitBounds]);
 
   const handleTrackNavigationShowDetails = () => trackNavigation.target && onShowTrackDetails(trackNavigation.target.id);
 
@@ -480,7 +498,6 @@ const Map: FC<MainContentProps> = ({
         : undefined;
   };
 
-  const [bottomMargin, setBottomMargin] = useState(0);
   const handleTopChanged = (height: number) => {
     setBottomMargin(height);
   };
