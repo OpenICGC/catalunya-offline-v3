@@ -16,8 +16,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-/*import {ColorFormat, ColorPicker} from 'material-ui-color';*/
-import {ColorFormat, ColorPicker, ColorValue} from 'mui-color';
+import {ColorFormat, ColorPicker, ColorType, ColorValue} from 'mui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {ClickAwayListener} from '@mui/material';
 import {COLOR_PALETTES} from '../../config';
@@ -106,9 +105,8 @@ const ListItem: FC<ListItemProps> = memo(({
   //EDIT
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(itemId, e.target.value);
   const handleColorChange = (color: ColorValue) => {
-    console.log('color', color);
-    //onColorChange(itemId, `#${color.hex}`);
-    onColorChange(itemId, '#fabada');
+    const hex = (color as ColorType).hex;
+    onColorChange(itemId, `#${hex}`);
   };
 
   // Stop editing

@@ -21,7 +21,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ButtonGroup from '@geomatico/geocomponents/Forms/ButtonGroup';
 import ColorSwitch from '@geomatico/geocomponents/Forms/ColorSwitch';
 
-import {ColorFormat, ColorPicker, ColorPalette, ColorValue} from 'mui-color';
+import {ColorFormat, ColorPicker, ColorPalette, ColorValue, ColorType} from 'mui-color';
 
 //CATOFFLINE
 import InputNumber from './InputNumber';
@@ -156,9 +156,8 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
   }), [isLargeSize]);
 
   const handleGpsPositionColorChange = (color: ColorValue) => {
-    console.log('color', color);
-    /*onGpsPositionColorChange(`#${color.hex}`);*/
-    onGpsPositionColorChange('#fabada');
+    const hex = (color as ColorType).hex;
+    onGpsPositionColorChange(`#${hex}`);
   };
   const handlePaletteChange = (e: SelectChangeEvent) => onColorPaletteChange(e.target.value);
 
