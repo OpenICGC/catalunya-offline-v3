@@ -443,6 +443,7 @@ const Map: FC<MainContentProps> = ({
         await new Promise(r => setTimeout(r, 300));
         handlePointNavigationFitBounds();
         setFabOpen(false);
+        setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
       };
       deferredFitBounds().catch(console.error);
     }
@@ -461,6 +462,7 @@ const Map: FC<MainContentProps> = ({
         await new Promise(r => setTimeout(r, 300));
         handleTrackNavigationFitBounds();
         setFabOpen(false);
+        setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
       };
       deferredFitBounds().catch(console.error);
     }
