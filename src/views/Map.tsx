@@ -482,6 +482,7 @@ const Map: FC<MainContentProps> = ({
     if (fitBounds !== undefined) {
       mapRef.current?.fitBounds(fitBounds, {padding: {top: 50 + topMargin, bottom: 50 + bottomMargin, left: 50, right: 50}});
       setFitBounds(undefined);
+      setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
     }
   }, [fitBounds]);
 
