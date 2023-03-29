@@ -442,17 +442,12 @@ const Map: FC<MainContentProps> = ({
     setPointIntent(undefined);
   };
 
-  const handlePointNavigationStop = () => {
-    pointNavigation.stop();
-    setBottomMargin(0);
-  };
-
   const handlePointNavigationFitBounds = () => {
     setFitBounds(pointNavigation.getBounds());
   };
 
   useEffect(() => {
-    if(recordingTrack.isRecording){
+    if (recordingTrack.isRecording) {
       setTopMargin(SEARCHBOX_HEIGHT + HEADER_HEIGHT);
     } else {
       setTopMargin(SEARCHBOX_HEIGHT);
@@ -463,14 +458,12 @@ const Map: FC<MainContentProps> = ({
     if (pointNavigation.target) {
       setBottomMargin(POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT);
       setFitBounds(pointNavigation.getBounds());
+    } else {
+      setBottomMargin(0);
     }
   }, [pointNavigation.target]);
 
   const handlePointNavigationShowDetails = () => pointNavigation.target && onShowPointDetails(pointNavigation.target.id);
-  const handleTrackNavigationStop = () => {
-    trackNavigation.stop();
-    setBottomMargin(0);
-  };
 
   const handleTrackNavigationFitBounds = () => {
     setFitBounds(trackNavigation.getBounds());
@@ -480,6 +473,8 @@ const Map: FC<MainContentProps> = ({
     if (trackNavigation.target) {
       setBottomMargin(TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT);
       setFitBounds(trackNavigation.getBounds());
+    } else {
+      setBottomMargin(0);
     }
   }, [trackNavigation.target]);
 
@@ -595,7 +590,7 @@ const Map: FC<MainContentProps> = ({
       color={pointNavigation.target.color}
       bearing={pointNavigation.feature?.properties.bearing || 0}
       distance={pointNavigation.feature?.properties.distance || 0}
-      onStop={handlePointNavigationStop}
+      onStop={pointNavigation.stop}
       onFitBounds={handlePointNavigationFitBounds}
       onShowDetails={handlePointNavigationShowDetails}
       onTopChanged={handleTopChanged}
@@ -608,7 +603,7 @@ const Map: FC<MainContentProps> = ({
       isOutOfTrack={trackNavigation.isOutOfTrack}
       isReverseDirection={trackNavigation.isReverseDirection}
       onReverseDirection={trackNavigation.toggleReverseDirection}
-      onStop={handleTrackNavigationStop}
+      onStop={trackNavigation.stop}
       onFitBounds={handleTrackNavigationFitBounds}
       onShowDetails={handleTrackNavigationShowDetails}
       onTopChanged={handleTopChanged}
