@@ -21,7 +21,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ButtonGroup from '@geomatico/geocomponents/Forms/ButtonGroup';
 import ColorSwitch from '@geomatico/geocomponents/Forms/ColorSwitch';
 
-import {ColorFormat, ColorPicker, ColorPalette} from 'material-ui-color';
+import {ColorFormat, ColorPicker, ColorPalette, ColorValue, ColorType} from 'mui-color';
 
 //CATOFFLINE
 import InputNumber from './InputNumber';
@@ -121,7 +121,7 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
 }) => {
   
   const {t} = useTranslation();
-  
+
   const smallButtonSx = useMemo(() => ({
     width: 48,
     height: 48,
@@ -154,14 +154,16 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
       color: (theme: Theme) => theme.palette.getContrastText('#424242')
     }
   }), [isLargeSize]);
-  
-  
-  const handleGpsPositionColorChange = (e: {hex: string}) => onGpsPositionColorChange(`#${e.hex}`);
+
+  const handleGpsPositionColorChange = (color: ColorValue) => {
+    const hex = (color as ColorType).hex;
+    onGpsPositionColorChange(`#${hex}`);
+  };
   const handlePaletteChange = (e: SelectChangeEvent) => onColorPaletteChange(e.target.value);
 
   const handleLanguageChange = (lang: LANGUAGE | null) => lang !== null && onLanguageChange(lang);
   const handleClose = () => onClose();
-  
+
   return <Dialog open={true} fullWidth PaperProps={{sx: {height: 'auto', minWidth: '330px', m: 0, p:0}}} onClose={handleClose}>
     <DialogTitle sx={dialogSx}>
       <SettingsIcon sx={{mr: 2}}/>
@@ -180,23 +182,25 @@ const SettingsDialog: FC<SettingsDialogProps> = ({
     </DialogTitle>
     <DialogContent sx={{mt: 2, py: 2, px: 0}}>
       <Typography variant='caption' sx={{p: 2, fontWeight: 900}}>{t('settings.navigation').toUpperCase()}</Typography>
-      <SettingGroup id='position-color'>
-        <Typography>{t('settings.positionColor')}</Typography>
-        <ColorPicker
-          hideTextfield
-          disableAlpha
-          value={gpsPositionColor}
-          inputFormats={inputFormats}
-          onChange={handleGpsPositionColorChange}
-          palette={asColorPickerPalette(colorPalette)}
-        />
-      </SettingGroup>
+      <Stack sx={{display: 'flex', flexDirection: 'column'}} id='position-color'>
+        <SettingGroup>
+          <Typography>{t('settings.positionColor')}</Typography>
+          <ColorPicker 
+            hideTextfield
+            disableAlpha
+            value={gpsPositionColor}
+            inputFormats={inputFormats}
+            onChange={handleGpsPositionColorChange}
+            palette={asColorPickerPalette(colorPalette)}
+          />
+        </SettingGroup>
+      </Stack>
       <SettingGroup id='tolerance'>
         <Typography>{t('settings.trackTolerance')}</Typography>
         <InputNumber onChange={onTrackToleranceChange} value={trackTolerance}/>
       </SettingGroup>
       <Divider sx={{my: 1}}/>
-      <Typography variant='caption' sx={{p: 2, fontWeight: 900}}>{t('settings.accessibility').toUpperCase()}</Typography>
+      <Typography variant='caption' sx={{p: 2, fontWeight: 900, mt: 20}}>{t('settings.accessibility').toUpperCase()}</Typography>
       <SettingGroup id='leftHanded'>
         <Typography>{t('settings.leftHanded')}</Typography>
         <ColorSwitch color={primaryColor} checked={isLeftHanded} onChange={onLeftHandedChange}/>
