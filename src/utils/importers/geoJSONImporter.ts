@@ -9,7 +9,7 @@ interface ScopeImportResults {
   numberOfErrors: number
 }
 
-export const GeoJSONImport = (data: string | GeoJSON.FeatureCollection) => {
+const geoJSONImporter = (data: string | GeoJSON.FeatureCollection) => {
   const hexColorRegex = /^#([0-9a-f]{3}){1,2}$/i;
   const objImport: ScopeImportResults = {
     points: [],
@@ -61,3 +61,5 @@ export const GeoJSONImport = (data: string | GeoJSON.FeatureCollection) => {
   });
   return objImport;
 };
+
+export default geoJSONImporter;

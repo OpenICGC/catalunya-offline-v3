@@ -4,7 +4,7 @@ import {Position} from 'geojson';
 
 describe('getAccumulatedAscent', () => {
 
-  it('getAccumulatedAscent should get the ascending accumulative difference', () => {
+  it('should get the ascending accumulative difference', () => {
 
     // GIVEN
     const sampleCoordinates: Position[] = [

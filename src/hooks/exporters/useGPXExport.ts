@@ -37,7 +37,7 @@ export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?
             return new Point(coord[1], coord[0],
               {
                 ele: coord[2],
-                time: new Date(coord[3])
+                time: new Date(coord[3] * 1000) // from seconds to milliseconds
               });
           } else if (coord[2]) {
             return new Point(coord[1], coord[0],
@@ -53,7 +53,7 @@ export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?
           new Point(point.geometry.coordinates[1], point.geometry.coordinates[0],
             {
               ele: point.geometry.coordinates[2] || undefined,
-              time: new Date(point.properties.timestamp) || undefined,
+              time: new Date(point.properties.timestamp) || undefined, // already in milliseconds
               name: point.properties.name,
               desc: point.properties.description
             }));
@@ -81,7 +81,7 @@ export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?
             return new Point(coord[1], coord[0],
               {
                 ele: coord[2],
-                time: new Date(coord[3])
+                time: new Date(coord[3] * 1000) // from seconds to milliseconds
               });
           } else if (coord[2]) {
             return new Point(coord[1], coord[0],

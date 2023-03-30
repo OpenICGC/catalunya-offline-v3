@@ -1,7 +1,7 @@
 import * as converter from '@tmcw/togeojson';
 import {DOMParser} from 'xmldom';
 import {ScopePoint, ScopeTrack} from '../../types/commonTypes';
-import {GeoJSONImport} from './GeoJSONImport';
+import geoJSONImporter from './geoJSONImporter';
 import {Feature, FeatureCollection} from 'geojson';
 
 interface ScopeImportResults {
@@ -10,7 +10,7 @@ interface ScopeImportResults {
   numberOfErrors: number
 }
 
-export const KmlImport: (data: string) => ScopeImportResults = (data) => {
+const kmlImporter: (data: string) => ScopeImportResults = (data) => {
   const kml = new DOMParser().parseFromString(data, 'utf-8');
   const geoJsonFromConverter = converter.kml(kml);
   const geoJsonForImporter: FeatureCollection = {
@@ -39,6 +39,8 @@ export const KmlImport: (data: string) => ScopeImportResults = (data) => {
       numberOfErrors: 1
     };
   } else {
-    return GeoJSONImport(geoJsonForImporter);
+    return geoJSONImporter(geoJsonForImporter);
   }
 };
+
+export default kmlImporter;
