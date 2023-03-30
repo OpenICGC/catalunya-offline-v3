@@ -65,6 +65,7 @@ const useRecordingTrackImpl = () => {
   };
 
   const pause = () => {
+    stopWatch.pause();
     setState(
       prevState => ({
         ...prevState,
@@ -74,6 +75,7 @@ const useRecordingTrackImpl = () => {
   };
 
   const resume = () => {
+    stopWatch.resume();
     setState(
       prevState => ({
         ...prevState,
