@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {Position} from 'geojson';
 import useGeolocation from './useGeolocation';
 import {singletonHook} from 'react-singleton-hook';
-import useStopWatch from './useStopwatch';
+import useStopWatch from './useStopWatch';
 
 type stopFn = (finalTrack: Array<Position>) => void;
 
@@ -23,6 +23,8 @@ const initialState = {
   coordinates: []
 };
 
+const timeCoordinate = () => Math.round(new Date().getTime() / 1000); // timestamp in seconds as fourth coordinate
+
 const useRecordingTrackImpl = () => {
   const [state, setState] = useState<recordingState>(initialState);
   const {geolocation} = useGeolocation(true);
@@ -30,7 +32,7 @@ const useRecordingTrackImpl = () => {
 
   useEffect(() => {
     if (geolocation.latitude !== null && geolocation.longitude !== null) {
-      const newPosition: Position = [geolocation.longitude, geolocation.latitude, geolocation.altitude || 0, stopWatch.time];
+      const newPosition: Position = [geolocation.longitude, geolocation.latitude, geolocation.altitude || 0, timeCoordinate()];
       setState(prevState => {
         if (prevState.isRecording && !prevState.isPaused) {
           return {
@@ -55,7 +57,7 @@ const useRecordingTrackImpl = () => {
         isRecording: true,
         onStop,
         coordinates: geolocation.longitude && geolocation.latitude ?
-          [[geolocation.longitude, geolocation.latitude, geolocation.altitude || 0, 0]] :
+          [[geolocation.longitude, geolocation.latitude, geolocation.altitude || 0, timeCoordinate()]] :
           []
       });
       return true;
@@ -63,7 +65,6 @@ const useRecordingTrackImpl = () => {
   };
 
   const pause = () => {
-    stopWatch.pause();
     setState(
       prevState => ({
         ...prevState,
@@ -73,7 +74,6 @@ const useRecordingTrackImpl = () => {
   };
 
   const resume = () => {
-    stopWatch.resume();
     setState(
       prevState => ({
         ...prevState,

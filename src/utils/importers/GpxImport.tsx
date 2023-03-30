@@ -30,7 +30,7 @@ export const GpxImport: (data: string) => ScopeImportResults = (data) => {
         }; 
       } else if (feature.geometry.type === 'LineString') {
         if(feature?.properties?.coordinateProperties.times){
-          const arrayOfTimestamps = feature.properties.coordinateProperties.times.map((time: string | number | Date) => Math.floor(new Date(time).getTime() / 1000));
+          const arrayOfTimestamps = feature.properties.coordinateProperties.times.map((time: string | number | Date) => Math.round(new Date(time).getTime() / 1000));  // timestamp in seconds as fourth coord
           const arrayOfCoordinates = feature?.geometry?.coordinates;
     
           const coordinatesWithTimestamp = arrayOfCoordinates.map((coord: GeoJSON.Position, i: number) => {

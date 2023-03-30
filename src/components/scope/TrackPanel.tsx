@@ -142,7 +142,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
       ...prevTrack,
       properties: {
         ...prevTrack.properties,
-        timestamp: value
+        timestamp: value // timestamp in milliseconds
       }
     })), []);
 
