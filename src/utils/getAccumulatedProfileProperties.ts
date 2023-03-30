@@ -4,6 +4,9 @@ import {Position} from 'geojson';
 
 export const getAccumulatedProfileProperties = (coordinates?: Position[]) => {
   if (coordinates) {
+    const startTimeInSec = coordinates.length > 0 && coordinates[0][3] !== undefined ? coordinates[0][3] : undefined;
+    const endTimeInSec = coordinates.length > 0 && coordinates[coordinates.length - 1][3] !== undefined ? coordinates[coordinates.length - 1][3] : undefined;
+    const elapsedTimeInSec = startTimeInSec !== undefined && endTimeInSec !== undefined && endTimeInSec > startTimeInSec ? endTimeInSec - startTimeInSec : undefined;
     return coordinates.reduce(
       (accum, actualPosition, i, coordinates) => {
         if (i > 0) {
@@ -25,7 +28,7 @@ export const getAccumulatedProfileProperties = (coordinates?: Position[]) => {
         ascent: 0,
         descent: 0,
         distance: 0,
-        time: coordinates.length > 0 && coordinates[coordinates.length - 1][3] ? coordinates[coordinates.length - 1][3] : undefined
+        time: elapsedTimeInSec
       });
   } else return undefined;
 };

@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {KmlImport} from './KmlImport';
+import kmlImporter from './kmlImporter';
 
 import sampleKmlFromWikiloc from '../../components/fixtures/sampleKmlFromWikiloc.xml';
 import sampleKmlFromRutaBike from '../../components/fixtures/sampleKmlFromRutaBike.xml';
@@ -189,14 +189,14 @@ const expectedImportedFromCatoffline = {
   numberOfErrors: 0
 };
 
-describe('KmlImport', () => {
+describe('kmlImporter', () => {
 
-  it('KmlImport should import a Kml from Catoffline', async () => {
+  it('should import a Kml from Catoffline', async () => {
     //GIVEN
     const data = kmlSample_01;
 
     //WHEN
-    const computedData = KmlImport(data);
+    const computedData = kmlImporter(data);
 
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -246,12 +246,12 @@ describe('KmlImport', () => {
 
   });
 
-  it('KmlImport should import a Kml from Wikiloc', async () => {
+  it('should import a Kml from Wikiloc', async () => {
     //GIVEN
     const data = sampleKmlFromWikiloc;
 
     //WHEN
-    const computedData = KmlImport(data);
+    const computedData = kmlImporter(data);
 
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -296,12 +296,12 @@ describe('KmlImport', () => {
 
   });
 
-  it('KmlImport should import a Kml from RutaBike', async () => {
+  it('should import a Kml from RutaBike', async () => {
     //GIVEN
     const data = sampleKmlFromRutaBike;
 
     //WHEN
-    const computedData = KmlImport(data);
+    const computedData = kmlImporter(data);
 
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -352,12 +352,9 @@ describe('KmlImport', () => {
 
   });
 
-  it('KmlImport should import a Kml from Google Earth', async () => {
-    //GIVEN
-    const data = sampleKmlFromGEarth;
-
+  it('should import a Kml from Google Earth', async () => {
     //WHEN
-    const computedData = KmlImport(data);
+    const computedData = kmlImporter(sampleKmlFromGEarth);
 
     const partialComputedData = {
       points: computedData.points.map(point => (

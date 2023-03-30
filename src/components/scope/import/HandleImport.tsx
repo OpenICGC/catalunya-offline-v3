@@ -1,9 +1,9 @@
 import {FC, useEffect} from 'react';
 import {Error, UUID} from '../../../types/commonTypes';
 import useImport, {ImportedFile} from '../../../hooks/useImport';
-import {GeoJSONImport} from '../../../utils/importers/GeoJSONImport';
-import {GpxImport} from '../../../utils/importers/GpxImport';
-import {KmlImport} from '../../../utils/importers/KmlImport';
+import geoJSONImporter from '../../../utils/importers/geoJSONImporter';
+import gpxImporter from '../../../utils/importers/gpxImporter';
+import kmlImporter from '../../../utils/importers/kmlImporter';
 import {useScopePoints, useScopeTracks} from '../../../hooks/useStoredCollections';
 import {MAX_ALLOWED_IMPORT_FEATURES} from '../../../config';
 import {useTranslation} from 'react-i18next';
@@ -29,9 +29,9 @@ const HandleImport: FC<HandleImportProps> = ({
   useEffect(() => {
     const importData = async (file: ImportedFile) => {
       const importer =
-        file.name.endsWith('geojson') ? GeoJSONImport :
-          file.name.endsWith('gpx') ? GpxImport :
-            file.name.endsWith('kml') ? KmlImport :
+        file.name.endsWith('geojson') ? geoJSONImporter :
+          file.name.endsWith('gpx') ? gpxImporter :
+            file.name.endsWith('kml') ? kmlImporter :
               undefined;
       if (importer) {
         const {points, tracks, numberOfErrors} = await importer(file.dataDecoded);

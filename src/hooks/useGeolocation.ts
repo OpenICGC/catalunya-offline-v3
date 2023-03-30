@@ -35,7 +35,7 @@ const nullGeolocation = () => ({
   latitude: null,
   longitude: null,
   speed: null,
-  timestamp: Date.now()
+  timestamp: Date.now() // milliseconds
 });
 
 const useGeolocation = (watchInBackground = false) => {

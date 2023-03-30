@@ -84,7 +84,7 @@ const DateInput: FC<DateInputProps> = ({
 
   const handleChange = (value: Moment | null) => {
     if(value !== null) {
-      onChange(value.toDate().getTime());
+      onChange(value.toDate().getTime()); // timestamp in milliseconds
     }
   };
   

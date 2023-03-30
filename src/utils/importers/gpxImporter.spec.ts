@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {GpxImport} from './GpxImport';
+import gpxImporter from './gpxImporter';
 import sampleGpxTrackFromCatOffline from '../../components/fixtures/sampleGpxTrackFromCatOffline.xml';
 import sampleGpxTrackAndPointFromCatOffline from '../../components/fixtures/sampleGpxTrackAndPointFromCatOffline.xml';
 import sampleGpxFromRutaBike from '../../components/fixtures/sampleGpxFromRutaBike.xml';
@@ -191,14 +191,14 @@ const expectedMultiPolygon = {
   ],
   numberOfErrors: 0
 };
-describe('GpxImport', () => {
+describe('gpxImporter', () => {
     
-  it('GpxImport should import a Gpx Track and Point from CatOffline', async () => {
+  it('should import a Gpx Track and Point from CatOffline', async () => {
     //GIVEN
     const data = sampleGpxTrackAndPointFromCatOffline;
     
     //WHEN
-    const computedData = GpxImport(data);
+    const computedData = gpxImporter(data);
 
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -243,12 +243,12 @@ describe('GpxImport', () => {
       
   });
 
-  it('GpxImport should import a Gpx Track from CatOffline', async () => {
+  it('should import a Gpx Track from CatOffline', async () => {
     //GIVEN
     const data = sampleGpxTrackFromCatOffline;
 
     //WHEN
-    const computedData = GpxImport(data);
+    const computedData = gpxImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -281,12 +281,12 @@ describe('GpxImport', () => {
 
   });
 
-  it('GpxImport should import a Gpx Track from RutaBike', async () => {
+  it('should import a Gpx Track from RutaBike', async () => {
     //GIVEN
     const data = sampleGpxFromRutaBike;
 
     //WHEN
-    const computedData = GpxImport(data);
+    const computedData = gpxImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -317,12 +317,12 @@ describe('GpxImport', () => {
     );
   });
 
-  it('GpxImport should import a Gpx Track from Wikiloc', async () => {
+  it('should import a Gpx Track from Wikiloc', async () => {
     //GIVEN
     const data = sampleGpxFromWikiloc;
 
     //WHEN
-    const computedData = GpxImport(data);
+    const computedData = gpxImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -354,12 +354,12 @@ describe('GpxImport', () => {
     );
   });
 
-  it('GpxImport should import a Gpx Track and Point from Wikiloc', async () => {
+  it('should import a Gpx Track and Point from Wikiloc', async () => {
     //GIVEN
     const data = sampleGpxFromWikiloc;
 
     //WHEN
-    const computedData = GpxImport(data);
+    const computedData = gpxImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -391,36 +391,36 @@ describe('GpxImport', () => {
     );
   });
 
-  it('GpxImport should not import a string', async () => {
+  it('should not import a string', async () => {
     //GIVEN
     const data = 'hello world';
 
     //WHEN
-    const computedData = GpxImport(data);
+    const computedData = gpxImporter(data);
 
     // THEN
     expect(computedData).to.deep.equal(expectedImportedError);
 
   });
 
-  it('GpxImport should not import a kml', async () => {
+  it('should not import a kml', async () => {
     //GIVEN
     const data = kmlSample_01;
 
     //WHEN
-    const computedData = GpxImport(data);
+    const computedData = gpxImporter(data);
 
     // THEN
     expect(computedData).to.deep.equal(expectedImportedError);
 
   });
 
-  it('GpxImport should not import a MultyPoligon gpx', async () => {
+  it('should not import a MultyPoligon gpx', async () => {
     //GIVEN
     const data = sampleMultiPolygon;
 
     //WHEN
-    const computedData = GpxImport(data);
+    const computedData = gpxImporter(data);
 
     const partialComputedData = {
       points: [],

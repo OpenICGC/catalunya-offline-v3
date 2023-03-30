@@ -180,7 +180,7 @@ const PointPanel: FC<PointPanelProps> = ({
       ...prevPoint,
       properties: {
         ...prevPoint.properties,
-        timestamp: value
+        timestamp: value // timestamp in milliseconds
       }
     })), []);
 

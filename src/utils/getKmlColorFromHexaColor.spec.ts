@@ -3,7 +3,7 @@ import {getKmlColorFromHexaColor} from './getKmlColorFromHexaColor';
 
 describe('getKmlColorFromHexaColor', () => {
   
-  it('getKmlColorFromHexaColor should convert hexadecimal color to kml color', async () => {
+  it('should convert hexadecimal color to kml color', async () => {
 
     // GIVEN
     const hexaColor = '#123456';
