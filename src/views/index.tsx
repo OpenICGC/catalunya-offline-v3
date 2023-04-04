@@ -112,7 +112,6 @@ const Index: FC = () => {
 
   const mainContent = <Map
     mapStyle={mapStyle}
-    manager={manager}
     onManagerChanged={handleManagerChanged}
     selectedScopeId={scope}
     onScopeSelected={setScope}
