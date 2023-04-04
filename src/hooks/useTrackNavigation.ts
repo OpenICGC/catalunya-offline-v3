@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Position, LineString} from 'geojson';
 import {singletonHook} from 'react-singleton-hook';
 import {Scope, ScopeTrack, UUID} from '../types/commonTypes';
@@ -45,6 +45,19 @@ const useTrackNavigationImpl = () => {
   const snappedDistance: number | undefined = snappedFeature?.properties.dist ? snappedFeature.properties.dist * 1000 : undefined;
   const currentPositionIndex: number | undefined = snappedFeature?.properties?.index;
   const isOutOfTrack: boolean = snappedDistance ? snappedDistance > trackTolerance : false;
+
+  useEffect(() => {
+    if (scopeTrack && !scopeTrack.properties.isVisible) {
+      trackStore.update({
+        ...scopeTrack,
+        properties: {
+          ...scopeTrack.properties,
+          isVisible: true
+        }
+      });
+    }
+  }, [scopeTrack]);
+
 
   const target = scopeTrack && toTrack ? {
     id: scopeTrack.id,
