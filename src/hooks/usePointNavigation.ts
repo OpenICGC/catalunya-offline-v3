@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Position} from 'geojson';
 import {singletonHook} from 'react-singleton-hook';
 import {Scope, ScopePoint, UUID} from '../types/commonTypes';
@@ -33,6 +33,18 @@ const usePointNavigationImpl = () => {
   const isNavigating: boolean = fromPosition != undefined && toPosition != undefined;
 
   const feature = fromPosition && toPosition ? navigateToPointFeature(fromPosition, toPosition) : undefined;
+
+  useEffect(() => {
+    if (scopePoint && !scopePoint.properties.isVisible) {
+      pointStore.update({
+        ...scopePoint,
+        properties: {
+          ...scopePoint.properties,
+          isVisible: true
+        }
+      });
+    }
+  }, [scopePoint]);
 
   const target = scopePoint ? {
     id: scopePoint.id,
