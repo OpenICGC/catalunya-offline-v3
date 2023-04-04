@@ -58,10 +58,8 @@ export type MainContentProps = {
   onScopeSelected: (scopeId: UUID) => void,
   selectedPointId?: UUID,
   onPointSelected: (pointId: UUID) => void,
-  onShowPointDetails: (pointId: UUID) => void,
   selectedTrackId?: UUID,
-  //onTrackSelected: (trackId: UUID) => void,
-  onShowTrackDetails: (trackId: UUID) => void,
+  onTrackSelected: (trackId: UUID) => void,
   visibleLayers: Array<number>,
 };
 
@@ -72,10 +70,8 @@ const Map: FC<MainContentProps> = ({
   onScopeSelected,
   selectedPointId,
   onPointSelected,
-  onShowPointDetails,
   selectedTrackId,
-  //onTrackSelected, // TODO
-  onShowTrackDetails,
+  onTrackSelected,
   visibleLayers
 }) => {
   const mapRef = useRef<MapRef>(null);
@@ -417,7 +413,7 @@ const Map: FC<MainContentProps> = ({
       longTouchTimer.current = undefined;
     }
   };
-  const handleClick = () => {
+  const handleMapClick = () => {
     setContextualMenuOpen(false);
     setSearchBoxHidden(!isSearchBoxHidden);
     setFabOpen(false);
@@ -461,7 +457,7 @@ const Map: FC<MainContentProps> = ({
     }
   }, [pointNavigation.target]);
 
-  const handlePointNavigationShowDetails = () => pointNavigation.target && onShowPointDetails(pointNavigation.target.id);
+  const handlePointNavigationShowDetails = () => pointNavigation.target && onPointSelected(pointNavigation.target.id);
 
   const handleTrackNavigationFitBounds = () => {
     setFitBounds(trackNavigation.getBounds());
@@ -484,7 +480,7 @@ const Map: FC<MainContentProps> = ({
     }
   }, [fitBounds]);
 
-  const handleTrackNavigationShowDetails = () => trackNavigation.target && onShowTrackDetails(trackNavigation.target.id);
+  const handleTrackNavigationShowDetails = () => trackNavigation.target && onTrackSelected(trackNavigation.target.id);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
   const [isAboutDialogOpen, setAboutDialogOpen] =useState<boolean>(false);
@@ -543,7 +539,7 @@ const Map: FC<MainContentProps> = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={clearLongTouchTimer}
       onTouchCancel={clearLongTouchTimer}
-      onClick={handleClick}
+      onClick={handleMapClick}
       onDblClick={handleDoubleClick}
       doubleClickZoom={false}
       attributionControl={false}
