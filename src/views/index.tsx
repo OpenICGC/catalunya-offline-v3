@@ -61,19 +61,19 @@ const Index: FC = () => {
   }, [manager]);
 
   useEffect(() => {
-    setSidePanelOpen(!isEditingPosition); // Closes panel when editing starts, and opens it when editing stops.
+    isEditingPosition && setSidePanelOpen(false); // Closes panel when editing starts
   }, [isEditingPosition]);
 
   useEffect(() => {
-    setSidePanelOpen(!isRecordingTrack); // Closes panel when recording starts, and opens it when recording stops.
+    isRecordingTrack && setSidePanelOpen(false); // Closes panel when recording starts
   }, [isRecordingTrack]);
 
   useEffect(() => {
-    pointNavigatingTo && setSidePanelOpen(false); // Closes panel when target point changes.
+    pointNavigatingTo && setSidePanelOpen(false); // Closes panel when point navigation starts
   }, [pointNavigatingTo?.id]);
 
   useEffect(() => {
-    trackNavigatingTo && setSidePanelOpen(false); // Closes panel when target track changes.
+    trackNavigatingTo && setSidePanelOpen(false); // Closes panel when track navigation starts
   }, [trackNavigatingTo?.id]);
 
   const handleSelectPoint = (pointId: UUID) => {
