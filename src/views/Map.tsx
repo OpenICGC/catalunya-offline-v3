@@ -53,7 +53,6 @@ maplibregl.RasterDEMTileSource.prototype.serialize = maplibregl.RasterTileSource
 
 export type MainContentProps = {
   mapStyle: string | MapboxStyle,
-  manager: Manager,
   onManagerChanged: (newManager: Manager) => void,
   selectedScopeId?: UUID,
   onScopeSelected: (scopeId: UUID) => void,
@@ -68,7 +67,6 @@ export type MainContentProps = {
 
 const Map: FC<MainContentProps> = ({
   mapStyle,
-  manager,
   onManagerChanged,
   selectedScopeId,
   onScopeSelected,
@@ -353,7 +351,7 @@ const Map: FC<MainContentProps> = ({
   }, [heading]);
 
   const changeManager = (clicked: Manager) => {
-    onManagerChanged(clicked === manager ? undefined : clicked);
+    onManagerChanged(clicked);
     setFabOpen(false);
   };
 
