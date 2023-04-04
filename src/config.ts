@@ -67,6 +67,16 @@ export const BASEMAPS: BaseMaps = [{
   onlineStyle: 'mapstyles/bt5m-nice-alti.json',
   attribution: 'Institut Cartogràfic i Geològic de Catalunya'
 },{
+  id: 'outdoor',
+  labels: {
+    ca: 'MapTiler Outdoor',
+    en: 'MapTiler Outdoor',
+    es: 'MapTiler Outdoor'
+  },
+  thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
+  onlineStyle: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key='+process.env.MAPTILER_API_KEY,
+  attribution: 'MapTiler, OpenStreetMap'
+},{
   id: 'galicia-osmbright',
   labels: {
     ca: 'OSM Bright Galicia',

@@ -76,14 +76,16 @@ const Index: FC = () => {
     trackNavigatingTo && setSidePanelOpen(false); // Closes panel when target track changes.
   }, [trackNavigatingTo?.id]);
 
-  const handleShowPointDetails = (pointId: UUID) => {
+  const handleSelectPoint = (pointId: UUID) => {
+    setTrack(undefined);
     setPoint(pointId);
-    setSidePanelOpen(true);
+    handleManagerChanged('SCOPES');
   };
 
-  const handleShowTrackDetails = (trackId: UUID) => {
+  const handleSelectTrack = (trackId: UUID) => {
+    setPoint(undefined);
     setTrack(trackId);
-    setSidePanelOpen(true);
+    handleManagerChanged('SCOPES');
   };
 
   const sidePanelContent = manager
@@ -116,11 +118,9 @@ const Index: FC = () => {
     selectedScopeId={scope}
     onScopeSelected={setScope}
     selectedPointId={point}
-    onPointSelected={setPoint}
-    onShowPointDetails={handleShowPointDetails}
+    onPointSelected={handleSelectPoint}
     selectedTrackId={track}
-    //onTrackSelected={setTrack}
-    onShowTrackDetails={handleShowTrackDetails}
+    onTrackSelected={handleSelectTrack}
     visibleLayers={visibleLayers}
   />;
 
