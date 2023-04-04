@@ -51,6 +51,11 @@ const Index: FC = () => {
 
   const toggleSidePanel = () => setSidePanelOpen(!isSidePanelOpen);
 
+  const handleManagerChanged = (manager: Manager) => {
+    setManager(manager);
+    setSidePanelOpen(true);
+  };
+
   useEffect(() => {
     setSidePanelOpen(!!manager);
   }, [manager]);
@@ -108,7 +113,7 @@ const Index: FC = () => {
   const mainContent = <Map
     mapStyle={mapStyle}
     manager={manager}
-    onManagerChanged={setManager}
+    onManagerChanged={handleManagerChanged}
     selectedScopeId={scope}
     onScopeSelected={setScope}
     selectedPointId={point}

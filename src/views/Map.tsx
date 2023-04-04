@@ -353,7 +353,7 @@ const Map: FC<MainContentProps> = ({
   }, [heading]);
 
   const changeManager = (clicked: Manager) => {
-    onManagerChanged(clicked === manager ? undefined : clicked);
+    onManagerChanged(clicked);
     setFabOpen(false);
   };
 
