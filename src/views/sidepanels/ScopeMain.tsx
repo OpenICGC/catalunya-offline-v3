@@ -89,9 +89,12 @@ const ScopeMain: FC<ScopeMainProps> = ({
   };*/
 
   const closeHandleExport = () => setSharingScopeId(undefined);
-  const closeHandleImport = () => setImportingScopeId(undefined);
+  const handleImportSuccess = () => {
+    importingScopeId && onScopeSelected(importingScopeId);
+    setImportingScopeId(undefined);
+  };
   const handleImportError = (error: Error) => {
-    closeHandleImport();
+    setImportingScopeId(undefined);
     setImportErrors(error);
   };
 
@@ -121,7 +124,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
         importingScopeId &&
         <HandleImport
           scopeId={importingScopeId}
-          onImportEnds={closeHandleImport}
+          onSuccess={handleImportSuccess}
           onError={handleImportError}
         />
       }

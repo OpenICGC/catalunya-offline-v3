@@ -11,13 +11,13 @@ import {useTranslation} from 'react-i18next';
 
 export type HandleImportProps = {
   scopeId: UUID,
-  onImportEnds: () => void
+  onSuccess: () => void
   onError: (error: Error) => void
 }
 
 const HandleImport: FC<HandleImportProps> = ({
   scopeId,
-  onImportEnds,
+  onSuccess,
   onError
 }) => {
 
@@ -46,7 +46,7 @@ const HandleImport: FC<HandleImportProps> = ({
         } else {
           await pointStore.create(points);
           await trackStore.create(tracks);
-          onImportEnds();
+          onSuccess();
         }
       } else {
         onError({name: 'errors.import.format', message: t('errors.import.format')});
