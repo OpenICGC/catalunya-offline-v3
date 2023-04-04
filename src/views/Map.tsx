@@ -450,6 +450,7 @@ const Map: FC<MainContentProps> = ({
 
   useEffect(() => {
     if (pointNavigation.target) {
+      trackNavigation?.stop();
       setBottomMargin(POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT);
       setFitBounds(pointNavigation.getBounds());
     } else {
@@ -465,6 +466,7 @@ const Map: FC<MainContentProps> = ({
 
   useEffect(() => {
     if (trackNavigation.target) {
+      pointNavigation?.stop();
       setBottomMargin(TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT);
       setFitBounds(trackNavigation.getBounds());
     } else {
