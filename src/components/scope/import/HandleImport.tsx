@@ -28,11 +28,12 @@ const HandleImport: FC<HandleImportProps> = ({
 
   useEffect(() => {
     const importData = async (file: ImportedFile) => {
+      const extension = file.name.split('.').pop()?.toLowerCase();
       const importer =
-        file.name.endsWith('geojson') ? geoJSONImporter :
-          file.name.endsWith('gpx') ? gpxImporter :
-            file.name.endsWith('kml') ? kmlImporter :
-              undefined;
+       extension === 'geojson' ? geoJSONImporter :
+         extension === 'gpx' ? gpxImporter :
+           extension === 'kml' ? kmlImporter :
+             undefined;
       if (importer) {
         const {points, tracks, numberOfErrors} = await importer(file.dataDecoded);
         const totalFeatures = points.length + tracks.length;
