@@ -9,6 +9,7 @@ export enum downloadStatusStatus {
   unknown,
   pending,
   downloading,
+  unzipping,
   done
 }
 
@@ -31,7 +32,7 @@ export type downloadStatusType = Array<downloadStatusTypeUnit>
 export type InfoType = {
   totalItems: number,
   completedItems: number
-  progress: number,
+  progress?: number,
   currentItem: downloadStatusTypeUnit | undefined
 }
 
@@ -85,8 +86,6 @@ const initialDatasourceStatus: downloadStatusType = OFFLINE_DATASOURCES.map(data
   }
 ));
 
-
-
 const useDownloadStatusImpl = (): {
   isOfflineReady: boolean | undefined,
   downloadStatus: downloadStatusType,
@@ -117,8 +116,7 @@ const useDownloadStatusImpl = (): {
         )
         .then(status => {
           return status === downloadStatusStatus.pending ?
-            onlineFileSize(st.url)
-              .then(bytes => ({url: st.url, status: status, contentLength: bytes})) :
+            onlineFileSize(st.url).then(bytes => ({url: st.url, status: status, contentLength: bytes})) :
             Promise.resolve({url: st.url, status: status, contentLength: 0});
         });
     });
@@ -142,30 +140,25 @@ const useDownloadStatusImpl = (): {
 
   useEffect(() => {
     // 5. Cuando todos los downloadStatus.status dejen de estar en unknown, poner isOfflineReady a true o false.
-    // Y esto es lo que indicará que puede empezar a usarse
-    const unknownDownloads = downloadStatus.filter(({status}) =>
-      status === downloadStatusStatus.unknown
-    );
-    if (!unknownDownloads.length) {
-      const doneDownloads = downloadStatus.filter(({status}) =>
-        status === downloadStatusStatus.done
-      );
-      if (doneDownloads.length === downloadStatus.length){
-        setIsOfflineReady(true);
-      }
+    // Y esto es lo que indicará que puede empezar a usarse o que ya está listo.
+    if (downloadStatus.every(({status}) => status === downloadStatusStatus.done)) {
+      setIsOfflineReady(true);
+    } else if (downloadStatus.every(({status}) => status !== downloadStatusStatus.unknown)) {
+      setIsOfflineReady(false);
     }
-  }, [isOfflineReady, downloadStatus]);
+  }, [downloadStatus]);
 
-  const updateStatus = (url:string, newStatus: downloadStatusStatus) => {
+
+  const setStatus = useCallback((url:string, newStatus: downloadStatusStatus) => {
     setDownloadStatus(prevData =>
       prevData.map(item => item.url === url ?
         {...item, status: newStatus} :
         item
       )
     );
-  };
+  }, []);
 
-  const updateProgress = useCallback((url:string, newBytes: number) => {
+  const setDownloadProgress = useCallback((url:string, newBytes: number) => {
     setDownloadStatus(prevData =>
       prevData.map(item => item.url === url ?
         {...item, downloadProgress: newBytes} :
@@ -175,26 +168,29 @@ const useDownloadStatusImpl = (): {
   }, []);
 
   const info = useMemo<InfoType>(() => {
-    const totalSize= downloadStatus.reduce((acc, cur) => {
+    const totalSize = downloadStatus.reduce((acc, cur) => {
       return acc + (cur.contentLength ? cur.contentLength : 0);
     }, 0);
     const downloadedSize = downloadStatus.reduce((acc, cur) => {
       return acc + (cur.downloadProgress ? cur.downloadProgress : 0);
     }, 0);
-    
+
+    // Percentage with one decimal digit, or undefined if unzipping
+    const progress = Math.floor(1000 * downloadedSize / totalSize) / 10;
+
     return {
       totalItems: downloadStatus.length,
-      completedItems: downloadStatus.filter(st => st.status === downloadStatusStatus.done).length,
-      progress: Math.round((((downloadedSize / totalSize) * 100) + Number.EPSILON) * 100) / 100,
-      currentItem: downloadStatus.find(st => st.status === downloadStatusStatus.downloading)
+      completedItems: downloadStatus.filter(({status}) => status === downloadStatusStatus.done).length,
+      progress: downloadStatus.every(({status}) => status === downloadStatusStatus.done || status === downloadStatusStatus.unzipping) ? undefined : progress,
+      currentItem: downloadStatus.find(({status}) => status === downloadStatusStatus.downloading)
     };
   }, [downloadStatus]);
 
   return {
     isOfflineReady,
     downloadStatus,
-    setDownloadProgress: updateProgress,
-    setStatus: updateStatus,
+    setDownloadProgress,
+    setStatus,
     info,
     pendingSize
   };

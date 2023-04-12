@@ -94,8 +94,8 @@ export const BASEMAPS: BaseMaps = [{
     es: 'OpenMapTiles Terrain (offline)'
   },
   thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
-  style: `https://cdn.geomatico.es/datasets/${TERRITORI}/terrain.json`,
-  sprites: 'https://cdn.geomatico.es/datasets/sprites.zip'
+  style: `https://cdn.geomatico.es/datasets/${TERRITORI}/terrain.json`
+  //sprites: 'https://cdn.geomatico.es/datasets/sprites.zip'
 },{
   id: 'outdoor',
   labels: {

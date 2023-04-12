@@ -191,19 +191,20 @@ export const getLastMetadataFileForBaseMap = async (basemap: BaseMap) => {
 };
 
 export const unZipOnSameFolder = async (uri: string) => {
-  let result;
-  const unzipComplete = (resultCode: number) => {
-    result = resultCode;
-    if (resultCode === 0){
-      Filesystem.deleteFile({path: uri});
-    } else {
-      throw `Error unzipping zip! Path: ${uri}`;
-    }
-  };
-  const filename = uri.split('/').pop() || '';
-  const directoryUri = uri.replace(filename, '');
-  await Zip.unzip(uri, directoryUri, unzipComplete);
-  return result === 0 ? uri.replace('.zip', '') : '';
+  return new Promise<string>((resolve, reject) => {
+    const unzipComplete = (resultCode: number) => {
+      if (resultCode === 0) {
+        Filesystem.deleteFile({path: uri}).then(() => resolve(uri.replace('.zip', '')));
+      } else {
+        reject(`Error unzipping zip! Path: ${uri}`);
+      }
+    };
+    const filename = uri.split('/').pop() || '';
+    const directoryUri = uri.replace(filename, '');
+    Zip.unzip(uri, directoryUri, unzipComplete);
+  });
+
+
 };
 
 export const deleteFile = async (path:string) => {

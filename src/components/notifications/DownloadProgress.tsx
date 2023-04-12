@@ -30,7 +30,7 @@ const progressContainer = {
 };
 
 export type DownloadProgressProps = {
-  progress: number,
+  progress?: number,
   isOpen?: boolean,
   onClose?: () => void,
   onCancel?: () => void,
@@ -39,11 +39,13 @@ export type DownloadProgressProps = {
 
 const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, onClose, description, onCancel}) => {
   const {t} = useTranslation();
+  const variant = progress === undefined ? 'indeterminate' : 'determinate';
+  const title = progress === undefined ? t('actions.unzipping') : t('actions.downloading');
   return <>
     <Dialog open={isOpen} fullWidth onClose={onClose} >
       <DialogContent sx={{mt: 0, display: 'flex', flexDirection: 'column', bgcolor: 'grey.800'}}>
         <Box sx={container}>
-          <Typography variant='body1' sx={{color: 'primary.contrastText'}}>{t('actions.downloading')}</Typography>
+          <Typography variant='body1' sx={{color: 'primary.contrastText'}}>{title}</Typography>
           {onClose && <IconButton onClick={onClose}>
             <CloseIcon sx={{color: 'common.white'}}/>
           </IconButton>}
@@ -51,9 +53,9 @@ const DownloadProgress: FC<DownloadProgressProps>  = ({progress, isOpen=false, o
         <Typography variant='body2' sx={{mb: 0.5, color: 'primary.contrastText'}}>{description}</Typography>
         <Box sx={progressContainer}>
           <Box sx={{ width: '100%', mr: 1 }}>
-            <LinearProgress variant="determinate" value={progress}/>
+            <LinearProgress variant={variant} value={progress}/>
           </Box>
-          <Typography variant="body2" color="primary.contrastText">{progress}%</Typography>
+          {progress ? <Typography variant="body2" color="primary.contrastText">{progress?.toFixed(1)}%</Typography> : null}
         </Box>
         { onCancel && <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2}}>
           <Button startIcon={<CancelIcon sx={{color: 'primary.contrastText', float: 'left'}}/>} onClick={onCancel} sx={{color: 'primary.contrastText', pb: 0}}>{t('actions.cancel')}</Button>

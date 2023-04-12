@@ -527,6 +527,7 @@ const Map: FC<MainContentProps> = ({
     />
     <GeocomponentMap
       styleDiffing={true}
+      RTLTextPlugin={''}
       {...MAP_PROPS}
       //reuseMaps
       ref={mapRef}

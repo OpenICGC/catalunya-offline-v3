@@ -30,7 +30,8 @@
     "search": "Buscar...",
     "share": "Compartir",
     "sharing": "Compartiendo",
-    "stopped": "Finalizado"
+    "stopped": "Finalizado",
+    "unzipping": "Descomprimiendo..."
   },
   "baseMapManager": {
     "title": "Mapas Base",

@@ -19,7 +19,7 @@ import useSelectedTrackId from '../hooks/appState/useSelectedTrackId';
 import useVisibleLayers from '../hooks/appState/useVisibleLayers';
 import useDownloadStatus from '../hooks/useDownloadStatus';
 import DownloadRequest from '../components/notifications/DownloadRequest';
-import NewDownloadManager from '../components/downloads/NewDownloadsManager';
+import DownloadManager from './DownloadManager';
 import useBasemapId from '../hooks/appState/useBasemapId';
 
 const stackSx = {
@@ -131,9 +131,10 @@ const Index: FC = () => {
     visibleLayers={visibleLayers}
   />;
 
-  if (downloadRequested === true && isOfflineReady === false) return <NewDownloadManager onCancelCbChanged={() => setDownloadRequested(false)}/>;
-
   return <>
+    {downloadRequested === true && isOfflineReady === false &&
+      <DownloadManager onCancelCbChanged={() => setDownloadRequested(false)}/>
+    }
     {downloadRequested === undefined && isOfflineReady === false && !IS_WEB && <DownloadRequest
       isOpen={true}
       onClose={() => setDownloadRequested(false)}
