@@ -35,7 +35,7 @@ import 'moment-duration-format';
 //UTILS
 import {HEXColor, Scope, ImagePath, ScopeTrack, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
-import styled from '@mui/styles/styled';
+import styled from '@mui/material/styles/styled';
 import {getAccumulatedProfileProperties} from '../../utils/getAccumulatedProfileProperties';
 import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';

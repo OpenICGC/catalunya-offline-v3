@@ -1,19 +1,19 @@
 import {CapacitorSQLite, SQLiteConnection} from '@capacitor-community/sqlite';
-import { defineCustomElements as jeepSqlite, applyPolyfills} from 'jeep-sqlite/loader';
+//import { defineCustomElements as jeepSqlite, applyPolyfills} from 'jeep-sqlite/loader';
 import maplibregl from 'maplibre-gl';
 
-import {IS_WEB} from '../config';
+//import {IS_WEB} from '../config';
 
-applyPolyfills().then(() => {
+/*applyPolyfills().then(() => {
   jeepSqlite(window);
-});
+});*/
 
 const decodeTileWorker = new Worker(new URL('./decodeTileWorker.js', import.meta.url));
 
 const sqlite = new SQLiteConnection(CapacitorSQLite);
 const query = 'SELECT HEX(tile_data) as tile_data_hex FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ? limit 1';
 
-const init = (async () => {
+/*const init = (async () => {
   if (IS_WEB) {
     try {
       //console.debug('[mbtiles] Initializing Offline Web Storage');
@@ -26,7 +26,7 @@ const init = (async () => {
       console.error('[mbtiles] Error initializing Offline Web Storage', err);
     }
   }
-})();
+})();*/
 
 const sourceDatabases = new Map();
 
@@ -55,7 +55,7 @@ const getTileFromDatabase = async (dbName: string, z: number, x: number, y: numb
 };
 
 const getDatabase = async (dbName: string) => {
-  await init;
+/*  await init;
   if (IS_WEB) {
     if (!sourceDatabases.has(dbName)) {
       try {
@@ -74,26 +74,26 @@ const getDatabase = async (dbName: string) => {
         })
       );
     }
-  } else {
-    if (!sourceDatabases.has(dbName)) {
-      try {
-        await sqlite.closeNCConnection(dbName);
-      } catch {
-      // Pos vale
-      }
-      //console.debug(`[mbtiles] creating connection to ${dbName}`);
-      //console.log(sqlite.isDatabase(dbName));
-      sourceDatabases.set(dbName, sqlite
-        .createNCConnection(dbName, 1)
-        .then(async db => {
-          //console.debug(`[mbtiles] opening ${dbName}`);
-          await db.open();
-          //console.debug(`[mbtiles] opened ${dbName}`);
-          return db;
-        })
-      );
+  } else {*/
+  if (!sourceDatabases.has(dbName)) {
+    try {
+      await sqlite.closeNCConnection(dbName);
+    } catch {
+    // Pos vale
     }
+    //console.debug(`[mbtiles] creating connection to ${dbName}`);
+    //console.log(sqlite.isDatabase(dbName));
+    sourceDatabases.set(dbName, sqlite
+      .createNCConnection(dbName, 1)
+      .then(async db => {
+        //console.debug(`[mbtiles] opening ${dbName}`);
+        await db.open();
+        //console.debug(`[mbtiles] opened ${dbName}`);
+        return db;
+      })
+    );
   }
+  //}
   
   return sourceDatabases.get(dbName);
 };

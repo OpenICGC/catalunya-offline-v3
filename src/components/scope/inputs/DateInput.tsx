@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 //MUI
 import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
-import {LocalizationProvider} from '@mui/x-date-pickers';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -14,9 +14,8 @@ import moment, {Moment} from 'moment/moment';
 //UTILS
 import i18n from 'i18next';
 import {useTranslation} from 'react-i18next';
-import styled from '@mui/styles/styled';
+import styled from '@mui/material/styles/styled';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
-import {Theme} from '@mui/material';
 
 export interface DateInputProps {
     isEditing: boolean,
@@ -44,7 +43,7 @@ const DateTimeFieldEditable = styled(TextField)({
   }
 });
 
-const DateTimeFieldNoEditable = styled(TextField)<Theme>(({theme}) => {
+const DateTimeFieldNoEditable = styled(TextField)(({theme}) => {
   return {
     borderRadius: '4px',
     flexGrow: 1,

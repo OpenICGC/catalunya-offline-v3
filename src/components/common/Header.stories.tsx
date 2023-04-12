@@ -11,7 +11,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
 import Box from '@mui/material/Box';
 import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
-import {Theme} from '@mui/material';
+import {Theme} from '@mui/material/styles/createTheme';
 
 export default {
   title: 'Common/Header',

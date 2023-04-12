@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Button from '@mui/material/Button';
-import {Theme} from '@mui/material';
+import {Theme} from '@mui/material/styles/createTheme';
 import {useTranslation} from 'react-i18next';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 

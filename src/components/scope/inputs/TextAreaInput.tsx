@@ -2,7 +2,7 @@ import React, {FC, useMemo} from 'react';
 import Typography from '@mui/material/Typography';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
 import Stack from '@mui/material/Stack';
-import styled from '@mui/styles/styled';
+import styled from '@mui/material/styles/styled';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import {useTranslation} from 'react-i18next';
 

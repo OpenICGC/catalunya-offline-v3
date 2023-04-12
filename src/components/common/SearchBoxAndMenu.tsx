@@ -18,7 +18,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SearchBox from '@geomatico/geocomponents/Search/SearchBox';
 
 //UTILS
-import {ClickAwayListener} from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import {useViewport} from '../../hooks/useViewport';
 import {useTranslation} from 'react-i18next';
 import useTheme from '@mui/material/styles/useTheme';

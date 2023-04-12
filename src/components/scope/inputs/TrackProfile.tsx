@@ -1,7 +1,6 @@
 import React, {FC, useMemo} from 'react';
 
-import {VegaLite} from 'react-vega';
-import {TopLevelSpec} from 'vega-lite';
+import {VegaLite, VisualizationSpec} from 'react-vega';
 import turfDistance from '@turf/distance';
 
 //MUI
@@ -83,7 +82,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
     vegaTrack.slice(0, currentPositionIndex + 1) :
     [];
   
-  const spec: TopLevelSpec = {
+  const spec: VisualizationSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     width: 'container',
     height: 100,
@@ -144,7 +143,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
           filled: true,
           opacity: isOutOfTrack? 0 : 1
         },
-        data: { 
+        data: {
           values: currentPositionIndex !== undefined ? 
             vegaTrack[currentPositionIndex] :
             [] 
@@ -189,7 +188,10 @@ const TrackProfile: FC<TrackProfileProps> = ({
       }
     ] : [
       {
-        mark: 'line',
+        mark: {
+          type: 'line',
+          opacity: 1
+        },
         data: { values: vegaTrack },
         encoding: {
           color: {

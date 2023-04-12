@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 
 import Layout from '../components/Layout';
 import Map from './Map';
@@ -12,7 +12,7 @@ import useEditingPosition from '../hooks/useEditingPosition';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import usePointNavigation from '../hooks/usePointNavigation';
 import useTrackNavigation from '../hooks/useTrackNavigation';
-import {BASEMAPS, IS_WEB} from '../config';
+import {IS_WEB} from '../config';
 import useSelectedScopeId from '../hooks/appState/useSelectedScopeId';
 import useSelectedPointId from '../hooks/appState/useSelectedPointId';
 import useSelectedTrackId from '../hooks/appState/useSelectedTrackId';
@@ -20,6 +20,7 @@ import useVisibleLayers from '../hooks/appState/useVisibleLayers';
 import useDownloadStatus from '../hooks/useDownloadStatus';
 import DownloadRequest from '../components/notifications/DownloadRequest';
 import NewDownloadManager from '../components/downloads/NewDownloadsManager';
+import useBasemapId from '../hooks/appState/useBasemapId';
 
 const stackSx = {
   height: '100%',
@@ -31,7 +32,7 @@ const stackSx = {
 const Index: FC = () => {
   const [isSidePanelOpen, setSidePanelOpen] = useState(false);
 
-  const [baseMapId, setBaseMapId] = useState<string>(BASEMAPS[0].id);
+  const [baseMapId, setBaseMapId] = useBasemapId();
   const [manager, setManager] = useState<Manager>(undefined);
   const [scope, setScope] = useSelectedScopeId();
   const [point, setPoint] = useSelectedPointId();
@@ -42,25 +43,25 @@ const Index: FC = () => {
 
   const [visibleLayers, setVisibleLayers] = useVisibleLayers();
 
-  const toggleLayerVisibility = (layerId: number) => {
+  const toggleLayerVisibility = useCallback((layerId: number) => {
     if(visibleLayers.includes(layerId)) {
       setVisibleLayers(visibleLayers.filter(layer => layer !== layerId));
     } else {
       setVisibleLayers([...visibleLayers, layerId].sort());
     }
-  };
+  }, [visibleLayers]);
 
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
   const pointNavigatingTo = usePointNavigation().target;
   const trackNavigatingTo = useTrackNavigation().target;
 
-  const toggleSidePanel = () => setSidePanelOpen(!isSidePanelOpen);
+  const toggleSidePanel = useCallback(() => setSidePanelOpen(prevValue => !prevValue), []);
 
-  const handleManagerChanged = (manager: Manager) => {
+  const handleManagerChanged = useCallback((manager: Manager) => {
     setManager(manager);
     setSidePanelOpen(true);
-  };
+  }, []);
 
   useEffect(() => {
     setSidePanelOpen(!!manager);
@@ -82,17 +83,17 @@ const Index: FC = () => {
     trackNavigatingTo && setSidePanelOpen(false); // Closes panel when track navigation starts
   }, [trackNavigatingTo?.id]);
 
-  const handleSelectPoint = (pointId: UUID) => {
+  const handleSelectPoint =  useCallback((pointId: UUID) => {
     setTrack(undefined);
     setPoint(pointId);
     handleManagerChanged('SCOPES');
-  };
+  }, []);
 
-  const handleSelectTrack = (trackId: UUID) => {
+  const handleSelectTrack =  useCallback((trackId: UUID) => {
     setPoint(undefined);
     setTrack(trackId);
     handleManagerChanged('SCOPES');
-  };
+  }, []);
 
   const sidePanelContent = manager
     ? <Stack sx={stackSx}>
@@ -103,7 +104,7 @@ const Index: FC = () => {
       {manager === 'BASEMAPS' && <BaseMaps
         baseMapId={baseMapId}
         onMapStyleChanged={setBaseMapId}
-        onMapStyleDeleted={() => console.log('Unimplemented')}//TODO
+        /*onMapStyleDeleted={() => console.log('Unimplemented')}//TODO*/
         /*onMapStyleAdded={() => console.log('Unimplemented')}//TODO*/
       />}
       {manager === 'SCOPES' && <ScopeMain
@@ -130,10 +131,10 @@ const Index: FC = () => {
     visibleLayers={visibleLayers}
   />;
 
-  if (downloadRequested === true && !isOfflineReady) return <NewDownloadManager onCancelCbChanged={() => setDownloadRequested(false)}/>;
+  if (downloadRequested === true && isOfflineReady === false) return <NewDownloadManager onCancelCbChanged={() => setDownloadRequested(false)}/>;
 
   return <>
-    {downloadRequested === undefined && !isOfflineReady && !IS_WEB && <DownloadRequest
+    {downloadRequested === undefined && isOfflineReady === false && !IS_WEB && <DownloadRequest
       isOpen={true}
       onClose={() => setDownloadRequested(false)}
       onDownload={() => setDownloadRequested(true)}

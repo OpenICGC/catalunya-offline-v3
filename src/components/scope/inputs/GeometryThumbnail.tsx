@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 
-import {VegaLite} from 'react-vega';
-import {TopLevelSpec} from 'vega-lite';
+import VegaLite from 'react-vega/lib/VegaLite';
 import {HEXColor} from '../../../types/commonTypes';
 
 export interface GeometryThumbnailProps {
@@ -16,7 +15,7 @@ const GeometryThumbnail: FC<GeometryThumbnailProps> = ({
   geometry
 }) => {
 
-  const spec: TopLevelSpec = {
+  const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     width: size,
     height: size,

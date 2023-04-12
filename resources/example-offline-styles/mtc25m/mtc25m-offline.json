@@ -4,7 +4,7 @@
     "mtc25mcatoff": {
       "type": "vector",
       "tiles": [
-        "mbtiles://mtc25m/{z}/{x}/{y}.pbf"
+        "mbtiles://mtc25mcat/{z}/{x}/{y}.pbf"
       ],
       "maxzoom": 13,
       "attribution": "Mapa CC-BY <a href='https://www.icgc.cat'>Institut Cartogràfic i Geològic de Catalunya</a>"

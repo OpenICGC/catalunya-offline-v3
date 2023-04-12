@@ -28,7 +28,7 @@ import List, {listItemType} from './List';
 import {HEXColor, Scope, ScopeTrack, ScopePoint, UUID, SCOPE_FEATURES_PANEL_TAB} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {lighten} from '@mui/system/colorManipulator';
-import {Theme} from '@mui/material';
+import {Theme} from '@mui/material/styles/createTheme';
 import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import FeaturesSummary from './FeaturesSummary';
 import ShareIcon from '@mui/icons-material/Share';

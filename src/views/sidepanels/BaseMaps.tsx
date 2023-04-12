@@ -17,22 +17,22 @@ import Header from '../../components/common/Header';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import useTheme from '@mui/material/styles/useTheme';
-import {styled} from '@mui/material/styles';
+import styled from '@mui/material/styles/styled';
 import {BASEMAPS} from '../../config';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 
 export type BaseMapsProps = {
   baseMapId: string,
   onMapStyleChanged: (newStyle: string) => void
-  onMapStyleDeleted: (newStyle: string) => void
+  /*onMapStyleDeleted: (newStyle: string) => void*/
   /*onMapStyleAdded: () => void*/
 };
 
 /*const boxSx = {width: '100%', height: 0, pt: 5, pb: 1};*/
 const BaseMaps: FC<BaseMapsProps> = ({
   baseMapId,
-  onMapStyleChanged,
-  onMapStyleDeleted,
+  onMapStyleChanged
+  /*onMapStyleDeleted*/
   /*onMapStyleAdded*/
 }) => {
   const {t} = useTranslation();
@@ -54,10 +54,10 @@ const BaseMaps: FC<BaseMapsProps> = ({
     <ScrollableContent id='scrollable-baseMapList'>
       <BaseMapList
         coreStyles={BASEMAPS}
-        userStyles={undefined}//TODO
+        userStyles={undefined} //TODO
         selectedStyleId={baseMapId}
         onStyleChange={onMapStyleChanged}
-        onStyleDelete={onMapStyleDeleted}
+        /*onStyleDelete={onMapStyleDeleted}*/
       />
     </ScrollableContent>
     {/*<Box sx={boxSx}>

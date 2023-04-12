@@ -4,7 +4,7 @@ import React, {FC, ReactNode} from 'react';
 import Fab from '@mui/material/Fab';
 
 //UTILS
-import {Theme} from '@mui/material';
+import {Theme} from '@mui/material/styles/createTheme';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 import useIsLeftHanded from '../../hooks/settings/useIsLeftHanded';

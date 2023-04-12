@@ -1,11 +1,10 @@
 import createTheme from '@mui/material/styles/createTheme';
-import {PaletteMode} from '@mui/material';
 
 export const primaryColor = '#f59d21';
 
-const theme = (mode?: PaletteMode) => createTheme({
+const theme = createTheme({
   palette: {
-    mode: mode ? mode : 'light',
+    mode: 'light',
     primary: {
       main: primaryColor,
       contrastText: '#fff',

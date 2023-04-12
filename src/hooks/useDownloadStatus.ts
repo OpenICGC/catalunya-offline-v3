@@ -103,10 +103,8 @@ const useDownloadStatusImpl = (): {
     ...initialDatasourceStatus
   ]);
 
-
-  const [isOfflineReady, setIsOfflineReady] = useState<boolean>(false);
+  const [isOfflineReady, setIsOfflineReady] = useState<boolean>();
   const [pendingSize, setPendingSize] = useState<number>(0);
-
 
   useEffect(() => {
     const estadoyPesosPromises = downloadStatus.map(st => {

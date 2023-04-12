@@ -1,5 +1,6 @@
 import React, {FC, useMemo} from 'react';
-import {styled, Theme} from '@mui/material/styles';
+import {Theme} from '@mui/material/styles/createTheme';
+import styled from '@mui/material/styles/styled';
 
 //MUI
 import Avatar from '@mui/material/Avatar';
@@ -75,14 +76,6 @@ const Root = styled(Stack,
   }
 }));
 
-export type BaseMapListProps = {
-  coreStyles: BaseMaps,
-  userStyles?: BaseMaps,
-  selectedStyleId: string,
-  onStyleChange: (newStyle: string)=> void,
-  onStyleDelete: (newStyle: string)=> void
-}
-
 const baseMapManagerSx = {
   width: '100%',
   px: 1.5,
@@ -106,7 +99,15 @@ const deleteButtonSx = {
   }
 };
 
-const BaseMapList: FC<BaseMapListProps> = ({coreStyles, userStyles, selectedStyleId, onStyleChange, onStyleDelete}) => {
+export type BaseMapListProps = {
+  coreStyles: BaseMaps,
+  userStyles?: BaseMaps,
+  selectedStyleId: string,
+  onStyleChange: (newStyle: string)=> void/*,
+  onStyleDelete: (newStyle: string)=> void*/
+}
+
+const BaseMapList: FC<BaseMapListProps> = ({coreStyles, userStyles, selectedStyleId, onStyleChange/*, onStyleDelete*/}) => {
   const {t, i18n} = useTranslation();
 
   const formatStyle = (styles: BaseMaps) => useMemo(() =>
@@ -120,7 +121,7 @@ const BaseMapList: FC<BaseMapListProps> = ({coreStyles, userStyles, selectedStyl
   const userStylesFormatted = userStyles && formatStyle(userStyles);
 
   const handleClick = (id: string) => () => onStyleChange(id);
-  const handleDelete = (id: string) => () => onStyleDelete(id);
+  /*const handleDelete = (id: string) => () => onStyleDelete(id);*/
   
   const renderStyles = (styles: Styles) => {
     return styles.map((style, index) => (
@@ -135,7 +136,7 @@ const BaseMapList: FC<BaseMapListProps> = ({coreStyles, userStyles, selectedStyl
             {style.label}
           </Typography>
           {
-            styles === userStylesFormatted && <IconButton onClick={handleDelete(style.id)} sx={deleteButtonSx}>
+            styles === userStylesFormatted && <IconButton /*onClick={handleDelete(style.id)}*/ sx={deleteButtonSx}>
               <DeleteIcon fontSize='small'/>
             </IconButton>
           }

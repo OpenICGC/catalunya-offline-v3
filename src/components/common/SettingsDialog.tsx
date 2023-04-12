@@ -29,11 +29,12 @@ import AddTrack from '../icons/AddTrack';
 
 //UTILS
 import {primaryColor} from '../../theme';
-import styled from '@mui/system/styled';
+import styled from '@mui/material/styles/styled';
 import {useTranslation} from 'react-i18next';
 import {HEXColor, LANGUAGE} from '../../types/commonTypes';
 import {COLOR_PALETTES} from '../../config';
-import {SelectChangeEvent, Theme} from '@mui/material';
+import {SelectChangeEvent} from '@mui/material/Select/SelectInput';
+import {Theme} from '@mui/material/styles/createTheme';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
 import IconButton from '@mui/material/IconButton';
 
