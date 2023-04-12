@@ -1,4 +1,4 @@
-import {BaseMaps, HEXColor} from './types/commonTypes';
+import {BaseMaps, HEXColor, OfflineDatasources} from './types/commonTypes';
 import {ViewportType} from './hooks/useViewport';
 import {Capacitor} from '@capacitor/core';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
@@ -34,72 +34,6 @@ export const DEFAULT_VIEWPORT: ViewportType = {
   pitch: 0
 };
 
-
-export const BASEMAPS: BaseMaps = [{
-  id: 'mtc25m',
-  labels: {
-    ca: 'Mapa Topogràfic 1:25 000',
-    en: 'Topographic Map 1:25 000',
-    es: 'Mapa Topográfico 1:25 000'
-  },
-  thumbnail: 'images/mtc25m.png',
-  onlineStyle: 'mapstyles/mtc25m-online.json',
-  offlineAssets: 'https://cdn.geomatico.es/datasets/mtc25m/assets.json',
-  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
-},{
-  id: 'contextmaps',
-  labels: {
-    ca: 'ContextMaps',
-    en: 'ContextMaps',
-    es: 'ContextMaps'
-  },
-  thumbnail: 'https://visors.icgc.cat/contextmaps/imatges_estil/icgc_mapa_estandard.png',
-  onlineStyle: 'https://geoserveis.icgc.cat/contextmaps/icgc_mapa_estandard.json',
-  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
-},{
-  id: 'bt5m',
-  labels: {
-    ca: 'bt5m Complert',
-    en: 'bt5m Complete',
-    es: 'bt5m Completo'
-  },
-  thumbnail: 'https://betaportal.icgc.cat/wordpress/wp-content/uploads/2017/03/bt5mnicetopo-150x150.png',
-  onlineStyle: 'mapstyles/bt5m-nice-alti.json',
-  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
-},{
-  id: 'outdoor',
-  labels: {
-    ca: 'MapTiler Outdoor',
-    en: 'MapTiler Outdoor',
-    es: 'MapTiler Outdoor'
-  },
-  thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
-  onlineStyle: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key='+process.env.MAPTILER_API_KEY,
-  attribution: 'MapTiler, OpenStreetMap'
-},{
-  id: 'galicia-osmbright',
-  labels: {
-    ca: 'OSM Bright Galicia',
-    en: 'OSM Bright Galicia',
-    es: 'OSM Bright Galicia'
-  },
-  thumbnail: 'https://tileserver.geomatico.es/styles/osm-bright/7/63/48.png',
-  onlineStyle: 'https://tileserver.geomatico.es/styles/osm-bright/style.json',
-  offlineAssets: 'https://cdn.geomatico.es/datasets/galicia/assets.json',
-  attribution: 'OpenStreetMap'
-},{
-  id: 'madrid-osmbright',
-  labels: {
-    ca: 'OSM Bright Madrid',
-    en: 'OSM Bright Madrid',
-    es: 'OSM Bright Madrid'
-  },
-  thumbnail: 'https://tileserver.geomatico.es/styles/osm-bright/7/63/48.png',
-  onlineStyle: 'https://tileserver.geomatico.es/styles/osm-bright/style.json',
-  offlineAssets: 'https://cdn.geomatico.es/datasets/madrid/assets.json',
-  attribution: 'OpenStreetMap'
-}];
-
 export const COLOR_PALETTES = [
   'BrewerPastel19',
   'BrewerSet39',
@@ -121,3 +55,56 @@ export const COLOR_PALETTES = [
   ...obj,
   [paletteName]: useColorRamp(paletteName).hexColors
 }), {});
+
+export const OFFLINE_GLYPHS = 'https://cdn.geomatico.es/datasets/glyphs.zip';
+
+const TERRITORI = 'catalunya'; // 'vigo';
+
+export const OFFLINE_DATASOURCES: OfflineDatasources = [{
+  'id': 'openmaptiles',
+  'url': `https://cdn.geomatico.es/datasets/${TERRITORI}/openmaptiles.mbtiles`,
+  'labels': {
+    'ca': 'Cartografia base',
+    'en': 'Base cartography',
+    'es': 'Cartografía base'
+  }
+}, {
+  'id': 'terreny',
+  'url': `https://cdn.geomatico.es/datasets/${TERRITORI}/terreny.mbtiles`,
+  'labels': {
+    'ca': 'Terreny',
+    'en': 'Terrain',
+    'es': 'Terreno'
+  }
+}, /*{
+  'id': 'corbes',
+  'url': `https://cdn.geomatico.es/datasets/${TERRITORI}/corbes.mbtiles`,
+  'labels': {
+    'ca': 'Corbes de nivell',
+    'en': 'Contour lines',
+    'es': 'Curvas de nivel'
+  }
+}*/];
+
+export const BASEMAPS: BaseMaps = [{
+  id: 'terrain',
+  labels: {
+    ca: 'OpenMapTiles Terrain (offline)',
+    en: 'OpenMapTiles Terrain (offline)',
+    es: 'OpenMapTiles Terrain (offline)'
+  },
+  thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
+  style: `https://cdn.geomatico.es/datasets/${TERRITORI}/terrain.json`
+  //sprites: 'https://cdn.geomatico.es/datasets/sprites.zip'
+},{
+  id: 'outdoor',
+  labels: {
+    ca: 'MapTiler Outdoor (online)',
+    en: 'MapTiler Outdoor (online)',
+    es: 'MapTiler Outdoor (online)'
+  },
+  thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
+  style: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key='+process.env.MAPTILER_API_KEY
+}];
+
+export const INITIAL_BASEMAP = BASEMAPS[0];

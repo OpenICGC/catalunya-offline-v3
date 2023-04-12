@@ -18,7 +18,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useTranslation} from 'react-i18next';
 import {ColorFormat, ColorPicker, ColorType, ColorValue} from 'mui-color';
 import {HEXColor, UUID} from '../../types/commonTypes';
-import {ClickAwayListener} from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import {COLOR_PALETTES} from '../../config';
 import useColorPalette from '../../hooks/settings/useColorPalette';
 

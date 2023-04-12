@@ -18,7 +18,7 @@ import SettingsView from './SettingsView';
 import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
 
 //UTILS
-import {MapboxStyle, MapRef} from 'react-map-gl';
+import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
 import {DEFAULT_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
@@ -36,6 +36,7 @@ import useTrackNavigation from '../hooks/useTrackNavigation';
 import {Manager, ScopePoint, UUID} from '../types/commonTypes';
 import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
 import useIsLargeSize from '../hooks/settings/useIsLargeSize';
+import useMapStyle from '../hooks/useMapStyle';
 /*import {useStatus} from '@capacitor-community/network-react';*/
 
 const HEADER_HEIGHT = 48;
@@ -52,7 +53,7 @@ mbtiles(maplibregl);
 maplibregl.RasterDEMTileSource.prototype.serialize = maplibregl.RasterTileSource.prototype.serialize;
 
 export type MainContentProps = {
-  mapStyle: string | MapboxStyle,
+  baseMapId: string,
   onManagerChanged: (newManager: Manager) => void,
   selectedScopeId?: UUID,
   onScopeSelected: (scopeId: UUID) => void,
@@ -64,7 +65,7 @@ export type MainContentProps = {
 };
 
 const Map: FC<MainContentProps> = ({
-  mapStyle,
+  baseMapId,
   onManagerChanged,
   selectedScopeId,
   onScopeSelected,
@@ -101,7 +102,7 @@ const Map: FC<MainContentProps> = ({
   const [pointIntent, setPointIntent] = useState<Position>();
 
   const recordingTrack = useRecordingTrack();
-  
+
   const [isFabOpen, setFabOpen] =useState<boolean>(false);
   const [isFabHidden, setFabHidden] =useState<boolean>(false);
   const [isSearchBoxHidden, setSearchBoxHidden] =useState<boolean>(false);
@@ -110,6 +111,8 @@ const Map: FC<MainContentProps> = ({
   const [bottomMargin, setBottomMargin] = useState(0);
   const [topMargin, setTopMargin] = useState(SEARCHBOX_HEIGHT);
   const [fitBounds, setFitBounds] = useState<[number, number, number, number]>();
+
+  const mapStyle = useMapStyle({baseMapId});
 
   const toggleFabOpen = () => setFabOpen(prevState => !prevState);
 
@@ -514,7 +517,7 @@ const Map: FC<MainContentProps> = ({
   };
 
   return <>
-    <SearchBoxAndMenu 
+    <SearchBoxAndMenu
       placeholder={t('actions.search')}
       onContextualMenuClick={handleContextualMenu}
       isHidden={isSearchBoxHidden}
@@ -524,6 +527,7 @@ const Map: FC<MainContentProps> = ({
     />
     <GeocomponentMap
       styleDiffing={true}
+      RTLTextPlugin={''}
       {...MAP_PROPS}
       //reuseMaps
       ref={mapRef}
@@ -559,7 +563,7 @@ const Map: FC<MainContentProps> = ({
         onScopesClick={() => changeManager('SCOPES')}
       />}
     </GeocomponentMap>
-    
+
     {!!editingPosition.position && <PositionEditor
       name={selectedPoint?.properties.name}
       bottomMargin={bottomMargin}

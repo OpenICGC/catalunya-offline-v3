@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import AppBar, {AppBarProps} from '@mui/material/AppBar';
 
-import styled from '@mui/system/styled';
+import styled from '@mui/material/styles/styled';
 import {useTranslation} from 'react-i18next';
 
 const classes = {

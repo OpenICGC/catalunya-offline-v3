@@ -26,7 +26,7 @@ import ImageInput from './inputs/ImageInput';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor, Scope, ImagePath, ScopePoint, UUID} from '../../types/commonTypes';
-import styled from '@mui/styles/styled';
+import styled from '@mui/material/styles/styled';
 
 import FeaturesSummary from './FeaturesSummary';
 

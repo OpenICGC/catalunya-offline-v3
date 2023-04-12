@@ -29,7 +29,7 @@ export const listOfflineDir = async (directory?:string) => {
 
 export const offlineDirExists = async (directory:string) => {
   try {
-    await Filesystem.readdir({
+    await Filesystem.stat({
       path: OFFLINE_DATADIR_NAME + '/' + directory,
       directory: Directory.Data
     });
@@ -140,6 +140,13 @@ export const readFile = async (uri: string) => {
   });
 };
 
+export const renameFile = async (from: string, to: string) => {
+  return await Filesystem.rename({
+    from: from,
+    to: to
+  });
+};
+
 export const writeFile = async (content: string, path: string, encoding: Encoding = Encoding.UTF8) => {
   return await Filesystem.writeFile({
     path: path,
@@ -184,19 +191,20 @@ export const getLastMetadataFileForBaseMap = async (basemap: BaseMap) => {
 };
 
 export const unZipOnSameFolder = async (uri: string) => {
-  let result;
-  const unzipComplete = (resultCode: number) => {
-    result = resultCode;
-    if (resultCode === 0){
-      Filesystem.deleteFile({path: uri});
-    } else {
-      throw `Error unzipping zip! Path: ${uri}`;
-    }
-  };
-  const filename = uri.split('/').pop() || '';
-  const directoryUri = uri.replace(filename, '');
-  await Zip.unzip(uri, directoryUri, unzipComplete);
-  return result === 0 ? uri.replace('.zip', '') : '';
+  return new Promise<string>((resolve, reject) => {
+    const unzipComplete = (resultCode: number) => {
+      if (resultCode === 0) {
+        Filesystem.deleteFile({path: uri}).then(() => resolve(uri.replace('.zip', '')));
+      } else {
+        reject(`Error unzipping zip! Path: ${uri}`);
+      }
+    };
+    const filename = uri.split('/').pop() || '';
+    const directoryUri = uri.replace(filename, '');
+    Zip.unzip(uri, directoryUri, unzipComplete);
+  });
+
+
 };
 
 export const deleteFile = async (path:string) => {
@@ -224,4 +232,22 @@ export const generateZip = async (source: string, path: string, fromType: Folder
 
     return destinationFile.uri;
   }
+};
+
+export const onlineFileSize = async (url: string) => {
+  const response = await fetch(url, {method: 'HEAD'});
+  const size = response.headers.get('content-length');
+  if (size) {
+    return parseInt(size);
+  } else {
+    return undefined;
+  }
+};
+
+export const bytesToSize = (bytes: number): string => {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes === 0) return 'n/a';
+  const i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), sizes.length - 1);
+  if (i === 0) return `${bytes} ${sizes[i]}`;
+  return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
 };

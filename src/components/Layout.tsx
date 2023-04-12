@@ -1,6 +1,6 @@
 import React, {FC, ReactNode} from 'react';
 
-import styled from '@mui/styles/styled';
+import styled from '@mui/material/styles/styled';
 import Box from '@mui/material/Box';
 
 import SidePanel from '@geomatico/geocomponents/Layout/SidePanel';

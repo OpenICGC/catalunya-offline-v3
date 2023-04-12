@@ -30,7 +30,8 @@
     "search": "Buscar...",
     "share": "Compartir",
     "sharing": "Compartiendo",
-    "stopped": "Finalizado"
+    "stopped": "Finalizado",
+    "unzipping": "Descomprimiendo..."
   },
   "baseMapManager": {
     "title": "Mapas Base",
@@ -38,9 +39,9 @@
   },
   "downloadingAlert": {
     "cancel": "Se ha cancelado la descarga",
-    "content_01": "Para poder trabajar en zonas con mala cobertura, es necesario descargarse los datos del Mapa topográfico de Catalunya 1:25.000.",
-    "content_02": "Si no quieres descargarlos ahora, puedes continuar navegando con una versión online, y se te ofrecerá descargarlos más adelante.",
-    "content_03": "¿Descargar el Mapa topográfico de Catalunya ahora? (350 MB)",
+    "content_01": "Para poder trabajar en zonas con mala cobertura, te recomendamos descargar el paquete de datos offline.",
+    "content_02": "Si no quieres descargarlos ahora, puedes continuar navegando con la versión online, y se te ofrecerá descargarlos más adelante.",
+    "content_03": "¿Quieres descargar el Mapa topográfico de Catalunya ahora? {{pendingSize}}",
     "error": "Error descargando cartografía",
     "glyphs": "Tipografías",
     "mbtiles": "Cartografía",
@@ -131,7 +132,6 @@
     "scope": "Compartir Ámbito",
     "track": "Compartir Ruta"
   },
-  "topographicMap": "Mapa topográfico de Catalunya 1:25 000",
   "track": "Ruta",
   "trackAlert": {
     "noTrack": "No hay datos de altura",

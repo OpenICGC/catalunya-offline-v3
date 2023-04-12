@@ -8,8 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 //UTILS
-import {styled} from '@mui/styles';
-import {grey} from '@mui/material/colors';
+import styled from '@mui/material/styles/styled';
+import grey from '@mui/material/colors/grey';
 import {ImagePath} from '../../types/commonTypes';
 import {Capacitor} from '@capacitor/core';
 import {IS_WEB} from '../../config';

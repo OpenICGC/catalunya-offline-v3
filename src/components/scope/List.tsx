@@ -17,7 +17,7 @@ import ListItem from './ListItem';
 //UTILS
 import {HEXColor, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
-import styled from '@mui/styles/styled';
+import styled from '@mui/material/styles/styled';
 import { SxProps } from '@mui/system/styleFunctionSx/styleFunctionSx';
 
 const errorMessageSx = {

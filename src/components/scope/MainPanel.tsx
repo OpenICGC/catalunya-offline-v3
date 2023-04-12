@@ -20,7 +20,7 @@ import List from './List';
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor, UUID, Scope} from '../../types/commonTypes';
-import {useTheme} from '@mui/material';
+import useTheme from '@mui/material/styles/useTheme';
 import Header from '../common/Header';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 

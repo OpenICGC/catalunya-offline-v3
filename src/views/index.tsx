@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 
 import Layout from '../components/Layout';
 import Map from './Map';
@@ -8,15 +8,19 @@ import Layers from './sidepanels/Layers';
 import BaseMaps from './sidepanels/BaseMaps';
 import ScopeMain from './sidepanels/ScopeMain';
 import Stack from '@mui/material/Stack';
-import useMapStyle from '../hooks/useMapStyle';
 import useEditingPosition from '../hooks/useEditingPosition';
 import useRecordingTrack from '../hooks/useRecordingTrack';
 import usePointNavigation from '../hooks/usePointNavigation';
 import useTrackNavigation from '../hooks/useTrackNavigation';
+import {IS_WEB} from '../config';
 import useSelectedScopeId from '../hooks/appState/useSelectedScopeId';
 import useSelectedPointId from '../hooks/appState/useSelectedPointId';
 import useSelectedTrackId from '../hooks/appState/useSelectedTrackId';
 import useVisibleLayers from '../hooks/appState/useVisibleLayers';
+import useDownloadStatus from '../hooks/useDownloadStatus';
+import DownloadRequest from '../components/notifications/DownloadRequest';
+import DownloadManager from './DownloadManager';
+import useBasemapId from '../hooks/appState/useBasemapId';
 
 const stackSx = {
   height: '100%',
@@ -28,33 +32,36 @@ const stackSx = {
 const Index: FC = () => {
   const [isSidePanelOpen, setSidePanelOpen] = useState(false);
 
-  const {baseMapId, mapStyle, setBaseMapId, StyleOfflineDownloaderComponent} = useMapStyle();
+  const [baseMapId, setBaseMapId] = useBasemapId();
   const [manager, setManager] = useState<Manager>(undefined);
   const [scope, setScope] = useSelectedScopeId();
   const [point, setPoint] = useSelectedPointId();
   const [track, setTrack] = useSelectedTrackId();
 
+  const [downloadRequested, setDownloadRequested] = useState<boolean>();
+  const {isOfflineReady, pendingSize} = useDownloadStatus();
+
   const [visibleLayers, setVisibleLayers] = useVisibleLayers();
 
-  const toggleLayerVisibility = (layerId: number) => {
+  const toggleLayerVisibility = useCallback((layerId: number) => {
     if(visibleLayers.includes(layerId)) {
       setVisibleLayers(visibleLayers.filter(layer => layer !== layerId));
     } else {
       setVisibleLayers([...visibleLayers, layerId].sort());
     }
-  };
+  }, [visibleLayers]);
 
   const isEditingPosition = !!useEditingPosition().position;
   const isRecordingTrack = useRecordingTrack().isRecording;
   const pointNavigatingTo = usePointNavigation().target;
   const trackNavigatingTo = useTrackNavigation().target;
 
-  const toggleSidePanel = () => setSidePanelOpen(!isSidePanelOpen);
+  const toggleSidePanel = useCallback(() => setSidePanelOpen(prevValue => !prevValue), []);
 
-  const handleManagerChanged = (manager: Manager) => {
+  const handleManagerChanged = useCallback((manager: Manager) => {
     setManager(manager);
     setSidePanelOpen(true);
-  };
+  }, []);
 
   useEffect(() => {
     setSidePanelOpen(!!manager);
@@ -76,17 +83,17 @@ const Index: FC = () => {
     trackNavigatingTo && setSidePanelOpen(false); // Closes panel when track navigation starts
   }, [trackNavigatingTo?.id]);
 
-  const handleSelectPoint = (pointId: UUID) => {
+  const handleSelectPoint =  useCallback((pointId: UUID) => {
     setTrack(undefined);
     setPoint(pointId);
     handleManagerChanged('SCOPES');
-  };
+  }, []);
 
-  const handleSelectTrack = (trackId: UUID) => {
+  const handleSelectTrack =  useCallback((trackId: UUID) => {
     setPoint(undefined);
     setTrack(trackId);
     handleManagerChanged('SCOPES');
-  };
+  }, []);
 
   const sidePanelContent = manager
     ? <Stack sx={stackSx}>
@@ -97,7 +104,7 @@ const Index: FC = () => {
       {manager === 'BASEMAPS' && <BaseMaps
         baseMapId={baseMapId}
         onMapStyleChanged={setBaseMapId}
-        onMapStyleDeleted={() => console.log('Unimplemented')}//TODO
+        /*onMapStyleDeleted={() => console.log('Unimplemented')}//TODO*/
         /*onMapStyleAdded={() => console.log('Unimplemented')}//TODO*/
       />}
       {manager === 'SCOPES' && <ScopeMain
@@ -113,7 +120,7 @@ const Index: FC = () => {
   ;
 
   const mainContent = <Map
-    mapStyle={mapStyle}
+    baseMapId={baseMapId}
     onManagerChanged={handleManagerChanged}
     selectedScopeId={scope}
     onScopeSelected={setScope}
@@ -125,7 +132,15 @@ const Index: FC = () => {
   />;
 
   return <>
-    {StyleOfflineDownloaderComponent}
+    {downloadRequested === true && isOfflineReady === false &&
+      <DownloadManager onCancelCbChanged={() => setDownloadRequested(false)}/>
+    }
+    {downloadRequested === undefined && isOfflineReady === false && !IS_WEB && <DownloadRequest
+      isOpen={true}
+      onClose={() => setDownloadRequested(false)}
+      onDownload={() => setDownloadRequested(true)}
+      bytes={pendingSize}
+    />}
     <Layout
       sidePanelContent={sidePanelContent}
       mainContent={mainContent}

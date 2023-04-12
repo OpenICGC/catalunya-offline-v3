@@ -1,52 +1,43 @@
-import React, {FC, useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {MapboxStyle} from 'react-map-gl';
 
-import {BASEMAPS, IS_WEB} from '../config';
-import DownloadsManager from '../components/downloads/DownloadsManager';
-import useBasemapId from './appState/useBasemapId';
+import {BaseMap} from '../types/commonTypes';
+import {BASEMAPS, INITIAL_BASEMAP} from '../config';
+import useDownloadStatus from './useDownloadStatus';
+import {CalculateOfflineMapStyle} from '../utils/mapstyle';
 
-interface useMapStyle {
-  baseMapId: string;
-  mapStyle: string | MapboxStyle;
-  setBaseMapId: (baseMapId: string ) => void;
-  StyleOfflineDownloaderComponent: FC | JSX.Element
+
+type useMapStyleProps = {
+  baseMapId: string
 }
 
-const useMapStyle = (): useMapStyle => {
+const useMapStyle = ({baseMapId = INITIAL_BASEMAP.id}: useMapStyleProps): string | MapboxStyle => {
 
-  const [basemapId, setBaseMapId] = useBasemapId();
-  const baseMap = BASEMAPS.find(bm => bm.id === basemapId);
+  const {isOfflineReady, downloadStatus} = useDownloadStatus();
+  const [mapStyle, setMapStyle] = useState<string | MapboxStyle>(INITIAL_BASEMAP.style);
 
-  const [mapStyle, setMapStyle] = useState(baseMap?.onlineStyle);
-
-  const handleChangeBaseMapId = (baseMapId: string) => {
-    setBaseMapId(baseMapId);
-  };
-
-  const handleStyleDownloaded = setMapStyle;
+  const baseMap = useMemo<BaseMap>(() => {
+    const basemap = BASEMAPS.find(({id}) => id === baseMapId);
+    if (basemap) {
+      return basemap;
+    } else {
+      return INITIAL_BASEMAP;
+    }
+  }, [baseMapId]);
 
   useEffect(() => {
-    if (baseMap?.onlineStyle) {
-      setMapStyle(baseMap.onlineStyle);
+    if (!isOfflineReady && mapStyle !== baseMap.style) {
+      setMapStyle(baseMap.style);
+    } else if (isOfflineReady) {
+      CalculateOfflineMapStyle(downloadStatus, baseMap)
+        .then(mapstyle => {
+          if (mapstyle) setMapStyle(mapstyle);
+        });
     }
-  }, [baseMap]);
-  
-  const StyleOfflineDownloaderComponent = useMemo(() =>
-    baseMap?.offlineAssets && !IS_WEB ?
-      <DownloadsManager baseMap={baseMap} onStyleReady={handleStyleDownloaded}/>
-      : 
-      <></>
-  , [baseMap]);
-  
-  
-  
-  return {
-    baseMapId: basemapId,
-    mapStyle: mapStyle || '',
-    setBaseMapId: handleChangeBaseMapId,
-    StyleOfflineDownloaderComponent
-  };
+  }, [baseMap, isOfflineReady, downloadStatus]);
+
+  return useMemo(() => mapStyle, [mapStyle]);
 };
 
 export default useMapStyle;

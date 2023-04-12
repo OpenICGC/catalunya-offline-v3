@@ -30,7 +30,8 @@
     "search": "Cerca...",
     "share": "Compartir",
     "sharing": "Compartint",
-    "stopped": "Finalizat"
+    "stopped": "Finalizat",
+    "unzipping": "Descomprimint..."
   },
   "baseMapManager": {
     "title": "Mapes Base",
@@ -38,9 +39,9 @@
   },
   "downloadingAlert": {
     "cancel": "S'ha cancel·lat la descàrrega",
-    "content_01": "Per poder treballar en zones amb mala cobertura, és necessari descarregar-se les dades del Mapa topogràfic de Catalunya 1:25 000.",
-    "content_02": "Si no voleu decarregar-les ara, podeu continuar navegant amb una versió online, i se us tornarà a oferir més endavant.",
-    "content_03": "Voleu descarregar ara el Mapa topogràfic de Catalunya? (350 MB)",
+    "content_01": "Per poder treballar en zones amb mala cobertura, us recomanem descarregar el paquet de dades offline.",
+    "content_02": "Si no voleu decarregar-les ara, podeu continuar navegant amb la versió online, i se us tornarà a oferir més endavant.",
+    "content_03": "Voleu descarregar el paquet de dades offline ara? {{pendingSize}}",
     "error": "Error descarregant cartografia",
     "glyphs": "Tipografies",
     "mbtiles": "Cartografia",
@@ -131,7 +132,6 @@
     "scope": "Compartir Àmbit",
     "track": "Compartir Traça"
   },
-  "topographicMap": "Mapa topogràfic de Catalunya 1:25 000",
   "track": "Traça",
   "trackAlert": {
     "noTrack": "No hi ha dades d'alçada",

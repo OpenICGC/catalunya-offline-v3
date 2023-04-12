@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
-import {Theme} from '@mui/material';
+import {Theme} from '@mui/material/styles/createTheme';
 import {HEXColor} from '../../types/commonTypes';
 
 export interface FeaturesSummaryProps {

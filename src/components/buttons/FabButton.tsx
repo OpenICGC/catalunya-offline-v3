@@ -4,8 +4,8 @@ import React, {FC} from 'react';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
-import {SxProps} from '@mui/system';
-import {grey} from '@mui/material/colors';
+import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
+import grey from '@mui/material/colors/grey';
 
 
 //MUI-ICONS

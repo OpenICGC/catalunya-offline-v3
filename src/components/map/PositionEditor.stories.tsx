@@ -19,7 +19,7 @@ const Template: Story<PositionEditorProps> = args => <PositionEditor {...args}/>
 const WithMapTemplate: Story<PositionEditorProps> = ({...args}) => {
   const [getViewport, setViewport] = useState(DEFAULT_VIEWPORT);
   return <Box sx={{ width: '100vw', height: '100vh', position: 'relative', boxShadow: 1 }}>
-    <GeocomponentMap mapStyle={BASEMAPS[1].onlineStyle} onViewportChange={setViewport} viewport={getViewport}/>
+    <GeocomponentMap mapStyle={BASEMAPS[1].style} onViewportChange={setViewport} viewport={getViewport}/>
     <PositionEditor {...args}/>
   </Box>;
 };
