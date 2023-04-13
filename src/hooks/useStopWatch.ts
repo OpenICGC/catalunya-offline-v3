@@ -1,30 +1,37 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 
 const useStopWatch = () => {
   const [time, setTime] = useState(0);
   const [, setTimer] = useState<number>();
 
-  const activateTimer = (start: boolean) => setTimer(prevTimer => {
+  const activateTimer = useCallback((start: boolean) => setTimer(prevTimer => {
     if (prevTimer) window.clearInterval(prevTimer);
     return start ?
       window.setInterval(() =>
         setTime(prevState => prevState + 1)
       , 1000) :
       undefined;
-  });
+  }), []);
+
+  const start = useCallback(() => {
+    setTime(0);
+    activateTimer(true);
+  }, []);
+
+  const pause = useCallback(() => activateTimer(false), []);
+  const resume = useCallback(() => activateTimer(true), []);
+
+  const stop = useCallback(() => {
+    activateTimer(false);
+    setTime(0);
+  }, []);
 
   return {
     time,
-    start: () => {
-      setTime(0);
-      activateTimer(true);
-    },
-    pause: () => activateTimer(false),
-    resume: () => activateTimer(true),
-    stop: () => {
-      activateTimer(false);
-      setTime(0);
-    }
+    start,
+    pause,
+    resume,
+    stop
   };
 };
 

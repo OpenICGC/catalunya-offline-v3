@@ -1,10 +1,11 @@
 import {registerPlugin} from '@capacitor/core';
 import {useEffect, useState} from 'react';
-import {CatOfflineError} from '../types/commonTypes';
+import {CatOfflineError} from '../../types/commonTypes';
 import {BackgroundGeolocationPlugin, CallbackError, Location} from '@capacitor-community/background-geolocation';
 import useIsActive from './useIsActive';
-import {IS_WEB} from '../config';
+import {IS_WEB} from '../../config';
 import {useTranslation} from 'react-i18next';
+import {singletonHook} from 'react-singleton-hook';
 
 const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>('BackgroundGeolocation');
 
@@ -17,6 +18,12 @@ export interface Geolocation {
   longitude: number | null;
   speed: number | null;
   timestamp: EpochTimeStamp | null; // In milliseconds https://w3c.github.io/hr-time/#the-epochtimestamp-typedef
+}
+
+type useGeolocationType = {
+  geolocation: Geolocation,
+  error: CatOfflineError | undefined,
+  setWatchInBackground: (watchInBackground: boolean) => void
 }
 
 const webConfig = {
@@ -38,8 +45,9 @@ const nullGeolocation = () => ({
   timestamp: Date.now() // milliseconds
 });
 
-const useGeolocation = (watchInBackground = false) => {
+const useGeolocation = (): useGeolocationType => {
   const [watcherId, setWatcherId] = useState<string>();
+  const [watchInBackground, setWatchInBackground] = useState<boolean>(false);
   const [error, setError] = useState<CatOfflineError>();
   const [geolocation, setGeolocation] = useState<Geolocation>(nullGeolocation);
   const isActive = useIsActive();
@@ -173,7 +181,22 @@ const useGeolocation = (watchInBackground = false) => {
     }
   };
 
-  return {geolocation, error};
+  return {geolocation, error, setWatchInBackground};
 };
 
-export default useGeolocation;
+const initialState: useGeolocationType = {
+  geolocation: {
+    accuracy: null,
+    altitude: null,
+    altitudeAccuracy: null,
+    heading: null,
+    latitude: null,
+    longitude: null,
+    speed: null,
+    timestamp: null
+  },
+  error: undefined,
+  setWatchInBackground: () => undefined
+};
+
+export default singletonHook<useGeolocationType>(initialState, useGeolocation);

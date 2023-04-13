@@ -1,9 +1,9 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 
 import {ScopePoint, UUID} from '../../types/commonTypes';
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import PointPanel from '../../components/scope/PointPanel';
-import usePointNavigation from '../../hooks/usePointNavigation';
+import usePointNavigation from '../../hooks/singleton/usePointNavigation';
 
 export interface ScopePointProps {
   scopeId: UUID,
@@ -26,14 +26,14 @@ const ScopePoint: FC<ScopePointProps> = ({
   const numPoints = pointStore.list().length;
   const numTracks = trackStore.list().length;
 
-  const pointChange = (newPoint: ScopePoint) => {
+  const pointChange = useCallback((newPoint: ScopePoint) => {
     const existing = pointStore.retrieve(newPoint.id);
     existing && pointStore.update(newPoint);
-  };
+  }, [pointStore.retrieve, pointStore.update]);
 
-  const goTo = (pointId: UUID) => {
+  const goTo = useCallback((pointId: UUID) => {
     pointNavigation.start(scopeId, pointId);
-  };
+  }, [pointNavigation.start]);
 
   return selectedScope && selectedPoint ? <PointPanel
     scope={selectedScope}

@@ -1,5 +1,5 @@
 import {MapboxStyle} from 'react-map-gl';
-import {downloadStatusType} from '../hooks/useDownloadStatus';
+import {downloadStatusType} from '../hooks/singleton/useDownloadStatus';
 import {BaseMap} from '../types/commonTypes';
 import {OFFLINE_DATASOURCES, OFFLINE_GLYPHS} from '../config';
 import {Capacitor} from '@capacitor/core';

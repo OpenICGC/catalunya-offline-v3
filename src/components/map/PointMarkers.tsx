@@ -46,4 +46,4 @@ const PointMarkers: FC<PointMarkersProps> = ({
   }</>;
 };
 
-export default PointMarkers;
+export default React.memo(PointMarkers);

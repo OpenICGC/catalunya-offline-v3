@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 import Layout from '../components/Layout';
 import Map from './Map';
@@ -8,19 +8,19 @@ import Layers from './sidepanels/Layers';
 import BaseMaps from './sidepanels/BaseMaps';
 import ScopeMain from './sidepanels/ScopeMain';
 import Stack from '@mui/material/Stack';
-import useEditingPosition from '../hooks/useEditingPosition';
-import useRecordingTrack from '../hooks/useRecordingTrack';
-import usePointNavigation from '../hooks/usePointNavigation';
-import useTrackNavigation from '../hooks/useTrackNavigation';
+import useEditingPosition from '../hooks/singleton/useEditingPosition';
+import useRecordingTrack from '../hooks/singleton/useRecordingTrack';
+import usePointNavigation from '../hooks/singleton/usePointNavigation';
+import useTrackNavigation from '../hooks/singleton/useTrackNavigation';
 import {IS_WEB} from '../config';
-import useSelectedScopeId from '../hooks/appState/useSelectedScopeId';
-import useSelectedPointId from '../hooks/appState/useSelectedPointId';
-import useSelectedTrackId from '../hooks/appState/useSelectedTrackId';
-import useVisibleLayers from '../hooks/appState/useVisibleLayers';
-import useDownloadStatus from '../hooks/useDownloadStatus';
+import useSelectedScopeId from '../hooks/persistedStates/useSelectedScopeId';
+import useSelectedPointId from '../hooks/persistedStates/useSelectedPointId';
+import useSelectedTrackId from '../hooks/persistedStates/useSelectedTrackId';
+import useVisibleLayers from '../hooks/persistedStates/useVisibleLayers';
+import useDownloadStatus from '../hooks/singleton/useDownloadStatus';
 import DownloadRequest from '../components/notifications/DownloadRequest';
 import DownloadManager from './DownloadManager';
-import useBasemapId from '../hooks/appState/useBasemapId';
+import useBasemapId from '../hooks/persistedStates/useBasemapId';
 
 const stackSx = {
   height: '100%',
@@ -29,7 +29,7 @@ const stackSx = {
   p: 0
 };
 
-const Index: FC = () => {
+const MainView: FC = () => {
   const [isSidePanelOpen, setSidePanelOpen] = useState(false);
 
   const [baseMapId, setBaseMapId] = useBasemapId();
@@ -51,8 +51,8 @@ const Index: FC = () => {
     }
   }, [visibleLayers]);
 
-  const isEditingPosition = !!useEditingPosition().position;
-  const isRecordingTrack = useRecordingTrack().isRecording;
+  const isEditingPosition = useEditingPosition().isEditing;
+  const isRecordingTrack =  useRecordingTrack().isRecording;
   const pointNavigatingTo = usePointNavigation().target;
   const trackNavigatingTo = useTrackNavigation().target;
 
@@ -83,19 +83,19 @@ const Index: FC = () => {
     trackNavigatingTo && setSidePanelOpen(false); // Closes panel when track navigation starts
   }, [trackNavigatingTo?.id]);
 
-  const handleSelectPoint =  useCallback((pointId: UUID) => {
+  const handleSelectPoint = useCallback((pointId: UUID) => {
     setTrack(undefined);
     setPoint(pointId);
     handleManagerChanged('SCOPES');
   }, []);
 
-  const handleSelectTrack =  useCallback((trackId: UUID) => {
+  const handleSelectTrack = useCallback((trackId: UUID) => {
     setPoint(undefined);
     setTrack(trackId);
     handleManagerChanged('SCOPES');
   }, []);
 
-  const sidePanelContent = manager
+  const sidePanelContent = useMemo(() => manager
     ? <Stack sx={stackSx}>
       {manager === 'LAYERS' && <Layers
         visibleLayers={visibleLayers}
@@ -117,9 +117,9 @@ const Index: FC = () => {
       />}
     </Stack>
     : null
-  ;
+  , [manager, visibleLayers, toggleLayerVisibility, baseMapId, setBaseMapId, scope, setScope, point, setPoint, track, setTrack]);
 
-  const mainContent = <Map
+  const mainContent = useMemo(() => <Map
     baseMapId={baseMapId}
     onManagerChanged={handleManagerChanged}
     selectedScopeId={scope}
@@ -129,7 +129,7 @@ const Index: FC = () => {
     selectedTrackId={track}
     onTrackSelected={handleSelectTrack}
     visibleLayers={visibleLayers}
-  />;
+  />, [baseMapId, handleManagerChanged, scope, setScope, point, handleSelectPoint, track, handleSelectTrack, visibleLayers]);
 
   return <>
     {downloadRequested === true && isOfflineReady === false &&
@@ -150,4 +150,4 @@ const Index: FC = () => {
   </>;
 };
 
-export default Index;
+export default MainView;

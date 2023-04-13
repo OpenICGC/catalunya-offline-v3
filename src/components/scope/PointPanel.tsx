@@ -30,11 +30,12 @@ import styled from '@mui/material/styles/styled';
 
 import FeaturesSummary from './FeaturesSummary';
 
-import {IS_WEB} from '../../config';
+import {IS_WEB, MAP_PROPS} from '../../config';
 import useImages from '../../hooks/useImages';
 import {openPhoto} from '../../utils/camera';
-import useEditingPosition from '../../hooks/useEditingPosition';
+import useEditingPosition from '../../hooks/singleton/useEditingPosition';
 import {Position} from 'geojson';
+import useViewport from '../../hooks/singleton/useViewport';
 
 //STYLES
 const sectionWrapperSx = {
@@ -113,6 +114,7 @@ const PointPanel: FC<PointPanelProps> = ({
   onGoTo
 }) => {
   const {t} = useTranslation();
+  const {viewport, setViewport} = useViewport();
 
   const [isEditing, setIsEditing] = useState(false);
   const [point, setPoint] = useState(initialPoint);
@@ -247,17 +249,25 @@ const PointPanel: FC<PointPanelProps> = ({
     stopEditing();
   };
 
+  const [acceptPoint, setAcceptPoint] = useState(false);
+  useEffect(() => {
+    if (acceptPoint) {
+      const newPosition = [viewport.longitude, viewport.latitude];
+      setPosition(newPosition);
+    }
+    setAcceptPoint(false);
+  }, [acceptPoint]);
+
   const startEditingPosition = () => {
+
+    const position = point.geometry.coordinates;
+    setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
     editingPosition.start({
-      initialPosition: point?.geometry.coordinates,
-      onAccept: setPosition,
+      initialPosition: position,
+      onAccept: () => setAcceptPoint(true),
       onCancel: setPosition
     });
   };
-
-  useEffect(() => {
-    setPosition(editingPosition.position);
-  }, [editingPosition.position]);
 
   return <>
     <Header
@@ -359,4 +369,4 @@ const PointPanel: FC<PointPanelProps> = ({
   </>;
 };
 
-export default PointPanel;
+export default React.memo(PointPanel);

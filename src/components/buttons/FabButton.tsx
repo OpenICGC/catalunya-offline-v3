@@ -241,4 +241,4 @@ const FabButton: FC<FabButtonProps> = ({
   </Box>;
 };
 
-export default FabButton;
+export default React.memo(FabButton);

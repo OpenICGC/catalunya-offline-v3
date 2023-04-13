@@ -1,0 +1,14 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "1acb5145-5a7f-409e-b82a-626853848da5",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": []
+      },
+      "properties": {}
+    }
+  ]
+}

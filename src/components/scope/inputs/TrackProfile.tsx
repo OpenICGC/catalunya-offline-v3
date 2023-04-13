@@ -49,9 +49,7 @@ const TrackProfile: FC<TrackProfileProps> = ({
   const isLatitudeValid = coordinates?.some(coord => (coord[1] >= -90 && coord[1] <= 90));
   const isHeightValid = coordinates?.some(coord => coord.length >= 3) && !coordinates?.every(coord => coord[2] === 0);
   const isTrackValid = coordinates && isHeightValid && isLongitudeValid && isLatitudeValid;
-  {
-    !isTrackValid && console.warn(t('trackAlert.noTrack'));
-  }
+
   const isNavigateMode: boolean = coordinates ?
     (currentPositionIndex !== undefined && currentPositionIndex >= 0 && currentPositionIndex < coordinates.length)
     : false;

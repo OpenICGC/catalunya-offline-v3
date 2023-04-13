@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Marker} from 'react-map-gl';
 
-import {Geolocation} from '../../hooks/useGeolocation';
+import {Geolocation} from '../../hooks/singleton/useGeolocation';
 import LocationMarkerIcon, {SIZE} from './LocationMarkerIcon';
 import {HEXColor} from '../../types/commonTypes';
 
@@ -29,4 +29,4 @@ const LocationMarker: FC<LocationMarkerProps> = ({color, geolocation, heading, h
   }
 };
 
-export default LocationMarker;
+export default React.memo(LocationMarker);

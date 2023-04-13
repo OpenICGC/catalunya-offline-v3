@@ -13,5 +13,4 @@ const Template: Story<SearchBoxAndMenuProps> = args => <SearchBoxAndMenu {...arg
 
 export const Default = Template.bind({});
 Default.args = {
-  placeholder: 'Buscar...'
 };

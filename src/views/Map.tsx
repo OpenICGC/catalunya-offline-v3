@@ -20,24 +20,24 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 //UTILS
 import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
-import {DEFAULT_VIEWPORT, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
+import {DEFAULT_VIEWPORT, FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
 import {AnyLayer, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
 import {Feature, Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
-import {useViewport} from '../hooks/useViewport';
-import useEditingPosition from '../hooks/useEditingPosition';
-import useCompass from '../hooks/useCompass';
-import useGeolocation from '../hooks/useGeolocation';
-import usePointNavigation from '../hooks/usePointNavigation';
-import useRecordingTrack from '../hooks/useRecordingTrack';
-import useTrackNavigation from '../hooks/useTrackNavigation';
-import {Manager, ScopePoint, UUID} from '../types/commonTypes';
+import useViewport from '../hooks/singleton/useViewport';
+import useEditingPosition from '../hooks/singleton/useEditingPosition';
+import useCompass from '../hooks/singleton/useCompass';
+import useGeolocation from '../hooks/singleton/useGeolocation';
+import usePointNavigation from '../hooks/singleton/usePointNavigation';
+import useRecordingTrack from '../hooks/singleton/useRecordingTrack';
+import useTrackNavigation from '../hooks/singleton/useTrackNavigation';
+import {ContextMapsResult, Manager, ScopePoint, UUID} from '../types/commonTypes';
 import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
 import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 import useMapStyle from '../hooks/useMapStyle';
-/*import {useStatus} from '@capacitor-community/network-react';*/
+import useIsActive from '../hooks/singleton/useIsActive';
 
 const HEADER_HEIGHT = 48;
 const SEARCHBOX_HEIGHT = 64;
@@ -76,7 +76,8 @@ const Map: FC<MainContentProps> = ({
   visibleLayers
 }) => {
   const mapRef = useRef<MapRef>(null);
-  const {viewport, setViewport} = useViewport();
+  const isActive = useIsActive();
+  const {viewport, setViewport, fitBounds: viewportFitBounds} = useViewport();
   const {geolocation, error: geolocationError} = useGeolocation();
   const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
@@ -103,23 +104,54 @@ const Map: FC<MainContentProps> = ({
 
   const recordingTrack = useRecordingTrack();
 
-  const [isFabOpen, setFabOpen] =useState<boolean>(false);
-  const [isFabHidden, setFabHidden] =useState<boolean>(false);
-  const [isSearchBoxHidden, setSearchBoxHidden] =useState<boolean>(false);
+  const [isFabOpen, setFabOpen] = useState<boolean>(false);
+  const [isFabHidden, setFabHidden] = useState<boolean>(false);
+  const [isSearchBoxHidden, setSearchBoxHidden] = useState<boolean>(false);
   const [isContextualMenuOpen, setContextualMenuOpen] = useState(false);
 
   const [bottomMargin, setBottomMargin] = useState(0);
   const [topMargin, setTopMargin] = useState(SEARCHBOX_HEIGHT);
-  const [fitBounds, setFitBounds] = useState<[number, number, number, number]>();
 
-  const mapStyle = useMapStyle({baseMapId});
+  const mapStyle = useMapStyle(baseMapId);
 
-  const toggleFabOpen = () => setFabOpen(prevState => !prevState);
+  const toggleFabOpen = useCallback(() => setFabOpen(prevState => !prevState), []);
 
   const [isLargeSize] = useIsLargeSize();
   const [gpsPositionColor] = useGpsPositionColor();
 
-  const sources: Sources = useMemo(() => {
+  const fitBounds = useCallback((bounds) => {
+    const width = mapRef.current?.getContainer().offsetWidth;
+    const height = mapRef.current?.getContainer().offsetHeight;
+    width && height && viewportFitBounds(width, height, bounds, {
+      padding: {
+        top: FIT_BOUNDS_PADDING + topMargin,
+        bottom: FIT_BOUNDS_PADDING + bottomMargin,
+        left: FIT_BOUNDS_PADDING,
+        right: FIT_BOUNDS_PADDING
+      }
+    });
+  }, [topMargin, bottomMargin, viewportFitBounds]);
+
+  const scopeDependantSources: Sources = useMemo(() => ({
+    'trackList': {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: trackList.filter(track =>
+          track.geometry !== null &&
+          track.properties.isVisible
+        ).map(track => ({
+          ...track,
+          properties: {
+            ...track.properties,
+            color: track.properties.color || scopeColor
+          }
+        }) as Feature)
+      }
+    }
+  }), [trackList]);
+
+  const navigationDependantSources: Sources = useMemo(() => {
     const {latitude, longitude} = geolocation;
 
     return {
@@ -157,29 +189,18 @@ const Map: FC<MainContentProps> = ({
           type: 'FeatureCollection',
           features: pointNavigation.feature ? [pointNavigation.feature] : []
         }
-      },
-      'trackList': {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: trackList.filter(track =>
-            track.geometry !== null &&
-            track.properties.isVisible
-          ).map(track => ({
-            ...track,
-            properties: {
-              ...track.properties,
-              color: track.properties.color || scopeColor
-            }
-          }) as Feature)
-        }
-      },
-      'extraLayers': {
-        type: 'geojson',
-        data: 'extra-layers.json'
       }
     };
-  }, [geolocation, recordingTrack.coordinates, pointNavigation.feature, trackList]);
+  }, [geolocation, recordingTrack.coordinates, pointNavigation.feature]);
+
+  const sources: Sources = useMemo(() => ({
+    ...scopeDependantSources,
+    ...navigationDependantSources,
+    'extraLayers': {
+      type: 'geojson',
+      data: 'extra-layers.json'
+    }
+  }), [scopeDependantSources, navigationDependantSources]);
 
   const layers: Array<AnyLayer> = useMemo(() => {
     return [{
@@ -272,7 +293,7 @@ const Map: FC<MainContentProps> = ({
   }, [gpsPositionColor, visibleLayers]);
 
   ////// Handle orientation & navigation state transitions
-  const handleOrientationClick = () => {
+  const handleOrientationClick = useCallback(() => {
     if (locationStatus === LOCATION_STATUS.NAVIGATING) {
       setLocationStatus(LOCATION_STATUS.TRACKING);
     } else {
@@ -281,9 +302,9 @@ const Map: FC<MainContentProps> = ({
         pitch: 0
       });
     }
-  };
+  }, [locationStatus, mapRef]);
 
-  const handleLocationClick = () => {
+  const handleLocationClick = useCallback(() => {
     if (locationStatus === LOCATION_STATUS.NOT_TRACKING) {
       setLocationStatus(LOCATION_STATUS.TRACKING);
     } else if (locationStatus === LOCATION_STATUS.TRACKING) {
@@ -291,13 +312,13 @@ const Map: FC<MainContentProps> = ({
     } else if (locationStatus === LOCATION_STATUS.NAVIGATING) {
       setLocationStatus(LOCATION_STATUS.TRACKING);
     }
-  };
+  }, [locationStatus]);
 
-  const disableTracking = () => {
+  const disableTracking = useCallback(() => {
     if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
       setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
     }
-  };
+  }, [locationStatus]);
 
   useEffect(() => {
     if (geolocationError) {
@@ -305,65 +326,47 @@ const Map: FC<MainContentProps> = ({
     }
   }, [geolocationError]);
 
-
   useEffect(() => {
-    if (locationStatus === LOCATION_STATUS.TRACKING) {
+    if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
       if (geolocation?.latitude && geolocation?.longitude) {
-        mapRef.current?.easeTo({
-          bearing: 0,
-          pitch: 0,
-          center: [geolocation.longitude, geolocation.latitude],
-          zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
-        });
-      }
-    } else if (locationStatus === LOCATION_STATUS.NAVIGATING) {
-      mapRef.current?.easeTo({
-        pitch: 60,
-        bearing: heading || 0
-      });
-    }
-  }, [locationStatus]);
-
-  useEffect(() => {
-    const {latitude, longitude} = geolocation;
-    if (latitude && longitude) {
-      if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
         setViewport({
-          latitude,
-          longitude,
-          zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom)
-        });
-      } else if (locationStatus === LOCATION_STATUS.DISABLED) {
-        setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
-      }
-    }
-  }, [geolocation]);
-
-  useEffect(() => {
-    if (locationStatus === LOCATION_STATUS.NAVIGATING) {
-      if (heading !== undefined) {
-        setViewport({
-          bearing: heading
+          longitude: geolocation.longitude,
+          latitude: geolocation.latitude,
+          zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom),
+          bearing: locationStatus === LOCATION_STATUS.NAVIGATING && heading ? heading : 0,
+          pitch: locationStatus === LOCATION_STATUS.NAVIGATING ? 60 : 0
         });
       }
+    } else if (locationStatus === LOCATION_STATUS.DISABLED) {
+      setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
     }
-  }, [heading]);
+  }, [locationStatus, geolocation.latitude, geolocation.longitude, viewport.zoom, heading]);
 
-  const changeManager = (clicked: Manager) => {
-    onManagerChanged(clicked);
+  const handleLayersClick = useCallback(() => {
+    onManagerChanged('LAYERS');
     setFabOpen(false);
-  };
+  }, [onManagerChanged]);
 
-  const selectPoint = (point: ScopePoint) => {
+  const handleBaseMapsClick = useCallback(() => {
+    onManagerChanged('BASEMAPS');
+    setFabOpen(false);
+  }, [onManagerChanged]);
+
+  const handleScopesClick = useCallback(() => {
+    onManagerChanged('SCOPES');
+    setFabOpen(false);
+  }, [onManagerChanged]);
+
+  const selectPoint = useCallback((point: ScopePoint) => {
     setViewport({
       longitude: point.geometry.coordinates[0],
       latitude: point.geometry.coordinates[1],
       zoom: MAP_PROPS.maxZoom
     });
     onPointSelected(point.id);
-  };
+  }, [onPointSelected]);
 
-  const createNewPoint = (coordinates: Position) => {
+  const createNewPoint = useCallback((coordinates: Position) => {
     const id = uuid();
     pointStore.create({
       type: 'Feature',
@@ -383,24 +386,45 @@ const Map: FC<MainContentProps> = ({
     setPointIntent(undefined);
     onPointSelected(id);
     return id;
-  };
+  }, [pointStore, t, onPointSelected]);
+
+  const [acceptPoint, setAcceptPoint] = useState(false);
+
+  useEffect(() => {
+    if (acceptPoint) {
+      const newPosition = [viewport.longitude, viewport.latitude];
+      if (selectedScopeId) {
+        createNewPoint(newPosition);
+      } else {
+        setPointIntent(newPosition);
+      }
+      setAcceptPoint(false);
+    }
+  }, [acceptPoint, viewport.longitude, viewport.latitude, selectedScopeId, createNewPoint]);
 
   const onLongTap = useCallback((position: Position) => {
+    setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
     editingPosition.start({
       initialPosition: position,
-      onAccept: (newPosition) => {
-        if (selectedScopeId) {
-          createNewPoint(newPosition);
-        } else {
-          setPointIntent(newPosition);
-        }
-      }
+      onAccept: () => setAcceptPoint(true)
     });
-  }, [editingPosition, selectedScopeId, pointStore]);
+  }, [editingPosition.start]);
 
   const longTouchTimer = useRef<number>();
 
-  const handleTouchStart = (e: MapTouchEvent) => {
+  const clearLongTouchTimer = useCallback(() => {
+    if (longTouchTimer.current) {
+      window.clearTimeout(longTouchTimer.current);
+      longTouchTimer.current = undefined;
+    }
+  }, [longTouchTimer]);
+
+  const handleTouchMove = useCallback(() => {
+    disableTracking();
+    clearLongTouchTimer();
+  }, [disableTracking, clearLongTouchTimer]);
+
+  const handleTouchStart = useCallback((e: MapTouchEvent) => {
     if (e.originalEvent.touches.length > 1) {
       return;
     }
@@ -408,40 +432,34 @@ const Map: FC<MainContentProps> = ({
     longTouchTimer.current = window.setTimeout(() => {
       onLongTap([e.lngLat.lng, e.lngLat.lat]);
     }, 500);
-  };
+  }, [clearLongTouchTimer, longTouchTimer, onLongTap]);
 
-  const clearLongTouchTimer = () => {
-    if (longTouchTimer.current) {
-      window.clearTimeout(longTouchTimer.current);
-      longTouchTimer.current = undefined;
-    }
-  };
-  const handleMapClick = () => {
+  const handleMapClick = useCallback(() => {
     setContextualMenuOpen(false);
     setSearchBoxHidden(!isSearchBoxHidden);
     setFabOpen(false);
     setFabHidden(!isFabHidden);
-  };
-  const handleDoubleClick = (e: MapLayerMouseEvent) => {
-    onLongTap([e.lngLat.lng, e.lngLat.lat]);
-  };
+  }, [isSearchBoxHidden, isFabHidden]);
 
-  const handleScopeSelected = (scopeId: UUID) => {
+  const handleDoubleClick = useCallback((e: MapLayerMouseEvent) => {
+    onLongTap([e.lngLat.lng, e.lngLat.lat]);
+  }, [onLongTap]);
+
+  const handleScopeSelected = useCallback((scopeId: UUID) => {
     onScopeSelected(scopeId);
-  };
+  }, [onScopeSelected]);
 
   useEffect(() => {
     pointIntent && selectedScopeId && createNewPoint(pointIntent);
-  }, [pointIntent, selectedScopeId]);
+  }, [pointIntent, selectedScopeId, createNewPoint]);
 
-  const handleScopeSelectionCancelled = () => {
-    // TODO cancel the point intent
+  const handleScopeSelectionCancelled = useCallback(() => {
     setPointIntent(undefined);
-  };
+  }, []);
 
-  const handlePointNavigationFitBounds = () => {
-    setFitBounds(pointNavigation.getBounds());
-  };
+  const handlePointNavigationFitBounds = useCallback(() => {
+    fitBounds(pointNavigation.getBounds());
+  }, [pointNavigation.getBounds]);
 
   useEffect(() => {
     if (recordingTrack.isRecording) {
@@ -452,83 +470,92 @@ const Map: FC<MainContentProps> = ({
   }, [recordingTrack.isRecording]);
 
   useEffect(() => {
-    if (pointNavigation.target) {
+    if (pointNavigation.isNavigating) {
       trackNavigation?.stop();
       setBottomMargin(POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT);
-      setFitBounds(pointNavigation.getBounds());
     } else {
       setBottomMargin(0);
     }
-  }, [pointNavigation.target]);
+  }, [pointNavigation.isNavigating, trackNavigation.stop]);
 
-  const handlePointNavigationShowDetails = () => pointNavigation.target && onPointSelected(pointNavigation.target.id);
+  const handlePointNavigationShowDetails = useCallback(() => {
+    pointNavigation.target && onPointSelected(pointNavigation.target.id);
+  }, [pointNavigation.target, onPointSelected]);
 
-  const handleTrackNavigationFitBounds = () => {
-    setFitBounds(trackNavigation.getBounds());
-  };
+  const handleTrackNavigationFitBounds = useCallback(() => {
+    fitBounds(trackNavigation.getBounds());
+  }, [trackNavigation.getBounds]);
 
   useEffect(() => {
-    if (trackNavigation.target) {
+    if (trackNavigation.isNavigating) {
       pointNavigation?.stop();
       setBottomMargin(TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT);
-      setFitBounds(trackNavigation.getBounds());
     } else {
       setBottomMargin(0);
     }
-  }, [trackNavigation.target]);
+  }, [trackNavigation.isNavigating, pointNavigation.stop]);
 
-  useEffect(() => {
-    if (fitBounds !== undefined) {
-      mapRef.current?.fitBounds(fitBounds, {padding: {top: 50 + topMargin, bottom: 50 + bottomMargin, left: 50, right: 50}});
-      setFitBounds(undefined);
-      setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
-    }
-  }, [fitBounds]);
+  const handleTrackNavigationShowDetails = useCallback(() => {
+    trackNavigation.target && onTrackSelected(trackNavigation.target.id);
+  }, [trackNavigation.target, onTrackSelected]);
 
-  const handleTrackNavigationShowDetails = () => trackNavigation.target && onTrackSelected(trackNavigation.target.id);
+  const [isSettingsDialogOpen, setSettingsDialogOpen] = useState<boolean>(false);
+  const [isAboutDialogOpen, setAboutDialogOpen] = useState<boolean>(false);
 
-  const [isSettingsDialogOpen, setSettingsDialogOpen] =useState<boolean>(false);
-  const [isAboutDialogOpen, setAboutDialogOpen] =useState<boolean>(false);
-  const handleContextualMenu = (menuId: string) => {
+  const handleContextualMenu = useCallback((menuId: string) => {
     menuId === 'settings'
       ? setSettingsDialogOpen(true)
       : menuId === 'about' 
         ? setAboutDialogOpen(true)
         : undefined;
-  };
+  }, []);
 
-  const handleTopChanged = (height: number) => {
+  const handleToggleContextualMenu = useCallback(() => {
+    setContextualMenuOpen(prevValue => !prevValue);
+  }, []);
+
+  const handleResultClick = useCallback((result: ContextMapsResult) => {
+    const coords = result.coordenades.split(',');
+    setViewport({
+      latitude: parseFloat(coords[1]),
+      longitude: parseFloat(coords[0]),
+      zoom: 14
+    });
+    setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
+  }, [setViewport]);
+
+  const handleTopChanged = useCallback((height: number) => {
     setBottomMargin(height);
-  };
+  }, []);
 
-  const handleEditingPositionAccept = () => {
+  const handleEditingPositionAccept = useCallback(() => {
     setBottomMargin(0);
     editingPosition.accept();
-  };
+  }, [editingPosition.accept]);
 
-  const handleEditingPositionCancel = () => {
+  const handleEditingPositionCancel = useCallback(() => {
     setBottomMargin(0);
     editingPosition.cancel();
-  };
+  }, [editingPosition.cancel]);
 
-  const handleRecordingTrackStop = () => {
+  const handleRecordingTrackStop = useCallback(() => {
     setBottomMargin(0);
     recordingTrack.stop();
-  };
+  }, [recordingTrack.stop]);
 
   return <>
-    <SearchBoxAndMenu
-      placeholder={t('actions.search')}
+    {isActive && <SearchBoxAndMenu
       onContextualMenuClick={handleContextualMenu}
       isHidden={isSearchBoxHidden}
       isContextualMenuOpen={isContextualMenuOpen}
-      toggleContextualMenu={() => setContextualMenuOpen(!isContextualMenuOpen)}
-      onSearchClick={() => setLocationStatus(LOCATION_STATUS.NOT_TRACKING)}
-    />
+      onToggleContextualMenu={handleToggleContextualMenu}
+      onResultClick={handleResultClick}
+    />}
     <GeocomponentMap
       styleDiffing={true}
       RTLTextPlugin={''}
       {...MAP_PROPS}
+      mapLib={maplibregl}
       //reuseMaps
       ref={mapRef}
       mapStyle={mapStyle}
@@ -537,10 +564,7 @@ const Map: FC<MainContentProps> = ({
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
-      onTouchMove={() => {
-        disableTracking();
-        clearLongTouchTimer();
-      }}
+      onTouchMove={handleTouchMove}
       onWheel={disableTracking}
       onTouchStart={handleTouchStart}
       onTouchEnd={clearLongTouchTimer}
@@ -552,19 +576,23 @@ const Map: FC<MainContentProps> = ({
     >
       <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>
       <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
-      {!editingPosition.position && <FabButton
-        isFabOpen={isFabOpen} onFabClick={toggleFabOpen} isFabHidden={isFabHidden}
-        bearing={viewport.bearing} pitch={viewport.pitch}
+
+      {!editingPosition.isEditing && <FabButton
+        isFabOpen={isFabOpen}
+        onFabClick={toggleFabOpen}
+        isFabHidden={isFabHidden}
+        bearing={viewport.bearing}
+        pitch={viewport.pitch}
         locationStatus={locationStatus}
         onOrientationClick={handleOrientationClick}
         onLocationClick={handleLocationClick}
-        onLayersClick={() => changeManager('LAYERS')}
-        onBaseMapsClick={() => changeManager('BASEMAPS')}
-        onScopesClick={() => changeManager('SCOPES')}
+        onLayersClick={handleLayersClick}
+        onBaseMapsClick={handleBaseMapsClick}
+        onScopesClick={handleScopesClick}
       />}
     </GeocomponentMap>
 
-    {!!editingPosition.position && <PositionEditor
+    {editingPosition.isEditing && <PositionEditor
       name={selectedPoint?.properties.name}
       bottomMargin={bottomMargin}
       color={pointColor}
@@ -617,4 +645,4 @@ const Map: FC<MainContentProps> = ({
     />}
   </>;
 };
-export default Map;
+export default React.memo(Map);

@@ -1,10 +1,10 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import {ScopeTrack, UUID} from '../../types/commonTypes';
 
 import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
 import TrackPanel from '../../components/scope/TrackPanel';
-import useRecordingTrack from '../../hooks/useRecordingTrack';
-import useTrackNavigation from '../../hooks/useTrackNavigation';
+import useRecordingTrack from '../../hooks/singleton/useRecordingTrack';
+import useTrackNavigation from '../../hooks/singleton/useTrackNavigation';
 
 export interface ScopeTrackProps {
   scopeId: UUID,
@@ -29,13 +29,13 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   const numPoints = pointStore.list().length;
   const numTracks = trackStore.list().length;
 
-  const trackChange = (newTrack: ScopeTrack) => {
+  const trackChange = useCallback((newTrack: ScopeTrack) => {
     if (trackStore.retrieve(newTrack.id)) {
       trackStore.update(newTrack);
     }
-  };
+  }, [trackStore.retrieve, trackStore.update]);
 
-  const recordTrack = () => {
+  const recordTrack = useCallback(() => {
     recordingTrack.start({
       onStop: (coordinates) => {
         selectedTrack && trackChange({
@@ -47,11 +47,11 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
         });
       }
     });
-  };
+  }, [recordingTrack.start, selectedTrack]);
 
-  const goTo = (trackId: UUID) => {
+  const goTo = useCallback((trackId: UUID) => {
     trackNavigation.start(scopeId, trackId);
-  };
+  }, [trackNavigation.start]);
 
   return selectedScope && selectedTrack ? <TrackPanel
     scope={selectedScope}

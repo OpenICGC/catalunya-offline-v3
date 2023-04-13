@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {App} from '@capacitor/app';
 import {singletonHook} from 'react-singleton-hook';
 
-const useIsActive = () => {
+const useIsActive = (): boolean => {
   const [isActive, setActive] = useState<boolean>(true);
 
   useEffect(() => {
@@ -17,7 +17,4 @@ const useIsActive = () => {
   return isActive;
 };
 
-export default singletonHook(
-  true,
-  () => useIsActive()
-);
+export default singletonHook<boolean>(true, useIsActive);

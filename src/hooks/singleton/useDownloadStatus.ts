@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {BASEMAPS, OFFLINE_DATASOURCES, OFFLINE_GLYPHS} from '../config';
-import {offlineDirExists, onlineFileSize} from '../utils/filesystem';
+import {BASEMAPS, OFFLINE_DATASOURCES, OFFLINE_GLYPHS} from '../../config';
+import {offlineDirExists, onlineFileSize} from '../../utils/filesystem';
 import {singletonHook} from 'react-singleton-hook';
 
 
@@ -86,14 +86,16 @@ const initialDatasourceStatus: downloadStatusType = OFFLINE_DATASOURCES.map(data
   }
 ));
 
-const useDownloadStatusImpl = (): {
+type useDownloadStatusType =  {
   isOfflineReady: boolean | undefined,
   downloadStatus: downloadStatusType,
   setDownloadProgress: (url: string, newBytes: number) => void,
   setStatus: (url: string, newStatus: downloadStatusStatus) => void,
   info: InfoType,
   pendingSize: number
-} => {
+};
+
+const useDownloadStatus = (): useDownloadStatusType => {
   // 1. Rellenar array de downloadStatus con el estado inicial (síncrono): url, localPath, labels,
   // contentLength=undefined, status="unknown"
   const [downloadStatus, setDownloadStatus] = useState<downloadStatusType>([
@@ -196,15 +198,13 @@ const useDownloadStatusImpl = (): {
   };
 };
 
-const useDownloadStatusInit = () => ({
+const initialState: useDownloadStatusType = {
   isOfflineReady: undefined,
   downloadStatus: [],
   setDownloadProgress: () => undefined,
   setStatus: () => undefined,
   info: {totalItems: 0, completedItems: 0, progress: 0, currentItem: undefined},
   pendingSize: 0
-});
+};
 
-const useDownloadStatus = singletonHook(useDownloadStatusInit, useDownloadStatusImpl);
-
-export default useDownloadStatus;
+export default singletonHook<useDownloadStatusType>(initialState, useDownloadStatus);

@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
@@ -8,12 +8,14 @@ import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCo
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
 import ScopeTrack from './ScopeTrack';
-import useEditingPosition from '../../hooks/useEditingPosition';
+import useEditingPosition from '../../hooks/singleton/useEditingPosition';
 import useShare from '../../hooks/useShare';
 import HandleExport from '../../components/scope/export/HandleExport';
-import usePointNavigation from '../../hooks/usePointNavigation';
-import useTrackNavigation from '../../hooks/useTrackNavigation';
-import useScopeFeaturesPanelTab from '../../hooks/appState/useScopeFeaturesPanelTab';
+import usePointNavigation from '../../hooks/singleton/usePointNavigation';
+import useTrackNavigation from '../../hooks/singleton/useTrackNavigation';
+import useScopeFeaturesPanelTab from '../../hooks/persistedStates/useScopeFeaturesPanelTab';
+import useViewport from '../../hooks/singleton/useViewport';
+import {MAP_PROPS} from '../../config';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -33,6 +35,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   onTrackSelected
 }) => {
   const {t} = useTranslation();
+  const {viewport, setViewport} = useViewport();
   const scopeStore = useScopes();
   const pointStore = useScopePoints(scopeId);
   const trackStore = useScopeTracks(scopeId);
@@ -46,34 +49,43 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const selectedScope = scopeStore.retrieve(scopeId);
   const editingPosition = useEditingPosition();
 
-  const unselectPoint = () => onPointSelected();
-  const unselectTrack = () => onTrackSelected();
+  const unselectPoint = useCallback(() => onPointSelected(), [onPointSelected]);
+  const unselectTrack = useCallback(() => onTrackSelected(), [onTrackSelected]);
 
-  const pointAdd = () => {
+  const [acceptPoint, setAcceptPoint] = useState(false);
+
+  useEffect(() => {
+    if (acceptPoint) {
+      const newPosition = [viewport.longitude, viewport.latitude];
+      const id = uuid();
+      pointStore.create({
+        type: 'Feature',
+        id: id,
+        geometry: {
+          type: 'Point',
+          coordinates: newPosition
+        },
+        properties: {
+          name: `${t('point')} ${pointStore.list().length + 1}`,
+          timestamp: Date.now(),
+          description: '',
+          images: [],
+          isVisible: true
+        }
+      });
+      onPointSelected(id);
+      setAcceptPoint(false);
+    }
+  }, [acceptPoint]);
+
+  const pointAdd = useCallback(() => {
+    setViewport({zoom: MAP_PROPS.maxZoom});
     editingPosition.start({
-      onAccept: (newPosition) => {
-        const id = uuid();
-        pointStore.create({
-          type: 'Feature',
-          id: id,
-          geometry: {
-            type: 'Point',
-            coordinates: newPosition
-          },
-          properties: {
-            name: `${t('point')} ${pointStore.list().length + 1}`,
-            timestamp: Date.now(),
-            description: '',
-            images: [],
-            isVisible: true
-          }
-        });
-        onPointSelected(id);
-      }
+      onAccept: () => setAcceptPoint(true)
     });
-  };
+  }, [setViewport, editingPosition.start]);
 
-  const pointColorChange = (pointId: UUID, newColor: HEXColor) => {
+  const pointColorChange = useCallback((pointId: UUID, newColor: HEXColor) => {
     const existing = pointStore.retrieve(pointId);
     existing && pointStore.update({
       ...existing,
@@ -82,9 +94,9 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         color: newColor
       }
     });
-  };
+  }, [pointStore, pointStore]);
 
-  const pointRename = (pointId: UUID, newName: string) => {
+  const pointRename = useCallback((pointId: UUID, newName: string) => {
     const existing = pointStore.retrieve(pointId);
     existing && pointStore.update({
       ...existing,
@@ -93,9 +105,9 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         name: newName
       }
     });
-  };
+  }, [pointStore]);
 
-  const pointToggleVisibility = (pointId: UUID) => {
+  const pointToggleVisibility = useCallback((pointId: UUID) => {
     const existing = pointStore.retrieve(pointId);
     existing && pointStore.update({
       ...existing,
@@ -104,26 +116,25 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         isVisible: !existing.properties.isVisible
       }
     });
-  };
+  }, [pointStore]);
 
-  const pointDelete = (pointId: UUID) => {
+  const pointDelete = useCallback((pointId: UUID) => {
     const existing = pointStore.retrieve(pointId);
     existing && pointStore.delete(pointId);
-  };
+  }, [pointStore]);
 
-  const pointGoTo = (pointId: UUID) => {
+  const pointGoTo = useCallback((pointId: UUID) => {
     pointNavigation.start(scopeId, pointId);
-  };
+  }, [pointNavigation.start, scopeId]);
 
-  const pointExport = (pointId: UUID) => {
+  const pointExport = useCallback((pointId: UUID) => {
     const point = pointStore.retrieve(pointId);
     if (point) {
       sharePoint(point);
     }
-  };
-  
-  
-  const trackAdd = () => {
+  }, [pointStore, sharePoint]);
+
+  const trackAdd = useCallback(() => {
     trackStore.create({
       type: 'Feature',
       id: uuid(),
@@ -136,9 +147,9 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         isVisible: true
       }
     });
-  };
+  }, [trackStore, t]);
 
-  const trackColorChange = (trackId: UUID, newColor: HEXColor) => {
+  const trackColorChange = useCallback((trackId: UUID, newColor: HEXColor) => {
     const existing = trackStore.retrieve(trackId);
     existing && trackStore.update({
       ...existing,
@@ -147,9 +158,9 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         color: newColor
       }
     });
-  };
+  }, [trackStore]);
 
-  const trackRename = (trackId: UUID, newName: string) => {
+  const trackRename = useCallback((trackId: UUID, newName: string) => {
     const existing = trackStore.retrieve(trackId);
     existing && trackStore.update({
       ...existing,
@@ -158,9 +169,9 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         name: newName
       }
     });
-  };
+  }, [trackStore]);
 
-  const trackToggleVisibility = (trackId: UUID) => {
+  const trackToggleVisibility = useCallback((trackId: UUID) => {
     const existing = trackStore.retrieve(trackId);
     existing && trackStore.update({
       ...existing,
@@ -169,22 +180,24 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         isVisible: !existing.properties.isVisible
       }
     });
-  };
+  }, [trackStore]);
 
-  const trackDelete = (trackId: UUID) => {
+  const trackDelete = useCallback((trackId: UUID) => {
     const existing = trackStore.retrieve(trackId);
     existing && trackStore.delete(trackId);
-  };
+  }, [trackStore]);
 
-  const trackGoTo = (trackId: UUID) => {
+  const trackGoTo = useCallback((trackId: UUID) => {
     trackNavigation.start(scopeId, trackId);
-  };
+  }, [trackNavigation.start, scopeId]);
 
-  const trackExport = (trackId: UUID) => {
+  const trackExport = useCallback((trackId: UUID) => {
     setSharingTrackId(trackId);
-  };
+  }, []);
 
-  const closeHandleExport = () => setSharingTrackId(undefined);
+  const closeHandleExport = useCallback(() => {
+    setSharingTrackId(undefined);
+  }, []);
 
   if (selectedTrack) return <ScopeTrack
     scopeId={scopeId}

@@ -116,7 +116,25 @@ const List: FC<ListProps> = ({
   const handleStopEditing = useCallback(() => setEditingId(undefined), []);
 
   const handleSearchClick = useCallback(() => undefined, []);
-  
+
+  const listItems = useMemo(() =>
+    filteredItems.map(item => <ListItem
+      key={item.id}
+      itemId={item.id}
+      name={item.name}
+      color={item.color}
+      isEditing={item.id === getEditingId}
+      isVisible={item.isVisible}
+      actionIcons={actionIcons}
+      contextualMenu={contextualMenu}
+      onActionClick={onActionClick}
+      onClick={onClick}
+      onColorChange={onColorChange}
+      onContextualMenuClick={handleContextualMenuClick}
+      onNameChange={onNameChange}
+      onStopEditing={handleStopEditing}
+    />), [filteredItems, getEditingId, actionIcons, contextualMenu, onActionClick, onClick, onColorChange, handleContextualMenuClick, onNameChange, handleStopEditing]);
+
   return <>
     <Box sx={searchBoxWrapperSx}>
       <SearchBox
@@ -137,24 +155,7 @@ const List: FC<ListProps> = ({
     }
     <ScrollableContent>
       <MuiList dense sx={muiListSx}>
-        {
-          filteredItems.map(item => <ListItem
-            key={item.id}
-            itemId={item.id}
-            name={item.name}
-            color={item.color}
-            isEditing={item.id === getEditingId}
-            isVisible={item.isVisible}
-            actionIcons={actionIcons}
-            contextualMenu={contextualMenu}
-            onActionClick={onActionClick}
-            onClick={onClick}
-            onColorChange={onColorChange}
-            onContextualMenuClick={handleContextualMenuClick}
-            onNameChange={onNameChange}
-            onStopEditing={handleStopEditing}
-          />)
-        }
+        {listItems}
       </MuiList>
     </ScrollableContent>
   </>;

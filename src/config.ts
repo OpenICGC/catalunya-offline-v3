@@ -1,5 +1,5 @@
 import {BaseMaps, HEXColor, OfflineDatasources} from './types/commonTypes';
-import {ViewportType} from './hooks/useViewport';
+import {ViewportType} from './hooks/singleton/useViewport';
 import {Capacitor} from '@capacitor/core';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 
@@ -18,6 +18,8 @@ export const IS_WEB = PLATFORM === 'web';
 export const PERSISTENCE_NAMESPACE = 'catoffline';
 
 export const MAX_ALLOWED_IMPORT_FEATURES = 100;
+
+export const FIT_BOUNDS_PADDING = 50;
 
 export const MAP_PROPS = {
   minZoom: 7,
@@ -106,5 +108,3 @@ export const BASEMAPS: BaseMaps = [{
   thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
   style: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key='+process.env.MAPTILER_API_KEY
 }];
-
-export const INITIAL_BASEMAP = BASEMAPS[0];

@@ -50,7 +50,7 @@ const fileDownloader = (
       .download(uri, absoluteTempPath, true)
       .then(async () => {
         await renameFile(absoluteTempPath, absolutePath);
-        console.log('[useFileTransfer] Download complete!');
+        //console.debug('[useFileTransfer] Download complete!');
         return absolutePath;
       })
       .catch(async (error) => {

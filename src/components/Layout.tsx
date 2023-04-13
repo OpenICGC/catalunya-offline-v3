@@ -61,4 +61,4 @@ const Layout: FC<LayoutProps> = ({mainContent, sidePanelContent, isSidePanelOpen
   </>;
 };
 
-export default Layout;
+export default React.memo(Layout);

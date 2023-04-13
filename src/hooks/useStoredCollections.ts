@@ -1,6 +1,7 @@
 import {Scope, ScopeTrack, ScopePoint, UUID} from '../types/commonTypes';
 import usePersistenceData, {PersistenceStatus} from './usePersistenceData';
 import {removePersistenceImpl} from '../utils/persistenceImpl';
+import {useMemo} from 'react';
 
 type CollectionItem = {
   id: UUID
@@ -18,7 +19,7 @@ interface collectionStorage<ItemType extends CollectionItem> {
 export const useLocalCollectionStore = <ItemType extends CollectionItem>(collectionId: string): collectionStorage<ItemType> => {
   const [items, setItems, persistenceStatus] = usePersistenceData<Array<ItemType>>(collectionId, []);
 
-  return {
+  return useMemo(() => ({
     list: () => items,
     create: created => Array.isArray(created) ?
       setItems(prevData => [...prevData, ...created ]) :
@@ -27,13 +28,13 @@ export const useLocalCollectionStore = <ItemType extends CollectionItem>(collect
     update: updated => setItems(prevData => prevData.map(item => item.id === updated.id ? updated : item)),
     delete: id => setItems(prevData => prevData.filter(item => item.id !== id)),
     status: persistenceStatus
-  };
+  }), [items, setItems, persistenceStatus]);
 };
 
 export const useLocalCollectionStoreScopes = (collectionId: string): collectionStorage<Scope> => {
   const [items, setItems, persistenceStatus] = usePersistenceData<Array<Scope>>(collectionId, []);
 
-  return {
+  return useMemo(() => ({
     list: () => items,
     create: created => Array.isArray(created) ?
       setItems(prevData => [...prevData, ...created ]) :
@@ -46,7 +47,7 @@ export const useLocalCollectionStoreScopes = (collectionId: string): collectionS
       setItems(prevData => prevData.filter(item => item.id !== id));
     },
     status: persistenceStatus
-  };
+  }), [items, setItems, persistenceStatus]);
 };
 
 export const useScopes = () => useLocalCollectionStoreScopes('scopes');

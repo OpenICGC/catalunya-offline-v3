@@ -29,6 +29,7 @@ import {getAccumulatedProfileProperties} from '../../utils/getAccumulatedProfile
 import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
 import OutOfTrackButton from '../buttons/OutOfTrackButton';
 import {Position} from 'geojson';
+import useIsActive from '../../hooks/singleton/useIsActive';
 
 //STYLES
 const sectionTitleSx = {
@@ -64,6 +65,7 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
   onTopChanged
 }) => {
   const {t} = useTranslation();
+  const isActive = useIsActive();
     
   //STYLES
   const outOfTrackSx = {
@@ -116,51 +118,53 @@ const TrackNavigationBottomSheet: FC<TrackNavigationBottomSheetProps> = ({
     isOpen={isOpen}
     onTopChanged={onTopChanged}
   >
-    <ListItem
-      itemId="track"
-      name={name}
-      color={color}
-      actionIcons={actionIcons}
-      onActionClick={handleActionClick}
-    />
-    <Stack direction="column" sx={{mt: 1}}>
-      <TrackProfile 
-        coordinates={coordinates}
+    {isActive && <>
+      <ListItem
+        itemId="track"
+        name={name}
         color={color}
-        currentPositionIndex={currentPositionIndex} 
-        isOutOfTrack={isOutOfTrack}
+        actionIcons={actionIcons}
+        onActionClick={handleActionClick}
       />
-      <Typography sx={sectionTitleSx} variant="caption">{t('properties.remainingToGo')}</Typography>
-      {
-        hasElevation ?
-          <Stack direction="row" justifyContent="space-around" gap={0.5} sx={{flexGrow: 1}}>
-            <TrackProperty icon={<RemainingDistanceIcon sx={outOfTrackSx}/>} value={isOutOfTrack ? undefined : distanceRemaining}/>
-            <TrackProperty icon={<PositiveSlopeIcon sx={outOfTrackSx}/>} value={hasElevation && isOutOfTrack ? undefined : ascentRemaining}/>
-            <TrackProperty icon={<NegativeSlopeIcon sx={outOfTrackSx}/>} value={hasElevation && isOutOfTrack ? undefined : descentRemaining}/>
-          </Stack>
-          :
-          <Stack direction="row" justifyContent="space-around" sx={{mt: 1, position: 'relative'}}>
-            {isOutOfTrack && <OutOfTrackButton/>}
-            <Stack alignItems="center">
-              <Typography variant="h6" component="p" sx={{color: isOutOfTrack ? 'grey.300' : 'common.black'}}>{distance}</Typography>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <RemainingDistanceIcon sx={outOfTrackSx}/>
-                <Typography variant="body2" component="p"
-                  sx={outOfTrackSx}>{t('properties.total')}</Typography>
+      <Stack direction="column" sx={{mt: 1}}>
+        <TrackProfile
+          coordinates={coordinates}
+          color={color}
+          currentPositionIndex={currentPositionIndex}
+          isOutOfTrack={isOutOfTrack}
+        />
+        <Typography sx={sectionTitleSx} variant="caption">{t('properties.remainingToGo')}</Typography>
+        {
+          hasElevation ?
+            <Stack direction="row" justifyContent="space-around" gap={0.5} sx={{flexGrow: 1}}>
+              <TrackProperty icon={<RemainingDistanceIcon sx={outOfTrackSx}/>} value={isOutOfTrack ? undefined : distanceRemaining}/>
+              <TrackProperty icon={<PositiveSlopeIcon sx={outOfTrackSx}/>} value={hasElevation && isOutOfTrack ? undefined : ascentRemaining}/>
+              <TrackProperty icon={<NegativeSlopeIcon sx={outOfTrackSx}/>} value={hasElevation && isOutOfTrack ? undefined : descentRemaining}/>
+            </Stack>
+            :
+            <Stack direction="row" justifyContent="space-around" sx={{mt: 1, position: 'relative'}}>
+              {isOutOfTrack && <OutOfTrackButton/>}
+              <Stack alignItems="center">
+                <Typography variant="h6" component="p" sx={{color: isOutOfTrack ? 'grey.300' : 'common.black'}}>{distance}</Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <RemainingDistanceIcon sx={outOfTrackSx}/>
+                  <Typography variant="body2" component="p"
+                    sx={outOfTrackSx}>{t('properties.total')}</Typography>
+                </Stack>
+              </Stack>
+              <Divider flexItem orientation="vertical"/>
+              <Stack alignItems="center">
+                <Typography variant="h6" component="p" sx={{color: isOutOfTrack ? 'grey.300' : 'common.black'}}>{distanceRemaining}</Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <RemainingDistanceIcon sx={outOfTrackSx}/>
+                  <Typography variant="body2" component="p" sx={outOfTrackSx}>{t('properties.remaining')}</Typography>
+                </Stack>
               </Stack>
             </Stack>
-            <Divider flexItem orientation="vertical"/>
-            <Stack alignItems="center">
-              <Typography variant="h6" component="p" sx={{color: isOutOfTrack ? 'grey.300' : 'common.black'}}>{distanceRemaining}</Typography>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <RemainingDistanceIcon sx={outOfTrackSx}/>
-                <Typography variant="body2" component="p" sx={outOfTrackSx}>{t('properties.remaining')}</Typography>
-              </Stack>
-            </Stack>
-          </Stack>
-      }
-    </Stack>
+        }
+      </Stack>
+    </>}
   </BottomSheet>;
 };
 
-export default TrackNavigationBottomSheet;
+export default React.memo(TrackNavigationBottomSheet);
