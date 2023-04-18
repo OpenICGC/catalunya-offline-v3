@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useCallback} from 'react';
 import {Theme} from '@mui/material/styles/createTheme';
 import styled from '@mui/material/styles/styled';
 
@@ -110,12 +110,12 @@ export type BaseMapListProps = {
 const BaseMapList: FC<BaseMapListProps> = ({coreStyles, userStyles, selectedStyleId, onStyleChange/*, onStyleDelete*/}) => {
   const {t, i18n} = useTranslation();
 
-  const formatStyle = (styles: BaseMaps) => useMemo(() =>
+  const formatStyle = useCallback((styles: BaseMaps) =>
     styles.map((basemap) => ({
       ...basemap,
       label: basemap.labels[i18n.language.split('-')[0]]
     }))
-  , []);
+  , [i18n.language]);
 
   const coreStylesFormatted = formatStyle(coreStyles);
   const userStylesFormatted = userStyles && formatStyle(userStyles);

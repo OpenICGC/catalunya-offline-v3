@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useEffect, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -20,6 +20,9 @@ import useTheme from '@mui/material/styles/useTheme';
 import styled from '@mui/material/styles/styled';
 import {BASEMAPS} from '../../config';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
+import useDownloadStatus from '../../hooks/singleton/useDownloadStatus';
+import {getUri} from '../../utils/filesystem';
+import {Capacitor} from '@capacitor/core';
 
 export type BaseMapsProps = {
   baseMapId: string,
@@ -39,11 +42,26 @@ const BaseMaps: FC<BaseMapsProps> = ({
   const theme = useTheme();
   const [isLargeSize] = useIsLargeSize();
 
+  const [coreStyles, setCoreStyles] = useState(BASEMAPS);
+
+  const {isOfflineReady, downloadStatus} = useDownloadStatus();
+
   const ScrollableContent = useMemo(() => styled(Box)({
     overflowY: 'auto',
     padding: '0px',
     marginBottom: isLargeSize ? '72px' : '64px'
   }), [isLargeSize]);
+
+  useEffect(() => {
+    isOfflineReady && getUri('').then(directory => {
+      setCoreStyles(
+        BASEMAPS.map(basemap => ({
+          ...basemap,
+          thumbnail: Capacitor.convertFileSrc(directory?.uri + '/' + downloadStatus.find(st => st.url === basemap.thumbnail)?.localPath)
+        }))
+      );
+    });
+  }, [isOfflineReady]);
   
   return <>
     <Header
@@ -53,7 +71,7 @@ const BaseMaps: FC<BaseMapsProps> = ({
     />
     <ScrollableContent id='scrollable-baseMapList'>
       <BaseMapList
-        coreStyles={BASEMAPS}
+        coreStyles={coreStyles}
         userStyles={undefined} //TODO
         selectedStyleId={baseMapId}
         onStyleChange={onMapStyleChanged}
