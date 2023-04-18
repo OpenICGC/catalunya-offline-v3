@@ -103,4 +103,4 @@ const DateInput: FC<DateInputProps> = ({
   </Stack>;
 };
 
-export default DateInput;
+export default React.memo(DateInput);

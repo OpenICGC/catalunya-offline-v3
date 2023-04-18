@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 
-import MainView from './views';
+import MainView from './views/MainView';
 
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 

@@ -109,3 +109,8 @@ export type Error = {
   name: string,
   message: string
 }
+
+export type ContextMapsResult = {
+  nom: string,
+  coordenades: string
+}

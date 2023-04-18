@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef} from 'react';
-import useDownloadStatus, {downloadStatusStatus, downloadStatusTypeUnit} from '../hooks/useDownloadStatus';
+import useDownloadStatus, {downloadStatusStatus, downloadStatusTypeUnit} from '../hooks/singleton/useDownloadStatus';
 import fileDownloader from '../utils/fileDownloader';
 import {unZipOnSameFolder} from '../utils/filesystem';
 import DownloadProgress from '../components/notifications/DownloadProgress';

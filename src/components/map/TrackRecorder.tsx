@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useMemo, useState} from 'react';
 
 //MUI
 import Stack from '@mui/material/Stack';
@@ -43,6 +43,12 @@ export enum RECORDING_STATUS {
   PAUSED
 }
 
+const iconActive = {
+  [RECORDING_STATUS.STOPPED]: <></>,
+  [RECORDING_STATUS.RECORDING]: <RecordingIcon/>,
+  [RECORDING_STATUS.PAUSED]: <PauseIcon/>
+};
+
 export type TrackRecorderProps = {
   name?: string,
   color?: HEXColor,
@@ -84,14 +90,7 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
     }
   };
 
-  const iconActive = {
-    [RECORDING_STATUS.STOPPED]: <></>,
-    [RECORDING_STATUS.RECORDING]: <RecordingIcon/>,
-    [RECORDING_STATUS.PAUSED]: <PauseIcon/>
-  };
-
-  const durationTime = moment.duration(elapsedTime, 'seconds');
-  const formattedTime = durationTime.format('h[h] mm[m] ss[s]');
+  const formattedTime = useMemo(() => moment.duration(elapsedTime, 'seconds').format('h[h] mm[m] ss[s]'), [elapsedTime]);
 
   const statusMessage = t(`actions.${RECORDING_STATUS[recordingStatus].toLowerCase()}`);
 
@@ -120,4 +119,4 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
   </>;
 };
 
-export default TrackRecorder;
+export default React.memo(TrackRecorder);

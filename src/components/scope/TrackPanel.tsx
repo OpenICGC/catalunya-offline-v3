@@ -179,9 +179,11 @@ const TrackPanel: FC<TrackPanelProps> = ({
     setIsEditing(false);
   };
 
+  const backIcon = useMemo(() => <ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>, []);
+
   return <>
     <Header
-      startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
+      startIcon={backIcon}
       name={scope.name}
       color={scope.color}
       onStartIconClick={onBackButtonClick}
@@ -255,4 +257,4 @@ const TrackPanel: FC<TrackPanelProps> = ({
   </>;
 };
 
-export default TrackPanel;
+export default React.memo(TrackPanel);

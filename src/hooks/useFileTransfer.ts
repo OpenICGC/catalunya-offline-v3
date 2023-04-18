@@ -40,7 +40,7 @@ const useFileTransferDownload = (): fileTransferDownload  => {
     return fileTransfer.current
       .download(url, path, true)
       .then(() => {
-        console.log('[useFileTransfer] Download complete!');
+        //console.debug('[useFileTransfer] Download complete!');
         return uri;
       })
       .catch((error) => {
@@ -53,7 +53,6 @@ const useFileTransferDownload = (): fileTransferDownload  => {
     setProgress(0);
     setError(undefined);
     setUrl(url);
-    console.log('[useFileTransfer] Using Cordova implementation.');
     return downloadMobile(url, directory);
   };
   

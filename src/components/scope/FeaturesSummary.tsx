@@ -43,4 +43,4 @@ const FeaturesSummary: FC<FeaturesSummaryProps> = ({
   </Box>;
 };
 
-export default FeaturesSummary;
+export default React.memo(FeaturesSummary);

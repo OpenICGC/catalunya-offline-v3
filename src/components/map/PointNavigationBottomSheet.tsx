@@ -22,6 +22,7 @@ import StopIcon from '../icons/NoGoTo';
 import {HEXColor} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
+import useIsActive from '../../hooks/singleton/useIsActive';
 
 export interface PointNavigationBottomSheetProps {
     name: string,
@@ -45,6 +46,7 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
   onTopChanged
 }) => {
   const {t} = useTranslation();
+  const isActive = useIsActive();
 
   const [isOpen, setOpen] = useState(true);
   const actionIcons = [
@@ -74,31 +76,33 @@ const PointNavigationBottomSheet: FC<PointNavigationBottomSheetProps> = ({
     isOpen={isOpen}
     onTopChanged={onTopChanged}
   >
-    <ListItem
-      itemId="point"
-      name={name}
-      color={color}
-      actionIcons={actionIcons}
-      onActionClick={handleActionClick}
-    />
-    <Stack direction="row" justifyContent='space-around' sx={{mt: 1}}>
-      <Stack alignItems='center'>
-        <Typography variant='h6' component='p'>{Math.round(bearing)}º</Typography>
-        <Stack direction="row" spacing={1} alignItems='center'>
-          <ArrowUpwardIcon sx={{transform: `rotate(${bearing}deg)`, color: 'grey.600'}}/>
-          <Typography variant='body2' component='p' sx={{color: 'grey.600'}}>{t('properties.bearing')}</Typography>
+    {isActive && <>
+      <ListItem
+        itemId="point"
+        name={name}
+        color={color}
+        actionIcons={actionIcons}
+        onActionClick={handleActionClick}
+      />
+      <Stack direction="row" justifyContent='space-around' sx={{mt: 1}}>
+        <Stack alignItems='center'>
+          <Typography variant='h6' component='p'>{Math.round(bearing)}º</Typography>
+          <Stack direction="row" spacing={1} alignItems='center'>
+            <ArrowUpwardIcon sx={{transform: `rotate(${bearing}deg)`, color: 'grey.600'}}/>
+            <Typography variant='body2' component='p' sx={{color: 'grey.600'}}>{t('properties.bearing')}</Typography>
+          </Stack>
+        </Stack>
+        <Divider flexItem orientation='vertical'/>
+        <Stack alignItems='center'>
+          <Typography variant='h6' component='p'>{getSignificantDistanceUnits(distance)}</Typography>
+          <Stack direction="row" spacing={1} alignItems='center'>
+            <StraightenIcon sx={{color: 'grey.600'}}/>
+            <Typography variant='body2' component='p' sx={{color: 'grey.600'}}>{t('properties.distance')}</Typography>
+          </Stack>
         </Stack>
       </Stack>
-      <Divider flexItem orientation='vertical'/>
-      <Stack alignItems='center'>
-        <Typography variant='h6' component='p'>{getSignificantDistanceUnits(distance)}</Typography>
-        <Stack direction="row" spacing={1} alignItems='center'>
-          <StraightenIcon sx={{color: 'grey.600'}}/>
-          <Typography variant='body2' component='p' sx={{color: 'grey.600'}}>{t('properties.distance')}</Typography>
-        </Stack>
-      </Stack>
-    </Stack>
+    </>}
   </BottomSheet>;
 };
 
-export default PointNavigationBottomSheet;
+export default React.memo(PointNavigationBottomSheet);

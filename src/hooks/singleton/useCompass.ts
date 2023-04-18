@@ -1,19 +1,25 @@
 import {useEffect, useState} from 'react';
 import {DeviceOrientation, DeviceOrientationCompassHeading} from '@awesome-cordova-plugins/device-orientation';
-import {IS_WEB} from '../config';
-import {getOrientation} from '../utils/orientation';
+import {IS_WEB} from '../../config';
+import {getOrientation} from '../../utils/orientation';
+import {singletonHook} from 'react-singleton-hook';
+import useIsActive from './useIsActive';
 
 declare interface CompassError {
   code: 0 | 20;
 }
 
-const useCompass = () => {
+type useCompassType = number | undefined;
+
+const useCompass = (): useCompassType => {
   const [heading, setHeading] = useState<number>();
+
+  const isActive = useIsActive();
 
   useEffect(() => {
     if (IS_WEB) { // Actually should test for cordova avail
       const listener = (event: DeviceOrientationEvent) => {
-        if (event.alpha !== null) {
+        if (isActive && event.alpha !== null) {
           const newHeading = Math.round(360 - event.alpha + screen.orientation.angle);
           newHeading && setHeading(prevHeading => prevHeading === newHeading ? prevHeading : newHeading);
         }
@@ -30,8 +36,10 @@ const useCompass = () => {
       };
     } else {
       const onSuccess = ({magneticHeading}: DeviceOrientationCompassHeading) => {
-        const newHeading = Math.round(magneticHeading + getOrientation());
-        setHeading(prevHeading => prevHeading === newHeading ? prevHeading : newHeading);
+        if (isActive) {
+          const newHeading = Math.round(magneticHeading + getOrientation());
+          setHeading(prevHeading => prevHeading === newHeading ? prevHeading : newHeading);
+        }
       };
 
       const onError = (error: CompassError) => console.error(error);
@@ -45,7 +53,7 @@ const useCompass = () => {
         subscription.unsubscribe();
       };
     }
-  }, []);
+  }, [isActive]);
 
   /*
   useEffect(() => {
@@ -56,4 +64,6 @@ const useCompass = () => {
   return heading;
 };
 
-export default useCompass;
+const initialState: useCompassType = undefined;
+
+export default singletonHook<useCompassType>(initialState, useCompass);

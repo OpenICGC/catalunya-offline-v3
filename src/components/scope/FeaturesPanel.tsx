@@ -1,4 +1,4 @@
-import React, {FC, SyntheticEvent} from 'react';
+import React, {FC, SyntheticEvent, useMemo} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -33,6 +33,8 @@ import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import FeaturesSummary from './FeaturesSummary';
 import ShareIcon from '@mui/icons-material/Share';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
+
+const actionIcons = [{id: 'visibility', activeIcon: <VisibilityIcon/>, inactiveIcon: <VisibilityOffIcon/>}];
 
 export type FeaturesPanelProps = {
   scope: Scope,
@@ -174,21 +176,19 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     }
   };
 
-  const pointItems: Array<listItemType> = scopePoints.map(scopePoint => ({
+  const pointItems: Array<listItemType> = useMemo(() => scopePoints.map(scopePoint => ({
     id: scopePoint.id,
     name: scopePoint.properties.name,
     color: scopePoint.properties.color || scope.color, // Inherits color from scope
     isVisible: scopePoint.properties.isVisible
-  }));
+  })), [scopePoints, scope.color]);
 
-  const trackItems: Array<listItemType> = scopeTracks.map(scopeTrack => ({
+  const trackItems: Array<listItemType> = useMemo(() => scopeTracks.map(scopeTrack => ({
     id: scopeTrack.id,
     name: scopeTrack.properties.name,
     color: scopeTrack.properties.color || scope.color, // Inherits color from scope
     isVisible: scopeTrack.properties.isVisible
-  }));
-
-  const actionIcons = [{id: 'visibility', activeIcon: <VisibilityIcon/>, inactiveIcon: <VisibilityOffIcon/>}];
+  })), [scopeTracks, scope.color]);
 
   return <>
     <Header
@@ -264,4 +264,4 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   </>;
 };
 
-export default FeaturesPanel;
+export default React.memo(FeaturesPanel);

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 
 //MUI
 import List from '@mui/material/List';
@@ -19,20 +19,14 @@ import SearchBox from '@geomatico/geocomponents/Search/SearchBox';
 
 //UTILS
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import {useViewport} from '../../hooks/useViewport';
 import {useTranslation} from 'react-i18next';
 import useTheme from '@mui/material/styles/useTheme';
-import useEditingPosition from '../../hooks/useEditingPosition';
-import useRecordingTrack from '../../hooks/useRecordingTrack';
+import useEditingPosition from '../../hooks/singleton/useEditingPosition';
+import useRecordingTrack from '../../hooks/singleton/useRecordingTrack';
 import {useStatus} from '@capacitor-community/network-react';
+import {ContextMapsResult} from '../../types/commonTypes';
 
 const BASE_URL = 'https://www.instamaps.cat/geocat/aplications/map/search.action';
-
-//TYPES
-type ContextMapsResult = {
-  nom: string,
-  coordenades: string
-}
 
 //STYLES
 const contextualMenuSx = (isHeaderVisible: boolean) => ({
@@ -59,24 +53,21 @@ const listSx = (componentWidth: object) => ({
 
 export type SearchBoxAndMenuProps = {
   isContextualMenuOpen: boolean,
-  placeholder: string,
   isHidden?: boolean,
   onContextualMenuClick?: (menuId: string) => void,
-  onSearchClick: () => void,
-  toggleContextualMenu: () => void
+  onResultClick: (result: ContextMapsResult) => void,
+  onToggleContextualMenu: () => void
 };
 
 const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   isContextualMenuOpen,
-  placeholder,
   isHidden = false,
   onContextualMenuClick = () => undefined,
-  onSearchClick,
-  toggleContextualMenu
+  onResultClick,
+  onToggleContextualMenu
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const {setViewport} = useViewport();
   const {networkStatus} = useStatus();
   
   //STYLES
@@ -87,7 +78,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   
   //CONNECTIVITY
   const hasConnectivity = networkStatus?.connected;
-  const isEditingPosition = !!useEditingPosition().position;
+  const isEditingPosition = useEditingPosition().isEditing;
   const isRecordingTrack = useRecordingTrack().isRecording;
   const isHeaderVisible = isEditingPosition || isRecordingTrack;
 
@@ -96,23 +87,25 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   const [results, setResults] = useState<Array<ContextMapsResult>>([]);
   const [showConnectivityError, setConnectivityError] = useState(false);
 
-  useEffect(() => {
-    if(hasConnectivity) {
-      setConnectivityError(false);
-    } else setResults([]);
-  }, [hasConnectivity]);
-
   const clearResults = () => setResults([]);
 
-  const handleTextChange = (newText: string) => {
-    if(isContextualMenuOpen) {
-      toggleContextualMenu();
+  useEffect(() => {
+    if (hasConnectivity) {
+      setConnectivityError(false);
+    } else {
+      clearResults();
+    }
+  }, [hasConnectivity]);
+
+  const handleTextChange = useCallback((newText: string) => {
+    if (isContextualMenuOpen) {
+      onToggleContextualMenu();
     }
     setText(newText);
     clearResults();
-  };
+  }, [isContextualMenuOpen]);
 
-  const handleSearchClick = () => {
+  const handleSearchClick = useCallback(() => {
     if (hasConnectivity) {
       setConnectivityError(false);
       const url = `${BASE_URL}?searchInput=${text}`;
@@ -121,24 +114,12 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
         .then(res => JSON.parse(res.resposta))
         .then(res => setResults(res.resultats));
     } else setConnectivityError(true);
-  };
-
-  const handleResultClick = (result: ContextMapsResult) => {
-    onSearchClick();
-    const coords = result.coordenades.split(',');
-    setViewport({
-      latitude: parseFloat(coords[1]),
-      longitude: parseFloat(coords[0]),
-      zoom: 14
-    });
-    clearResults();
-    setText('');
-  };
+  }, [hasConnectivity, text]);
 
   //CONTEXTUAL MENU
-  const handleContextualMenu = () => toggleContextualMenu();
+
   const handleAction = (actionId: string) => {
-    toggleContextualMenu();
+    onToggleContextualMenu();
     onContextualMenuClick(actionId);
   };
 
@@ -195,7 +176,11 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
     <ListItem
       dense
       key={index}
-      onClick={() => handleResultClick(result)}
+      onClick={() => {
+        onResultClick(result);
+        clearResults();
+        setText('');
+      }}
       sx={{
         width: '100%',
         '&:hover': {
@@ -224,19 +209,23 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
     </ListItem>
   );
 
+  const placeholder = t('actions.search');
+  const searchboxSx = isHidden ? searchHiddenSx : searchSx;
+  const paperSx = isHidden || hasConnectivity ? resultsHiddenSx : resultsSx;
+
   return <>
     <SearchBox
       text={text}
       AdvanceSearchIcon={MoreVertIcon}
-      onAdvanceSearchClick={handleContextualMenu}
+      onAdvanceSearchClick={onToggleContextualMenu}
       onTextChange={handleTextChange}
       onSearchClick={handleSearchClick}
       placeholder={placeholder}
-      sx={isHidden ? searchHiddenSx : searchSx}
+      sx={searchboxSx}
     />
     {
       showConnectivityError ?
-        <Paper elevation={3} sx={isHidden || hasConnectivity ? resultsHiddenSx : resultsSx}>
+        <Paper elevation={3} sx={paperSx}>
           <ClickAwayListener onClickAway={clearResults}>
             <List dense sx={listSx(componentWidth)}>{renderConnectivityError}</List>
           </ClickAwayListener>
@@ -264,4 +253,4 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
     }
   </>;
 };
-export default SearchBoxAndMenu;
+export default React.memo(SearchBoxAndMenu);
