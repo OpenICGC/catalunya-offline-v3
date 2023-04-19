@@ -58,53 +58,48 @@ export const COLOR_PALETTES = [
   [paletteName]: useColorRamp(paletteName).hexColors
 }), {});
 
-export const OFFLINE_GLYPHS = 'https://cdn.geomatico.es/datasets/glyphs.zip';
+const BASE_URL = 'https://cdn.geomatico.es/datasets';
 
-const TERRITORI = 'catalunya'; // 'vigo';
+const DATASET = 'icgc'; // 'mtc25m' 'catalunya' 'madrid' 'vigo' 'galicia'
 
 export const OFFLINE_DATASOURCES: OfflineDatasources = [{
   'id': 'openmaptiles',
-  'url': `https://cdn.geomatico.es/datasets/${TERRITORI}/openmaptiles.mbtiles`,
+  'url': `${BASE_URL}/${DATASET}/openmaptiles.mbtiles`,
   'labels': {
     'ca': 'Cartografia base',
     'en': 'Base cartography',
     'es': 'Cartografía base'
   }
 }, {
-  'id': 'terreny',
-  'url': `https://cdn.geomatico.es/datasets/${TERRITORI}/terreny.mbtiles`,
+  'id': 'terrain',
+  'url': `${BASE_URL}/${DATASET}/terrain.mbtiles`,
   'labels': {
     'ca': 'Terreny',
     'en': 'Terrain',
     'es': 'Terreno'
   }
-}, /*{
-  'id': 'corbes',
-  'url': `https://cdn.geomatico.es/datasets/${TERRITORI}/corbes.mbtiles`,
-  'labels': {
-    'ca': 'Corbes de nivell',
-    'en': 'Contour lines',
-    'es': 'Curvas de nivel'
-  }
-}*/];
+}];
+
+export const OFFLINE_GLYPHS = `${BASE_URL}/${DATASET}/glyphs.zip`;
 
 export const BASEMAPS: BaseMaps = [{
-  id: 'terrain',
+  id: 'estandard',
   labels: {
-    ca: 'OpenMapTiles Terrain (offline)',
-    en: 'OpenMapTiles Terrain (offline)',
-    es: 'OpenMapTiles Terrain (offline)'
+    ca: 'Estàndard',
+    en: 'Standard',
+    es: 'Estándar'
   },
-  thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
-  style: `https://cdn.geomatico.es/datasets/${TERRITORI}/terrain.json`
-  //sprites: 'https://cdn.geomatico.es/datasets/sprites.zip'
+  style: `${BASE_URL}/${DATASET}/estandard.json`,
+  thumbnail: `${BASE_URL}/${DATASET}/thumbnail-estandard.png`,
+  sprites: `${BASE_URL}/${DATASET}/sprites-estandard.zip`
 },{
-  id: 'outdoor',
+  id: 'lleure',
   labels: {
-    ca: 'MapTiler Outdoor (online)',
-    en: 'MapTiler Outdoor (online)',
-    es: 'MapTiler Outdoor (online)'
+    ca: 'Lleure',
+    en: 'Ocio',
+    es: 'Outdoor'
   },
-  thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
-  style: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key='+process.env.MAPTILER_API_KEY
+  style: `${BASE_URL}/${DATASET}/lleure.json`,
+  thumbnail: `${BASE_URL}/${DATASET}/thumbnail-lleure.png`,
+  sprites: `${BASE_URL}/${DATASET}/sprites-lleure.zip`
 }];
