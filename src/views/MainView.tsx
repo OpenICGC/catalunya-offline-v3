@@ -49,7 +49,7 @@ const MainView: FC = () => {
     } else {
       setVisibleLayers([...visibleLayers, layerId].sort());
     }
-  }, [visibleLayers]);
+  }, [visibleLayers, setVisibleLayers]);
 
   const isEditingPosition = useEditingPosition().isEditing;
   const isRecordingTrack =  useRecordingTrack().isRecording;
