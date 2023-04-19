@@ -47,7 +47,7 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
         });
       }
     });
-  }, [recordingTrack.start, selectedTrack]);
+  }, [recordingTrack.start, selectedTrack, trackChange]);
 
   const goTo = useCallback((trackId: UUID) => {
     trackNavigation.start(scopeId, trackId);

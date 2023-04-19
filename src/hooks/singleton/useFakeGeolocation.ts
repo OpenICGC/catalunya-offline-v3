@@ -28,13 +28,12 @@ const useFakeGeolocation = (): useGeolocationType => {
   const coordinates = (fakeTrack as GeoJSON.FeatureCollection<LineString>).features[0].geometry.coordinates;
 
   useEffect(() => {
-    const t0 = coordinates[0][3];
     for (let i = 1; i < coordinates.length; i++) {
       const [x, y, z, t] = coordinates[i];
       //console.log('FakeGeolocation', x, y, z, t);
       setTimeout(function () {
         setGeolocation({
-          accuracy: null,
+          accuracy: 100,
           altitude: z,
           altitudeAccuracy: null,
           heading: null,
@@ -43,11 +42,11 @@ const useFakeGeolocation = (): useGeolocationType => {
           speed: null,
           timestamp: t
         });
-      }, 100 * (t-t0));
+      }, 500 * i);
     }
   }, []);
 
-  const error = undefined;
+  const error = undefined; //{code: 'GEOLOCATION_POSITION_UNAVAILABLE', message: 'Geolocation Position Unavailable'};
   const setWatchInBackground = useCallback(() => undefined, []);
 
   return {geolocation, error, setWatchInBackground};

@@ -87,13 +87,13 @@ const MainView: FC = () => {
     setTrack(undefined);
     setPoint(pointId);
     handleManagerChanged('SCOPES');
-  }, []);
+  }, [setTrack, setPoint]);
 
   const handleSelectTrack = useCallback((trackId: UUID) => {
     setPoint(undefined);
     setTrack(trackId);
     handleManagerChanged('SCOPES');
-  }, []);
+  }, [setTrack, setPoint]);
 
   const sidePanelContent = useMemo(() => manager
     ? <Stack sx={stackSx}>

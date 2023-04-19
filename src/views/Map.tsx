@@ -191,7 +191,7 @@ const Map: FC<MainContentProps> = ({
         }
       }
     };
-  }, [geolocation, recordingTrack.coordinates, pointNavigation.feature]);
+  }, [geolocation.latitude, geolocation.longitude, recordingTrack.coordinates, pointNavigation.feature]);
 
   const sources: Sources = useMemo(() => ({
     ...scopeDependantSources,
@@ -204,61 +204,6 @@ const Map: FC<MainContentProps> = ({
 
   const layers: Array<AnyLayer> = useMemo(() => {
     return [{
-      id: 'geolocation-precision',
-      source: 'geolocation',
-      type: 'circle',
-      paint: {
-        'circle-color': gpsPositionColor,
-        'circle-opacity': 0.33,
-        'circle-radius': [
-          'interpolate',
-          ['exponential', 2],
-          ['zoom'],
-          7, // Beware: this formula works only for latitudes around initial viewport's latitude
-          ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))],
-          15,
-          ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))]
-        ],
-        'circle-stroke-color': gpsPositionColor,
-        'circle-stroke-opacity': 0.67,
-        'circle-stroke-width': 1,
-        'circle-pitch-alignment': 'map'
-      }
-    },
-    {
-      id: 'recordingTrack',
-      source: 'recordingTrack',
-      type: 'line',
-      paint: {
-        'line-color': '#d32f2f',
-        'line-width': 4
-      }
-    },
-    {
-      id: 'navigateToPointLine',
-      source: 'navigateToPointLine',
-      type: 'line',
-      paint: {
-        'line-color': '#000000',
-        'line-width': 4,
-        'line-opacity': 0.67,
-        'line-dasharray': [2, 2]
-      },
-      layout: {
-        'line-cap': 'round',
-        'line-join': 'round'
-      }
-    },
-    {
-      id: 'trackList',
-      source: 'trackList',
-      type: 'line',
-      paint: {
-        'line-color': ['get', 'color'],
-        'line-width': 4
-      }
-    },
-    {
       id: 'extraLayers',
       source: 'extraLayers',
       type: 'symbol',
@@ -288,6 +233,57 @@ const Map: FC<MainContentProps> = ({
           3, '#1FA1E2', // 3, '#E78AC3', // Alberg
           '#000000' // Default
         ]
+      }
+    },{
+      id: 'trackList',
+      source: 'trackList',
+      type: 'line',
+      paint: {
+        'line-color': ['get', 'color'],
+        'line-width': 4
+      }
+    },{
+      id: 'navigateToPointLine',
+      source: 'navigateToPointLine',
+      type: 'line',
+      paint: {
+        'line-color': '#000000',
+        'line-width': 4,
+        'line-opacity': 0.67,
+        'line-dasharray': [2, 2]
+      },
+      layout: {
+        'line-cap': 'round',
+        'line-join': 'round'
+      }
+    },{
+      id: 'recordingTrack',
+      source: 'recordingTrack',
+      type: 'line',
+      paint: {
+        'line-color': '#d32f2f',
+        'line-width': 4
+      }
+    },{
+      id: 'geolocation-precision',
+      source: 'geolocation',
+      type: 'circle',
+      paint: {
+        'circle-color': gpsPositionColor,
+        'circle-opacity': 0.33,
+        'circle-radius': [
+          'interpolate',
+          ['exponential', 2],
+          ['zoom'],
+          7, // Beware: this formula works only for latitudes around initial viewport's latitude
+          ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))],
+          15,
+          ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))]
+        ],
+        'circle-stroke-color': gpsPositionColor,
+        'circle-stroke-opacity': 0.67,
+        'circle-stroke-width': 1,
+        'circle-pitch-alignment': 'map'
       }
     }];
   }, [gpsPositionColor, visibleLayers]);
@@ -327,8 +323,8 @@ const Map: FC<MainContentProps> = ({
   }, [geolocationError]);
 
   useEffect(() => {
-    if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
-      if (geolocation?.latitude && geolocation?.longitude) {
+    if (geolocation?.latitude && geolocation?.longitude) {
+      if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
         setViewport({
           longitude: geolocation.longitude,
           latitude: geolocation.latitude,
@@ -336,11 +332,11 @@ const Map: FC<MainContentProps> = ({
           bearing: locationStatus === LOCATION_STATUS.NAVIGATING && heading ? heading : 0,
           pitch: locationStatus === LOCATION_STATUS.NAVIGATING ? 60 : 0
         });
+      } else if (locationStatus === LOCATION_STATUS.DISABLED) {
+        setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
       }
-    } else if (locationStatus === LOCATION_STATUS.DISABLED) {
-      setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
     }
-  }, [locationStatus, geolocation.latitude, geolocation.longitude, viewport.zoom, heading]);
+  }, [locationStatus, geolocation.latitude, geolocation.longitude, viewport.zoom, setViewport, heading]);
 
   const handleLayersClick = useCallback(() => {
     onManagerChanged('LAYERS');
@@ -364,7 +360,7 @@ const Map: FC<MainContentProps> = ({
       zoom: MAP_PROPS.maxZoom
     });
     onPointSelected(point.id);
-  }, [onPointSelected]);
+  }, [onPointSelected, setViewport]);
 
   const createNewPoint = useCallback((coordinates: Position) => {
     const id = uuid();
@@ -408,7 +404,7 @@ const Map: FC<MainContentProps> = ({
       initialPosition: position,
       onAccept: () => setAcceptPoint(true)
     });
-  }, [editingPosition.start]);
+  }, [editingPosition.start, setViewport]);
 
   const longTouchTimer = useRef<number>();
 
@@ -459,7 +455,7 @@ const Map: FC<MainContentProps> = ({
 
   const handlePointNavigationFitBounds = useCallback(() => {
     fitBounds(pointNavigation.getBounds());
-  }, [pointNavigation.getBounds]);
+  }, [fitBounds, pointNavigation.getBounds]);
 
   useEffect(() => {
     if (recordingTrack.isRecording) {
@@ -484,7 +480,7 @@ const Map: FC<MainContentProps> = ({
 
   const handleTrackNavigationFitBounds = useCallback(() => {
     fitBounds(trackNavigation.getBounds());
-  }, [trackNavigation.getBounds]);
+  }, [fitBounds, trackNavigation.getBounds]);
 
   useEffect(() => {
     if (trackNavigation.isNavigating) {

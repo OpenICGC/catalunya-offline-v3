@@ -99,7 +99,7 @@ const useRecordingTrack = (): useRecordingTrackType => {
     stopWatch.stop();
     state.onStop && state.onStop(state.coordinates);
     setState(initialRecordingState);
-  }, [setWatchInBackground, stopWatch.stop, state.onStop]);
+  }, [setWatchInBackground, stopWatch.stop, state.onStop, state.coordinates]);
 
   return {
     start,
