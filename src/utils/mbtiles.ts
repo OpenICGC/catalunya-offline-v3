@@ -91,6 +91,9 @@ const getDatabase = async (dbName: string) => {
         //console.debug(`[mbtiles] opened ${dbName}`);
         return db;
       })
+      .catch(reason => {
+        console.error('[mbtiles] createNCConnection failed because', reason);
+      })
     );
   }
   //}

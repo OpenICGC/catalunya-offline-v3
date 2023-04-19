@@ -549,6 +549,7 @@ const Map: FC<MainContentProps> = ({
     />}
     <GeocomponentMap
       styleDiffing={true}
+      reuseMaps={true}
       RTLTextPlugin={''}
       {...MAP_PROPS}
       mapLib={maplibregl}

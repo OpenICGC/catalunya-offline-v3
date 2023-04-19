@@ -5,6 +5,7 @@ import {OFFLINE_DATASOURCES, OFFLINE_GLYPHS} from '../config';
 import {Capacitor} from '@capacitor/core';
 import {getDatabase} from './mbtiles';
 import {getUri} from './filesystem';
+import {RasterDemSource, RasterSource, VectorSource} from 'mapbox-gl';
 
 export const CalculateOfflineMapStyle = async (downloadStatus: downloadStatusType, baseMap: BaseMap): Promise<MapboxStyle|undefined> => {
   const glyphsAsset = downloadStatus.find(st => st.url === OFFLINE_GLYPHS);
@@ -24,32 +25,25 @@ export const CalculateOfflineMapStyle = async (downloadStatus: downloadStatusTyp
     const style: MapboxStyle = await res.json();
 
     let newStyle = {...style} as MapboxStyle;
-    if (glyphsAsset?.localPath) newStyle = {...newStyle, glyphs: Capacitor.convertFileSrc(directory?.uri + '/' + glyphsAsset.localPath) + 'glyphs/{fontstack}/{range}.pbf'};
-    if (spritesAssets?.localPath) newStyle = {...newStyle, sprite: Capacitor.convertFileSrc(directory?.uri + '/' + spritesAssets.localPath) + 'sprites/sprites'};
+    if (glyphsAsset?.localPath) newStyle = {...newStyle, glyphs: Capacitor.convertFileSrc(directory?.uri + '/' + glyphsAsset.localPath) + '{fontstack}/{range}.pbf'};
+    if (spritesAssets?.localPath) newStyle = {...newStyle, sprite: Capacitor.convertFileSrc(directory?.uri + '/' + spritesAssets.localPath) + newStyle?.sprite?.split('/').pop()};
     //Recorrer mejor los sourdces del estilo
     newStyle = {
       ...newStyle,
-      sources: Object.keys(newStyle.sources).reduce((acc, cur) => {
-        const mbtile = mbtilesAssets.find(mb => mb.localPath.endsWith(cur + '.mbtiles'));
-        if (mbtile) {
-          acc[cur] = cur === 'terreny' ? {
-            'type': 'raster-dem',
-            'tiles': [
-              `mbtiles://${cur}/{z}/{x}/{y}.pbf`
-            ],
-            'tileSize': 256,
-            'maxzoom': 15
-          } :{
-            'type': 'vector',
-            'tiles': [
-              `mbtiles://${cur}/{z}/{x}/{y}.pbf`
-            ],
-          };
+      sources: Object.keys(newStyle.sources).reduce((sources, sourceId) => {
+        const existsOfflineAsset = !!mbtilesAssets.find(mb => mb.localPath.endsWith(sourceId + '.mbtiles'));
+        if (existsOfflineAsset) {
+          sources[sourceId] = {
+            ...newStyle.sources[sourceId],
+            tiles: [
+              `mbtiles://${sourceId}/{z}/{x}/{y}.pbf`
+            ]
+          } as (VectorSource | RasterSource | RasterDemSource);
         } else {
-          acc[cur] = newStyle.sources[cur];
+          sources[sourceId] = newStyle.sources[sourceId];
         }
         
-        return acc;
+        return sources;
       }, {} as MapboxStyle['sources'])
     };
 
