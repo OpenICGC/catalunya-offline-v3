@@ -3,7 +3,7 @@ import {downloadStatusType} from '../hooks/singleton/useDownloadStatus';
 import {BaseMap} from '../types/commonTypes';
 import {OFFLINE_DATASOURCES, OFFLINE_GLYPHS} from '../config';
 import {Capacitor} from '@capacitor/core';
-import {getDatabase} from './mbtiles';
+import {setDbPaths} from './mbtiles';
 import {getUri} from './filesystem';
 import {RasterDemSource, RasterSource, VectorSource} from 'mapbox-gl';
 
@@ -13,20 +13,18 @@ export const CalculateOfflineMapStyle = async (downloadStatus: downloadStatusTyp
   const mbtilesAssets = downloadStatus.filter(st => OFFLINE_DATASOURCES.map(({url}) => url).includes(st.url));
   const styleAsset = downloadStatus.find(st => st.url === baseMap.style);
 
-  const directory = await getUri('');
-
-  //Load mbtiles on sqlite
-  mbtilesAssets.map(mb => getDatabase(directory?.uri.replace('file://', '') + '/' + mb.localPath));
+  const baseUri = await getUri('');
+  const basePath = baseUri?.uri?.replace('file://', '');
 
   //Parse style to update assets origin
   if (styleAsset) {
-    const url = Capacitor.convertFileSrc(directory?.uri + '/' + styleAsset.localPath);
+    const url = Capacitor.convertFileSrc(baseUri?.uri + '/' + styleAsset.localPath);
     const res = await fetch(url);
     const style: MapboxStyle = await res.json();
 
     let newStyle = {...style} as MapboxStyle;
-    if (glyphsAsset?.localPath) newStyle = {...newStyle, glyphs: Capacitor.convertFileSrc(directory?.uri + '/' + glyphsAsset.localPath) + '{fontstack}/{range}.pbf'};
-    if (spritesAssets?.localPath) newStyle = {...newStyle, sprite: Capacitor.convertFileSrc(directory?.uri + '/' + spritesAssets.localPath) + newStyle?.sprite?.split('/').pop()};
+    if (glyphsAsset?.localPath) newStyle = {...newStyle, glyphs: Capacitor.convertFileSrc(baseUri?.uri + '/' + glyphsAsset.localPath) + '{fontstack}/{range}.pbf'};
+    if (spritesAssets?.localPath) newStyle = {...newStyle, sprite: Capacitor.convertFileSrc(baseUri?.uri + '/' + spritesAssets.localPath) + newStyle?.sprite?.split('/').pop()};
     //Recorrer mejor los sourdces del estilo
     newStyle = {
       ...newStyle,
@@ -46,6 +44,16 @@ export const CalculateOfflineMapStyle = async (downloadStatus: downloadStatusTyp
         return sources;
       }, {} as MapboxStyle['sources'])
     };
+
+    // Inform offline mbtiles reader about file locations
+    await setDbPaths(
+      Object.fromEntries(
+        Object.keys(newStyle.sources).map(sourceId => {
+          const filePath = basePath + '/' + mbtilesAssets.find(mb => mb.localPath.endsWith(sourceId + '.mbtiles'))?.localPath;
+          return [sourceId, filePath];
+        })
+      )
+    );
 
     return newStyle;
   }
