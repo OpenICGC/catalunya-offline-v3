@@ -96,8 +96,8 @@ export const BASEMAPS: BaseMaps = [{
   id: 'lleure',
   labels: {
     ca: 'Lleure',
-    en: 'Ocio',
-    es: 'Outdoor'
+    en: 'Outdoor',
+    es: 'Ocio'
   },
   style: `${BASE_URL}/${DATASET}/lleure.json`,
   thumbnail: `${BASE_URL}/${DATASET}/thumbnail-lleure.png`,

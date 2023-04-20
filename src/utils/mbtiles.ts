@@ -1,4 +1,4 @@
-import {CapacitorSQLite, SQLiteConnection} from '@capacitor-community/sqlite';
+import {CapacitorSQLite, SQLiteConnection, SQLiteDBConnection} from '@capacitor-community/sqlite';
 //import { defineCustomElements as jeepSqlite, applyPolyfills} from 'jeep-sqlite/loader';
 import maplibregl from 'maplibre-gl';
 
@@ -28,24 +28,25 @@ const query = 'SELECT HEX(tile_data) as tile_data_hex FROM tiles WHERE zoom_leve
   }
 })();*/
 
-const sourceDatabases = new Map();
+let dbPaths: Record<string, string> = {};
+const dbConnections: Map<string, SQLiteDBConnection> = new Map<string, SQLiteDBConnection>();
 
 const getTile = (url: string) => {
   const splitUrl = url.split('/');
-  const dbName = splitUrl[2] + '.mbtiles';
-  const uri = Array.from(sourceDatabases.keys()).find(db => db.endsWith(dbName));
+  const dbPath = dbPaths[splitUrl[2]];
   const z = +splitUrl[splitUrl.length - 3];
   const x = +splitUrl[splitUrl.length - 2];
   const y = +(splitUrl[splitUrl.length - 1].split('.')[0]);
 
-  return getTileFromDatabase(uri, z, x, y);
+  //console.debug('[mbtiles] getTile', dbPath, z, x, y);
+  return getTileFromDatabase(dbPath, z, x, y);
 };
 
-const getTileFromDatabase = async (dbName: string, z: number, x: number, y: number) => {
-  const db = await getDatabase(dbName);
+const getTileFromDatabase = async (dbPath: string, z: number, x: number, y: number) => {
+  const connection = dbConnections.get(dbPath);
   const params = [z, x, Math.pow(2, z) - y - 1];
-  const queryresults = await db.query(query, params);
-  if (queryresults.values.length === 1) { // Tile found
+  const queryresults = await connection?.query(query, params);
+  if (queryresults?.values?.length === 1) { // Tile found
     const channel = new MessageChannel();
     decodeTileWorker.postMessage(queryresults.values[0].tile_data_hex, [channel.port2]);
     return await new Promise((resolve) => channel.port1.onmessage = (e) => {
@@ -54,51 +55,14 @@ const getTileFromDatabase = async (dbName: string, z: number, x: number, y: numb
   }
 };
 
-const getDatabase = async (dbName: string) => {
-/*  await init;
-  if (IS_WEB) {
-    if (!sourceDatabases.has(dbName)) {
-      try {
-        await sqlite.closeConnection(dbName, true);
-      } catch {
-      // Pos vale
-      }
-      //console.debug(`[mbtiles] creating connection to ${dbName}`);
-      sourceDatabases.set(dbName, sqlite
-        .createConnection(dbName, false, 'no-encryption', 1, true)
-        .then(async db => {
-          //console.debug(`[mbtiles] opening ${dbName}`);
-          await db.open();
-          //console.debug(`[mbtiles] opened ${dbName}`);
-          return db;
-        })
-      );
-    }
-  } else {*/
-  if (!sourceDatabases.has(dbName)) {
-    try {
-      await sqlite.closeNCConnection(dbName);
-    } catch {
-    // Pos vale
-    }
-    //console.debug(`[mbtiles] creating connection to ${dbName}`);
-    //console.log(sqlite.isDatabase(dbName));
-    sourceDatabases.set(dbName, sqlite
-      .createNCConnection(dbName, 1)
-      .then(async db => {
-        //console.debug(`[mbtiles] opening ${dbName}`);
-        await db.open();
-        //console.debug(`[mbtiles] opened ${dbName}`);
-        return db;
-      })
-      .catch(reason => {
-        console.error('[mbtiles] createNCConnection failed because', reason);
-      })
-    );
-  }
-  //}
-  
-  return sourceDatabases.get(dbName);
+const openConnection = async (dbName: string) => {
+  const connection = await sqlite
+    .createNCConnection(dbName, 1)
+    .then(connection => {
+      connection.open();
+      return connection;
+    });
+  dbConnections.set(dbName, connection);
 };
 
 const mbtiles = (ml: typeof maplibregl) => {
@@ -117,7 +81,17 @@ const mbtiles = (ml: typeof maplibregl) => {
   });
 };
 
+const setDbPaths = async (paths: Record<string, string>) => {
+  await Promise.all(Object.values(dbPaths).map(path => sqlite.closeNCConnection(path))); // Close old connections
+  // console.log('[mbtiles] All connections closed');
+  dbPaths = paths;
+  await Promise.all(Object.values(dbPaths).map(path =>
+    openConnection(path)
+      .catch((reason) => console.error('[mbtiles] Connection to', path, 'not opened, reason is', reason))
+  ));
+};
+
 export {
   mbtiles,
-  getDatabase
+  setDbPaths
 };
