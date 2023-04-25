@@ -7,15 +7,20 @@ import {init as initSentry, makeBrowserOfflineTransport, makeFetchTransport} fro
 
 import './i18n';
 import theme from './theme';
+import {PLATFORM} from './config';
 import LangSetter from './views/LangSetter';
 import MainView from './views/MainView';
-import {Capacitor} from '@capacitor/core';
 
-initSentry({
-  dsn: process.env.SENTRY_DSN,
-  environment: Capacitor.getPlatform(),
-  transport: makeBrowserOfflineTransport(makeFetchTransport)
-});
+if (process.env.SENTRY_DSN) {
+  console.log('Initializing Sentry');
+  initSentry({
+    dsn: process.env.SENTRY_DSN,
+    environment: PLATFORM,
+    transport: makeBrowserOfflineTransport(makeFetchTransport)
+  });
+} else {
+  console.warn('Sentry is not properly configured. Errors won\'t be reported');
+}
 
 const App = () =>
   <ThemeProvider theme={theme}>

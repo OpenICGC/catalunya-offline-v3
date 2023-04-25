@@ -55,9 +55,7 @@ module.exports = (env) => ({
     ]
   },
   plugins: env.test ? [
-    new DotenvWebpackPlugin({
-      safe: true // load '.env.example' to verify the '.env' variables are all set
-    })
+    new DotenvWebpackPlugin()
   ] : [
     new HtmlWebPackPlugin({
       favicon: './resources/logo.svg',
@@ -72,14 +70,12 @@ module.exports = (env) => ({
         }
       ]
     }),
-    new DotenvWebpackPlugin({
-      safe: true
-    }),
-    new SentryWebpackPlugin({
+    new DotenvWebpackPlugin(),
+    ...(process.env.SENTRY_AUTH_TOKEN ? [new SentryWebpackPlugin({
       org: 'geomatico',
       project: 'catoffline',
       include: './dist',
       authToken: process.env.SENTRY_AUTH_TOKEN
-    })
+    })] : [])
   ]
 });

@@ -38,17 +38,23 @@ Some relevant dependencies are:
 
 [TBD]
 
+## Configure sentry
 
-## Offline datasets
+Sentry will keep track of errors occurring in real devices so we can be aware and eventuallu fix them.
+In order to have sentry up and running, please configure propperly adding the required information to the `.env` file:
 
-Offline dataset was downloaded from `http://betaserver.icgc.cat/mapicc/catoff_vt.zip`.
+```dotenv
+SENTRY_DSN=
+SENTRY_AUTH_TOKEN=
+```
 
-Offline asset publishing and setup is explained in `GENERAR_ESTILO_OFFLINE.md`.
+
+## Inspect offline assets
 
 The ADB command to explore the App filesystem in Android is:
 
 ```bash
-adb shell run-as cat.icgc.catofflinev2 ls -lha /data/user/0/cat.icgc.catofflinev2/files/offlineData/mtc25m/1.0.0
+adb shell run-as cat.icgc.catofflinev2 ls -lha /data/user/0/cat.icgc.catofflinev2/files/offlineData
 ```
 
 ## Run in develompment mode
