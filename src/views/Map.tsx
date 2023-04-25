@@ -330,7 +330,7 @@ const Map: FC<MainContentProps> = ({
           latitude: geolocation.latitude,
           zoom: Math.max(MIN_TRACKING_ZOOM, viewport.zoom),
           bearing: locationStatus === LOCATION_STATUS.NAVIGATING && heading ? heading : 0,
-          pitch: locationStatus === LOCATION_STATUS.NAVIGATING ? 60 : 0
+          pitch: locationStatus === LOCATION_STATUS.NAVIGATING ? MAP_PROPS.maxPitch : 0
         });
       } else if (locationStatus === LOCATION_STATUS.DISABLED) {
         setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
