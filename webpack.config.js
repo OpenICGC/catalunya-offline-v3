@@ -2,6 +2,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DotenvWebpackPlugin = require('dotenv-webpack');
 const path = require('path');
+const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 
 module.exports = (env) => ({
   mode: env.prod ? 'production' : 'development',
@@ -73,6 +74,12 @@ module.exports = (env) => ({
     }),
     new DotenvWebpackPlugin({
       safe: true
+    }),
+    new SentryWebpackPlugin({
+      org: 'geomatico',
+      project: 'catoffline',
+      include: './dist',
+      authToken: process.env.SENTRY_AUTH_TOKEN
     })
   ]
 });
