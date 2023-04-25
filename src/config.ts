@@ -22,16 +22,16 @@ export const MAX_ALLOWED_IMPORT_FEATURES = 100;
 export const FIT_BOUNDS_PADDING = 50;
 
 export const MAP_PROPS = {
-  minZoom: 7,
-  maxZoom: 14.99, // 17,
+  minZoom: 6,
+  maxZoom: 17,
   maxPitch: 60,
   hash: false
 };
 
 export const DEFAULT_VIEWPORT: ViewportType = {
-  latitude: 42.1094,
-  longitude: 1.3705,
-  zoom: 9,
+  latitude: 40.5,
+  longitude: 1.6,
+  zoom: 6,
   bearing: 0,
   pitch: 0
 };
