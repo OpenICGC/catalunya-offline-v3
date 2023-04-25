@@ -23,8 +23,8 @@ export const FIT_BOUNDS_PADDING = 50;
 
 export const MAP_PROPS = {
   minZoom: 6,
-  maxZoom: 17,
-  maxPitch: 60,
+  maxZoom: 16,
+  maxPitch: 68,
   hash: false
 };
 
