@@ -56,12 +56,10 @@ const getTileFromDatabase = async (dbPath: string, z: number, x: number, y: numb
 };
 
 const openConnection = async (dbName: string) => {
-  const connection = await sqlite
-    .createNCConnection(dbName, 1)
-    .then(connection => {
-      connection.open();
-      return connection;
-    });
+  const connection = await sqlite.createNCConnection(dbName, 1);
+  //console.log('[mbtiles] Opening...');
+  await connection.open();
+  //console.log('[mbtiles] Opened...');
   dbConnections.set(dbName, connection);
 };
 
@@ -87,7 +85,11 @@ const setDbPaths = async (paths: Record<string, string>) => {
   dbPaths = paths;
   await Promise.all(Object.values(dbPaths).map(path =>
     openConnection(path)
-      .catch((reason) => console.error('[mbtiles] Connection to', path, 'not opened, reason is', reason))
+      .catch((reason) => {
+        if (!reason.message.includes('already exists')) { // If it was already opened, should be fine
+          console.error('[mbtiles] Connection to', path, 'not opened, reason is', reason);
+        }
+      })
   ));
 };
 
