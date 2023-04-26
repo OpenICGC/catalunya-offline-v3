@@ -28,14 +28,6 @@ export const MAP_PROPS = {
   hash: false
 };
 
-export const DEFAULT_VIEWPORT: ViewportType = {
-  latitude: 40.5,
-  longitude: 1.6,
-  zoom: 6,
-  bearing: 0,
-  pitch: 0
-};
-
 export const COLOR_PALETTES = [
   'BrewerPastel19',
   'BrewerSet39',
@@ -60,7 +52,33 @@ export const COLOR_PALETTES = [
 
 const BASE_URL = 'https://cdn.geomatico.es/datasets';
 
-const DATASET = 'icgc'; // 'mtc25m' 'catalunya' 'madrid' 'vigo' 'galicia'
+const DATASET: 'icgc' | 'mtc25m' | 'catalunya' | 'madrid' | 'vigo' | 'galicia' = 'icgc';
+
+const LATITUDES: Record<string, number> = {
+  icgc: 40.5,
+  mtc25m: 40.5,
+  catalunya: 40.5,
+  madrid: 40.417,
+  vigo: 42.236,
+  galicia: 42.755
+};
+
+const LONGITUDES: Record<string, number> = {
+  icgc: 1.6,
+  mtc25m: 1.6,
+  catalunya: 1.6,
+  madrid: -3.703,
+  vigo: -8.727,
+  galicia: -7.866
+};
+
+export const DEFAULT_VIEWPORT: ViewportType = {
+  latitude: LATITUDES[DATASET],
+  longitude: LONGITUDES[DATASET],
+  zoom: 6,
+  bearing: 0,
+  pitch: 0
+};
 
 export const OFFLINE_DATASOURCES: OfflineDatasources = [{
   'id': 'openmaptiles',
