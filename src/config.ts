@@ -5,7 +5,7 @@ import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 
 export const DRAWER_WIDTH = 270;
 
-export const MIN_TRACKING_ZOOM = 10;
+export const MIN_TRACKING_ZOOM = 14;
 
 export const GPS_POSITION_STALE_COLOR = '#9b9b9b';
 
