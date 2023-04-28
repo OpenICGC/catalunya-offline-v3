@@ -23,8 +23,8 @@ const ScopePoint: FC<ScopePointProps> = ({
 
   const selectedScope = scopeStore.retrieve(scopeId);
   const selectedPoint = pointStore.retrieve(pointId);
-  const numPoints = pointStore.list().length;
-  const numTracks = trackStore.list().length;
+  const numPoints = pointStore.list()?.length ?? 0;
+  const numTracks = trackStore.list()?.length ?? 0;
 
   const pointChange = useCallback((newPoint: ScopePoint) => {
     const existing = pointStore.retrieve(newPoint.id);

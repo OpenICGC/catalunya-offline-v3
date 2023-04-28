@@ -137,7 +137,7 @@ const Map: FC<MainContentProps> = ({
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
-        features: trackList.filter(track =>
+        features: trackList?.filter(track =>
           track.geometry !== null &&
           track.properties.isVisible
         ).map(track => ({
@@ -146,7 +146,7 @@ const Map: FC<MainContentProps> = ({
             ...track.properties,
             color: track.properties.color || scopeColor
           }
-        }) as Feature)
+        }) as Feature) ?? []
       }
     }
   }), [trackList]);
@@ -372,7 +372,7 @@ const Map: FC<MainContentProps> = ({
         coordinates: coordinates
       },
       properties: {
-        name: `${t('point')} ${pointStore.list().length + 1}`,
+        name: `${t('point')} ${(pointStore.list()?.length ?? 0) + 1}`,
         timestamp: Date.now(),
         description: '',
         images: [],
@@ -607,7 +607,7 @@ const Map: FC<MainContentProps> = ({
     />}
     {!!pointIntent && <ScopeSelector
       isLargeSize={isLargeSize}
-      scopes={scopeStore.list()}
+      scopes={scopeStore?.list() ?? []}
       onScopeSelected={handleScopeSelected}
       onCancel={handleScopeSelectionCancelled}
     />}

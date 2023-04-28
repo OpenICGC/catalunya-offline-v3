@@ -46,8 +46,8 @@ const ScopeMain: FC<ScopeMainProps> = ({
   const scopeAdd = () => {
     scopeStore.create({
       id: uuid(),
-      name: `${t('scope')} ${scopeStore.list().length + 1}`,
-      color: palette[scopeStore.list().length % palette.length]
+      name: `${t('scope')} ${(scopeStore.list()?.length ?? 0) + 1}`,
+      color: palette[(scopeStore.list()?.length ?? 0) % palette.length]
     });
   };
 
@@ -101,7 +101,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
   return !selectedScope ?
     <>
       <MainPanel
-        scopes={scopeStore.list()}
+        scopes={scopeStore.list() ?? []}
         onSelect={onScopeSelected}
         onAdd={scopeAdd}
         onColorChange={scopeColorChange}

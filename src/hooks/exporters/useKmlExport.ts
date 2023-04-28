@@ -12,7 +12,7 @@ export const useKmlExport = (scopeId: UUID) => {
   const scopePointList = pointStore.list();
   const scopeTrackList = trackStore.list();
     
-  const formattedPoints = scopePointList.map(point => {
+  const formattedPoints = scopePointList?.map(point => {
     return {
       ...point,
       properties: {
@@ -26,7 +26,7 @@ export const useKmlExport = (scopeId: UUID) => {
     };
   });
   
-  const formattedTracks = scopeTrackList.map(track => {
+  const formattedTracks = scopeTrackList?.map(track => {
     if (track.geometry?.coordinates.some(coord => coord.length === 2)) {
       return {
         ...track,

@@ -1,7 +1,6 @@
 import {ScopeFeature, UUID} from '../../types/commonTypes';
 import {useScopePoints, useScopeTracks} from '../useStoredCollections';
 import {useEffect, useState} from 'react';
-import {PersistenceStatus} from '../usePersistenceData';
 import {getImageNameWithoutPath} from '../../utils/getImageNameWithoutPath';
 import {Feature, FeatureCollection} from 'geojson';
 
@@ -23,12 +22,9 @@ export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePo
   
   const tracks = trackStore.list();
   const points = pointStore.list();
-  
-  const tracksStatus = trackStore.status;
-  const pointStatus = pointStore.status;
-  
+
   useEffect(() => {
-    if (!geojson && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
+    if (tracks !== undefined && points !== undefined) {
       const tracksWithValidImagePaths = changeImagePaths(tracks);
       const pointsWithValidImagePaths = changeImagePaths(points);
 
@@ -60,7 +56,7 @@ export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePo
         });
       }
     }
-  }, [tracks, points, tracksStatus, pointStatus]);
+  }, [tracks, points]);
   
   return geojson;
 };

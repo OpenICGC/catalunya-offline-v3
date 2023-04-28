@@ -66,7 +66,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
           coordinates: newPosition
         },
         properties: {
-          name: `${t('point')} ${pointStore.list().length + 1}`,
+          name: `${t('point')} ${(pointStore.list()?.length ?? 0) + 1}`,
           timestamp: Date.now(),
           description: '',
           images: [],
@@ -140,7 +140,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
       id: uuid(),
       geometry: null,
       properties: {
-        name: `${t('track')} ${trackStore.list().length + 1}`,
+        name: `${t('track')} ${(trackStore.list()?.length ?? 0) + 1}`,
         timestamp: Date.now(),
         description: '',
         images: [],
@@ -214,8 +214,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   if (selectedScope) return <>
     <FeaturesPanel
       scope={selectedScope}
-      scopePoints={pointStore.list()}
-      scopeTracks={trackStore.list()}
+      scopePoints={pointStore?.list() ?? []}
+      scopeTracks={trackStore?.list() ?? []}
       onBackButtonClick={onClose}
 
       onSelectPoint={onPointSelected}

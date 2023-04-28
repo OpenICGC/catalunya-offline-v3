@@ -3,7 +3,6 @@ import { buildGPX, BaseBuilder } from 'gpx-builder';
 import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
 import {Segment} from 'gpx-builder/dist/builder/BaseBuilder/models';
 import {useEffect, useState} from 'react';
-import {PersistenceStatus} from '../usePersistenceData';
 
 export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?: boolean) => {
   const {Point, Metadata, Track} = BaseBuilder.MODELS;
@@ -13,16 +12,12 @@ export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?
   const scope = useScopes().retrieve(scopeId);
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
-  
-  
+
   const scopeTrack = trackStore.retrieve(trackId);
   const scopePointList = pointStore.list();
-  
-  const tracksStatus = trackStore.status;
-  const pointStatus = pointStore.status;
-  
+
   useEffect(() => {
-    if (!gpx && scope && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
+    if (!gpx && scope && scopeTrack !== undefined && scopePointList !== undefined) {
       const meta = new Metadata(
         {
           name: scope.name
@@ -109,7 +104,7 @@ export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?
         return setGpx(buildGPX(gpx.toObject()));
       }
     }
-  }, [scope, scopeTrack, scopePointList, tracksStatus, pointStatus]);
+  }, [scope, scopeTrack, scopePointList]);
 
   return gpx;
   

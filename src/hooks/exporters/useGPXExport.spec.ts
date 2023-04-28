@@ -114,130 +114,83 @@ const trackWithoutTimestampNorElevation: ScopeTrack = {
   }
 };
 
-
 describe('useGPXExport', () => {
-
   it('should generate a valid GPX from trackId', async() => {
-
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    const gpxExportHook = renderHook(() => useGPXExport(scope.id, track.id));
 
     // WHEN
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-
     act(() => scopeTracksHook.result.current.create(track));
-    await scopeTracksHook.waitForNextUpdate();
-    
-    const gpxExportHook = renderHook(() => useGPXExport(scope.id, track.id));
-    await gpxExportHook.waitForNextUpdate();
-    
+
     // THEN
     expect(gpxExportHook.result.current).to.deep.equal(gpxSample_01);
 
     // CLEAN
     act(() => scopeTracksHook.result.current.delete(track.id));
-    await scopeTracksHook.waitForNextUpdate();
-
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
-    
   });
 
   it('should generate a valid GPX from trackId and visiblePoints', async() => {
-
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    const gpxExportHook = renderHook(() => useGPXExport(scope.id, track.id, true));
 
     // WHEN
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-
     for (const point of points) {
       act(() => scopePointsHook.result.current.create(point));
-      await scopePointsHook.waitForNextUpdate();
     }
-
     act(() => scopeTracksHook.result.current.create(track));
-    await scopeTracksHook.waitForNextUpdate();
-
-    const gpxExportHook = renderHook(() => useGPXExport(scope.id, track.id, true));
-    await gpxExportHook.waitForNextUpdate();
 
     // THEN
     expect(gpxExportHook.result.current).to.deep.equal(gpxSample_02);
 
-    //CLEAN
+    // CLEAN
     act(() => scopeTracksHook.result.current.delete(track.id));
-    await scopeTracksHook.waitForNextUpdate();
-
     for (const point of points) {
       act(() => scopePointsHook.result.current.delete(point.id));
-      await scopePointsHook.waitForNextUpdate();
     }
-
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
-
   });
 
   it('should generate a valid GPX from trackId without timestamp', async() => {
-
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    const gpxExportHook = renderHook(() => useGPXExport(scope.id, trackWithoutTimestamp.id));
 
     // WHEN
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-
     act(() => scopeTracksHook.result.current.create(trackWithoutTimestamp));
-    await scopeTracksHook.waitForNextUpdate();
-
-    const gpxExportHook = renderHook(() => useGPXExport(scope.id, trackWithoutTimestamp.id));
-    await gpxExportHook.waitForNextUpdate();
 
     // THEN
     expect(gpxExportHook.result.current).to.deep.equal(gpxSample_03);
 
-    //CLEAN
+    // CLEAN
     act(() => scopeTracksHook.result.current.delete(trackWithoutTimestamp.id));
-    await scopeTracksHook.waitForNextUpdate();
-
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
-
   });
 
   it('should generate a valid GPX from trackId without timestamp nor elevation', async() => {
-
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    const gpxExportHook = renderHook(() => useGPXExport(scope.id, trackWithoutTimestampNorElevation.id));
 
     // WHEN
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-
     act(() => scopeTracksHook.result.current.create(trackWithoutTimestampNorElevation));
-    await scopeTracksHook.waitForNextUpdate();
-
-    const gpxExportHook = renderHook(() => useGPXExport(scope.id, trackWithoutTimestampNorElevation.id));
-    await gpxExportHook.waitForNextUpdate();
 
     // THEN
     expect(gpxExportHook.result.current).to.deep.equal(gpxSample_04);
 
-    //CLEAN
+    // CLEAN
     act(() => scopeTracksHook.result.current.delete(trackWithoutTimestampNorElevation.id));
-    await scopeTracksHook.waitForNextUpdate();
-
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
-
   });
-
 });

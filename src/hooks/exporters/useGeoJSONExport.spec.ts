@@ -96,30 +96,22 @@ const expectedTracks = tracks
   }));
 
 describe('useGeoJSONExport', () => {
-  // GIVEN
+  it('should generate a valid GeoJSON from scope.id', () => {
 
-  it('should generate a valid GeoJSON from scope.id', async () => {
-
-    // WHEN
+    // GIVEN
     const scopesHook = renderHook(() => useScopes());
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
-    
+    const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id));
+
+    // WHEN
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-    
     for (const point of points) {
       act(() => scopePointsHook.result.current.create(point));
-      await scopePointsHook.waitForNextUpdate();
     }
-    
     for (const track of tracks) {
       act(() => scopeTracksHook.result.current.create(track));
-      await scopeTracksHook.waitForNextUpdate();
     }
-
-    const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id));
-    await geoJSONExportHook.waitForNextUpdate();
 
     // THEN
     const expectedGeoJSON = {
@@ -131,32 +123,25 @@ describe('useGeoJSONExport', () => {
     };
     expect(geoJSONExportHook.result.current).to.deep.equal(expectedGeoJSON);
 
-    //CLEAN
+    // CLEAN
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
   });
 
-  it('should generate a valid GeoJSON from trackId', async () => {
-    // WHEN
+  it('should generate a valid GeoJSON from trackId', () => {
+    // GIVEN
     const scopesHook = renderHook(() => useScopes());
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
-    
-    act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
+    const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id, '3578a'));
 
+    // WHEN
+    act(() => scopesHook.result.current.create(scope));
     for (const point of points) {
       act(() => scopePointsHook.result.current.create(point));
-      await scopePointsHook.waitForNextUpdate();
     }
-
     for (const track of tracks) {
       act(() => scopeTracksHook.result.current.create(track));
-      await scopeTracksHook.waitForNextUpdate();
     }
-
-    const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id, '3578a'));
-    await geoJSONExportHook.waitForNextUpdate();
 
     // THEN
     const expectedGeoJSON = {
@@ -167,32 +152,25 @@ describe('useGeoJSONExport', () => {
     };
     expect(geoJSONExportHook.result.current).to.deep.equal(expectedGeoJSON);
 
-    //CLEAN
+    // CLEAN
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
   });
 
-  it('should generate a valid GeoJSON from trackId and visiblePoints', async () => {
-    // WHEN
+  it('should generate a valid GeoJSON from trackId and visiblePoints', () => {
+    // GIVEN
     const scopesHook = renderHook(() => useScopes());
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
-    
-    act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
+    const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id, '3578a', true));
 
+    // WHEN
+    act(() => scopesHook.result.current.create(scope));
     for (const point of points) {
       act(() => scopePointsHook.result.current.create(point));
-      await scopePointsHook.waitForNextUpdate();
     }
-
     for (const track of tracks) {
       act(() => scopeTracksHook.result.current.create(track));
-      await scopeTracksHook.waitForNextUpdate();
     }
-
-    const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id, '3578a', true));
-    await geoJSONExportHook.waitForNextUpdate();
 
     // THEN
     const expectedGeoJSON = {
@@ -204,8 +182,7 @@ describe('useGeoJSONExport', () => {
     };
     expect(geoJSONExportHook.result.current).to.deep.equal(expectedGeoJSON);
 
-    //CLEAN
+    // CLEAN
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
   });
 });
