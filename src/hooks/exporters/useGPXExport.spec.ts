@@ -118,7 +118,9 @@ describe('useGPXExport', () => {
   it('should generate a valid GPX from trackId', async() => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const gpxExportHook = renderHook(() => useGPXExport(scope.id, track.id));
 
     // WHEN
@@ -136,8 +138,11 @@ describe('useGPXExport', () => {
   it('should generate a valid GPX from trackId and visiblePoints', async() => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
     const gpxExportHook = renderHook(() => useGPXExport(scope.id, track.id, true));
 
     // WHEN
@@ -161,7 +166,9 @@ describe('useGPXExport', () => {
   it('should generate a valid GPX from trackId without timestamp', async() => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const gpxExportHook = renderHook(() => useGPXExport(scope.id, trackWithoutTimestamp.id));
 
     // WHEN
@@ -179,7 +186,9 @@ describe('useGPXExport', () => {
   it('should generate a valid GPX from trackId without timestamp nor elevation', async() => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const gpxExportHook = renderHook(() => useGPXExport(scope.id, trackWithoutTimestampNorElevation.id));
 
     // WHEN

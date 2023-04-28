@@ -20,7 +20,8 @@ describe('useStoredCollections',() => {
       name: 'Scope 1bis',
       color: '#FEBEDE'
     };
-    const {result} = renderHook(() => useScopes());
+    const {result, waitForValueToChange} = renderHook(() => useScopes());
+    await waitForValueToChange(() => result.current.list() !== undefined);
 
     // WHEN
     act(() => result.current.create(sampleScope));
@@ -73,7 +74,8 @@ describe('useStoredCollections',() => {
         coordinates: [1, 1]
       }
     };
-    const {result} = renderHook(() => useScopePoints(scopeId));
+    const {result, waitForValueToChange} = renderHook(() => useScopePoints(scopeId));
+    await waitForValueToChange(() => result.current.list() !== undefined);
 
     // WHEN
     act(() => result.current.create(samplePoint));
@@ -123,7 +125,8 @@ describe('useStoredCollections',() => {
         coordinates: [[2, 2], [3, 3]]
       }
     };
-    const {result} = renderHook(() => useScopeTracks(scopeId));
+    const {result, waitForValueToChange} = renderHook(() => useScopeTracks(scopeId));
+    await waitForValueToChange(() => result.current.list() !== undefined);
 
     // WHEN
     act(() => result.current.create(sampleTrack));

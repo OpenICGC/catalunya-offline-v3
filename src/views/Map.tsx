@@ -382,7 +382,7 @@ const Map: FC<MainContentProps> = ({
     setPointIntent(undefined);
     onPointSelected(id);
     return id;
-  }, [pointStore, t, onPointSelected]);
+  }, [pointStore.create, pointStore.list, t, onPointSelected]);
 
   const [acceptPoint, setAcceptPoint] = useState(false);
 
@@ -396,7 +396,7 @@ const Map: FC<MainContentProps> = ({
       }
       setAcceptPoint(false);
     }
-  }, [acceptPoint, viewport.longitude, viewport.latitude, selectedScopeId, createNewPoint]);
+  }, [acceptPoint, viewport.longitude, viewport.latitude, selectedScopeId, createNewPoint, pointList]);
 
   const onLongTap = useCallback((position: Position) => {
     setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
@@ -446,8 +446,8 @@ const Map: FC<MainContentProps> = ({
   }, [onScopeSelected]);
 
   useEffect(() => {
-    pointIntent && selectedScopeId && createNewPoint(pointIntent);
-  }, [pointIntent, selectedScopeId, createNewPoint]);
+    pointIntent && pointList && createNewPoint(pointIntent);
+  }, [pointIntent, pointList, createNewPoint]);
 
   const handleScopeSelectionCancelled = useCallback(() => {
     setPointIntent(undefined);

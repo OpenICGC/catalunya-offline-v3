@@ -8,6 +8,6 @@ const key = 'state.scopeFeaturesPanelTab';
 const defaultValue: Type = SCOPE_FEATURES_PANEL_TAB.POINTS;
 
 export default singletonHook(
-  [defaultValue, () => undefined],
+  [defaultValue, () => undefined, false],
   () => usePersistedState<Type>(key, defaultValue)
 );

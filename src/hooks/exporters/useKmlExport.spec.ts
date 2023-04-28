@@ -160,11 +160,14 @@ const trackWithoutTimestamp: ScopeTrack[] = [
 ];
 
 describe('useKmlExport', () => {
-  it('should generate a valid KML from scopeId (tracks with lon,lat,ele,timestamp, points with lon,lat,ele)', () => {
+  it('should generate a valid KML from scopeId (tracks with lon,lat,ele,timestamp, points with lon,lat,ele)', async () => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const kmlExportHook = renderHook(() => useKmlExport(scope.id));
 
     // WHEN
@@ -183,11 +186,14 @@ describe('useKmlExport', () => {
     act(() => scopesHook.result.current.delete(scope.id));
   });
 
-  it('should generate a valid KML from scopeId (tracks with lon,lat,ele, points with lon,lat,ele)', () => {
+  it('should generate a valid KML from scopeId (tracks with lon,lat,ele, points with lon,lat,ele)', async () => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const kmlExportHook = renderHook(() => useKmlExport(scope.id));
 
     // WHEN
@@ -206,11 +212,14 @@ describe('useKmlExport', () => {
     act(() => scopesHook.result.current.delete(scope.id));
   });
 
-  it('should generate a valid KML from scopeId (tracks with lon,lat, points with lon,lat,ele)', () => {
+  it('should generate a valid KML from scopeId (tracks with lon,lat, points with lon,lat,ele)', async () => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const kmlExportHook = renderHook(() => useKmlExport(scope.id));
 
     // WHEN
@@ -229,11 +238,14 @@ describe('useKmlExport', () => {
     act(() => scopesHook.result.current.delete(scope.id));
   });
 
-  it('should generate a valid KML from scopeId (points with lon,lat, tracks with lon,lat)', () => {
+  it('should generate a valid KML from scopeId (points with lon,lat, tracks with lon,lat)', async () => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const kmlExportHook = renderHook(() => useKmlExport(scope.id));
 
     // WHEN

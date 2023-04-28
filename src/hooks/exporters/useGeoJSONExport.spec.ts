@@ -96,12 +96,15 @@ const expectedTracks = tracks
   }));
 
 describe('useGeoJSONExport', () => {
-  it('should generate a valid GeoJSON from scope.id', () => {
+  it('should generate a valid GeoJSON from scope.id', async () => {
 
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id));
 
     // WHEN
@@ -127,11 +130,14 @@ describe('useGeoJSONExport', () => {
     act(() => scopesHook.result.current.delete(scope.id));
   });
 
-  it('should generate a valid GeoJSON from trackId', () => {
+  it('should generate a valid GeoJSON from trackId', async () => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id, '3578a'));
 
     // WHEN
@@ -156,11 +162,14 @@ describe('useGeoJSONExport', () => {
     act(() => scopesHook.result.current.delete(scope.id));
   });
 
-  it('should generate a valid GeoJSON from trackId and visiblePoints', () => {
+  it('should generate a valid GeoJSON from trackId and visiblePoints', async () => {
     // GIVEN
     const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
     const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
     const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
     const geoJSONExportHook = renderHook(() => useGeoJSONExport(scope.id, '3578a', true));
 
     // WHEN

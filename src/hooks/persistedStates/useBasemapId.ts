@@ -8,6 +8,6 @@ const key = 'state.basemapId';
 const defaultValue: Type = BASEMAPS[0].id;
 
 export default singletonHook(
-  [defaultValue, () => undefined],
+  [defaultValue, () => undefined, false],
   () => usePersistedState<Type>(key, defaultValue)
 );
