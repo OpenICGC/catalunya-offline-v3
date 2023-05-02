@@ -41,7 +41,7 @@ Default.args = {
     name: 'Montseny',
     color: '#095c7a',
   },
-  initialPoint: {
+  point: {
     type: 'Feature',
     id: uuidv4(),
     geometry: {

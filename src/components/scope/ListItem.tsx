@@ -1,4 +1,14 @@
-import React, {KeyboardEvent, FC, ChangeEvent, SyntheticEvent, useState, ReactNode, memo, useMemo} from 'react';
+import React, {
+  KeyboardEvent,
+  FC,
+  ChangeEvent,
+  SyntheticEvent,
+  useState,
+  ReactNode,
+  memo,
+  useMemo,
+  useEffect, useRef
+} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -118,7 +128,16 @@ const ListItem: FC<ListItemProps> = memo(({
     setAnchorEl(null);
     onStopEditing();
   };
-  
+
+  const inputRef = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+    if (isEditing) {
+      // Focus
+      inputRef?.current?.focus();
+    }
+  }, [isEditing]);
+
   return <ClickAwayListener onClickAway={handleClickAway}>
     <MuiListItem sx={muiListItemSx}>
       <ListItemIcon sx={listItemIconSx}>
@@ -139,7 +158,7 @@ const ListItem: FC<ListItemProps> = memo(({
         <TextField size='small' label='' variant='outlined' sx={textFieldSx}
           key='listItem'
           error={name.length < 1}
-          inputRef={input => input && input.focus()}
+          inputRef={inputRef}
           onChange={handleNameChange}
           onKeyDown={handleEnterStopsEditing}
           value={name}

@@ -26,22 +26,21 @@ const ScopePoint: FC<ScopePointProps> = ({
   const numPoints = pointStore.list()?.length ?? 0;
   const numTracks = trackStore.list()?.length ?? 0;
 
-  const pointChange = useCallback((newPoint: ScopePoint) => {
-    const existing = pointStore.retrieve(newPoint.id);
-    existing && pointStore.update(newPoint);
-  }, [pointStore.retrieve, pointStore.update]);
+  const handlePointChange = useCallback((point: ScopePoint) => {
+    pointStore.update(point);
+  }, [pointStore]);
 
   const goTo = useCallback((pointId: UUID) => {
     pointNavigation.start(scopeId, pointId);
-  }, [pointNavigation.start]);
+  }, [pointNavigation.start, scopeId]);
 
   return selectedScope && selectedPoint ? <PointPanel
     scope={selectedScope}
-    initialPoint={selectedPoint}
+    point={selectedPoint}
     numPoints={numPoints}
     numTracks={numTracks}
     onBackButtonClick={onClose}
-    onPointChange={pointChange}
+    onPointChange={handlePointChange}
     onGoTo={goTo}
   /> : null;
 };
