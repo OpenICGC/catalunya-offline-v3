@@ -547,7 +547,7 @@ const Map: FC<MainContentProps> = ({
       onToggleContextualMenu={handleToggleContextualMenu}
       onResultClick={handleResultClick}
     />}
-    <GeocomponentMap
+    {mapStyle && <GeocomponentMap
       styleDiffing={true}
       reuseMaps={true}
       RTLTextPlugin={''}
@@ -556,8 +556,8 @@ const Map: FC<MainContentProps> = ({
       //reuseMaps
       ref={mapRef}
       mapStyle={mapStyle}
-      sources={sources}
-      layers={layers}
+      sources={isActive ? sources : undefined}
+      layers={isActive ? layers : undefined}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
@@ -587,7 +587,7 @@ const Map: FC<MainContentProps> = ({
         onBaseMapsClick={handleBaseMapsClick}
         onScopesClick={handleScopesClick}
       />}
-    </GeocomponentMap>
+    </GeocomponentMap>}
 
     {editingPosition.isEditing && <PositionEditor
       name={selectedPoint?.properties.name}
