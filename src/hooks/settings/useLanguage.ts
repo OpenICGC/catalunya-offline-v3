@@ -8,6 +8,6 @@ const key = 'settings.language';
 const defaultValue: Type = LANGUAGE.ca;
 
 export default singletonHook(
-  [defaultValue, () => undefined],
+  [defaultValue, () => undefined, false],
   () => usePersistedState<Type>(key, defaultValue)
 );

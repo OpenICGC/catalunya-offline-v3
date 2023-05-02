@@ -26,8 +26,8 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
 
   const selectedScope = scopeStore.retrieve(scopeId);
   const selectedTrack = trackStore.retrieve(trackId);
-  const numPoints = pointStore.list().length;
-  const numTracks = trackStore.list().length;
+  const numPoints = pointStore.list()?.length ?? 0;
+  const numTracks = trackStore.list()?.length ?? 0;
 
   const trackChange = useCallback((newTrack: ScopeTrack) => {
     if (trackStore.retrieve(newTrack.id)) {

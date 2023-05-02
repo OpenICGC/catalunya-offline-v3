@@ -11,7 +11,6 @@ import {
   removeDirectory,
   writeFile
 } from '../utils/filesystem';
-import {PersistenceStatus} from './usePersistenceData';
 import {useKmlExport} from './exporters/useKmlExport';
 import {useGeoJSONExport} from './exporters/useGeoJSONExport';
 import {SHARE_FORMAT} from '../components/common/ShareDialog';
@@ -47,9 +46,6 @@ export const useZip = (
   const tracks = trackStore.list();
   const points = pointStore.list();
 
-  const tracksStatus = trackStore.status;
-  const pointStatus = pointStore.status;
-
   const [state, setState] = useState<useZipState|undefined>(undefined);
   const [path, setPath] = useState<string|undefined>(undefined);
 
@@ -57,7 +53,7 @@ export const useZip = (
     features.flatMap(feature => feature.properties.images.map(image => image));
 
   useEffect(() => {
-    if (!state && geojson && kml && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
+    if (!state && geojson && kml && tracks !== undefined && points !== undefined) {
       const data = type === SHARE_FORMAT.ZIP ?
         JSON.stringify(geojson) :
         kml;
@@ -67,7 +63,7 @@ export const useZip = (
         points
       });
     }
-  }, [state, geojson, kml, tracks, points, pointStatus, tracksStatus]);
+  }, [state, geojson, kml, tracks, points]);
 
 
   useEffect(() => {

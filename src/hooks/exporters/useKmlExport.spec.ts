@@ -160,129 +160,107 @@ const trackWithoutTimestamp: ScopeTrack[] = [
 ];
 
 describe('useKmlExport', () => {
-
   it('should generate a valid KML from scopeId (tracks with lon,lat,ele,timestamp, points with lon,lat,ele)', async () => {
+    // GIVEN
+    const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
+    const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
+    const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
+    const kmlExportHook = renderHook(() => useKmlExport(scope.id));
 
     // WHEN
-    const scopesHook = renderHook(() => useScopes());
-    const scopePointsHook = renderHook(() => useScopePoints(scope.id));
-    const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
-
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-
     for (const point of points) {
       act(() => scopePointsHook.result.current.create(point));
-      await scopePointsHook.waitForNextUpdate();
     }
-
     for (const track of tracks) {
       act(() => scopeTracksHook.result.current.create(track));
-      await scopeTracksHook.waitForNextUpdate();
     }
-
-    const kmlExportHook = renderHook(() => useKmlExport(scope.id));
-    await kmlExportHook.waitForNextUpdate();
 
     // THEN
     expect(kmlExportHook.result.current).to.deep.equal(kmlSample_01);
 
     //CLEAN
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
   });
 
   it('should generate a valid KML from scopeId (tracks with lon,lat,ele, points with lon,lat,ele)', async () => {
+    // GIVEN
+    const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
+    const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
+    const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
+    const kmlExportHook = renderHook(() => useKmlExport(scope.id));
 
     // WHEN
-    const scopesHook = renderHook(() => useScopes());
-    const scopePointsHook = renderHook(() => useScopePoints(scope.id));
-    const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
-
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-
     for (const point of points) {
       act(() => scopePointsHook.result.current.create(point));
-      await scopePointsHook.waitForNextUpdate();
     }
-
     for (const track of trackWithoutTimestamp) {
       act(() => scopeTracksHook.result.current.create(track));
-      await scopeTracksHook.waitForNextUpdate();
     }
-
-    const kmlExportHook = renderHook(() => useKmlExport(scope.id));
-    await kmlExportHook.waitForNextUpdate();
 
     // THEN
     expect(kmlExportHook.result.current).to.deep.equal(kmlSample_01);
 
-    //CLEAN
+    // CLEAN
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
   });
 
   it('should generate a valid KML from scopeId (tracks with lon,lat, points with lon,lat,ele)', async () => {
+    // GIVEN
+    const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
+    const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
+    const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
+    const kmlExportHook = renderHook(() => useKmlExport(scope.id));
 
     // WHEN
-    const scopesHook = renderHook(() => useScopes());
-    const scopePointsHook = renderHook(() => useScopePoints(scope.id));
-    const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
-
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-
     for (const point of points) {
       act(() => scopePointsHook.result.current.create(point));
-      await scopePointsHook.waitForNextUpdate();
     }
-
     for (const track of trackWithoutTimestampNorElevation) {
       act(() => scopeTracksHook.result.current.create(track));
-      await scopeTracksHook.waitForNextUpdate();
     }
-
-    const kmlExportHook = renderHook(() => useKmlExport(scope.id));
-    await kmlExportHook.waitForNextUpdate();
 
     // THEN
     expect(kmlExportHook.result.current).to.deep.equal(kmlSample_01);
 
-    //CLEAN
+    // CLEAN
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
   });
 
   it('should generate a valid KML from scopeId (points with lon,lat, tracks with lon,lat)', async () => {
+    // GIVEN
+    const scopesHook = renderHook(() => useScopes());
+    await scopesHook.waitForValueToChange(() => scopesHook.result.current.list() !== undefined);
+    const scopePointsHook = renderHook(() => useScopePoints(scope.id));
+    await scopePointsHook.waitForValueToChange(() => scopePointsHook.result.current.list() !== undefined);
+    const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
+    await scopeTracksHook.waitForValueToChange(() => scopeTracksHook.result.current.list() !== undefined);
+    const kmlExportHook = renderHook(() => useKmlExport(scope.id));
 
     // WHEN
-    const scopesHook = renderHook(() => useScopes());
-    const scopePointsHook = renderHook(() => useScopePoints(scope.id));
-    const scopeTracksHook = renderHook(() => useScopeTracks(scope.id));
-
     act(() => scopesHook.result.current.create(scope));
-    await scopesHook.waitForNextUpdate();
-
     for (const point of pointsWithoutElevation) {
       act(() => scopePointsHook.result.current.create(point));
-      await scopePointsHook.waitForNextUpdate();
     }
-
     for (const track of trackWithoutTimestamp) {
       act(() => scopeTracksHook.result.current.create(track));
-      await scopeTracksHook.waitForNextUpdate();
     }
-
-    const kmlExportHook = renderHook(() => useKmlExport(scope.id));
-    await kmlExportHook.waitForNextUpdate();
 
     // THEN
     expect(kmlExportHook.result.current).to.deep.equal(kmlSample_02);
 
-    //CLEAN
+    // CLEAN
     act(() => scopesHook.result.current.delete(scope.id));
-    await scopesHook.waitForNextUpdate();
   });
-
 });

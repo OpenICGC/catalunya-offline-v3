@@ -8,6 +8,6 @@ const key = 'state.selectedTrackId';
 const defaultValue: Type = undefined;
 
 export default singletonHook(
-  [defaultValue, () => undefined],
+  [defaultValue, () => undefined, false],
   () => usePersistedState<Type>(key, defaultValue)
 );

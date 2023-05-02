@@ -7,6 +7,6 @@ const key = 'state.visibleLayers';
 const defaultValue: Type = [];
 
 export default singletonHook(
-  [defaultValue, () => undefined],
+  [defaultValue, () => undefined, false],
   () => usePersistedState<Type>(key, defaultValue)
 );

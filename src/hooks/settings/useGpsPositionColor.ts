@@ -8,6 +8,6 @@ const key = 'settings.gpsPositionColor';
 const defaultValue: Type = '#4286f5';
 
 export default singletonHook(
-  [defaultValue, () => undefined],
+  [defaultValue, () => undefined, false],
   () => usePersistedState<Type>(key, defaultValue)
 );

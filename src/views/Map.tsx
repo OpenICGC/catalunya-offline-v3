@@ -137,7 +137,7 @@ const Map: FC<MainContentProps> = ({
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
-        features: trackList.filter(track =>
+        features: trackList?.filter(track =>
           track.geometry !== null &&
           track.properties.isVisible
         ).map(track => ({
@@ -146,7 +146,7 @@ const Map: FC<MainContentProps> = ({
             ...track.properties,
             color: track.properties.color || scopeColor
           }
-        }) as Feature)
+        }) as Feature) ?? []
       }
     }
   }), [trackList]);
@@ -372,7 +372,7 @@ const Map: FC<MainContentProps> = ({
         coordinates: coordinates
       },
       properties: {
-        name: `${t('point')} ${pointStore.list().length + 1}`,
+        name: `${t('point')} ${(pointStore.list()?.length ?? 0) + 1}`,
         timestamp: Date.now(),
         description: '',
         images: [],
@@ -382,7 +382,7 @@ const Map: FC<MainContentProps> = ({
     setPointIntent(undefined);
     onPointSelected(id);
     return id;
-  }, [pointStore, t, onPointSelected]);
+  }, [pointStore.create, pointStore.list, t, onPointSelected]);
 
   const [acceptPoint, setAcceptPoint] = useState(false);
 
@@ -396,7 +396,7 @@ const Map: FC<MainContentProps> = ({
       }
       setAcceptPoint(false);
     }
-  }, [acceptPoint, viewport.longitude, viewport.latitude, selectedScopeId, createNewPoint]);
+  }, [acceptPoint, viewport.longitude, viewport.latitude, selectedScopeId, createNewPoint, pointList]);
 
   const onLongTap = useCallback((position: Position) => {
     setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
@@ -446,8 +446,8 @@ const Map: FC<MainContentProps> = ({
   }, [onScopeSelected]);
 
   useEffect(() => {
-    pointIntent && selectedScopeId && createNewPoint(pointIntent);
-  }, [pointIntent, selectedScopeId, createNewPoint]);
+    pointIntent && pointList && createNewPoint(pointIntent);
+  }, [pointIntent, pointList, createNewPoint]);
 
   const handleScopeSelectionCancelled = useCallback(() => {
     setPointIntent(undefined);
@@ -547,7 +547,7 @@ const Map: FC<MainContentProps> = ({
       onToggleContextualMenu={handleToggleContextualMenu}
       onResultClick={handleResultClick}
     />}
-    <GeocomponentMap
+    {mapStyle && <GeocomponentMap
       styleDiffing={true}
       reuseMaps={true}
       RTLTextPlugin={''}
@@ -556,8 +556,8 @@ const Map: FC<MainContentProps> = ({
       //reuseMaps
       ref={mapRef}
       mapStyle={mapStyle}
-      sources={sources}
-      layers={layers}
+      sources={isActive ? sources : undefined}
+      layers={isActive ? layers : undefined}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
@@ -587,7 +587,7 @@ const Map: FC<MainContentProps> = ({
         onBaseMapsClick={handleBaseMapsClick}
         onScopesClick={handleScopesClick}
       />}
-    </GeocomponentMap>
+    </GeocomponentMap>}
 
     {editingPosition.isEditing && <PositionEditor
       name={selectedPoint?.properties.name}
@@ -607,7 +607,7 @@ const Map: FC<MainContentProps> = ({
     />}
     {!!pointIntent && <ScopeSelector
       isLargeSize={isLargeSize}
-      scopes={scopeStore.list()}
+      scopes={scopeStore?.list() ?? []}
       onScopeSelected={handleScopeSelected}
       onCancel={handleScopeSelectionCancelled}
     />}

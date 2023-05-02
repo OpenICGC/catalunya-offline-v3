@@ -9,7 +9,6 @@ import {
   removeDirectory,
   writeFile
 } from '../utils/filesystem';
-import {PersistenceStatus} from './usePersistenceData';
 import {useGPXExport} from './exporters/useGPXExport';
 
 type useGpxState = {
@@ -40,21 +39,18 @@ export const useGpx = (
   const tracks = trackStore.list();
   const points = pointStore.list();
 
-  const tracksStatus = trackStore.status;
-  const pointStatus = pointStore.status;
-
   const [state, setState] = useState<useGpxState|undefined>(undefined);
   const [path, setPath] = useState<string|undefined>(undefined);
 
   useEffect(() => {
-    if (!state && gpx && tracksStatus === PersistenceStatus.READY && pointStatus === PersistenceStatus.READY) {
+    if (!state && gpx && tracks !== undefined && points !== undefined) {
       setState({
         data: gpx,
         tracks,
         points
       });
     }
-  }, [state, gpx, tracks, points, pointStatus, tracksStatus]);
+  }, [state, gpx, tracks, points]);
 
 
   useEffect(() => {

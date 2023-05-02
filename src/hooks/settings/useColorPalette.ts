@@ -7,6 +7,6 @@ const key = 'settings.colorPalette';
 const defaultValue = 'BrewerSet19';
 
 export default singletonHook(
-  [defaultValue, () => undefined],
+  [defaultValue, () => undefined, false],
   () => usePersistedState<Type>(key, defaultValue)
 );

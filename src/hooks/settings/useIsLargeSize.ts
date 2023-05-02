@@ -7,6 +7,6 @@ const key = 'settings.isLargeSize';
 const defaultValue: Type = false;
 
 export default singletonHook(
-  [defaultValue, () => undefined],
+  [defaultValue, () => undefined, false],
   () => usePersistedState<Type>(key, defaultValue)
 );
