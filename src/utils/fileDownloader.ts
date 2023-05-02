@@ -36,8 +36,9 @@ const fileDownloader = (
     }
     const directory = await getUri(destinationDirectory);
 
-    const absoluteDestinationDirectory = directory?.uri.replace('file://', '') || '';
-    
+    //const absoluteDestinationDirectory = directory?.uri.replace('file://', '') || '';
+    const absoluteDestinationDirectory = directory?.uri || '';
+
     const absolutePath = filename ?
       absoluteDestinationDirectory + '/' + filename :
       absoluteDestinationDirectory + '/' + url.split('/').pop();
