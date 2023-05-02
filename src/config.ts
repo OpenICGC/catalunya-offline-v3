@@ -14,6 +14,7 @@ export const EXPORT_DIR_NAME = 'exports';
 
 export const PLATFORM = Capacitor.getPlatform();
 export const IS_WEB = PLATFORM === 'web';
+export const IS_IOS = PLATFORM === 'ios';
 
 export const PERSISTENCE_NAMESPACE = 'catoffline';
 

@@ -1,6 +1,7 @@
 
 import {FileTransfer, FileTransferError} from '@awesome-cordova-plugins/file-transfer';
 import {createDirectory, deleteFile, FolderType, getUri, offlineDirExists, renameFile} from './filesystem';
+import {IS_IOS} from '../config';
 
 interface fileDownloader {
   download: () => Promise<string|FileTransferError>,
@@ -36,8 +37,9 @@ const fileDownloader = (
     }
     const directory = await getUri(destinationDirectory);
 
-    //const absoluteDestinationDirectory = directory?.uri.replace('file://', '') || '';
-    const absoluteDestinationDirectory = directory?.uri || '';
+    const absoluteDestinationDirectory = IS_IOS ?
+      directory?.uri || '' :
+      directory?.uri.replace('file://', '') || '';
 
     const absolutePath = filename ?
       absoluteDestinationDirectory + '/' + filename :
