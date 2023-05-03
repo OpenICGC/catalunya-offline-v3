@@ -596,7 +596,7 @@ const Map: FC<MainContentProps> = ({
       onAccept={handleEditingPositionAccept}
       onCancel={handleEditingPositionCancel}
     />}
-    {recordingTrack.isRecording && <TrackRecorder
+    {recordingTrack.isRecording && !editingPosition.isEditing && <TrackRecorder
       name={selectedTrack?.properties.name}
       bottomMargin={bottomMargin}
       color={trackColor}

@@ -126,7 +126,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   const searchSx = {
     '&.SearchBox-root': {
       transition: 'transform 360ms linear',
-      zIndex: 1200,
+      zIndex: 1,
       position: 'absolute',
       top: isHeaderVisible ? 48 : 0,
       m: 1,
