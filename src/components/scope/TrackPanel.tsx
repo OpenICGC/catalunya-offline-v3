@@ -55,9 +55,15 @@ const sxInput = {
   '& .GenericInput-title': sectionTitleSx
 };
 
+const ScrollableContent = styled(Box)({
+  overflow: 'auto',
+  padding: '0px',
+  marginBottom: '32px'
+});
+
 export type TrackPanelProps = {
   scope: Scope,
-  initialTrack: ScopeTrack,
+  track: ScopeTrack,
   numPoints: number,
   numTracks: number,
   onRecordStart: () => void,
@@ -68,7 +74,7 @@ export type TrackPanelProps = {
 
 const TrackPanel: FC<TrackPanelProps> = ({
   scope,
-  initialTrack,
+  track,
   numPoints,
   numTracks,
   onRecordStart,
@@ -79,8 +85,8 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const {t} = useTranslation();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [track, setTrack] = useState(initialTrack);
-  const {images, create, remove, save, discard} = useImages(initialTrack.properties.images);
+  const [uneditedTrack, setUneditedTrack] = useState<ScopeTrack>();
+  const {images, create, remove, save, discard} = useImages(track.properties.images);
 
   const accums = useMemo(() => getAccumulatedProfileProperties(track.geometry?.coordinates), [track]);
   const distance: string | undefined = accums ? getSignificantDistanceUnits(accums.distance) : undefined;
@@ -92,8 +98,10 @@ const TrackPanel: FC<TrackPanelProps> = ({
   const hasTimestamp = track.geometry && track.geometry.coordinates.length ? !!track.geometry.coordinates[track.geometry.coordinates.length - 1][3] : false;
 
   useEffect(() => {
-    setTrack(initialTrack);
-  }, [initialTrack]);
+    if (isEditing) {
+      setUneditedTrack(track);
+    }
+  }, [isEditing]);
 
   const actionIcons = useMemo(() => ([
     {
@@ -107,53 +115,47 @@ const TrackPanel: FC<TrackPanelProps> = ({
     }
   ]), [track.geometry]);
 
-  const ScrollableContent = useMemo(() => styled(Box)({
-    overflow: 'auto',
-    padding: '0px',
-    marginBottom: isEditing ? '32px' : '16px'
-  }), [isEditing]);
-
   // HANDLERS
   const handleActionClick = useCallback((trackId: string, actionId: string) => {
     actionId === 'rename' ? setIsEditing(true) : onGoTo(trackId);
   }, []);
 
   const handleColorChange = useCallback((trackId: UUID, color: HEXColor) =>
-    setTrack(prevTrack => ({
-      ...prevTrack,
+    onTrackChange({
+      ...track,
       properties: {
-        ...prevTrack.properties,
+        ...track.properties,
         color: color
       }
-    })), []);
+    }), [track]);
 
   const handleNameChange = useCallback((trackId: UUID, name: string) =>
-    setTrack(prevTrack => ({
-      ...prevTrack,
+    onTrackChange({
+      ...track,
       properties: {
-        ...prevTrack.properties,
+        ...track.properties,
         name: name
       }
-    })), []);
+    }), [track]);
 
 
   const handleDateChange = useCallback((value: number) =>
-    value && setTrack(prevTrack => ({
-      ...prevTrack,
+    value && onTrackChange({
+      ...track,
       properties: {
-        ...prevTrack.properties,
+        ...track.properties,
         timestamp: value // timestamp in milliseconds
       }
-    })), []);
+    }), [track]);
 
   const handleDescriptionChange = useCallback((value: string) =>
-    setTrack(prevTrack => ({
-      ...prevTrack,
+    onTrackChange({
+      ...track,
       properties: {
-        ...prevTrack.properties,
+        ...track.properties,
         description: value
       }
-    })), []);
+    }), [track]);
 
   const handleAddImage = () => create();
 
@@ -175,7 +177,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const handleCancel = () => {
     discard();
-    setTrack(initialTrack);
+    uneditedTrack && onTrackChange(uneditedTrack);
     setIsEditing(false);
   };
 
@@ -183,7 +185,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   return <>
     <Header
-      startIcon={backIcon}
+      startIcon={isEditing ? <></> : backIcon}
       name={scope.name}
       color={scope.color}
       onStartIconClick={onBackButtonClick}

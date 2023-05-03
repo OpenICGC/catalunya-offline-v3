@@ -50,7 +50,7 @@ Default.args = {
     name: 'Montseny',
     color: '#095c7a',
   },
-  initialTrack: {
+  track: {
     type: 'Feature',
     id: uuid(),
     properties: {
@@ -80,7 +80,7 @@ SmallDevice.args = {
 export const DeviceWithoutTimestamp = DeviceTemplate.bind({});
 DeviceWithoutTimestamp.args = {
   ...Default.args,
-  initialTrack: {
+  track: {
     type: 'Feature',
     id: uuid(),
     properties: {
@@ -98,7 +98,7 @@ DeviceWithoutTimestamp.args = {
 export const DeviceWithoutHeight = DeviceTemplate.bind({});
 DeviceWithoutHeight.args = {
   ...Default.args,
-  initialTrack: {
+  track: {
     type: 'Feature',
     id: uuid(),
     properties: {
@@ -116,7 +116,7 @@ DeviceWithoutHeight.args = {
 export const DeviceWithoutZeroHeight = DeviceTemplate.bind({});
 DeviceWithoutZeroHeight.args = {
   ...Default.args,
-  initialTrack: {
+  track: {
     type: 'Feature',
     id: uuid(),
     properties: {
@@ -134,7 +134,7 @@ DeviceWithoutZeroHeight.args = {
 export const DeviceWithoutGeom = DeviceTemplate.bind({});
 DeviceWithoutGeom.args = {
   ...Default.args,
-  initialTrack: {
+  track: {
     type: 'Feature',
     id: uuid(),
     properties: {
