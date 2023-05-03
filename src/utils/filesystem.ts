@@ -235,7 +235,10 @@ export const generateZip = async (source: string, path: string, fromType: Folder
 };
 
 export const onlineFileSize = async (url: string) => {
-  const response = await fetch(url, {method: 'HEAD'});
+  const response = await fetch(url, {
+    headers: { 'Accept-Encoding': 'identity' }, // Prevents 'gzip' encoding, giving better bandwidth in our case, and ensures getting content-length header
+    method: 'HEAD'
+  });
   const size = response.headers.get('content-length');
   if (size) {
     return parseInt(size);
