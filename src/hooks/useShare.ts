@@ -5,7 +5,7 @@ import { Share } from '@capacitor/share';
 const useShare = () => {
 
   const sharePoint = useCallback(async (point: ScopePoint) => {
-    const fons = 'topoMap';
+    const fons = 'naturalMap';
     const lat = point.geometry.coordinates[1].toFixed(5);
     const lng = point.geometry.coordinates[0].toFixed(5);
     const zoom = 16;
