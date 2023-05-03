@@ -50,7 +50,11 @@ const fileDownloader = (
     const uri = encodeURI(url);
     
     return fileTransfer
-      .download(uri, absoluteTempPath, true)
+      .download(uri, absoluteTempPath, true, {
+        headers: {
+          'Accept-Encoding': 'identity' // Prevents 'gzip' encoding, giving better bandwidth in our case
+        }
+      })
       .then(async () => {
         await renameFile(absoluteTempPath, absolutePath);
         //console.debug('[useFileTransfer] Download complete!');

@@ -51,9 +51,9 @@ export const COLOR_PALETTES = [
   [paletteName]: useColorRamp(paletteName).hexColors
 }), {});
 
-const BASE_URL = 'https://cdn.geomatico.es/datasets';
-
 const DATASET: 'icgc' | 'mtc25m' | 'catalunya' | 'madrid' | 'vigo' | 'galicia' = 'icgc';
+
+const BASE_URL = DATASET === 'icgc' ? 'https://betaserver.icgc.cat/apks/catoffv3' : `https://cdn.geomatico.es/datasets/${DATASET}`;
 
 const LATITUDES: Record<string, number> = {
   icgc: 40.5,
@@ -83,7 +83,7 @@ export const DEFAULT_VIEWPORT: ViewportType = {
 
 export const OFFLINE_DATASOURCES: OfflineDatasources = [{
   'id': 'openmaptiles',
-  'url': `${BASE_URL}/${DATASET}/openmaptiles.mbtiles`,
+  'url': `${BASE_URL}/openmaptiles.mbtiles`,
   'labels': {
     'ca': 'Cartografia base',
     'en': 'Base cartography',
@@ -91,7 +91,7 @@ export const OFFLINE_DATASOURCES: OfflineDatasources = [{
   }
 }, {
   'id': 'terrain',
-  'url': `${BASE_URL}/${DATASET}/terrain.mbtiles`,
+  'url': `${BASE_URL}/terrain.mbtiles`,
   'labels': {
     'ca': 'Terreny',
     'en': 'Terrain',
@@ -99,7 +99,7 @@ export const OFFLINE_DATASOURCES: OfflineDatasources = [{
   }
 }];
 
-export const OFFLINE_GLYPHS = `${BASE_URL}/${DATASET}/glyphs.zip`;
+export const OFFLINE_GLYPHS = `${BASE_URL}/glyphs.zip`;
 
 export const BASEMAPS: BaseMaps = [{
   id: 'estandard',
@@ -108,9 +108,9 @@ export const BASEMAPS: BaseMaps = [{
     en: 'Standard',
     es: 'Estándar'
   },
-  style: `${BASE_URL}/${DATASET}/estandard.json`,
-  thumbnail: `${BASE_URL}/${DATASET}/thumbnail-estandard.png`,
-  sprites: `${BASE_URL}/${DATASET}/sprites-estandard.zip`
+  style: `${BASE_URL}/estandard.json`,
+  thumbnail: `${BASE_URL}/thumbnail-estandard.png`,
+  sprites: `${BASE_URL}/sprites-estandard.zip`
 },{
   id: 'lleure',
   labels: {
@@ -118,7 +118,7 @@ export const BASEMAPS: BaseMaps = [{
     en: 'Outdoor',
     es: 'Ocio'
   },
-  style: `${BASE_URL}/${DATASET}/lleure.json`,
-  thumbnail: `${BASE_URL}/${DATASET}/thumbnail-lleure.png`,
-  sprites: `${BASE_URL}/${DATASET}/sprites-lleure.zip`
+  style: `${BASE_URL}/lleure.json`,
+  thumbnail: `${BASE_URL}/thumbnail-lleure.png`,
+  sprites: `${BASE_URL}/sprites-lleure.zip`
 }];
