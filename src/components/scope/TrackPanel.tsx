@@ -207,7 +207,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
     </Box>
     <ScrollableContent>
       <Stack sx={sectionWrapperSx}>
-        {!track.geometry && !isEditing && <>
+        {!track.geometry && <>
           <Typography sx={sectionTitleSx} variant="caption">
             {t('properties.recordingTrack')}
           </Typography>
