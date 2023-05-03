@@ -169,20 +169,6 @@ const Map: FC<MainContentProps> = ({
           }] : []
         }
       },
-      'recordingTrack': {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: recordingTrack.coordinates.length ? [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'LineString',
-              coordinates: recordingTrack.coordinates
-            }
-          }] : []
-        }
-      },
       'navigateToPointLine': {
         type: 'geojson',
         data: {
@@ -191,7 +177,7 @@ const Map: FC<MainContentProps> = ({
         }
       }
     };
-  }, [geolocation.latitude, geolocation.longitude, recordingTrack.coordinates, pointNavigation.feature]);
+  }, [geolocation.latitude, geolocation.longitude, pointNavigation.feature]);
 
   const sources: Sources = useMemo(() => ({
     ...scopeDependantSources,
@@ -255,14 +241,6 @@ const Map: FC<MainContentProps> = ({
       layout: {
         'line-cap': 'round',
         'line-join': 'round'
-      }
-    },{
-      id: 'recordingTrack',
-      source: 'recordingTrack',
-      type: 'line',
-      paint: {
-        'line-color': '#d32f2f',
-        'line-width': 4
       }
     },{
       id: 'geolocation-precision',

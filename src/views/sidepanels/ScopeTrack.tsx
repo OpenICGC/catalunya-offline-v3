@@ -5,7 +5,6 @@ import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCo
 import TrackPanel from '../../components/scope/TrackPanel';
 import useRecordingTrack from '../../hooks/singleton/useRecordingTrack';
 import useTrackNavigation from '../../hooks/singleton/useTrackNavigation';
-import {Position} from 'geojson';
 
 export interface ScopeTrackProps {
   scopeId: UUID,
@@ -21,8 +20,8 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
-  const trackNavigation = useTrackNavigation();
 
+  const trackNavigation = useTrackNavigation();
   const recordingTrack = useRecordingTrack();
 
   const selectedScope = scopeStore.retrieve(scopeId);
@@ -34,25 +33,9 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     trackStore.update(track);
   }, [trackStore]);
 
-  const [recordedCoordinates, setRecordedCoordinates] = useState<Array<Position>>();
-  useEffect(() => {
-    selectedTrack && recordedCoordinates && handleTrackChange({
-      ...selectedTrack,
-      geometry: recordedCoordinates.length ? {
-        type: 'LineString',
-        coordinates: recordedCoordinates
-      } : null
-    });
-    setRecordedCoordinates(undefined);
-  }, [recordedCoordinates, selectedTrack, handleTrackChange]); // TODO esto está mal aquí: si desaparece el panel, adiós traza, y si cambia scopeId o trackId, la escribimos donde no toca!!
-
   const recordTrack = useCallback(() => {
-    recordingTrack.start({
-      onStop: (coordinates) => {
-        setRecordedCoordinates(coordinates);
-      }
-    });
-  }, [recordingTrack.start]);
+    recordingTrack.start(scopeId, trackId);
+  }, [recordingTrack.start, scopeId, trackId]);
 
   const goTo = useCallback((trackId: UUID) => {
     trackNavigation.start(scopeId, trackId);
