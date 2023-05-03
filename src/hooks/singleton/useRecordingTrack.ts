@@ -2,26 +2,12 @@ import {useCallback, useEffect, useState} from 'react';
 import {Position} from 'geojson';
 import useGeolocation from './useGeolocation';
 import {singletonHook} from 'react-singleton-hook';
-import useStopWatch from '../useStopWatch';
 
 type stopFn = (finalTrack: Array<Position>) => void;
 
 type startFn = (argument: {
   onStop?: stopFn
 }) => boolean;
-
-type recordingState = {
-  isRecording: boolean,
-  isPaused: boolean,
-  coordinates: Array<Position>,
-  onStop?: stopFn
-};
-
-const initialRecordingState = {
-  isRecording: false,
-  isPaused: false,
-  coordinates: []
-};
 
 const timeCoordinate = () => Math.round(new Date().getTime() / 1000); // timestamp in seconds as fourth coordinate
 
@@ -36,79 +22,72 @@ type useRecordingTrackType = {
 }
 
 const useRecordingTrack = (): useRecordingTrackType => {
-  const [state, setState] = useState<recordingState>(initialRecordingState);
+  const [isRecording, setRecording] = useState<boolean>(false);
+  const [isPaused, setPaused] = useState<boolean>(false);
+  const [coordinates, setCoordinates] = useState<Array<Position>>([]);
+  const [onStop, setOnStop] = useState<stopFn>();
+  const [startTime, setStartTime] = useState<number>();
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+
   const {geolocation, setWatchInBackground} = useGeolocation();
-  const stopWatch = useStopWatch();
 
   useEffect(() => {
-    if (geolocation.latitude !== null && geolocation.longitude !== null) {
+    if (geolocation.latitude !== null && geolocation.longitude !== null && isRecording && !isPaused) {
       const newPosition: Position = [geolocation.longitude, geolocation.latitude, geolocation.altitude || 0, timeCoordinate()];
-      setState(prevState => {
-        if (prevState.isRecording && !prevState.isPaused) {
-          return {
-            ...prevState,
-            coordinates: [...prevState.coordinates, newPosition]
-          };
-        } else {
-          return prevState;
-        }
-      });
+      setCoordinates(prevCoordinates => ([...prevCoordinates, newPosition]));
     }
-  }, [geolocation.latitude, geolocation.longitude]);
+  }, [geolocation.latitude, geolocation.longitude, isRecording, isPaused]);
+
+  useEffect(() => {
+    if (isRecording && startTime) {
+      const timer = setInterval(() => setElapsedTime(Math.round((Date.now() - startTime) / 1000)), 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isRecording, startTime]);
 
   const start: startFn = useCallback(({onStop}) => {
-    if (state.isRecording) {
+    if (isRecording) {
       console.info('Cannot record track. Another track is being recorded.');
       return false;
     } else {
       setWatchInBackground(true);
-      stopWatch.start();
-      setState({
-        ...initialRecordingState,
-        isRecording: true,
-        onStop
-      });
+      const startTime = Date.now();
+      setStartTime(startTime);
+      setRecording(true);
+      setOnStop(() => onStop);
       return true;
     }
-  }, [state.isRecording, setWatchInBackground, stopWatch.start]);
+  }, [isRecording, setWatchInBackground]);
 
   const pause = useCallback(() => {
     setWatchInBackground(false);
-    stopWatch.pause();
-    setState(
-      prevState => ({
-        ...prevState,
-        isPaused: true
-      })
-    );
-  }, [setWatchInBackground, stopWatch.pause]);
+    setPaused(true);
+  }, [setWatchInBackground]);
 
   const resume = useCallback(() => {
     setWatchInBackground(true);
-    stopWatch.resume();
-    setState(
-      prevState => ({
-        ...prevState,
-        isPaused: false
-      })
-    );
-  }, [setWatchInBackground, stopWatch.resume]);
+    setPaused(false);
+  }, [setWatchInBackground]);
 
   const stop = useCallback(() => {
+    onStop && onStop(coordinates);
+    // Reset all the internal state
     setWatchInBackground(false);
-    stopWatch.stop();
-    state.onStop && state.onStop(state.coordinates);
-    setState(initialRecordingState);
-  }, [setWatchInBackground, stopWatch.stop, state.onStop, state.coordinates]);
+    setRecording(false);
+    setPaused(false);
+    setCoordinates([]);
+    setOnStop(undefined);
+    setStartTime(undefined);
+  }, [onStop, coordinates, setWatchInBackground]);
 
   return {
     start,
     pause,
     resume,
     stop,
-    coordinates: state.coordinates,
-    isRecording: state.isRecording,
-    elapsedTime: stopWatch.time
+    coordinates,
+    isRecording,
+    elapsedTime
   };
 };
 
