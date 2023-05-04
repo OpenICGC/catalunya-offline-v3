@@ -137,7 +137,7 @@ const Map: FC<MainContentProps> = ({
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
-        features: trackList?.filter(track =>
+        features: isActive ? trackList?.filter(track =>
           track.geometry !== null &&
           track.properties.isVisible
         ).map(track => ({
@@ -146,10 +146,10 @@ const Map: FC<MainContentProps> = ({
             ...track.properties,
             color: track.properties.color || scopeColor
           }
-        }) as Feature) ?? []
+        }) as Feature) ?? [] : []
       }
     }
-  }), [trackList]);
+  }), [trackList, isActive]);
 
   const navigationDependantSources: Sources = useMemo(() => {
     const {latitude, longitude} = geolocation;
@@ -159,7 +159,7 @@ const Map: FC<MainContentProps> = ({
         type: 'geojson',
         data: {
           type: 'FeatureCollection',
-          features: latitude && longitude ? [{
+          features: latitude && longitude && isActive ? [{
             type: 'Feature',
             properties: {...geolocation},
             geometry: {
@@ -173,11 +173,11 @@ const Map: FC<MainContentProps> = ({
         type: 'geojson',
         data: {
           type: 'FeatureCollection',
-          features: pointNavigation.feature ? [pointNavigation.feature] : []
+          features: isActive && pointNavigation.feature ? [pointNavigation.feature] : []
         }
       }
     };
-  }, [geolocation.latitude, geolocation.longitude, pointNavigation.feature]);
+  }, [geolocation.latitude, geolocation.longitude, pointNavigation.feature, isActive]);
 
   const sources: Sources = useMemo(() => ({
     ...scopeDependantSources,
@@ -524,6 +524,7 @@ const Map: FC<MainContentProps> = ({
       isContextualMenuOpen={isContextualMenuOpen}
       onToggleContextualMenu={handleToggleContextualMenu}
       onResultClick={handleResultClick}
+      isHeaderVisible={editingPosition.isEditing || recordingTrack.isRecording}
     />}
     {mapStyle && <GeocomponentMap
       styleDiffing={true}
@@ -534,8 +535,8 @@ const Map: FC<MainContentProps> = ({
       //reuseMaps
       ref={mapRef}
       mapStyle={mapStyle}
-      sources={isActive ? sources : undefined}
-      layers={isActive ? layers : undefined}
+      sources={sources}
+      layers={layers}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
@@ -578,7 +579,7 @@ const Map: FC<MainContentProps> = ({
       name={selectedTrack?.properties.name}
       bottomMargin={bottomMargin}
       color={trackColor}
-      elapsedTime={recordingTrack.elapsedTime}
+      startTime={recordingTrack.startTime}
       onPause={recordingTrack.pause}
       onResume={recordingTrack.resume}
       onStop={handleRecordingTrackStop}

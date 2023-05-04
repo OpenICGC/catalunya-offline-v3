@@ -12,7 +12,7 @@ const useIsActive = (): boolean => {
     return () => {
       App.removeAllListeners();
     };
-  }, []);
+  }, [App]);
 
   return isActive;
 };

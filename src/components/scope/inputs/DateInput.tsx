@@ -94,7 +94,7 @@ const DateInput: FC<DateInputProps> = ({
         key='dateTime'
         readOnly={!isEditing}
         onChange={handleChange}
-        value={moment(timestamp)}
+        value={timestamp}
         renderInput={(params) => isEditing ?
           <DateTimeFieldEditable {...params} size="small" /> :
           <DateTimeFieldNoEditable {...params} />}

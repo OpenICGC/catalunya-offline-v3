@@ -94,7 +94,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         color: newColor
       }
     });
-  }, [pointStore, pointStore]);
+  }, [pointStore]);
 
   const pointRename = useCallback((pointId: UUID, newName: string) => {
     const existing = pointStore.retrieve(pointId);

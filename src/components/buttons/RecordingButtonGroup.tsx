@@ -88,4 +88,4 @@ const RecordingButtonGroup: FC<RecordingButtonGroupProps> = ({
   />;
 };
 
-export default RecordingButtonGroup;
+export default React.memo(RecordingButtonGroup);

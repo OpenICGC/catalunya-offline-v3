@@ -15,7 +15,7 @@ type useRecordingTrackType = {
   resume: () => void,
   stop: () => void,
   isRecording: boolean,
-  elapsedTime: number
+  startTime?: number
 }
 
 const useRecordingTrack = (): useRecordingTrackType => {
@@ -27,16 +27,8 @@ const useRecordingTrack = (): useRecordingTrackType => {
   const [isPaused, setPaused] = useState<boolean>(false);
   //const [coordinates, setCoordinates] = useState<Array<Position>>([]);
   const [startTime, setStartTime] = useState<number>();
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const {geolocation, setWatchInBackground} = useGeolocation();
-
-  useEffect(() => {
-    if (isRecording && startTime) {
-      const timer = setInterval(() => setElapsedTime(Math.round((Date.now() - startTime) / 1000)), 1000);
-      return () => clearInterval(timer);
-    }
-  }, [isRecording]);
 
   useEffect(() => {
     if (geolocation.latitude !== null && geolocation.longitude !== null && isRecording && !isPaused && trackId) {
@@ -95,7 +87,7 @@ const useRecordingTrack = (): useRecordingTrackType => {
     resume,
     stop,
     isRecording,
-    elapsedTime
+    startTime
   };
 };
 
@@ -105,7 +97,7 @@ const initialState: useRecordingTrackType = {
   resume: () => undefined,
   stop: () => undefined,
   isRecording: false,
-  elapsedTime: 0
+  startTime: undefined
 };
 
 export default singletonHook<useRecordingTrackType>(initialState, useRecordingTrack);

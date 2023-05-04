@@ -21,6 +21,7 @@ import useDownloadStatus from '../hooks/singleton/useDownloadStatus';
 import DownloadRequest from '../components/notifications/DownloadRequest';
 import DownloadManager from './DownloadManager';
 import useBasemapId from '../hooks/persistedStates/useBasemapId';
+import useIsActive from '../hooks/singleton/useIsActive';
 
 const stackSx = {
   height: '100%',
@@ -55,6 +56,7 @@ const MainView: FC = () => {
   const isRecordingTrack =  useRecordingTrack().isRecording;
   const pointNavigatingTo = usePointNavigation().target;
   const trackNavigatingTo = useTrackNavigation().target;
+  const isActive = useIsActive();
 
   const toggleSidePanel = useCallback(() => setSidePanelOpen(prevValue => !prevValue), []);
 
@@ -95,7 +97,7 @@ const MainView: FC = () => {
     handleManagerChanged('SCOPES');
   }, [setTrack, setPoint]);
 
-  const sidePanelContent = useMemo(() => manager
+  const sidePanelContent = useMemo(() => manager && isActive
     ? <Stack sx={stackSx}>
       {manager === 'LAYERS' && <Layers
         visibleLayers={visibleLayers}
@@ -117,7 +119,7 @@ const MainView: FC = () => {
       />}
     </Stack>
     : null
-  , [manager, visibleLayers, toggleLayerVisibility, baseMapId, setBaseMapId, scope, setScope, point, setPoint, track, setTrack]);
+  , [manager, visibleLayers, toggleLayerVisibility, baseMapId, setBaseMapId, scope, setScope, point, setPoint, track, setTrack, isActive]);
 
   const mainContent = useMemo(() => <Map
     baseMapId={baseMapId}

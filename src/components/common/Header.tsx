@@ -93,4 +93,4 @@ const Header: FC<HeaderProps> = ({
   </Root>;
 };
 
-export default Header;
+export default React.memo(Header);
