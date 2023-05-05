@@ -1,4 +1,4 @@
-import React, {forwardRef, ReactNode, Ref, useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {forwardRef, ReactNode, Ref, useCallback, useMemo} from 'react';
 import ReactMapGL, {
   MapboxStyle,
   MapRef,
