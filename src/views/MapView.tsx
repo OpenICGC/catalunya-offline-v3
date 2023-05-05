@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'reac
 import maplibregl from 'maplibre-gl';
 
 //GEOCOMPONENTS
-import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
+import MapComponent from '../components/map/Map';
 
 //CATOFFLINE
 import AboutDialog from '../components/common/AboutDialog';
@@ -22,8 +22,8 @@ import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
 import {DEFAULT_VIEWPORT, FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
-import {AnyLayer, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
-import {Feature, Position} from 'geojson';
+import {AnyLayer, GeoJSONSource, GeoJSONSourceRaw, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
+import {Feature, FeatureCollection, Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 import useViewport from '../hooks/singleton/useViewport';
@@ -38,6 +38,7 @@ import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
 import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 import useMapStyle from '../hooks/useMapStyle';
 import useIsActive from '../hooks/singleton/useIsActive';
+import {GeoJsonFeature} from 'vega';
 
 const HEADER_HEIGHT = 48;
 const SEARCHBOX_HEIGHT = 64;
@@ -64,7 +65,7 @@ export type MainContentProps = {
   visibleLayers: Array<number>,
 };
 
-const Map: FC<MainContentProps> = ({
+const MapView: FC<MainContentProps> = ({
   baseMapId,
   onManagerChanged,
   selectedScopeId,
@@ -132,61 +133,97 @@ const Map: FC<MainContentProps> = ({
     });
   }, [topMargin, bottomMargin, viewportFitBounds]);
 
-  const scopeDependantSources: Sources = useMemo(() => ({
+  const sources: Sources = useMemo(() => ({
     'trackList': {
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
-        features: isActive ? trackList?.filter(track =>
-          track.geometry !== null &&
-          track.properties.isVisible
-        ).map(track => ({
-          ...track,
-          properties: {
-            ...track.properties,
-            color: track.properties.color || scopeColor
-          }
-        }) as Feature) ?? [] : []
+        features: []
       }
-    }
-  }), [trackList, isActive]);
-
-  const navigationDependantSources: Sources = useMemo(() => {
-    const {latitude, longitude} = geolocation;
-
-    return {
-      'geolocation': {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: latitude && longitude && isActive ? [{
-            type: 'Feature',
-            properties: {...geolocation},
-            geometry: {
-              type: 'Point',
-              coordinates: [longitude, latitude]
-            }
-          }] : []
-        }
-      },
-      'navigateToPointLine': {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: isActive && pointNavigation.feature ? [pointNavigation.feature] : []
-        }
+    },
+    'geolocation': {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: []
       }
-    };
-  }, [geolocation.latitude, geolocation.longitude, pointNavigation.feature, isActive]);
-
-  const sources: Sources = useMemo(() => ({
-    ...scopeDependantSources,
-    ...navigationDependantSources,
+    },
+    'navigateToPointLine': {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: []
+      }
+    },
     'extraLayers': {
       type: 'geojson',
       data: 'extra-layers.json'
     }
-  }), [scopeDependantSources, navigationDependantSources]);
+  }), []);
+
+  const updateTrackList = ()=> {
+    if (mapRef.current && isActive) {
+      const features: Array<GeoJsonFeature> = trackList?.filter(track =>
+        track.geometry !== null &&
+        track.properties.isVisible
+      ).map(track => ({
+        ...track,
+        properties: {
+          ...track.properties,
+          color: track.properties.color || scopeColor
+        }
+      }) as Feature) ?? [];
+
+      (mapRef.current.getSource('trackList') as GeoJSONSource).setData({
+        type: 'FeatureCollection',
+        features: features
+      });
+    }
+  };
+
+  useEffect(updateTrackList, [trackList, isActive]);
+
+  const updateGeolocation = ()=> {
+    if (mapRef.current && isActive) {
+      const features: Array<GeoJsonFeature> = geolocation.latitude && geolocation.longitude ? [{
+        type: 'Feature',
+        properties: {...geolocation},
+        geometry: {
+          type: 'Point',
+          coordinates: [geolocation.longitude, geolocation.latitude]
+        }
+      }] : [];
+
+      (mapRef.current.getSource('geolocation') as GeoJSONSource).setData({
+        type: 'FeatureCollection',
+        features: features
+      });
+    }
+  };
+
+  useEffect(updateGeolocation, [geolocation.latitude, geolocation.longitude, isActive]);
+
+  const updatePointNavigation = () => {
+    if (mapRef.current && isActive) {
+      (mapRef.current.getSource('navigateToPointLine') as GeoJSONSource).setData({
+        type: 'FeatureCollection',
+        features: pointNavigation.feature ? [pointNavigation.feature] : []
+      });
+    }
+  };
+
+  useEffect(updatePointNavigation, [pointNavigation.feature, isActive]);
+
+  useEffect(() => {
+    if (mapRef.current !== null) {
+      mapRef.current.once('styledata', () => {
+        updateTrackList();
+        updateGeolocation();
+        updatePointNavigation();
+      });
+    }
+
+  }, [mapStyle]);
 
   const layers: Array<AnyLayer> = useMemo(() => {
     return [{
@@ -517,6 +554,7 @@ const Map: FC<MainContentProps> = ({
     recordingTrack.stop();
   }, [recordingTrack.stop]);
 
+
   return <>
     {isActive && <SearchBoxAndMenu
       onContextualMenuClick={handleContextualMenu}
@@ -526,13 +564,20 @@ const Map: FC<MainContentProps> = ({
       onResultClick={handleResultClick}
       isHeaderVisible={editingPosition.isEditing || recordingTrack.isRecording}
     />}
-    {mapStyle && <GeocomponentMap
-      styleDiffing={true}
-      reuseMaps={true}
-      RTLTextPlugin={''}
-      {...MAP_PROPS}
-      mapLib={maplibregl}
-      //reuseMaps
+    {!editingPosition.isEditing && <FabButton
+      isFabOpen={isFabOpen}
+      onFabClick={toggleFabOpen}
+      isFabHidden={isFabHidden}
+      bearing={viewport.bearing}
+      pitch={viewport.pitch}
+      locationStatus={locationStatus}
+      onOrientationClick={handleOrientationClick}
+      onLocationClick={handleLocationClick}
+      onLayersClick={handleLayersClick}
+      onBaseMapsClick={handleBaseMapsClick}
+      onScopesClick={handleScopesClick}
+    />}
+    {mapStyle && <MapComponent
       ref={mapRef}
       mapStyle={mapStyle}
       sources={sources}
@@ -547,26 +592,10 @@ const Map: FC<MainContentProps> = ({
       onTouchCancel={clearLongTouchTimer}
       onClick={handleMapClick}
       onDblClick={handleDoubleClick}
-      doubleClickZoom={false}
-      attributionControl={false}
     >
       <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>
       <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
-
-      {!editingPosition.isEditing && <FabButton
-        isFabOpen={isFabOpen}
-        onFabClick={toggleFabOpen}
-        isFabHidden={isFabHidden}
-        bearing={viewport.bearing}
-        pitch={viewport.pitch}
-        locationStatus={locationStatus}
-        onOrientationClick={handleOrientationClick}
-        onLocationClick={handleLocationClick}
-        onLayersClick={handleLayersClick}
-        onBaseMapsClick={handleBaseMapsClick}
-        onScopesClick={handleScopesClick}
-      />}
-    </GeocomponentMap>}
+    </MapComponent>}
 
     {editingPosition.isEditing && <PositionEditor
       name={selectedPoint?.properties.name}
@@ -621,4 +650,4 @@ const Map: FC<MainContentProps> = ({
     />}
   </>;
 };
-export default React.memo(Map);
+export default React.memo(MapView);

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {CSSProperties, FC} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -25,6 +25,8 @@ import useIsLeftHanded from '../../hooks/settings/useIsLeftHanded';
 const fabTransition = 'transform 360ms linear';
 const buttonTransition = 'transform 360ms cubic-bezier(0.16, 1, 0.3, 1)';
 const delay = 40; // ms
+
+const divStyle: CSSProperties = {width: '100%', height: '100%', position: 'absolute'};
 
 export enum LOCATION_STATUS {
   DISABLED,
@@ -214,31 +216,33 @@ const FabButton: FC<FabButtonProps> = ({
     transform: isLeftHanded ? 'translateX(-100px)' : 'translateX(100px)'
   };
 
-  return <Box sx={container}>
-    <Fab color="primary" sx={isFabOpen ? fabOpen : isFabHidden ? fabHidden : fab} onClick={onFabClick}>
-      <FabIcon/>
-    </Fab>
-    <IconButton sx={isFabOpen ? orientationOpen : orientation} onClick={onOrientationClick}>
-      <OrientationIcon northColor={orientationNorthColor} southColor={orientationSouthColor}/>
-    </IconButton>
-    <IconButton sx={isFabOpen ? layersOpen : layers} onClick={onLayersClick}>
-      <LayersIcon/>
-    </IconButton>
-    <IconButton sx={isFabOpen ? folderOpen : folder} onClick={onScopesClick}>
-      <ScopesIcon/>
-    </IconButton>
-    <IconButton sx={isFabOpen ? baseMapsOpen : baseMaps} onClick={onBaseMapsClick}>
-      <BaseMapsIcon/>
-    </IconButton>
-    <IconButton sx={isFabOpen ? locationOpen : location} onClick={onLocationClick}>
-      {
-        locationStatus === LOCATION_STATUS.DISABLED ? <LocationDisabledIcon/> :
-          locationStatus === LOCATION_STATUS.NOT_TRACKING ? <NoTrackingIcon/> :
-            locationStatus === LOCATION_STATUS.TRACKING ? <TrackingIcon/> :
-              <NavigatingIcon/>
-      }
-    </IconButton>
-  </Box>;
+  return <div style={divStyle}>
+    <Box sx={container}>
+      <Fab color="primary" sx={isFabOpen ? fabOpen : isFabHidden ? fabHidden : fab} onClick={onFabClick}>
+        <FabIcon/>
+      </Fab>
+      <IconButton sx={isFabOpen ? orientationOpen : orientation} onClick={onOrientationClick}>
+        <OrientationIcon northColor={orientationNorthColor} southColor={orientationSouthColor}/>
+      </IconButton>
+      <IconButton sx={isFabOpen ? layersOpen : layers} onClick={onLayersClick}>
+        <LayersIcon/>
+      </IconButton>
+      <IconButton sx={isFabOpen ? folderOpen : folder} onClick={onScopesClick}>
+        <ScopesIcon/>
+      </IconButton>
+      <IconButton sx={isFabOpen ? baseMapsOpen : baseMaps} onClick={onBaseMapsClick}>
+        <BaseMapsIcon/>
+      </IconButton>
+      <IconButton sx={isFabOpen ? locationOpen : location} onClick={onLocationClick}>
+        {
+          locationStatus === LOCATION_STATUS.DISABLED ? <LocationDisabledIcon/> :
+            locationStatus === LOCATION_STATUS.NOT_TRACKING ? <NoTrackingIcon/> :
+              locationStatus === LOCATION_STATUS.TRACKING ? <TrackingIcon/> :
+                <NavigatingIcon/>
+        }
+      </IconButton>
+    </Box>
+  </div>;
 };
 
 export default React.memo(FabButton);

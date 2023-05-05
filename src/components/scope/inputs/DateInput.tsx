@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 //OTHERS
-import moment, {Moment} from 'moment/moment';
+import {Moment} from 'moment/moment';
 
 //UTILS
 import i18n from 'i18next';
