@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 
 //GEOCOMPONENTS
@@ -20,10 +20,10 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 //UTILS
 import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
-import {DEFAULT_VIEWPORT, FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
+import {FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
-import {AnyLayer, GeoJSONSource, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
-import {Feature, Position} from 'geojson';
+import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
+import {Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 import useViewport from '../hooks/singleton/useViewport';
@@ -38,7 +38,7 @@ import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
 import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 import useMapStyle from '../hooks/useMapStyle';
 import useIsActive from '../hooks/singleton/useIsActive';
-import {GeoJsonFeature} from 'vega';
+import Overlays from '../components/map/Overlays';
 
 const HEADER_HEIGHT = 48;
 const SEARCHBOX_HEIGHT = 64;
@@ -132,176 +132,6 @@ const MapView: FC<MainContentProps> = ({
       }
     });
   }, [topMargin, bottomMargin, viewportFitBounds]);
-
-  const sources: Sources = useMemo(() => ({
-    'trackList': {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: []
-      }
-    },
-    'geolocation': {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: []
-      }
-    },
-    'navigateToPointLine': {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: []
-      }
-    },
-    'extraLayers': {
-      type: 'geojson',
-      data: 'extra-layers.json'
-    }
-  }), []);
-
-  const updateTrackList = ()=> {
-    if (mapRef.current && isActive) {
-      const features: Array<GeoJsonFeature> = trackList?.filter(track =>
-        track.geometry !== null &&
-        track.properties.isVisible
-      ).map(track => ({
-        ...track,
-        properties: {
-          ...track.properties,
-          color: track.properties.color || scopeColor
-        }
-      }) as Feature) ?? [];
-
-      (mapRef.current.getSource('trackList') as GeoJSONSource).setData({
-        type: 'FeatureCollection',
-        features: features
-      });
-    }
-  };
-
-  useEffect(updateTrackList, [trackList, isActive]);
-
-  const updateGeolocation = ()=> {
-    if (mapRef.current && isActive) {
-      const features: Array<GeoJsonFeature> = geolocation.latitude && geolocation.longitude ? [{
-        type: 'Feature',
-        properties: {...geolocation},
-        geometry: {
-          type: 'Point',
-          coordinates: [geolocation.longitude, geolocation.latitude]
-        }
-      }] : [];
-
-      (mapRef.current.getSource('geolocation') as GeoJSONSource).setData({
-        type: 'FeatureCollection',
-        features: features
-      });
-    }
-  };
-
-  useEffect(updateGeolocation, [geolocation.latitude, geolocation.longitude, isActive]);
-
-  const updatePointNavigation = () => {
-    if (mapRef.current && isActive) {
-      (mapRef.current.getSource('navigateToPointLine') as GeoJSONSource).setData({
-        type: 'FeatureCollection',
-        features: pointNavigation.feature ? [pointNavigation.feature] : []
-      });
-    }
-  };
-
-  useEffect(updatePointNavigation, [pointNavigation.feature, isActive]);
-
-  useEffect(() => {
-    if (mapRef.current !== null) {
-      mapRef.current.once('styledata', () => {
-        updateTrackList();
-        updateGeolocation();
-        updatePointNavigation();
-      });
-    }
-
-  }, [mapStyle]);
-
-  const layers: Array<AnyLayer> = useMemo(() => {
-    return [{
-      id: 'extraLayers',
-      source: 'extraLayers',
-      type: 'symbol',
-      filter: ['in', ['get', 't'], ['literal', visibleLayers]],
-      layout: {
-        'text-font': ['pictos_25_icgc-Regular'],
-        'text-size': 18,
-        'text-anchor': 'center',
-        'text-justify': 'center',
-        'symbol-placement': 'point',
-        'text-allow-overlap': true,
-        'text-field': ['match', ['get', 't'], // Tipus
-          0, '\u0055', // Refugi
-          1, '\u0062', // Camping
-          2, '\u002C', // Turisme Rural
-          3, '\u003A', // Alberg
-          '\u0020' // Default
-        ]
-      },
-      paint: {
-        'text-halo-width': 1,
-        'text-halo-color': '#fff',
-        'text-color': ['match', ['get', 't'], // Tipus
-          0, '#D4121E', // 0, '#FE946C', // Refugi
-          1, '#F1BE25', // 1, '#6FC6B5', // Camping
-          2, '#4A8A63', // 2, '#8DA0CB', // Turisme Rural
-          3, '#1FA1E2', // 3, '#E78AC3', // Alberg
-          '#000000' // Default
-        ]
-      }
-    },{
-      id: 'trackList',
-      source: 'trackList',
-      type: 'line',
-      paint: {
-        'line-color': ['get', 'color'],
-        'line-width': 4
-      }
-    },{
-      id: 'navigateToPointLine',
-      source: 'navigateToPointLine',
-      type: 'line',
-      paint: {
-        'line-color': '#000000',
-        'line-width': 4,
-        'line-opacity': 0.67,
-        'line-dasharray': [2, 2]
-      },
-      layout: {
-        'line-cap': 'round',
-        'line-join': 'round'
-      }
-    },{
-      id: 'geolocation-precision',
-      source: 'geolocation',
-      type: 'circle',
-      paint: {
-        'circle-color': gpsPositionColor,
-        'circle-opacity': 0.33,
-        'circle-radius': [
-          'interpolate',
-          ['exponential', 2],
-          ['zoom'],
-          7, // Beware: this formula works only for latitudes around initial viewport's latitude
-          ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))],
-          15,
-          ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))]
-        ],
-        'circle-stroke-color': gpsPositionColor,
-        'circle-stroke-opacity': 0.67,
-        'circle-stroke-width': 1,
-        'circle-pitch-alignment': 'map'
-      }
-    }];
-  }, [gpsPositionColor, visibleLayers]);
 
   ////// Handle orientation & navigation state transitions
   const handleOrientationClick = useCallback(() => {
@@ -580,8 +410,6 @@ const MapView: FC<MainContentProps> = ({
     {mapStyle && <MapComponent
       ref={mapRef}
       mapStyle={mapStyle}
-      sources={sources}
-      layers={layers}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
@@ -593,7 +421,15 @@ const MapView: FC<MainContentProps> = ({
       onClick={handleMapClick}
       onDblClick={handleDoubleClick}
     >
-      <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>
+      <Overlays
+        isActive={isActive}
+        trackList={trackList}
+        scopeColor={scopeColor}
+        geolocation={geolocation}
+        navigateToPointLine={pointNavigation.feature}
+        gpsPositionColor={gpsPositionColor}
+        visibleLayers={visibleLayers}/>
+      {isActive && <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>}
       <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
     </MapComponent>}
 

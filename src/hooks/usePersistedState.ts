@@ -16,6 +16,17 @@ const configureNamespace = Preferences.configure({group: PERSISTENCE_NAMESPACE})
 const load = <T> (key: string): Promise<T | undefined> => Preferences.get({key}).then(({value}) => value === null ? undefined : JSON.parse(value));
 const save = <T> (key: string, value: T) => value === undefined ? Preferences.remove({key}) : Preferences.set({key, value: JSON.stringify(value)});
 
+/*const configureNamespace = Promise.resolve(); // Preferences.configure({group: PERSISTENCE_NAMESPACE});
+
+const load = <T> (key: string): Promise<T | undefined> => {
+  const item = localStorage.getItem(PERSISTENCE_NAMESPACE + '.'+ key);
+  return Promise.resolve(item ? JSON.parse(item) : undefined);
+};
+
+const save = <T> (key: string, value: T) => {
+  value === undefined ? localStorage.removeItem(PERSISTENCE_NAMESPACE + '.'+ key) : localStorage.setItem(PERSISTENCE_NAMESPACE + '.'+ key, JSON.stringify(value));
+};*/
+
 type usePersistedStateReturnType<T> = [
   getValue: T,
   setValue: (newValue: T | SetStateAction<T>) => void,

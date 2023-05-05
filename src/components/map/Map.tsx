@@ -1,4 +1,4 @@
-import React, {forwardRef, ReactNode, Ref, useCallback, useMemo} from 'react';
+import React, {forwardRef, ReactNode, Ref, useCallback} from 'react';
 import ReactMapGL, {
   MapboxStyle,
   MapRef,
@@ -10,7 +10,6 @@ import maplibregl from 'maplibre-gl';
 import {MAP_PROPS} from '../../config';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
-import {AnyLayer, Sources} from 'mapbox-gl';
 
 export type Viewport = Partial<ViewState>;
 
@@ -21,11 +20,6 @@ const cssStyle = {
 
 export interface MapProps extends ReacMapGlProps {
   mapStyle: MapboxStyle,
-  //sprite?: string,
-  //glyphs?: string,
-  //terrain?: TerrainSpecification,
-  sources: Sources,
-  layers: Array<AnyLayer>,
   viewport: Viewport,
   onViewportChange?: (viewState: ViewState) => void,
   children?: ReactNode
@@ -34,30 +28,11 @@ export interface MapProps extends ReacMapGlProps {
 const Map = forwardRef((props: MapProps, ref: Ref<MapRef>) => {
   const {
     mapStyle,
-    //sprite,
-    //glyphs,
-    //terrain,
-    sources,
-    layers,
     viewport,
     onViewportChange,
     children,
     ...reactMapGlProps
   } = props;
-
-  const fullStyle: MapboxStyle = useMemo(() => {
-    return {
-      ...mapStyle,
-      sources: {
-        ...(mapStyle.sources ? {...mapStyle.sources} : {}),
-        ...(sources ? {...sources} : {})
-      },
-      layers: [
-        ...(mapStyle.layers ? mapStyle.layers : []),
-        ...(layers ? layers : [])
-      ]
-    };
-  }, [mapStyle/*, sprite, glyphs, terrain*/, sources, layers]);
 
   const handleMapMove = useCallback((value: ViewStateChangeEvent) =>
     onViewportChange && onViewportChange(value.viewState)
@@ -70,7 +45,7 @@ const Map = forwardRef((props: MapProps, ref: Ref<MapRef>) => {
     style={cssStyle}
     fog={undefined}
     terrain={undefined}
-    mapStyle={fullStyle}
+    mapStyle={mapStyle}
     {...viewport}
     onMove={handleMapMove}
     styleDiffing={true}

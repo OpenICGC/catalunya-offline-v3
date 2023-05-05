@@ -5,6 +5,7 @@ import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCo
 import TrackPanel from '../../components/scope/TrackPanel';
 import useRecordingTrack from '../../hooks/singleton/useRecordingTrack';
 import useTrackNavigation from '../../hooks/singleton/useTrackNavigation';
+import useIsActive from '../../hooks/singleton/useIsActive';
 
 export interface ScopeTrackProps {
   scopeId: UUID,
@@ -17,6 +18,7 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   trackId, 
   onClose
 }) => {
+  const isActive = useIsActive();
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
@@ -42,6 +44,7 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   }, [trackNavigation.start, scopeId]);
 
   return selectedScope && selectedTrack ? <TrackPanel
+    isActive={isActive}
     scope={selectedScope}
     track={selectedTrack}
     numPoints={numPoints}

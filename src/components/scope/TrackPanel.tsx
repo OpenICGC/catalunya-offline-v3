@@ -62,6 +62,7 @@ const ScrollableContent = styled(Box)({
 });
 
 export type TrackPanelProps = {
+  isActive: boolean,
   scope: Scope,
   track: ScopeTrack,
   numPoints: number,
@@ -73,6 +74,7 @@ export type TrackPanelProps = {
 };
 
 const TrackPanel: FC<TrackPanelProps> = ({
+  isActive,
   scope,
   track,
   numPoints,
@@ -183,7 +185,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const backIcon = useMemo(() => <ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>, []);
 
-  return <>
+  return (isActive || isEditing) ? <>
     <Header
       startIcon={isEditing ? <></> : backIcon}
       name={scope.name}
@@ -256,7 +258,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
         <AcceptButton disabled={false} onAccept={handleAccept}/>
       </Stack>
     }
-  </>;
+  </> : null;
 };
 
 export default React.memo(TrackPanel);
