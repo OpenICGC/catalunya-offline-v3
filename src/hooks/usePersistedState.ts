@@ -1,7 +1,7 @@
-import {PERSISTENCE_NAMESPACE} from '../config';
 import {SetStateAction, useCallback, useEffect, useState} from 'react';
-import {Preferences} from '@capacitor/preferences';
 import {useEventListener} from 'usehooks-ts';
+import capacitorPersistence from '../utils/persistence/capacitorPersistence';
+import cachedPersistence from '../utils/persistence/cachedPersistence';
 
 type PersistedStateUpdateEvent<T> = CustomEvent<{key: string, value: T}>;
 
@@ -11,27 +11,13 @@ declare global {
   }
 }
 
-const configureNamespace = Preferences.configure({group: PERSISTENCE_NAMESPACE});
-
-const load = <T> (key: string): Promise<T | undefined> => Preferences.get({key}).then(({value}) => value === null ? undefined : JSON.parse(value));
-const save = <T> (key: string, value: T) => value === undefined ? Preferences.remove({key}) : Preferences.set({key, value: JSON.stringify(value)});
-
-/*const configureNamespace = Promise.resolve(); // Preferences.configure({group: PERSISTENCE_NAMESPACE});
-
-const load = <T> (key: string): Promise<T | undefined> => {
-  const item = localStorage.getItem(PERSISTENCE_NAMESPACE + '.'+ key);
-  return Promise.resolve(item ? JSON.parse(item) : undefined);
-};
-
-const save = <T> (key: string, value: T) => {
-  value === undefined ? localStorage.removeItem(PERSISTENCE_NAMESPACE + '.'+ key) : localStorage.setItem(PERSISTENCE_NAMESPACE + '.'+ key, JSON.stringify(value));
-};*/
-
 type usePersistedStateReturnType<T> = [
   getValue: T,
   setValue: (newValue: T | SetStateAction<T>) => void,
   isLoaded: boolean
 ]
+
+const {load, save} = cachedPersistence(capacitorPersistence);
 
 const usePersistedState = <T> (key: string, defaultValue: T): usePersistedStateReturnType<T> => {
   const [getValue, setValue] = useState<T>(defaultValue);
@@ -48,11 +34,9 @@ const usePersistedState = <T> (key: string, defaultValue: T): usePersistedStateR
   useEffect(() => {
     setLoaded(false);
     setValue(defaultValue);
-    configureNamespace.then(() => {
-      load<T>(key).then(value => {
-        value !== undefined && setValue(value);
-        setLoaded(true);
-      });
+    load<T>(key).then(value => {
+      value !== undefined && setValue(value);
+      setLoaded(true);
     });
   }, [key]);
 
@@ -68,9 +52,7 @@ const usePersistedState = <T> (key: string, defaultValue: T): usePersistedStateR
   const setWithPersistence = useCallback((newValue: T | SetStateAction<T>) => {
     setValue(prevValue => {
       const val = newValue instanceof Function ? newValue(prevValue) : newValue;
-      configureNamespace.then(() => {
-        save(key, val);
-      });
+      save(key, val);
       return val;
     });
     setDispatchEvent(true);
