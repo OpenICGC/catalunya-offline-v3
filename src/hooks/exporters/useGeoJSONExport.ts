@@ -1,5 +1,5 @@
 import {ScopeFeature, UUID} from '../../types/commonTypes';
-import {useScopePoints, useScopeTracks} from '../useStoredCollections';
+import {useScopePoints, useScopeTracks} from '../usePersistedCollections';
 import {useEffect, useState} from 'react';
 import {getImageNameWithoutPath} from '../../utils/getImageNameWithoutPath';
 import {Feature, FeatureCollection} from 'geojson';

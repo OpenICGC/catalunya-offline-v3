@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {useGeoJSONExport} from './useGeoJSONExport';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
-import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
+import {useScopePoints, useScopes, useScopeTracks} from '../usePersistedCollections';
 import {v4 as uuidv4} from 'uuid';
 import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import {getImageNameWithoutPath} from '../../utils/getImageNameWithoutPath';

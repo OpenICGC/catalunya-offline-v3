@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {buildGPX, BaseBuilder} from 'gpx-builder';
 
 import {UUID} from '../../types/commonTypes';
-import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
+import {useScopePoints, useScopes, useScopeTracks} from '../usePersistedCollections';
 
 export const useGPXExport = (scopeId: UUID, trackId: UUID, includeVisiblePoints?: boolean) => {
   const {Point, Metadata, Track, Segment} = BaseBuilder.MODELS;

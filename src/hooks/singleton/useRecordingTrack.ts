@@ -3,7 +3,7 @@ import {Position} from 'geojson';
 import useGeolocation from './useGeolocation';
 import {singletonHook} from 'react-singleton-hook';
 import {UUID} from '../../types/commonTypes';
-import {useScopeTracks} from '../useStoredCollections';
+import {useScopeTracks} from '../usePersistedCollections';
 
 type startFn = (scopeId: UUID, trackId: UUID) => boolean;
 

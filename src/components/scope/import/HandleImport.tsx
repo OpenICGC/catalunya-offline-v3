@@ -4,7 +4,7 @@ import useImport, {ImportedFile} from '../../../hooks/useImport';
 import geoJSONImporter from '../../../utils/importers/geoJSONImporter';
 import gpxImporter from '../../../utils/importers/gpxImporter';
 import kmlImporter from '../../../utils/importers/kmlImporter';
-import {useScopePoints, useScopeTracks} from '../../../hooks/useStoredCollections';
+import {useScopePoints, useScopeTracks} from '../../../hooks/usePersistedCollections';
 import {MAX_ALLOWED_IMPORT_FEATURES} from '../../../config';
 import {useTranslation} from 'react-i18next';
 

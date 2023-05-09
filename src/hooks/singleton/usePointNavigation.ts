@@ -3,7 +3,7 @@ import {Feature, LineString, Position} from 'geojson';
 import {singletonHook} from 'react-singleton-hook';
 import {HEXColor, Scope, ScopePoint, UUID} from '../../types/commonTypes';
 import useGeolocation from './useGeolocation';
-import {useScopePoints, useScopes} from '../useStoredCollections';
+import {useScopePoints, useScopes} from '../usePersistedCollections';
 import navigateToPointFeature from '../../utils/navigateToPointFeature';
 
 type startFn = (scopeId: UUID, scopePointId: UUID) => void;

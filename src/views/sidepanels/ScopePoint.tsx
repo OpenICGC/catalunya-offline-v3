@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
 
 import {ScopePoint, UUID} from '../../types/commonTypes';
-import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
+import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/usePersistedCollections';
 import PointPanel from '../../components/scope/PointPanel';
 import usePointNavigation from '../../hooks/singleton/usePointNavigation';
 

@@ -3,7 +3,7 @@ import {useGPXExport} from './useGPXExport';
 import {v4 as uuidv4} from 'uuid';
 import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
-import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
+import {useScopePoints, useScopes, useScopeTracks} from '../usePersistedCollections';
 import gpxSample_01 from './gpxSample_01.xml';
 import gpxSample_02 from './gpxSample_02.xml';
 import gpxSample_03 from './gpxSample_03.xml';

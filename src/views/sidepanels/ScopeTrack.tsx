@@ -1,7 +1,7 @@
 import React, {FC, useCallback} from 'react';
 import {ScopeTrack, UUID} from '../../types/commonTypes';
 
-import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
+import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/usePersistedCollections';
 import TrackPanel from '../../components/scope/TrackPanel';
 import useRecordingTrack from '../../hooks/singleton/useRecordingTrack';
 import useTrackNavigation from '../../hooks/singleton/useTrackNavigation';
