@@ -1,7 +1,7 @@
 {
-  "name": "catalunya-offline-v2",
+  "name": "catalunya-offline",
   "version": "3.0.0",
-  "description": "Catalunya Offline v2",
+  "description": "Catalunya Offline",
   "main": "./dist/main.js",
   "scripts": {
     "test": "npm run lint && karma start karma.config.js",
@@ -13,7 +13,6 @@
     "build:ios": "npm run build && capacitor sync && capacitor open ios",
     "storybook": "start-storybook -s ./static -p 6006",
     "storybook:build": "build-storybook",
-    "deploy": "npm run build && gh-pages -d dist",
     "lint": "npm run lint:js && npm run lint:i18n",
     "lint:js": "eslint src",
     "lint:i18n": "eslint --fix --format node_modules/eslint-plugin-i18n-json/formatter.js src/i18n/*.json",
@@ -28,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/OpenICGC/catalunya-offline-v2/issues"
   },
-  "homepage": "https://openicgc.github.io/catalunya-offline-v2",
+  "homepage": "https://icgc.cat/Ciutada/Destacats/Aplicacions-mobils/Catalunya-Offline",
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "@babel/plugin-transform-runtime": "^7.17.0",
