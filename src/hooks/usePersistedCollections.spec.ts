@@ -1,6 +1,6 @@
 import {renderHook, act} from '@testing-library/react-hooks/dom';
 import {expect} from 'chai';
-import {useScopes, useScopePoints, useScopeTracks} from './useStoredCollections';
+import {useScopes, useScopePoints, useScopeTracks} from './usePersistedCollections';
 import {Scope, ScopeTrack, ScopePoint} from '../types/commonTypes';
 import {v4 as uuidv4} from 'uuid';
 

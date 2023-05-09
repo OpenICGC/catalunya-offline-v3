@@ -27,7 +27,7 @@ const Root = styled(AppBar,
     '&.Header-root': {
       backgroundColor: colorHeader || theme.palette.secondary.main,
       height: '48px',
-      zIndex: 2000,
+      zIndex: 2,
     },
     '& .Header-toolBar': {
       padding: '16px',
@@ -93,4 +93,4 @@ const Header: FC<HeaderProps> = ({
   </Root>;
 };
 
-export default Header;
+export default React.memo(Header);

@@ -21,8 +21,6 @@ import SearchBox from '@geomatico/geocomponents/Search/SearchBox';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import {useTranslation} from 'react-i18next';
 import useTheme from '@mui/material/styles/useTheme';
-import useEditingPosition from '../../hooks/singleton/useEditingPosition';
-import useRecordingTrack from '../../hooks/singleton/useRecordingTrack';
 import {useStatus} from '@capacitor-community/network-react';
 import {ContextMapsResult} from '../../types/commonTypes';
 
@@ -56,7 +54,8 @@ export type SearchBoxAndMenuProps = {
   isHidden?: boolean,
   onContextualMenuClick?: (menuId: string) => void,
   onResultClick: (result: ContextMapsResult) => void,
-  onToggleContextualMenu: () => void
+  onToggleContextualMenu: () => void,
+  isHeaderVisible: boolean
 };
 
 const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
@@ -64,7 +63,8 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   isHidden = false,
   onContextualMenuClick = () => undefined,
   onResultClick,
-  onToggleContextualMenu
+  onToggleContextualMenu,
+  isHeaderVisible
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
@@ -78,9 +78,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   
   //CONNECTIVITY
   const hasConnectivity = networkStatus?.connected;
-  const isEditingPosition = useEditingPosition().isEditing;
-  const isRecordingTrack = useRecordingTrack().isRecording;
-  const isHeaderVisible = isEditingPosition || isRecordingTrack;
+
 
   //SEARCH
   const [text, setText] = useState('');
@@ -126,7 +124,7 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   const searchSx = {
     '&.SearchBox-root': {
       transition: 'transform 360ms linear',
-      zIndex: 1200,
+      zIndex: 1,
       position: 'absolute',
       top: isHeaderVisible ? 48 : 0,
       m: 1,

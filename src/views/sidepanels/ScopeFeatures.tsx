@@ -4,7 +4,7 @@ import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 
 import {HEXColor, UUID} from '../../types/commonTypes';
-import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
+import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/usePersistedCollections';
 import FeaturesPanel from '../../components/scope/FeaturesPanel';
 import ScopePoint from './ScopePoint';
 import ScopeTrack from './ScopeTrack';
@@ -94,7 +94,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         color: newColor
       }
     });
-  }, [pointStore, pointStore]);
+  }, [pointStore]);
 
   const pointRename = useCallback((pointId: UUID, newName: string) => {
     const existing = pointStore.retrieve(pointId);

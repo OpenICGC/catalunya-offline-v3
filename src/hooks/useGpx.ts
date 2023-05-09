@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 
 import {ScopePoint, ScopeTrack, UUID} from '../types/commonTypes';
-import {useScopePoints, useScopeTracks} from './useStoredCollections';
+import {useScopePoints, useScopeTracks} from './usePersistedCollections';
 import {
   createDirectory,
   dirExists,

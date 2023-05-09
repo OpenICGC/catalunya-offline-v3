@@ -3,6 +3,7 @@ import {useCallback} from 'react';
 import {singletonHook} from 'react-singleton-hook';
 import {WebMercatorViewport} from '@math.gl/web-mercator';
 import usePersistedState from '../usePersistedState';
+import useIsActive from './useIsActive';
 
 export type ViewportType = {
   latitude: number,
@@ -35,9 +36,10 @@ type useViewportType = {
 
 const useViewport = (): useViewportType => {
   const [viewport, setViewport] = usePersistedState<ViewportType>('state.viewport', DEFAULT_VIEWPORT);
+  const isActive = useIsActive();
 
   const updateViewport = useCallback((newViewport: Partial<ViewportType>) => {
-    setViewport(prevViewport => ({...prevViewport, ...newViewport}));
+    isActive && setViewport(prevViewport => ({...prevViewport, ...newViewport}));
   }, []);
 
   const fitBounds = useCallback(

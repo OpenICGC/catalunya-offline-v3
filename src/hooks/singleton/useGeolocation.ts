@@ -6,6 +6,7 @@ import useIsActive from './useIsActive';
 import {IS_WEB} from '../../config';
 import {useTranslation} from 'react-i18next';
 import {singletonHook} from 'react-singleton-hook';
+//import useFakeGeolocation from './useFakeGeolocation';
 
 const BackgroundGeolocation = registerPlugin<BackgroundGeolocationPlugin>('BackgroundGeolocation');
 
@@ -200,3 +201,4 @@ const initialState: useGeolocationType = {
 };
 
 export default singletonHook<useGeolocationType>(initialState, useGeolocation);
+//export default useFakeGeolocation;

@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 //OTHERS
-import moment, {Moment} from 'moment/moment';
+import {Moment} from 'moment/moment';
 
 //UTILS
 import i18n from 'i18next';
@@ -94,7 +94,7 @@ const DateInput: FC<DateInputProps> = ({
         key='dateTime'
         readOnly={!isEditing}
         onChange={handleChange}
-        value={moment(timestamp)}
+        value={timestamp}
         renderInput={(params) => isEditing ?
           <DateTimeFieldEditable {...params} size="small" /> :
           <DateTimeFieldNoEditable {...params} />}

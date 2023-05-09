@@ -31,7 +31,7 @@ export const Default = Template.bind({});
 Default.args = {
   name: 'Traza 01',
   color: '#973572',
-  elapsedTime: 3855
+  startTime: Date.now()
 };
 
 export const WithMap = WithMapTemplate.bind({});

@@ -34,8 +34,8 @@ export const globalTypes = {
 };
 
 const withThemeProvider = (Story, context) =>
-  <Emotion10ThemeProvider theme={theme(context.globals.theme)}>
-    <ThemeProvider theme={theme(context.globals.theme)}>
+  <Emotion10ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline/>
       <Story {...context} />
     </ThemeProvider>

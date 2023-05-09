@@ -78,6 +78,12 @@ const CoordsFieldNoEditable = styled(InputBase)({
   }
 });
 
+const ScrollableContent = styled(Box)({
+  overflow: 'auto',
+  padding: '0px',
+  marginBottom: '32px'
+});
+
 const Location = styled(Stack)({
   flexDirection: 'row',
   justifyContent: 'space-between',
@@ -96,7 +102,7 @@ const actionIcons = [
 
 export type PointPanelProps = {
     scope: Scope,
-    initialPoint: ScopePoint,
+    point: ScopePoint,
     numPoints: number,
     numTracks: number,
     onBackButtonClick: () => void,
@@ -106,7 +112,7 @@ export type PointPanelProps = {
 
 const PointPanel: FC<PointPanelProps> = ({
   scope,
-  initialPoint,
+  point,
   numPoints,
   numTracks,
   onBackButtonClick,
@@ -115,28 +121,11 @@ const PointPanel: FC<PointPanelProps> = ({
 }) => {
   const {t} = useTranslation();
   const {viewport, setViewport} = useViewport();
-
   const [isEditing, setIsEditing] = useState(false);
-  const [point, setPoint] = useState(initialPoint);
-  const {images, create, remove, save, discard} = useImages(initialPoint.properties.images);
-
+  const [uneditedPoint, setUneditedPoint] = useState<ScopePoint>();
+  const {images, create, remove, save, discard} = useImages(point.properties.images);
   const editingPosition = useEditingPosition();
-
-  useEffect(() => {
-    setPoint(prevPoint => ({
-      ...prevPoint,
-      geometry: {
-        ...prevPoint.geometry,
-        coordinates: initialPoint.geometry.coordinates
-      }
-    }));
-  }, [initialPoint.geometry.coordinates]);
-
-  const ScrollableContent = useMemo(() => styled(Box)({
-    overflow: 'auto',
-    padding: '0px',
-    marginBottom: isEditing ? '32px' : '16px',
-  }), [isEditing]);
+  const [acceptPoint, setAcceptPoint] = useState(false);
 
   const precisePositionIconSx = useMemo(() => ({
     '&:hover': {
@@ -145,6 +134,11 @@ const PointPanel: FC<PointPanelProps> = ({
     }
   }), [isEditing]);
 
+  useEffect(() => {
+    if (isEditing) {
+      setUneditedPoint(point);
+    }
+  }, [isEditing]);
 
   // VALIDATORS
   const [lon, lat] = point.geometry.coordinates;
@@ -160,65 +154,65 @@ const PointPanel: FC<PointPanelProps> = ({
   }, []);
   
   const handleColorChange = useCallback((pointId: UUID, color: HEXColor) =>
-    setPoint(prevPoint => ({
-      ...prevPoint,
+    onPointChange({
+      ...point,
       properties: {
-        ...prevPoint.properties,
+        ...point.properties,
         color: color
       }
-    })), []);
+    }), [point]);
 
   const handleNameChange = useCallback((pointId: UUID, name: string) =>
-    setPoint(prevPoint => ({
-      ...prevPoint,
+    onPointChange({
+      ...point,
       properties: {
-        ...prevPoint.properties,
+        ...point.properties,
         name: name
       }
-    })), []);
+    }), [point]);
 
   const handleDateChange = useCallback((value: number) =>
-    value && setPoint(prevPoint => ({
-      ...prevPoint,
+    value && onPointChange({
+      ...point,
       properties: {
-        ...prevPoint.properties,
+        ...point.properties,
         timestamp: value // timestamp in milliseconds
       }
-    })), []);
+    }), [point]);
 
   const handleDescriptionChange = useCallback((value: string) =>
-    setPoint(prevPoint => ({
-      ...prevPoint,
+    onPointChange({
+      ...point,
       properties: {
-        ...prevPoint.properties,
+        ...point.properties,
         description: value
       }
-    })), []);
+    }), [point]);
 
-  const handleCoordinatesChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, coordIndex: number) =>
-    setPoint(prevPoint => {
-      const newCoords = [...prevPoint.geometry.coordinates];
-      (e.target.value === '' || e.target.value === '-') ?
-        coordIndex === 2 ? newCoords.pop() : 0
-        : newCoords[coordIndex] = parseFloat(e.target.value);
-      return {
-        ...prevPoint,
-        geometry: {
-          type: 'Point',
-          coordinates: newCoords
-        }
-      };
-    }), []);
+  const handleCoordinatesChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, coordIndex: number) => {
+    const newCoords = [...point.geometry.coordinates];
+    (e.target.value === '' || e.target.value === '-') ?
+      coordIndex === 2 ? newCoords.pop() : 0
+      : newCoords[coordIndex] = parseFloat(e.target.value);
 
-  const setPosition = useCallback((newPosition?: Position) =>
-    newPosition && setPoint(prevPoint => ({
-      ...prevPoint,
+    onPointChange({
+      ...point,
       geometry: {
         type: 'Point',
-        coordinates: prevPoint.geometry.coordinates.length > 2 ? [...newPosition, prevPoint.geometry.coordinates[2]] : newPosition
+        coordinates: newCoords
       }
-    })),
-  []);
+    });
+  }, [point]);
+
+  const setPosition = useCallback((newPosition?: Position) =>
+    newPosition && onPointChange({
+      ...point,
+      geometry: {
+        type: 'Point',
+        coordinates: point.geometry.coordinates.length > 2 ? [...newPosition, point.geometry.coordinates[2]] : newPosition
+      }
+    }),
+  [point]);
 
   const handleAddImage = () => create();
 
@@ -245,11 +239,10 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const handleCancel = () => {
     discard();
-    setPoint(initialPoint);
+    uneditedPoint && onPointChange(uneditedPoint);
     stopEditing();
   };
 
-  const [acceptPoint, setAcceptPoint] = useState(false);
   useEffect(() => {
     if (acceptPoint) {
       const newPosition = [viewport.longitude, viewport.latitude];
@@ -259,7 +252,6 @@ const PointPanel: FC<PointPanelProps> = ({
   }, [acceptPoint]);
 
   const startEditingPosition = () => {
-
     const position = point.geometry.coordinates;
     setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
     editingPosition.start({
@@ -271,7 +263,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   return <>
     <Header
-      startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
+      startIcon={isEditing ? <></> : <ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
       name={scope.name}
       color={scope.color}
       onStartIconClick={onBackButtonClick}

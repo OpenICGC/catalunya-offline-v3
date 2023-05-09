@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {useKmlExport} from './useKmlExport';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
-import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
+import {useScopePoints, useScopes, useScopeTracks} from '../usePersistedCollections';
 import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import kmlSample_01 from './kmlSample_01.xml';
 import kmlSample_02 from './kmlSample_02.xml';

@@ -1,6 +1,6 @@
 import {UUID} from '../../types/commonTypes';
 import Mustache from 'mustache';
-import {useScopePoints, useScopes, useScopeTracks} from '../useStoredCollections';
+import {useScopePoints, useScopes, useScopeTracks} from '../usePersistedCollections';
 import kmlTemplate from './kmlTemplate.xml';
 import {getImageNameWithoutPath} from '../../utils/getImageNameWithoutPath';
 import {getKmlColorFromHexaColor} from '../../utils/getKmlColorFromHexaColor';

@@ -1,7 +1,6 @@
 import {Scope, ScopeTrack, ScopePoint, UUID} from '../types/commonTypes';
-import {removePersistenceImpl} from '../utils/persistenceImpl';
 import {useEffect, useMemo} from 'react';
-import usePersistedState from './usePersistedState';
+import usePersistedState, {clear} from './usePersistedState';
 
 type CollectionItem = {
   id: UUID
@@ -19,7 +18,7 @@ const usePersistedCollection = <ItemType extends CollectionItem>(collectionId: s
   const [items, setItems, isLoaded] = usePersistedState<Array<ItemType> | undefined>(collectionId, undefined);
 
   useEffect(() => {
-    if (isLoaded && items === undefined) {
+    if (isLoaded && collectionId && items === undefined) {
       setItems([]);
     }
   }, [isLoaded]);
@@ -27,21 +26,21 @@ const usePersistedCollection = <ItemType extends CollectionItem>(collectionId: s
   return useMemo(() => ({
     list: () => items,
     create: created => {
-      if (!isLoaded) throw new Error('Data not loaded. Cannot create items. Please check item list is not undefined before calling create.');
+      if (items === undefined) throw new Error('Data not loaded. Cannot create items. Please check item list is not undefined before calling create.');
       Array.isArray(created) ?
-        setItems(prevData => prevData ? [...prevData, ...created ] : created) :
-        setItems(prevData => prevData ? [...prevData, created ] : [created]);
+        setItems(prevData => prevData ? [...prevData, ...created] : created) :
+        setItems(prevData => prevData ? [...prevData, created] : [created]);
     },
     retrieve: (id: UUID) => items?.find(item => item.id === id),
     update: updated => {
-      if (!isLoaded) throw new Error('Data not loaded. Cannot update items. Please check item list is not undefined before calling update.');
+      if (items === undefined) throw new Error('Data not loaded. Cannot update items. Please check item list is not undefined before calling update.');
       setItems(prevData => prevData?.map(item => item.id === updated.id ? updated : item));
     },
     delete: id => {
-      if (!isLoaded) throw new Error('Data not loaded. Cannot delete items. Please check item list is not undefined before calling delete.');
+      if (items === undefined) throw new Error('Data not loaded. Cannot delete items. Please check item list is not undefined before calling delete.');
       setItems(prevData => prevData?.filter(item => item.id !== id));
     }
-  }), [items, setItems, isLoaded]);
+  }), [items, setItems]);
 };
 
 export const useScopes = (): persistedCollectionInterface<Scope> => {
@@ -56,23 +55,23 @@ export const useScopes = (): persistedCollectionInterface<Scope> => {
   return useMemo(() => ({
     list: () => items,
     create: created => {
-      if (!isLoaded) throw new Error('Data not loaded. Cannot create items. Please check item list is not undefined before calling create.');
+      if (items === undefined) throw new Error('Data not loaded. Cannot create items. Please check item list is not undefined before calling create.');
       Array.isArray(created) ?
         setItems(prevData => prevData ? [...prevData, ...created ] : created) :
         setItems(prevData => prevData ? [...prevData, created ] : [created]);
     },
     retrieve: (id: UUID) => items?.find(item => item.id === id),
     update: updated => {
-      if (!isLoaded) throw new Error('Data not loaded. Cannot update items. Please check item list is not undefined before calling update.');
+      if (items === undefined) throw new Error('Data not loaded. Cannot update items. Please check item list is not undefined before calling update.');
       setItems(prevData => prevData?.map(item => item.id === updated.id ? updated : item));
     },
     delete: (id) => {
-      if (!isLoaded) throw new Error('Data not loaded. Cannot delete items. Please check item list is not undefined before calling delete.');
-      removePersistenceImpl(`scopes/${id}/points`); // TODO this is low-level, no notifications!
-      removePersistenceImpl(`scopes/${id}/tracks`); // TODO this is low-level, no notifications!
+      if (items === undefined) throw new Error('Data not loaded. Cannot delete items. Please check item list is not undefined before calling delete.');
+      clear(`scopes/${id}/points`);
+      clear(`scopes/${id}/tracks`);
       setItems(prevData => prevData?.filter(item => item.id !== id));
     }
-  }), [items, setItems, isLoaded]);
+  }), [items, setItems]);
 };
 
 export const useScopePoints = (scopeId?: UUID) => usePersistedCollection<ScopePoint>(scopeId ? `scopes/${scopeId}/points` : '');

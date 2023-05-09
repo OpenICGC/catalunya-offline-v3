@@ -14,12 +14,15 @@ const fileDownloader = (
   url: string, 
   localPath: string, 
   onProgress: (bytes: number) => void): fileDownloader => {
+
+  let lastNotifiedProgress = 0;
   
   const fileTransfer = FileTransfer.create();
   fileTransfer.onProgress((e) => {
     if (e.lengthComputable) {
-      const percentage = e.loaded / e.total * 100;
-      if ((percentage % 0.1) < 0.001 ) {
+      if ((e.loaded/e.total) - (lastNotifiedProgress/e.total) >= 0.001 || e.loaded === e.total) {
+        // Update progress when difference is bigger than 0.1% for this file, or when done
+        lastNotifiedProgress = e.loaded;
         onProgress(e.loaded);
       }
     }
@@ -48,7 +51,8 @@ const fileDownloader = (
     const absoluteTempPath = absolutePath + '.part';
     
     const uri = encodeURI(url);
-    
+
+    lastNotifiedProgress = 0;
     return fileTransfer
       .download(uri, absoluteTempPath, true, {
         headers: {

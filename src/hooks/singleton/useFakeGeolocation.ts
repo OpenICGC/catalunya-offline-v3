@@ -42,7 +42,7 @@ const useFakeGeolocation = (): useGeolocationType => {
           speed: null,
           timestamp: t
         });
-      }, 500 * i);
+      }, 1000 * i);
     }
   }, []);
 

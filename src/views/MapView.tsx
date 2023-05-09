@@ -1,8 +1,8 @@
-import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 
 //GEOCOMPONENTS
-import GeocomponentMap from '@geomatico/geocomponents/Map/Map';
+import MapComponent from '../components/map/Map';
 
 //CATOFFLINE
 import AboutDialog from '../components/common/AboutDialog';
@@ -20,10 +20,10 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 //UTILS
 import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
-import {DEFAULT_VIEWPORT, FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
-import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
-import {AnyLayer, MapLayerMouseEvent, MapTouchEvent, Sources} from 'mapbox-gl';
-import {Feature, Position} from 'geojson';
+import {FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
+import {useScopePoints, useScopes, useScopeTracks} from '../hooks/usePersistedCollections';
+import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
+import {Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
 import {useTranslation} from 'react-i18next';
 import useViewport from '../hooks/singleton/useViewport';
@@ -38,6 +38,7 @@ import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
 import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 import useMapStyle from '../hooks/useMapStyle';
 import useIsActive from '../hooks/singleton/useIsActive';
+import Overlays from '../components/map/Overlays';
 
 const HEADER_HEIGHT = 48;
 const SEARCHBOX_HEIGHT = 64;
@@ -64,7 +65,7 @@ export type MainContentProps = {
   visibleLayers: Array<number>,
 };
 
-const Map: FC<MainContentProps> = ({
+const MapView: FC<MainContentProps> = ({
   baseMapId,
   onManagerChanged,
   selectedScopeId,
@@ -89,6 +90,10 @@ const Map: FC<MainContentProps> = ({
   const pointStore = useScopePoints(selectedScopeId);
   const trackStore = useScopeTracks(selectedScopeId);
 
+  const scopeList = scopeStore.list();
+  const pointList = pointStore.list();
+  const trackList = trackStore.list();
+
   const selectedScope = selectedScopeId ? scopeStore.retrieve(selectedScopeId) : undefined;
   const selectedPoint = selectedPointId ? pointStore.retrieve(selectedPointId) : undefined;
   const selectedTrack = selectedTrackId ? trackStore.retrieve(selectedTrackId) : undefined;
@@ -96,8 +101,6 @@ const Map: FC<MainContentProps> = ({
   const scopeColor = selectedScope?.color;
   const pointColor = selectedPoint?.properties.color || scopeColor;
   const trackColor = selectedTrack?.properties.color || scopeColor;
-  const pointList = pointStore.list();
-  const trackList = trackStore.list();
 
   const editingPosition = useEditingPosition();
   const [pointIntent, setPointIntent] = useState<Position>();
@@ -131,162 +134,6 @@ const Map: FC<MainContentProps> = ({
       }
     });
   }, [topMargin, bottomMargin, viewportFitBounds]);
-
-  const scopeDependantSources: Sources = useMemo(() => ({
-    'trackList': {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: trackList?.filter(track =>
-          track.geometry !== null &&
-          track.properties.isVisible
-        ).map(track => ({
-          ...track,
-          properties: {
-            ...track.properties,
-            color: track.properties.color || scopeColor
-          }
-        }) as Feature) ?? []
-      }
-    }
-  }), [trackList]);
-
-  const navigationDependantSources: Sources = useMemo(() => {
-    const {latitude, longitude} = geolocation;
-
-    return {
-      'geolocation': {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: latitude && longitude ? [{
-            type: 'Feature',
-            properties: {...geolocation},
-            geometry: {
-              type: 'Point',
-              coordinates: [longitude, latitude]
-            }
-          }] : []
-        }
-      },
-      'recordingTrack': {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: recordingTrack.coordinates.length ? [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'LineString',
-              coordinates: recordingTrack.coordinates
-            }
-          }] : []
-        }
-      },
-      'navigateToPointLine': {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: pointNavigation.feature ? [pointNavigation.feature] : []
-        }
-      }
-    };
-  }, [geolocation.latitude, geolocation.longitude, recordingTrack.coordinates, pointNavigation.feature]);
-
-  const sources: Sources = useMemo(() => ({
-    ...scopeDependantSources,
-    ...navigationDependantSources,
-    'extraLayers': {
-      type: 'geojson',
-      data: 'extra-layers.json'
-    }
-  }), [scopeDependantSources, navigationDependantSources]);
-
-  const layers: Array<AnyLayer> = useMemo(() => {
-    return [{
-      id: 'extraLayers',
-      source: 'extraLayers',
-      type: 'symbol',
-      filter: ['in', ['get', 't'], ['literal', visibleLayers]],
-      layout: {
-        'text-font': ['pictos_25_icgc-Regular'],
-        'text-size': 18,
-        'text-anchor': 'center',
-        'text-justify': 'center',
-        'symbol-placement': 'point',
-        'text-allow-overlap': true,
-        'text-field': ['match', ['get', 't'], // Tipus
-          0, '\u0055', // Refugi
-          1, '\u0062', // Camping
-          2, '\u002C', // Turisme Rural
-          3, '\u003A', // Alberg
-          '\u0020' // Default
-        ]
-      },
-      paint: {
-        'text-halo-width': 1,
-        'text-halo-color': '#fff',
-        'text-color': ['match', ['get', 't'], // Tipus
-          0, '#D4121E', // 0, '#FE946C', // Refugi
-          1, '#F1BE25', // 1, '#6FC6B5', // Camping
-          2, '#4A8A63', // 2, '#8DA0CB', // Turisme Rural
-          3, '#1FA1E2', // 3, '#E78AC3', // Alberg
-          '#000000' // Default
-        ]
-      }
-    },{
-      id: 'trackList',
-      source: 'trackList',
-      type: 'line',
-      paint: {
-        'line-color': ['get', 'color'],
-        'line-width': 4
-      }
-    },{
-      id: 'navigateToPointLine',
-      source: 'navigateToPointLine',
-      type: 'line',
-      paint: {
-        'line-color': '#000000',
-        'line-width': 4,
-        'line-opacity': 0.67,
-        'line-dasharray': [2, 2]
-      },
-      layout: {
-        'line-cap': 'round',
-        'line-join': 'round'
-      }
-    },{
-      id: 'recordingTrack',
-      source: 'recordingTrack',
-      type: 'line',
-      paint: {
-        'line-color': '#d32f2f',
-        'line-width': 4
-      }
-    },{
-      id: 'geolocation-precision',
-      source: 'geolocation',
-      type: 'circle',
-      paint: {
-        'circle-color': gpsPositionColor,
-        'circle-opacity': 0.33,
-        'circle-radius': [
-          'interpolate',
-          ['exponential', 2],
-          ['zoom'],
-          7, // Beware: this formula works only for latitudes around initial viewport's latitude
-          ['/', ['*', ['get', 'accuracy'], ['^', 2, 7]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))],
-          15,
-          ['/', ['*', ['get', 'accuracy'], ['^', 2, 15]], 156543.03 * Math.cos(DEFAULT_VIEWPORT.latitude * (Math.PI / 180))]
-        ],
-        'circle-stroke-color': gpsPositionColor,
-        'circle-stroke-opacity': 0.67,
-        'circle-stroke-width': 1,
-        'circle-pitch-alignment': 'map'
-      }
-    }];
-  }, [gpsPositionColor, visibleLayers]);
 
   ////// Handle orientation & navigation state transitions
   const handleOrientationClick = useCallback(() => {
@@ -362,41 +209,7 @@ const Map: FC<MainContentProps> = ({
     onPointSelected(point.id);
   }, [onPointSelected, setViewport]);
 
-  const createNewPoint = useCallback((coordinates: Position) => {
-    const id = uuid();
-    pointStore.create({
-      type: 'Feature',
-      id: id,
-      geometry: {
-        type: 'Point',
-        coordinates: coordinates
-      },
-      properties: {
-        name: `${t('point')} ${(pointStore.list()?.length ?? 0) + 1}`,
-        timestamp: Date.now(),
-        description: '',
-        images: [],
-        isVisible: true
-      }
-    });
-    setPointIntent(undefined);
-    onPointSelected(id);
-    return id;
-  }, [pointStore.create, pointStore.list, t, onPointSelected]);
-
   const [acceptPoint, setAcceptPoint] = useState(false);
-
-  useEffect(() => {
-    if (acceptPoint) {
-      const newPosition = [viewport.longitude, viewport.latitude];
-      if (selectedScopeId) {
-        createNewPoint(newPosition);
-      } else {
-        setPointIntent(newPosition);
-      }
-      setAcceptPoint(false);
-    }
-  }, [acceptPoint, viewport.longitude, viewport.latitude, selectedScopeId, createNewPoint, pointList]);
 
   const onLongTap = useCallback((position: Position) => {
     setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
@@ -404,7 +217,7 @@ const Map: FC<MainContentProps> = ({
       initialPosition: position,
       onAccept: () => setAcceptPoint(true)
     });
-  }, [editingPosition.start, setViewport]);
+  }, [setViewport, editingPosition.start]);
 
   const longTouchTimer = useRef<number>();
 
@@ -414,6 +227,51 @@ const Map: FC<MainContentProps> = ({
       longTouchTimer.current = undefined;
     }
   }, [longTouchTimer]);
+
+  useEffect(() => {
+    if (acceptPoint) {
+      setAcceptPoint(false);
+      const newPosition = [viewport.longitude, viewport.latitude];
+      if (selectedScopeId) {
+        createNewPoint(newPosition);
+      } else {
+        setPointIntent(newPosition);
+      }
+    }
+  }, [acceptPoint]);
+
+  const createNewPoint = useCallback((coordinates: Position) => {
+    setPointIntent(undefined);
+    const id = uuid();
+    pointStore.create({
+      type: 'Feature',
+      id: id,
+      geometry: {
+        type: 'Point',
+        coordinates: coordinates
+      },
+      properties: {
+        name: `${t('point')} ${(pointList?.length ?? 0) + 1}`,
+        timestamp: Date.now(),
+        description: '',
+        images: [],
+        isVisible: true
+      }
+    });
+    onPointSelected(id);
+  }, [pointStore.create, pointList, t, onPointSelected]);
+
+  useEffect(() => {
+    pointIntent && selectedScope && pointList && createNewPoint(pointIntent);
+  }, [pointIntent, selectedScope, pointList, createNewPoint]);
+
+  const handleScopeSelected = useCallback((scopeId: UUID) => {
+    onScopeSelected(scopeId);
+  }, [onScopeSelected]);
+
+  const handleScopeSelectionCancelled = useCallback(() => {
+    setPointIntent(undefined);
+  }, []);
 
   const handleTouchMove = useCallback(() => {
     disableTracking();
@@ -440,18 +298,6 @@ const Map: FC<MainContentProps> = ({
   const handleDoubleClick = useCallback((e: MapLayerMouseEvent) => {
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
   }, [onLongTap]);
-
-  const handleScopeSelected = useCallback((scopeId: UUID) => {
-    onScopeSelected(scopeId);
-  }, [onScopeSelected]);
-
-  useEffect(() => {
-    pointIntent && pointList && createNewPoint(pointIntent);
-  }, [pointIntent, pointList, createNewPoint]);
-
-  const handleScopeSelectionCancelled = useCallback(() => {
-    setPointIntent(undefined);
-  }, []);
 
   const handlePointNavigationFitBounds = useCallback(() => {
     fitBounds(pointNavigation.getBounds());
@@ -539,6 +385,7 @@ const Map: FC<MainContentProps> = ({
     recordingTrack.stop();
   }, [recordingTrack.stop]);
 
+
   return <>
     {isActive && <SearchBoxAndMenu
       onContextualMenuClick={handleContextualMenu}
@@ -546,18 +393,11 @@ const Map: FC<MainContentProps> = ({
       isContextualMenuOpen={isContextualMenuOpen}
       onToggleContextualMenu={handleToggleContextualMenu}
       onResultClick={handleResultClick}
+      isHeaderVisible={editingPosition.isEditing || recordingTrack.isRecording}
     />}
-    {mapStyle && <GeocomponentMap
-      styleDiffing={true}
-      reuseMaps={true}
-      RTLTextPlugin={''}
-      {...MAP_PROPS}
-      mapLib={maplibregl}
-      //reuseMaps
+    {mapStyle && <MapComponent
       ref={mapRef}
       mapStyle={mapStyle}
-      sources={isActive ? sources : undefined}
-      layers={isActive ? layers : undefined}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
@@ -568,13 +408,8 @@ const Map: FC<MainContentProps> = ({
       onTouchCancel={clearLongTouchTimer}
       onClick={handleMapClick}
       onDblClick={handleDoubleClick}
-      doubleClickZoom={false}
-      attributionControl={false}
     >
-      <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>
-      <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
-
-      {!editingPosition.isEditing && <FabButton
+      {!editingPosition.isEditing && isActive && <FabButton
         isFabOpen={isFabOpen}
         onFabClick={toggleFabOpen}
         isFabHidden={isFabHidden}
@@ -587,7 +422,17 @@ const Map: FC<MainContentProps> = ({
         onBaseMapsClick={handleBaseMapsClick}
         onScopesClick={handleScopesClick}
       />}
-    </GeocomponentMap>}
+      <Overlays
+        isActive={isActive}
+        trackList={trackList}
+        scopeColor={scopeColor}
+        geolocation={geolocation}
+        navigateToPointLine={pointNavigation.feature}
+        gpsPositionColor={gpsPositionColor}
+        visibleLayers={visibleLayers}/>
+      {isActive && <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>}
+      <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
+    </MapComponent>}
 
     {editingPosition.isEditing && <PositionEditor
       name={selectedPoint?.properties.name}
@@ -596,18 +441,18 @@ const Map: FC<MainContentProps> = ({
       onAccept={handleEditingPositionAccept}
       onCancel={handleEditingPositionCancel}
     />}
-    {recordingTrack.isRecording && <TrackRecorder
+    {recordingTrack.isRecording && !editingPosition.isEditing && <TrackRecorder
       name={selectedTrack?.properties.name}
       bottomMargin={bottomMargin}
       color={trackColor}
-      elapsedTime={recordingTrack.elapsedTime}
+      startTime={recordingTrack.startTime}
       onPause={recordingTrack.pause}
       onResume={recordingTrack.resume}
       onStop={handleRecordingTrackStop}
     />}
     {!!pointIntent && <ScopeSelector
       isLargeSize={isLargeSize}
-      scopes={scopeStore?.list() ?? []}
+      scopes={scopeList ?? []}
       onScopeSelected={handleScopeSelected}
       onCancel={handleScopeSelectionCancelled}
     />}
@@ -642,4 +487,4 @@ const Map: FC<MainContentProps> = ({
     />}
   </>;
 };
-export default React.memo(Map);
+export default React.memo(MapView);

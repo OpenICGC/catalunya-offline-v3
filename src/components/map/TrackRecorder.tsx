@@ -1,26 +1,17 @@
-import React, {FC, useMemo, useState} from 'react';
+import React, {FC, useCallback, useMemo, useState} from 'react';
 
 //MUI
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-
-//MUI-ICONS
-import RecordingIcon from '@mui/icons-material/FiberManualRecord';
-import PauseIcon from '@mui/icons-material/Pause';
 
 //CATOFFLINE
-import Header from '../common/Header';
 import Notification from '../notifications/Notification';
 import RecordingButtonGroup from '../buttons/RecordingButtonGroup';
-
-//OTHERS
-import moment from 'moment';
-import 'moment-duration-format';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
 import {HEXColor} from '../../types/commonTypes';
 import useTheme from '@mui/material/styles/useTheme';
+import TrackRecorderHeader from './TrackRecorderHeader';
 
 const buttonContainerSx = (bottomMargin: number | undefined) => ({
   position: 'absolute',
@@ -30,12 +21,6 @@ const buttonContainerSx = (bottomMargin: number | undefined) => ({
   zIndex: 1000,
   width: '100vw'
 });
-const headerSx = {
-  '&.Header-root': {
-    position: 'absolute',
-    top: 0
-  }
-};
 
 export enum RECORDING_STATUS {
   STOPPED,
@@ -43,17 +28,11 @@ export enum RECORDING_STATUS {
   PAUSED
 }
 
-const iconActive = {
-  [RECORDING_STATUS.STOPPED]: <></>,
-  [RECORDING_STATUS.RECORDING]: <RecordingIcon/>,
-  [RECORDING_STATUS.PAUSED]: <PauseIcon/>
-};
-
 export type TrackRecorderProps = {
   name?: string,
   color?: HEXColor,
   bottomMargin?: number,
-  elapsedTime: number,
+  startTime?: number,
   onPause: () => void,
   onResume: () => void,
   onStop: () => void
@@ -63,7 +42,7 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
   name,
   color,
   bottomMargin,
-  elapsedTime,
+  startTime,
   onPause,
   onResume,
   onStop
@@ -73,7 +52,9 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
   const [isNotificationOpen, setNotificationOpen] = useState(false);
   const [recordingStatus, setRecordingStatus] = useState<RECORDING_STATUS>(RECORDING_STATUS.RECORDING);
 
-  const handleButtonGroupClick = (status: RECORDING_STATUS) => {
+  const handleClose = useCallback(() => setNotificationOpen(false), []);
+
+  const handleButtonGroupClick = useCallback((status: RECORDING_STATUS) => {
     setRecordingStatus(status);
     setNotificationOpen(true);
     switch (status) {
@@ -88,32 +69,29 @@ const TrackRecorder: FC<TrackRecorderProps> = ({
       setRecordingStatus(RECORDING_STATUS.RECORDING);
       break;
     }
-  };
+  }, [onPause, onResume, onStop]);
 
-  const formattedTime = useMemo(() => moment.duration(elapsedTime, 'seconds').format('h[h] mm[m] ss[s]'), [elapsedTime]);
+  const stackSx = useMemo(() => buttonContainerSx(bottomMargin), [bottomMargin]);
 
-  const statusMessage = t(`actions.${RECORDING_STATUS[recordingStatus].toLowerCase()}`);
+  const statusMessage = useMemo(() => t(`actions.${RECORDING_STATUS[recordingStatus].toLowerCase()}`), [recordingStatus]);
 
-  const headerName = (name ? `${name.toUpperCase()} - ` : '') + statusMessage;
-  const headerColor = color ? color : (theme.palette.secondary.main as HEXColor);
-
-  const timeSx = {
-    color: theme.palette.getContrastText(headerColor),
-    minWidth: 100,
-    textAlign: 'right'
-  };
+  const headerName = useMemo(() => (name ? `${name.toUpperCase()} - ` : '') + statusMessage, [name, statusMessage]);
+  const headerColor = useMemo(() => color ? color : (theme.palette.secondary.main as HEXColor), [color, theme.palette.secondary.main]);
 
   return <>
-    <Header startIcon={!!iconActive[recordingStatus] && iconActive[recordingStatus]} name={headerName} color={headerColor} sx={headerSx}>
-      <Typography sx={timeSx}>{formattedTime}</Typography>
-    </Header>
+    <TrackRecorderHeader
+      recordingStatus={recordingStatus}
+      headerName={headerName}
+      headerColor={headerColor}
+      startTime={startTime}
+    />
     <Notification
       message={statusMessage}
-      onClose={() => setNotificationOpen(false)}
+      onClose={handleClose}
       isOpen={isNotificationOpen}
       variant='center'
     />
-    <Stack direction='row' justifyContent='center' sx={buttonContainerSx(bottomMargin)}>
+    <Stack direction='row' justifyContent='center' sx={stackSx}>
       <RecordingButtonGroup recordingStatus={recordingStatus} onButtonClick={handleButtonGroupClick}/>
     </Stack>
   </>;

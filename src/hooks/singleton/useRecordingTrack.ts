@@ -2,26 +2,10 @@ import {useCallback, useEffect, useState} from 'react';
 import {Position} from 'geojson';
 import useGeolocation from './useGeolocation';
 import {singletonHook} from 'react-singleton-hook';
-import useStopWatch from '../useStopWatch';
+import {UUID} from '../../types/commonTypes';
+import {useScopeTracks} from '../usePersistedCollections';
 
-type stopFn = (finalTrack: Array<Position>) => void;
-
-type startFn = (argument: {
-  onStop?: stopFn
-}) => boolean;
-
-type recordingState = {
-  isRecording: boolean,
-  isPaused: boolean,
-  coordinates: Array<Position>,
-  onStop?: stopFn
-};
-
-const initialRecordingState = {
-  isRecording: false,
-  isPaused: false,
-  coordinates: []
-};
+type startFn = (scopeId: UUID, trackId: UUID) => boolean;
 
 const timeCoordinate = () => Math.round(new Date().getTime() / 1000); // timestamp in seconds as fourth coordinate
 
@@ -30,85 +14,80 @@ type useRecordingTrackType = {
   pause: () => void,
   resume: () => void,
   stop: () => void,
-  coordinates: Array<Position>,
   isRecording: boolean,
-  elapsedTime: number
+  startTime?: number
 }
 
 const useRecordingTrack = (): useRecordingTrackType => {
-  const [state, setState] = useState<recordingState>(initialRecordingState);
+  const [scopeId, setScopeId] = useState<UUID>();
+  const [trackId, setTrackId] = useState<UUID>();
+  const trackStore = useScopeTracks(scopeId);
+
+  const [isRecording, setRecording] = useState<boolean>(false);
+  const [isPaused, setPaused] = useState<boolean>(false);
+  //const [coordinates, setCoordinates] = useState<Array<Position>>([]);
+  const [startTime, setStartTime] = useState<number>();
+
   const {geolocation, setWatchInBackground} = useGeolocation();
-  const stopWatch = useStopWatch();
 
   useEffect(() => {
-    if (geolocation.latitude !== null && geolocation.longitude !== null) {
-      const newPosition: Position = [geolocation.longitude, geolocation.latitude, geolocation.altitude || 0, timeCoordinate()];
-      setState(prevState => {
-        if (prevState.isRecording && !prevState.isPaused) {
-          return {
-            ...prevState,
-            coordinates: [...prevState.coordinates, newPosition]
-          };
-        } else {
-          return prevState;
-        }
-      });
+    if (geolocation.latitude !== null && geolocation.longitude !== null && isRecording && !isPaused && trackId) {
+      const prevTrack = trackStore.retrieve(trackId);
+      if (prevTrack) {
+        const newPosition: Position = [geolocation.longitude, geolocation.latitude, geolocation.altitude || 0, timeCoordinate()];
+        trackStore.update({
+          ...prevTrack,
+          geometry: {
+            type: 'LineString',
+            coordinates: [...(prevTrack.geometry?.coordinates || []), newPosition]
+          }
+        });
+      }
     }
   }, [geolocation.latitude, geolocation.longitude]);
 
-  const start: startFn = useCallback(({onStop}) => {
-    if (state.isRecording) {
+  const start: startFn = useCallback((scopeId, trackId) => {
+    if (isRecording) {
       console.info('Cannot record track. Another track is being recorded.');
       return false;
     } else {
       setWatchInBackground(true);
-      stopWatch.start();
-      setState({
-        ...initialRecordingState,
-        isRecording: true,
-        onStop
-      });
+      const startTime = Date.now();
+      setStartTime(startTime);
+      setRecording(true);
+      setScopeId(scopeId);
+      setTrackId(trackId);
       return true;
     }
-  }, [state.isRecording, setWatchInBackground, stopWatch.start]);
+  }, [isRecording, setWatchInBackground]);
 
   const pause = useCallback(() => {
     setWatchInBackground(false);
-    stopWatch.pause();
-    setState(
-      prevState => ({
-        ...prevState,
-        isPaused: true
-      })
-    );
-  }, [setWatchInBackground, stopWatch.pause]);
+    setPaused(true);
+  }, [setWatchInBackground]);
 
   const resume = useCallback(() => {
     setWatchInBackground(true);
-    stopWatch.resume();
-    setState(
-      prevState => ({
-        ...prevState,
-        isPaused: false
-      })
-    );
-  }, [setWatchInBackground, stopWatch.resume]);
+    setPaused(false);
+  }, [setWatchInBackground]);
 
   const stop = useCallback(() => {
+    // Reset all the internal state
     setWatchInBackground(false);
-    stopWatch.stop();
-    state.onStop && state.onStop(state.coordinates);
-    setState(initialRecordingState);
-  }, [setWatchInBackground, stopWatch.stop, state.onStop, state.coordinates]);
+    setRecording(false);
+    setPaused(false);
+    setScopeId(undefined);
+    setTrackId(undefined);
+    setStartTime(undefined);
+  }, [setWatchInBackground]);
 
   return {
     start,
     pause,
     resume,
     stop,
-    coordinates: state.coordinates,
-    isRecording: state.isRecording,
-    elapsedTime: stopWatch.time
+    isRecording,
+    startTime
   };
 };
 
@@ -117,9 +96,8 @@ const initialState: useRecordingTrackType = {
   pause: () => undefined,
   resume: () => undefined,
   stop: () => undefined,
-  coordinates: [],
   isRecording: false,
-  elapsedTime: 0
+  startTime: undefined
 };
 
 export default singletonHook<useRecordingTrackType>(initialState, useRecordingTrack);

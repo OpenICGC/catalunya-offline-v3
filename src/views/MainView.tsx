@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 import Layout from '../components/Layout';
-import Map from './Map';
+import MapView from './MapView';
 
 import {Manager, UUID} from '../types/commonTypes';
 import Layers from './sidepanels/Layers';
@@ -119,7 +119,7 @@ const MainView: FC = () => {
     : null
   , [manager, visibleLayers, toggleLayerVisibility, baseMapId, setBaseMapId, scope, setScope, point, setPoint, track, setTrack]);
 
-  const mainContent = useMemo(() => <Map
+  const mainContent = useMemo(() => <MapView
     baseMapId={baseMapId}
     onManagerChanged={handleManagerChanged}
     selectedScopeId={scope}

@@ -3,7 +3,7 @@ import {Position, LineString} from 'geojson';
 import {singletonHook} from 'react-singleton-hook';
 import {HEXColor, Scope, ScopeTrack, UUID} from '../../types/commonTypes';
 import useGeolocation from './useGeolocation';
-import {useScopes, useScopeTracks} from '../useStoredCollections';
+import {useScopes, useScopeTracks} from '../usePersistedCollections';
 import turfNearestPointOnLine from '@turf/nearest-point-on-line';
 import useTrackTolerance from '../settings/useTrackTolerance';
 

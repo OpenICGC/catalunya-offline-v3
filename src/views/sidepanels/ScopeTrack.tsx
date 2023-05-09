@@ -1,10 +1,11 @@
 import React, {FC, useCallback} from 'react';
 import {ScopeTrack, UUID} from '../../types/commonTypes';
 
-import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/useStoredCollections';
+import {useScopeTracks, useScopePoints, useScopes} from '../../hooks/usePersistedCollections';
 import TrackPanel from '../../components/scope/TrackPanel';
 import useRecordingTrack from '../../hooks/singleton/useRecordingTrack';
 import useTrackNavigation from '../../hooks/singleton/useTrackNavigation';
+import useIsActive from '../../hooks/singleton/useIsActive';
 
 export interface ScopeTrackProps {
   scopeId: UUID,
@@ -17,11 +18,12 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   trackId, 
   onClose
 }) => {
+  const isActive = useIsActive();
   const scopeStore = useScopes();
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
-  const trackNavigation = useTrackNavigation();
 
+  const trackNavigation = useTrackNavigation();
   const recordingTrack = useRecordingTrack();
 
   const selectedScope = scopeStore.retrieve(scopeId);
@@ -29,38 +31,27 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
   const numPoints = pointStore.list()?.length ?? 0;
   const numTracks = trackStore.list()?.length ?? 0;
 
-  const trackChange = useCallback((newTrack: ScopeTrack) => {
-    if (trackStore.retrieve(newTrack.id)) {
-      trackStore.update(newTrack);
-    }
-  }, [trackStore.retrieve, trackStore.update]);
+  const handleTrackChange = useCallback((track: ScopeTrack) => {
+    trackStore.update(track);
+  }, [trackStore]);
 
   const recordTrack = useCallback(() => {
-    recordingTrack.start({
-      onStop: (coordinates) => {
-        selectedTrack && trackChange({
-          ...selectedTrack,
-          geometry: coordinates.length ? {
-            type: 'LineString',
-            coordinates
-          } : null
-        });
-      }
-    });
-  }, [recordingTrack.start, selectedTrack, trackChange]);
+    recordingTrack.start(scopeId, trackId);
+  }, [recordingTrack.start, scopeId, trackId]);
 
   const goTo = useCallback((trackId: UUID) => {
     trackNavigation.start(scopeId, trackId);
-  }, [trackNavigation.start]);
+  }, [trackNavigation.start, scopeId]);
 
   return selectedScope && selectedTrack ? <TrackPanel
+    isActive={isActive}
     scope={selectedScope}
-    initialTrack={selectedTrack}
+    track={selectedTrack}
     numPoints={numPoints}
     numTracks={numTracks}
     onRecordStart={recordTrack}
     onBackButtonClick={onClose}
-    onTrackChange={trackChange}
+    onTrackChange={handleTrackChange}
     onGoTo={goTo}
   /> : null;
 };
