@@ -395,19 +395,6 @@ const MapView: FC<MainContentProps> = ({
       onResultClick={handleResultClick}
       isHeaderVisible={editingPosition.isEditing || recordingTrack.isRecording}
     />}
-    {!editingPosition.isEditing && <FabButton
-      isFabOpen={isFabOpen}
-      onFabClick={toggleFabOpen}
-      isFabHidden={isFabHidden}
-      bearing={viewport.bearing}
-      pitch={viewport.pitch}
-      locationStatus={locationStatus}
-      onOrientationClick={handleOrientationClick}
-      onLocationClick={handleLocationClick}
-      onLayersClick={handleLayersClick}
-      onBaseMapsClick={handleBaseMapsClick}
-      onScopesClick={handleScopesClick}
-    />}
     {mapStyle && <MapComponent
       ref={mapRef}
       mapStyle={mapStyle}
@@ -422,6 +409,19 @@ const MapView: FC<MainContentProps> = ({
       onClick={handleMapClick}
       onDblClick={handleDoubleClick}
     >
+      {!editingPosition.isEditing && isActive && <FabButton
+        isFabOpen={isFabOpen}
+        onFabClick={toggleFabOpen}
+        isFabHidden={isFabHidden}
+        bearing={viewport.bearing}
+        pitch={viewport.pitch}
+        locationStatus={locationStatus}
+        onOrientationClick={handleOrientationClick}
+        onLocationClick={handleLocationClick}
+        onLayersClick={handleLayersClick}
+        onBaseMapsClick={handleBaseMapsClick}
+        onScopesClick={handleScopesClick}
+      />}
       <Overlays
         isActive={isActive}
         trackList={trackList}
