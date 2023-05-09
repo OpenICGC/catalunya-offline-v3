@@ -7,7 +7,7 @@ const remoteDebug = process.env.LIVE_RELOAD_IP ? {
 
 const config: CapacitorConfig = {
   appId: 'cat.icgc.catofflinev2',
-  appName: ' Catalunya Offline v2',
+  appName: 'Catalunya Offline',
   webDir: 'dist',
   bundledWebRuntime: false,
   server: {
@@ -16,6 +16,16 @@ const config: CapacitorConfig = {
   },
   ios: {
     contentInset: 'always' //https://forum.ionicframework.com/t/ios-notch-safe-area-inconsistent-behavior/203053/3
+  },
+  plugins: {
+    CapacitorSQLite: { // See https://github.com/capacitor-community/sqlite/issues/363
+      androidIsEncryption: false,
+      androidBiometric: {
+        biometricAuth : false,
+        biometricTitle : 'Biometric login for capacitor sqlite',
+        biometricSubTitle : 'Log in using your biometric'
+      },
+    }
   }
 };
 
