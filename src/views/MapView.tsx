@@ -21,7 +21,7 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
 import {FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
-import {useScopePoints, useScopes, useScopeTracks} from '../hooks/useStoredCollections';
+import {useScopePoints, useScopes, useScopeTracks} from '../hooks/usePersistedCollections';
 import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
 import {Position} from 'geojson';
 import {v4 as uuid} from 'uuid';
@@ -90,6 +90,10 @@ const MapView: FC<MainContentProps> = ({
   const pointStore = useScopePoints(selectedScopeId);
   const trackStore = useScopeTracks(selectedScopeId);
 
+  const scopeList = scopeStore.list();
+  const pointList = pointStore.list();
+  const trackList = trackStore.list();
+
   const selectedScope = selectedScopeId ? scopeStore.retrieve(selectedScopeId) : undefined;
   const selectedPoint = selectedPointId ? pointStore.retrieve(selectedPointId) : undefined;
   const selectedTrack = selectedTrackId ? trackStore.retrieve(selectedTrackId) : undefined;
@@ -97,8 +101,6 @@ const MapView: FC<MainContentProps> = ({
   const scopeColor = selectedScope?.color;
   const pointColor = selectedPoint?.properties.color || scopeColor;
   const trackColor = selectedTrack?.properties.color || scopeColor;
-  const pointList = pointStore.list();
-  const trackList = trackStore.list();
 
   const editingPosition = useEditingPosition();
   const [pointIntent, setPointIntent] = useState<Position>();
@@ -207,41 +209,7 @@ const MapView: FC<MainContentProps> = ({
     onPointSelected(point.id);
   }, [onPointSelected, setViewport]);
 
-  const createNewPoint = useCallback((coordinates: Position) => {
-    const id = uuid();
-    pointStore.create({
-      type: 'Feature',
-      id: id,
-      geometry: {
-        type: 'Point',
-        coordinates: coordinates
-      },
-      properties: {
-        name: `${t('point')} ${(pointStore.list()?.length ?? 0) + 1}`,
-        timestamp: Date.now(),
-        description: '',
-        images: [],
-        isVisible: true
-      }
-    });
-    setPointIntent(undefined);
-    onPointSelected(id);
-    return id;
-  }, [pointStore.create, pointStore.list, t, onPointSelected]);
-
   const [acceptPoint, setAcceptPoint] = useState(false);
-
-  useEffect(() => {
-    if (acceptPoint) {
-      const newPosition = [viewport.longitude, viewport.latitude];
-      if (selectedScopeId) {
-        createNewPoint(newPosition);
-      } else {
-        setPointIntent(newPosition);
-      }
-      setAcceptPoint(false);
-    }
-  }, [acceptPoint, viewport.longitude, viewport.latitude, selectedScopeId, createNewPoint, pointList]);
 
   const onLongTap = useCallback((position: Position) => {
     setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
@@ -249,7 +217,7 @@ const MapView: FC<MainContentProps> = ({
       initialPosition: position,
       onAccept: () => setAcceptPoint(true)
     });
-  }, [editingPosition.start, setViewport]);
+  }, [setViewport, editingPosition.start]);
 
   const longTouchTimer = useRef<number>();
 
@@ -259,6 +227,51 @@ const MapView: FC<MainContentProps> = ({
       longTouchTimer.current = undefined;
     }
   }, [longTouchTimer]);
+
+  useEffect(() => {
+    if (acceptPoint) {
+      setAcceptPoint(false);
+      const newPosition = [viewport.longitude, viewport.latitude];
+      if (selectedScopeId) {
+        createNewPoint(newPosition);
+      } else {
+        setPointIntent(newPosition);
+      }
+    }
+  }, [acceptPoint]);
+
+  const createNewPoint = useCallback((coordinates: Position) => {
+    setPointIntent(undefined);
+    const id = uuid();
+    pointStore.create({
+      type: 'Feature',
+      id: id,
+      geometry: {
+        type: 'Point',
+        coordinates: coordinates
+      },
+      properties: {
+        name: `${t('point')} ${(pointList?.length ?? 0) + 1}`,
+        timestamp: Date.now(),
+        description: '',
+        images: [],
+        isVisible: true
+      }
+    });
+    onPointSelected(id);
+  }, [pointStore.create, pointList, t, onPointSelected]);
+
+  useEffect(() => {
+    pointIntent && selectedScope && pointList && createNewPoint(pointIntent);
+  }, [pointIntent, selectedScope, pointList, createNewPoint]);
+
+  const handleScopeSelected = useCallback((scopeId: UUID) => {
+    onScopeSelected(scopeId);
+  }, [onScopeSelected]);
+
+  const handleScopeSelectionCancelled = useCallback(() => {
+    setPointIntent(undefined);
+  }, []);
 
   const handleTouchMove = useCallback(() => {
     disableTracking();
@@ -285,18 +298,6 @@ const MapView: FC<MainContentProps> = ({
   const handleDoubleClick = useCallback((e: MapLayerMouseEvent) => {
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
   }, [onLongTap]);
-
-  const handleScopeSelected = useCallback((scopeId: UUID) => {
-    onScopeSelected(scopeId);
-  }, [onScopeSelected]);
-
-  useEffect(() => {
-    pointIntent && pointList && createNewPoint(pointIntent);
-  }, [pointIntent, pointList, createNewPoint]);
-
-  const handleScopeSelectionCancelled = useCallback(() => {
-    setPointIntent(undefined);
-  }, []);
 
   const handlePointNavigationFitBounds = useCallback(() => {
     fitBounds(pointNavigation.getBounds());
@@ -451,7 +452,7 @@ const MapView: FC<MainContentProps> = ({
     />}
     {!!pointIntent && <ScopeSelector
       isLargeSize={isLargeSize}
-      scopes={scopeStore?.list() ?? []}
+      scopes={scopeList ?? []}
       onScopeSelected={handleScopeSelected}
       onCancel={handleScopeSelectionCancelled}
     />}

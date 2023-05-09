@@ -18,7 +18,7 @@ const usePersistedCollection = <ItemType extends CollectionItem>(collectionId: s
   const [items, setItems, isLoaded] = usePersistedState<Array<ItemType> | undefined>(collectionId, undefined);
 
   useEffect(() => {
-    if (isLoaded && items === undefined) {
+    if (isLoaded && collectionId && items === undefined) {
       setItems([]);
     }
   }, [isLoaded]);
