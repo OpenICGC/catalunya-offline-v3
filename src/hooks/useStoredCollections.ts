@@ -1,7 +1,6 @@
 import {Scope, ScopeTrack, ScopePoint, UUID} from '../types/commonTypes';
-import {removePersistenceImpl} from '../utils/persistenceImpl';
 import {useEffect, useMemo} from 'react';
-import usePersistedState from './usePersistedState';
+import usePersistedState, {clear} from './usePersistedState';
 
 type CollectionItem = {
   id: UUID
@@ -68,8 +67,8 @@ export const useScopes = (): persistedCollectionInterface<Scope> => {
     },
     delete: (id) => {
       if (items === undefined) throw new Error('Data not loaded. Cannot delete items. Please check item list is not undefined before calling delete.');
-      removePersistenceImpl(`scopes/${id}/points`); // TODO this is low-level, no notifications!
-      removePersistenceImpl(`scopes/${id}/tracks`); // TODO this is low-level, no notifications!
+      clear(`scopes/${id}/points`);
+      clear(`scopes/${id}/tracks`);
       setItems(prevData => prevData?.filter(item => item.id !== id));
     }
   }), [items, setItems]);

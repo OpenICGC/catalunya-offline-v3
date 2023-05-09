@@ -61,4 +61,11 @@ const usePersistedState = <T> (key: string, defaultValue: T): usePersistedStateR
   return [getValue, setWithPersistence, isLoaded];
 };
 
+export const clear = (key: string) => {
+  save(key, undefined);
+  window.dispatchEvent(new CustomEvent('persistedStateUpdate', {
+    detail: {key, value: undefined}
+  }));
+};
+
 export default usePersistedState;
