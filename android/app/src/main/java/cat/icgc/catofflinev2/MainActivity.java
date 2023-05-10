@@ -1,4 +1,4 @@
-package cat.icgc.catofflinev2;
+package cat.icgc.catofflinev3;
 
 import com.getcapacitor.BridgeActivity;
 

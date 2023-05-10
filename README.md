@@ -54,7 +54,7 @@ SENTRY_AUTH_TOKEN=
 The ADB command to explore the App filesystem in Android is:
 
 ```bash
-adb shell run-as cat.icgc.catofflinev2 ls -lha /data/user/0/cat.icgc.catofflinev2/files/offlineData
+adb shell run-as cat.icgc.catofflinev3 ls -lha /data/user/0/cat.icgc.catofflinev3/files/offlineData
 ```
 
 ## Run in develompment mode

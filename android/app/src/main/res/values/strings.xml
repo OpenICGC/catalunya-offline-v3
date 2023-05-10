@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Catalunya Offline</string>
     <string name="title_activity_main">Catalunya Offline</string>
-    <string name="package_name">cat.icgc.catofflinev2</string>
-    <string name="custom_url_scheme">cat.icgc.catofflinev2</string>
+    <string name="package_name">cat.icgc.catofflinev3</string>
+    <string name="custom_url_scheme">cat.icgc.catofflinev3</string>
     <string name="capacitor_background_geolocation_notification_channel_name">Background Tracking</string>
 </resources>

@@ -6,7 +6,7 @@ const remoteDebug = process.env.LIVE_RELOAD_IP ? {
 } : {};
 
 const config: CapacitorConfig = {
-  appId: 'cat.icgc.catofflinev2',
+  appId: 'cat.icgc.catofflinev3',
   appName: 'Catalunya Offline',
   webDir: 'dist',
   bundledWebRuntime: false,
