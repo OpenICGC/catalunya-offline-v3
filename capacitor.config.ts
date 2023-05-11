@@ -15,7 +15,8 @@ const config: CapacitorConfig = {
     ...remoteDebug
   },
   ios: {
-    contentInset: 'always' //https://forum.ionicframework.com/t/ios-notch-safe-area-inconsistent-behavior/203053/3
+    contentInset: 'always', //https://forum.ionicframework.com/t/ios-notch-safe-area-inconsistent-behavior/203053/3
+    scheme: 'Catalunya Offline'
   },
   plugins: {
     CapacitorSQLite: { // See https://github.com/capacitor-community/sqlite/issues/363
