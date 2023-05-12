@@ -1,7 +1,6 @@
 {
   "version": 8,
   "name": "icgc_mapa_lleure_catalunya",
-  "metadata": {"maputnik:renderer": "mbgljs"},
   "center": [1.537786, 41.837539],
   "zoom": 12,
   "bearing": 0,
@@ -19,17 +18,17 @@
     "terrain": {
       "type": "raster-dem",
       "tiles": [
-        "https://betaserver.icgc.cat/tileserver3/tileserver.php/cat-offline-v2-terrain/{z}/{x}/{y}.png"
+        "https://geoserveis.icgc.cat/servei/catalunya/contextmaps-terreny-5m-rgb/wmts/{z}/{x}/{y}.png"
       ],
       "tileSize": 256,
       "bounds": [
-        -1,
-        40,
-        7,
-        43
+        0,
+        40.4553,
+        3.3344,
+        43.0649
       ],
       "minzoom": 6,
-      "maxzoom": 11
+      "maxzoom": 12
     }
   },
   "sprite": "https://geoserveis.icgc.cat/vector-tiles/simbologia/sprites1/sprite",

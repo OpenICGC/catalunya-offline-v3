@@ -53,7 +53,7 @@ mbtiles(maplibregl);
 // See https://github.com/mapbox/mapbox-gl-js/issues/3893
 maplibregl.RasterDEMTileSource.prototype.serialize = maplibregl.RasterTileSource.prototype.serialize;
 
-export type MainContentProps = {
+export type MapViewProps = {
   baseMapId: string,
   onManagerChanged: (newManager: Manager) => void,
   selectedScopeId?: UUID,
@@ -65,7 +65,7 @@ export type MainContentProps = {
   visibleLayers: Array<number>,
 };
 
-const MapView: FC<MainContentProps> = ({
+const MapView: FC<MapViewProps> = ({
   baseMapId,
   onManagerChanged,
   selectedScopeId,

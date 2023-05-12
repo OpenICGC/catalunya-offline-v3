@@ -22,11 +22,11 @@ const useMapStyle = (baseMapId: string): useMapStyleType => {
   useEffect(() => {
     const baseMap = BASEMAPS.find(({id}) => id === baseMapId);
     if (baseMap) {
-      if (isOfflineReady) {
+      if (isOfflineReady === true) {
         CalculateOfflineMapStyle(downloadStatus, baseMap).then(removeHiddenLayers).then(setMapStyle);
-      } else {
+      } else if (isOfflineReady === false) {
         fetch(baseMap.style).then(response => response.json()).then(removeHiddenLayers).then(setMapStyle);
-      }
+      } // isOfflineReady can be undefined. In this case, do nothing.
     }
   }, [baseMapId, isOfflineReady]);
 
