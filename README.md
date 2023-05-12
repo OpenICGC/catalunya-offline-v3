@@ -145,6 +145,25 @@ The applied language will be determined by:
 There are other detection strategies available, see
 [https://github.com/i18next/i18next-browser-languageDetector](https://github.com/i18next/i18next-browser-languageDetector).
 
+
+## Preparing datasets and styles
+
+The base URL for accessing resources is defined in `src/config.ts`, in the `BASE_URL` const.
+
+The application expects to find the following resources in `BASE_URL`:
+
+* Two mbtiles files for offline usage named:
+  * `openmaptiles.mbtiles` base cartography (vector tiles following OpenMapTiles schema), and
+  * `terrain.mbtiles` in terrain-rgb format.
+* A `glyphs.zip` file that will be used offline. Glyphs are shared across all styles, make sure to include all used typographies here.
+* For each map style ('estandard' and 'lleure' at the time of writing):
+  * The map style definition file (for instance, `estandard.json` or `lleure.json`). This will be used verbatim in online mode, so make sure URLs for sources, sprites and glyphs point to publicly available services. In offline mode, these URLS will be rewritten to point to the locally downloaded versions. Please keep the source id's untouched.
+  * The thumbnail to be displayed in style switcher (for example, `thumbnail-estandard.png'). It is expected to be in `png` format.
+  * A zip file containing the sprites for the style (for example, `sprites-estandard.zip`).
+
+You can find a copy of the actual published sprites, glyphs, thumbnails and styles (that is, all resources except for mbtiles, for weight reasons) in the `resources/example-styles/official/` folder. We highly recommend to keep these sample resources in sync with the ones published in production, as backup and for reference.
+
+
 ## License
 
 Copyright (c) 2023 GeoStart (MIT License)  
