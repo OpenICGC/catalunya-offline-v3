@@ -31,7 +31,7 @@
       "maxzoom": 12
     }
   },
-  "sprite": "https://geoserveis.icgc.cat/vector-tiles/simbologia/sprites1/sprite",
+  "sprite": "https://datacloud.icgc.cat/datacloud/catalunya-offline/sprites_estandard/sprite",
   "glyphs": "https://geoserveis.icgc.cat/vector-tiles/simbologia/glyphs/{fontstack}/{range}.pbf",
   "layers": [
     {
