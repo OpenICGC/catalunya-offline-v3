@@ -121,4 +121,13 @@ export const BASEMAPS: BaseMaps = [{
   style: `${BASE_URL}/lleure.json`,
   thumbnail: `${BASE_URL}/thumbnail-lleure.png`,
   sprites: `${BASE_URL}/sprites-lleure.zip`
+},{
+  id: 'ortofoto',
+  labels: {
+    ca: 'Ortofoto (només online)',
+    en: 'Ortophoto (online only)',
+    es: 'Ortofoto (solo online)'
+  },
+  style: 'https://geoserveis.icgc.cat/contextmaps/icgc_orto_estandard.json',
+  thumbnail: `${BASE_URL}/thumbnail-ortofoto.png`
 }];

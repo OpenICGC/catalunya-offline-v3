@@ -48,13 +48,12 @@ export const CalculateOfflineMapStyle = async (downloadStatus: downloadStatusTyp
     // Inform offline mbtiles reader about file locations
     await setDbPaths(
       Object.fromEntries(
-        Object.keys(newStyle.sources).map(sourceId => {
-          const filePath = basePath + '/' + mbtilesAssets.find(mb => mb.localPath.endsWith(sourceId + '.mbtiles'))?.localPath;
-          return [sourceId, filePath];
-        })
+        Object.keys(newStyle.sources)
+          .map(sourceId => [sourceId, mbtilesAssets.find(mb => mb.localPath.endsWith(sourceId + '.mbtiles'))?.localPath])
+          .filter(([,offlineAsset]) => offlineAsset !== undefined)
+          .map(([sourceId, offlineAsset]) => ([sourceId, basePath + '/' + offlineAsset]))
       )
     );
-
     return newStyle;
   }
 };
