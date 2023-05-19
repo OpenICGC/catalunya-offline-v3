@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 
 //GEOCOMPONENTS
@@ -20,7 +20,7 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 //UTILS
 import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
-import {FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
+import {BASEMAPS, DEFAULT_MAX_ZOOM, FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/usePersistedCollections';
 import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
 import {Position} from 'geojson';
@@ -122,6 +122,8 @@ const MapView: FC<MapViewProps> = ({
   const [isLargeSize] = useIsLargeSize();
   const [gpsPositionColor] = useGpsPositionColor();
 
+  const maxZoom = useMemo(() => BASEMAPS.find(({id}) => id === baseMapId)?.maxZoom ?? DEFAULT_MAX_ZOOM, [baseMapId]);
+
   const fitBounds = useCallback((bounds) => {
     const width = mapRef.current?.getContainer().offsetWidth;
     const height = mapRef.current?.getContainer().offsetHeight;
@@ -204,20 +206,20 @@ const MapView: FC<MapViewProps> = ({
     setViewport({
       longitude: point.geometry.coordinates[0],
       latitude: point.geometry.coordinates[1],
-      zoom: MAP_PROPS.maxZoom
+      zoom: maxZoom
     });
     onPointSelected(point.id);
-  }, [onPointSelected, setViewport]);
+  }, [onPointSelected, setViewport, maxZoom]);
 
   const [acceptPoint, setAcceptPoint] = useState(false);
 
   const onLongTap = useCallback((position: Position) => {
-    setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
+    setViewport({longitude: position[0], latitude: position[1], zoom: maxZoom});
     editingPosition.start({
       initialPosition: position,
       onAccept: () => setAcceptPoint(true)
     });
-  }, [setViewport, editingPosition.start]);
+  }, [setViewport, editingPosition.start, maxZoom]);
 
   const longTouchTimer = useRef<number>();
 
@@ -385,7 +387,6 @@ const MapView: FC<MapViewProps> = ({
     recordingTrack.stop();
   }, [recordingTrack.stop]);
 
-
   return <>
     {isActive && <SearchBoxAndMenu
       onContextualMenuClick={handleContextualMenu}
@@ -398,6 +399,7 @@ const MapView: FC<MapViewProps> = ({
     {mapStyle && <MapComponent
       ref={mapRef}
       mapStyle={mapStyle}
+      maxZoom={maxZoom}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}

@@ -30,7 +30,7 @@ import styled from '@mui/material/styles/styled';
 
 import FeaturesSummary from './FeaturesSummary';
 
-import {IS_WEB, MAP_PROPS} from '../../config';
+import {DEFAULT_MAX_ZOOM, IS_WEB} from '../../config';
 import useImages from '../../hooks/useImages';
 import {openPhoto} from '../../utils/camera';
 import useEditingPosition from '../../hooks/singleton/useEditingPosition';
@@ -253,7 +253,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const startEditingPosition = () => {
     const position = point.geometry.coordinates;
-    setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
+    setViewport({longitude: position[0], latitude: position[1], zoom: DEFAULT_MAX_ZOOM});
     editingPosition.start({
       initialPosition: position,
       onAccept: () => setAcceptPoint(true),

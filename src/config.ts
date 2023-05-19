@@ -22,9 +22,10 @@ export const MAX_ALLOWED_IMPORT_FEATURES = 100;
 
 export const FIT_BOUNDS_PADDING = 50;
 
+export const DEFAULT_MAX_ZOOM = 17;
+
 export const MAP_PROPS = {
   minZoom: 6,
-  maxZoom: 17,
   maxPitch: 68,
   hash: false
 };
@@ -129,5 +130,6 @@ export const BASEMAPS: BaseMaps = [{
     es: 'Ortofoto (solo online)'
   },
   style: 'https://geoserveis.icgc.cat/contextmaps/icgc_orto_estandard.json',
-  thumbnail: `${BASE_URL}/thumbnail-ortofoto.png`
+  thumbnail: `${BASE_URL}/thumbnail-ortofoto.png`,
+  maxZoom: 18
 }];
