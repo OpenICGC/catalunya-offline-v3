@@ -101,10 +101,10 @@ const FabButton: FC<FabButtonProps> = ({
     }
   };
 
-  const orientationBgcolor = bearing == 0 && pitch == 0 ? 'grey.400' : 'grey.800';
-  const orientationIconColor = bearing == 0 && pitch == 0 ? 'rgba(255, 255, 255, 0.33)' : 'common.white';
+  const orientationBgcolor = bearing == 0 && pitch == 0 ? 'grey.800' : 'primary.main';
+  const orientationIconColor = 'common.white';
   const orientationNorthColor = bearing == 0 && pitch == 0 ? '#800' : '#C00';
-  const orientationSouthColor = bearing == 0 && pitch == 0 ? '#FFF' : grey[800];
+  const orientationSouthColor = grey[800];
 
   const orientation = {
     ...buttonBase,
