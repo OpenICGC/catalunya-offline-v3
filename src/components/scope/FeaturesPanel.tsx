@@ -166,13 +166,16 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   };
   
   const tabsSx = {
-    color: 'action.disabled',
+    color: 'common.white',
+    //color: lighten(scope.color, 0.75),
+    bgcolor: scope.color,
     '& .Mui-selected': {
-      bgcolor: lighten(scope.color, 0.25),
-      color: (theme: Theme) => theme.palette.getContrastText(lighten(scope.color, 0.25)),
+      bgcolor: 'common.white',
+      color: 'grey.800',
+      fontWeight: 900
     },
     '& .MuiTabs-indicator': {
-      bgcolor: (theme: Theme) => theme.palette.getContrastText(lighten(scope.color,0.25))
+      bgcolor: 'common.white'
     }
   };
 
