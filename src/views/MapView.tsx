@@ -33,7 +33,7 @@ import useGeolocation from '../hooks/singleton/useGeolocation';
 import usePointNavigation from '../hooks/singleton/usePointNavigation';
 import useRecordingTrack from '../hooks/singleton/useRecordingTrack';
 import useTrackNavigation from '../hooks/singleton/useTrackNavigation';
-import {ContextMapsResult, Manager, ScopePoint, UUID} from '../types/commonTypes';
+import {ContextMapsResult, Manager, ScopePoint, ScopeTrack, UUID} from '../types/commonTypes';
 import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
 import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 import useMapStyle from '../hooks/useMapStyle';
@@ -44,6 +44,8 @@ const HEADER_HEIGHT = 48;
 const SEARCHBOX_HEIGHT = 64;
 const POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT= 144;
 const TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT = 283;
+
+const interactiveLayerIds = ['trackList'];
 
 mbtiles(maplibregl);
 
@@ -211,6 +213,17 @@ const MapView: FC<MapViewProps> = ({
     onPointSelected(point.id);
   }, [onPointSelected, setViewport, maxZoom]);
 
+  const selectTrack = useCallback((track: ScopeTrack) => {
+    const bounds = track?.geometry?.coordinates.reduce<[number, number, number, number]>((bbox, position) => ([
+      Math.min(bbox[0], position[0]), // xMin
+      Math.min(bbox[1], position[1]), // yMin
+      Math.max(bbox[2], position[0]), // xMax
+      Math.max(bbox[3], position[1])  // yMax
+    ]), [180, 90, -180, -90]);
+    bounds && fitBounds(bounds);
+    onTrackSelected(track.id);
+  }, [fitBounds, onTrackSelected]);
+
   const [acceptPoint, setAcceptPoint] = useState(false);
 
   const onLongTap = useCallback((position: Position) => {
@@ -290,12 +303,23 @@ const MapView: FC<MapViewProps> = ({
     }, 500);
   }, [clearLongTouchTimer, longTouchTimer, onLongTap]);
 
-  const handleMapClick = useCallback(() => {
+  const handleMapClick = useCallback(({features}) => {
     setContextualMenuOpen(false);
     setSearchBoxHidden(!isSearchBoxHidden);
     setFabOpen(false);
     setFabHidden(!isFabHidden);
-  }, [isSearchBoxHidden, isFabHidden]);
+    if (features.length) { // A feature was clicked. It can only be from trackList, as it's de only interactiveLayer.
+      // Build a proper ScopeFeature from the information we obtained on the onClick event.
+      const {id, ...properties} = features[0].properties;
+      const scopeFeature = {
+        type: 'Feature',
+        id,
+        properties,
+        geometry: features[0].geometry
+      } as ScopeTrack;
+      selectTrack(scopeFeature);
+    }
+  }, [isSearchBoxHidden, isFabHidden, selectTrack]);
 
   const handleDoubleClick = useCallback((e: MapLayerMouseEvent) => {
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
@@ -410,6 +434,7 @@ const MapView: FC<MapViewProps> = ({
       onTouchCancel={clearLongTouchTimer}
       onClick={handleMapClick}
       onDblClick={handleDoubleClick}
+      interactiveLayerIds={interactiveLayerIds}
     >
       {!editingPosition.isEditing && isActive && <FabButton
         isFabOpen={isFabOpen}

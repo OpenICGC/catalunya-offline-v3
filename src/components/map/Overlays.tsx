@@ -131,7 +131,13 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
 
       setTrackListData({
         type: 'FeatureCollection',
-        features: features
+        features: features.map(feature => ({
+          ...feature,
+          properties: {
+            ...feature.properties,
+            id: feature.id // Hacking id into feature properties so it can be recovered on an "onClick" event
+          }
+        }))
       });
     }
   }, [isActive, trackList, scopeColor]);
