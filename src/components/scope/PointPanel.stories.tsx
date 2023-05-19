@@ -46,7 +46,7 @@ Default.args = {
     id: uuidv4(),
     geometry: {
       type: 'Point',
-      coordinates: [40.4125, -3.6897, 1225]
+      coordinates: [40.41123456, -3.68123456, 1225]
     },
     properties: {
       name: 'Masía',
