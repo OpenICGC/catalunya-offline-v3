@@ -24,7 +24,7 @@ export const FIT_BOUNDS_PADDING = 50;
 
 export const MAP_PROPS = {
   minZoom: 6,
-  maxZoom: 16,
+  maxZoom: 17,
   maxPitch: 68,
   hash: false
 };
@@ -53,7 +53,7 @@ export const COLOR_PALETTES = [
 
 const DATASET: 'icgc' | 'mtc25m' | 'catalunya' | 'madrid' | 'vigo' | 'galicia' = 'icgc';
 
-const BASE_URL = DATASET === 'icgc' ? 'https://datacloud.icgc.cat/datacloud/catalunya-offline' : `https://cdn.geomatico.es/datasets/${DATASET}`;
+const BASE_URL = DATASET === 'icgc' ? 'https://datacloud.icgc.cat/datacloud/catalunya-offline' : `https://cdn.geomatico.es/datasets/${DATASET}`; // 'https://d3f7z3c5u0qoak.cloudfront.net';
 
 const LATITUDES: Record<string, number> = {
   icgc: 40.5,
