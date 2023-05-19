@@ -15,7 +15,7 @@ import usePointNavigation from '../../hooks/singleton/usePointNavigation';
 import useTrackNavigation from '../../hooks/singleton/useTrackNavigation';
 import useScopeFeaturesPanelTab from '../../hooks/persistedStates/useScopeFeaturesPanelTab';
 import useViewport from '../../hooks/singleton/useViewport';
-import {MAP_PROPS} from '../../config';
+import {DEFAULT_MAX_ZOOM} from '../../config';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -79,7 +79,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   }, [acceptPoint]);
 
   const pointAdd = useCallback(() => {
-    setViewport({zoom: MAP_PROPS.maxZoom});
+    setViewport({zoom: DEFAULT_MAX_ZOOM});
     editingPosition.start({
       onAccept: () => setAcceptPoint(true)
     });

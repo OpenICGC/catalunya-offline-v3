@@ -10,7 +10,8 @@ export type BaseMap = {
   },
   thumbnail: string,
   style: string,
-  sprites?: string
+  sprites?: string,
+  maxZoom?: number
 }
 
 export type BaseMaps = Array<BaseMap>
