@@ -14,8 +14,8 @@ import OrientationIcon from '../icons/Compass';
 import LocationDisabledIcon from '@mui/icons-material/LocationDisabled';
 import NoTrackingIcon from '@mui/icons-material/LocationSearching';
 import TrackingIcon from '@mui/icons-material/MyLocation';
-import NavigatingIcon from '@mui/icons-material/Explore';
 import LayersIcon from '@mui/icons-material/Layers';
+import NavigationIcon from '../icons/NavigationIcon';
 import BaseMapsIcon from '@mui/icons-material/Map';
 import ScopesIcon from '@mui/icons-material/Folder';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
@@ -235,7 +235,7 @@ const FabButton: FC<FabButtonProps> = ({
         locationStatus === LOCATION_STATUS.DISABLED ? <LocationDisabledIcon/> :
           locationStatus === LOCATION_STATUS.NOT_TRACKING ? <NoTrackingIcon/> :
             locationStatus === LOCATION_STATUS.TRACKING ? <TrackingIcon/> :
-              <NavigatingIcon/>
+              <NavigationIcon/>
       }
     </IconButton>
   </Box>;
