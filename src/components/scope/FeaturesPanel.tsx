@@ -8,11 +8,13 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
+import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import RouteIcon from '@mui/icons-material/Route';
+import ShareIcon from '@mui/icons-material/Share';
 import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -23,16 +25,15 @@ import AddTrack from '../icons/AddTrack';
 import AddButton from '../buttons/AddButton';
 import Header from '../common/Header';
 import List, {listItemType} from './List';
+import FeaturesSummary from './FeaturesSummary';
 
 //UTILS
 import {HEXColor, Scope, ScopeTrack, ScopePoint, UUID, SCOPE_FEATURES_PANEL_TAB} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
-import {lighten} from '@mui/system/colorManipulator';
-import {Theme} from '@mui/material/styles/createTheme';
-import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
-import FeaturesSummary from './FeaturesSummary';
-import ShareIcon from '@mui/icons-material/Share';
+
+
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
+import {Theme} from '@mui/material/styles/createTheme';
 
 const actionIcons = [{id: 'visibility', activeIcon: <VisibilityIcon/>, inactiveIcon: <VisibilityOffIcon/>}];
 
@@ -166,13 +167,16 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   };
   
   const tabsSx = {
-    color: 'action.disabled',
+    color: (theme: Theme) => theme.palette.getContrastText(scope.color),
+    bgcolor: scope.color,
     '& .Mui-selected': {
-      bgcolor: lighten(scope.color, 0.25),
-      color: (theme: Theme) => theme.palette.getContrastText(lighten(scope.color, 0.25)),
+      bgcolor: 'common.white',
+      color: 'grey.800',
+      fontWeight: 900,
+      boxShadow: 3
     },
     '& .MuiTabs-indicator': {
-      bgcolor: (theme: Theme) => theme.palette.getContrastText(lighten(scope.color,0.25))
+      bgcolor: 'common.white'
     }
   };
 
