@@ -37,6 +37,15 @@
     "title": "Mapas Base",
     "userStyles": "Mis mapas base"
   },
+  "delete": {
+    "message": {
+      "pointTrack": "¿Estás seguro? No se podrá deshacer.",
+      "scope": "¿Estás seguro de borrar todo el Ámbito? Se borrarán todos los puntos y trazas de este ámbito y no se podrá deshacer."
+    },
+    "point": "Borrar Punto",
+    "scope": "Borrar Ámbito",
+    "track": "Borrar Traza"
+  },
   "downloadingAlert": {
     "cancel": "Se ha cancelado la descarga",
     "content_01": "Para poder trabajar en zonas con mala cobertura, te recomendamos descargar el paquete de datos offline.",

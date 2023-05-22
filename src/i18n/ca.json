@@ -37,6 +37,15 @@
     "title": "Mapes Base",
     "userStyles": "Meus mapes base"
   },
+  "delete": {
+    "message": {
+      "pointTrack": "Estàs segur? No es podrà desfer.",
+      "scope": "Esteu segur d'esborrar tot l'Àmbit? S'esborraran tots els punts i les traces d'aquest àmbit i no es podrà desfer."
+    },
+    "point": "Esborrar Punt",
+    "scope": "Esborrar Ámbit",
+    "track": "Esborrar Trace"
+  },
   "downloadingAlert": {
     "cancel": "S'ha cancel·lat la descàrrega",
     "content_01": "Per poder treballar en zones amb mala cobertura, us recomanem descarregar el paquet de dades offline.",

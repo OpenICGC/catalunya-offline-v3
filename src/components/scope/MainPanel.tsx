@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useMemo} from 'react';
+import React, {FC, useCallback, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -12,17 +12,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
 import FolderIcon from '@mui/icons-material/Folder';
 /*import MoreHorizIcon from '@mui/icons-material/MoreHoriz';*/
-
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
 import List from './List';
 
 //UTILS
 import {useTranslation} from 'react-i18next';
-import {HEXColor, UUID, Scope} from '../../types/commonTypes';
+import {HEXColor, Scope, UUID} from '../../types/commonTypes';
 import useTheme from '@mui/material/styles/useTheme';
 import Header from '../common/Header';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
+import DeleteDialog, {FEATURE_DELETED} from '../common/DeleteDialog';
 
 const boxSx = {width: '100%', height: 0};
 
@@ -54,6 +54,7 @@ const MainPanel: FC<MainPanelProps> = ({
   const {t} = useTranslation();
   const theme = useTheme();
   const [isLargeSize] = useIsLargeSize();
+  const [deleteRequestId, setDeleteRequestId] = useState <UUID> ();
 
   const contextualMenu = useMemo(() => ([
     {
@@ -65,7 +66,7 @@ const MainPanel: FC<MainPanelProps> = ({
       id: 'delete',
       label: t('actions.delete'),
       icon: <DeleteIcon/>,
-      callbackProp: onDelete
+      callbackProp: setDeleteRequestId
     },
     /*{
       id: 'instamaps',
@@ -85,7 +86,7 @@ const MainPanel: FC<MainPanelProps> = ({
       icon: <AddIcon/>,
       callbackProp: onImport
     }
-  ]), [onDelete, /*onInstamaps, onDataSchema,*/ t]);
+  ]), [onDelete, /*onInstamaps, onDataSchema,*/ t, setDeleteRequestId]);
 
   const handleContextualMenuClick = useCallback((scopeId: UUID, menuId: string) => {
     const menuEntry = contextualMenu.find(({id}) => id === menuId);
@@ -95,6 +96,13 @@ const MainPanel: FC<MainPanelProps> = ({
   }, [contextualMenu]);
 
   const actionIcons = useMemo(() => ([{id: 'export', activeIcon: <ShareIcon/>}]), []);
+
+  const handleDeleteAccept = () => {
+    deleteRequestId && onDelete(deleteRequestId);
+    setDeleteRequestId(undefined);
+  };
+
+  const handleDeleteCancel = () => setDeleteRequestId(undefined);
 
   return <>
     <Header
@@ -113,6 +121,9 @@ const MainPanel: FC<MainPanelProps> = ({
       onContextualMenuClick={handleContextualMenuClick}
       onNameChange={onRename}
     />
+    {
+      deleteRequestId !== undefined && <DeleteDialog featureDeleted={FEATURE_DELETED.SCOPE} onAccept={handleDeleteAccept} onCancel={handleDeleteCancel}/>
+    }
     <Box sx={boxSx}>
       <AddButton onClick={onAdd}>
         <CreateNewFolderIcon/>

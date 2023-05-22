@@ -1,4 +1,4 @@
-import React, {FC, SyntheticEvent, useMemo} from 'react';
+import React, {FC, SyntheticEvent, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -33,6 +33,7 @@ import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
 import FeaturesSummary from './FeaturesSummary';
 import ShareIcon from '@mui/icons-material/Share';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
+import DeleteDialog, {FEATURE_DELETED} from '../common/DeleteDialog';
 
 const actionIcons = [{id: 'visibility', activeIcon: <VisibilityIcon/>, inactiveIcon: <VisibilityOffIcon/>}];
 
@@ -87,6 +88,8 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
 }) => {
   const {t} = useTranslation();
   const [isLargeSize] = useIsLargeSize();
+  const [deleteRequestId, setDeleteRequestId] = useState <UUID> ();
+  
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
   const handleActionPointClick = (pointId: UUID) => {
@@ -128,7 +131,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         id: 'delete',
         label: t('actions.delete'),
         icon: <DeleteIcon/>,
-        callbackProp: onDeletePoint
+        callbackProp: setDeleteRequestId
       }
       ,
       {
@@ -154,7 +157,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         id: 'delete',
         label: t('actions.delete'),
         icon: <DeleteIcon/>,
-        callbackProp: onDeleteTrack
+        callbackProp: setDeleteRequestId
       },
       {
         id: 'export',
@@ -190,6 +193,18 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     isVisible: scopeTrack.properties.isVisible
   })), [scopeTracks, scope.color]);
 
+  const handleDeletePointAccept = () => {
+    deleteRequestId && onDeletePoint(deleteRequestId);
+    setDeleteRequestId(undefined);
+  };
+  
+  const handleDeleteTrackAccept = () => {
+    deleteRequestId && onDeleteTrack(deleteRequestId);
+    setDeleteRequestId(undefined);
+  };
+
+  const handleDeleteCancel = () => setDeleteRequestId(undefined);
+  
   return <>
     <Header
       startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
@@ -199,7 +214,6 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
     >
       <FeaturesSummary numPoints={scopePoints.length} numTracks={scopeTracks.length} colorContrastFrom={scope.color}/>
     </Header>
-      
     <Tabs
       value={tabValue}
       onChange={handleTabChange}
@@ -239,7 +253,11 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         <AddButton onClick={onAddPoint}>
           <AddLocationAltIcon/>
         </AddButton>
-      </Box></>
+      </Box>
+      {
+        deleteRequestId !== undefined && <DeleteDialog featureDeleted={FEATURE_DELETED.POINT} onAccept={handleDeletePointAccept} onCancel={handleDeleteCancel}/>
+      }
+      </>
     }
     {
       tabValue === SCOPE_FEATURES_PANEL_TAB.TRACKS && <>
@@ -259,6 +277,9 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
             <AddTrack/>
           </AddButton>
         </Box>
+        {
+          deleteRequestId !== undefined && <DeleteDialog featureDeleted={FEATURE_DELETED.TRACK} onAccept={handleDeleteTrackAccept} onCancel={handleDeleteCancel}/>
+        }
       </>
     }
   </>;

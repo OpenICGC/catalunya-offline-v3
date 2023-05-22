@@ -37,6 +37,15 @@
     "title": "Base Maps",
     "userStyles": "My base maps"
   },
+  "delete": {
+    "message": {
+      "pointTrack": "Are you sure? It cannot be undone.",
+      "scope": "Are you sure to delete the entire Scope? All points and tracks in this scope will be deleted and cannot be undone."
+    },
+    "point": "Delete Point",
+    "scope": "Delete Scope",
+    "track": "Delete Track"
+  },
   "downloadingAlert": {
     "cancel": "Download has been canceled",
     "content_01": "The offline data pack is needed to work in areas with poor coverage, and we strongly encourage you to download it as soon as possible.",
