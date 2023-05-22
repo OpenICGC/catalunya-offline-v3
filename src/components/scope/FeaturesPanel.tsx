@@ -33,6 +33,7 @@ import {useTranslation} from 'react-i18next';
 
 
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
+import {Theme} from '@mui/material/styles/createTheme';
 
 const actionIcons = [{id: 'visibility', activeIcon: <VisibilityIcon/>, inactiveIcon: <VisibilityOffIcon/>}];
 
@@ -166,13 +167,13 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   };
   
   const tabsSx = {
-    color: 'common.white',
-    //color: lighten(scope.color, 0.75),
+    color: (theme: Theme) => theme.palette.getContrastText(scope.color),
     bgcolor: scope.color,
     '& .Mui-selected': {
       bgcolor: 'common.white',
       color: 'grey.800',
-      fontWeight: 900
+      fontWeight: 900,
+      boxShadow: 3
     },
     '& .MuiTabs-indicator': {
       bgcolor: 'common.white'
