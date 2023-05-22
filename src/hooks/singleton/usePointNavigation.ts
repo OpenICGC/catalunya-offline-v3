@@ -25,7 +25,7 @@ type usePointNavigationType = {
     name: string,
     color: HEXColor
   } | undefined,
-  feature: Feature<LineString, {
+  navigateToFeature: Feature<LineString, {
     bearing: number,
     distance: number
   }> | undefined,
@@ -51,7 +51,7 @@ const usePointNavigation = (): usePointNavigationType => {
 
   const isNavigating: boolean = fromPosition != undefined && toPosition != undefined;
 
-  const feature = useMemo(() => fromPosition && toPosition ? navigateToPointFeature(fromPosition, toPosition) : undefined, [fromPosition, toPosition]);
+  const navigateToFeature = useMemo(() => fromPosition && toPosition ? navigateToPointFeature(fromPosition, toPosition) : undefined, [fromPosition, toPosition]);
 
   useEffect(() => {
     if (scopePoint && !scopePoint.properties.isVisible) {
@@ -91,7 +91,7 @@ const usePointNavigation = (): usePointNavigationType => {
   return {
     isNavigating,
     target,
-    feature,
+    navigateToFeature,
     start,
     stop,
     getBounds
@@ -101,7 +101,7 @@ const usePointNavigation = (): usePointNavigationType => {
 const initialState: usePointNavigationType = {
   isNavigating: false,
   target: undefined,
-  feature: undefined,
+  navigateToFeature: undefined,
   start: () => undefined,
   stop: () => undefined,
   getBounds: () => undefined
