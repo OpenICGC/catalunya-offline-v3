@@ -67,6 +67,8 @@ export type TrackPanelProps = {
   track: ScopeTrack,
   numPoints: number,
   numTracks: number,
+  isEditing: boolean,
+  onEditing: (isEditing: boolean) => void,
   onRecordStart: () => void,
   onTrackChange: (newTrack: ScopeTrack) => void,
   onBackButtonClick: () => void,
@@ -79,14 +81,14 @@ const TrackPanel: FC<TrackPanelProps> = ({
   track,
   numPoints,
   numTracks,
+  isEditing,
+  onEditing,
   onRecordStart,
   onTrackChange,
   onBackButtonClick,
   onGoTo
 }) => {
   const {t} = useTranslation();
-
-  const [isEditing, setIsEditing] = useState(false);
   const [uneditedTrack, setUneditedTrack] = useState<ScopeTrack>();
   const {images, create, remove, save, discard} = useImages(track.properties.images);
 
@@ -119,7 +121,7 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   // HANDLERS
   const handleActionClick = useCallback((trackId: string, actionId: string) => {
-    actionId === 'rename' ? setIsEditing(true) : onGoTo(trackId);
+    actionId === 'rename' ? onEditing(true) : onGoTo(trackId);
   }, []);
 
   const handleColorChange = useCallback((trackId: UUID, color: HEXColor) =>
@@ -174,13 +176,13 @@ const TrackPanel: FC<TrackPanelProps> = ({
         images
       }
     });
-    setIsEditing(false);
+    onEditing(false);
   };
 
   const handleCancel = () => {
     discard();
     uneditedTrack && onTrackChange(uneditedTrack);
-    setIsEditing(false);
+    onEditing(false);
   };
 
   const backIcon = useMemo(() => <ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>, []);
