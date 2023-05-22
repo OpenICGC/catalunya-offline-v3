@@ -3,18 +3,20 @@ import {useScopePoints, useScopeTracks} from '../usePersistedCollections';
 import {useEffect, useState} from 'react';
 import {getImageNameWithoutPath} from '../../utils/getImageNameWithoutPath';
 import {Feature, FeatureCollection} from 'geojson';
+import {useTranslation} from 'react-i18next';
 
-const changeImagePaths = (features: Array<ScopeFeature>): Array<ScopeFeature> => features
+const formatFeatures = (features: Array<ScopeFeature>, language: string): Array<ScopeFeature> => features
   .map(feature => ({
     ...feature,
     properties: {
       ...feature.properties,
-      images: feature.properties.images
-        .map(image => 'files/' + getImageNameWithoutPath(image))
+      formattedDate: new Date(feature.properties.timestamp).toLocaleString(language),
+      images: feature.properties.images.map(image => 'files/' + getImageNameWithoutPath(image))
     }
   }));
 export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePoints?: boolean) => {
-  
+  const {i18n} = useTranslation();
+
   const [geojson, setGeojson] = useState<FeatureCollection|undefined>(undefined);
   
   const trackStore = useScopeTracks(scopeId);
@@ -25,17 +27,17 @@ export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePo
 
   useEffect(() => {
     if (tracks !== undefined && points !== undefined) {
-      const tracksWithValidImagePaths = changeImagePaths(tracks);
-      const pointsWithValidImagePaths = changeImagePaths(points);
+      const formattedTracks = formatFeatures(tracks, i18n.language);
+      const formattedPoints = formatFeatures(points, i18n.language);
 
       if ( trackId ) {
-        const track = tracksWithValidImagePaths
+        const track = formattedTracks
           .filter(track => track.geometry)
           .find(track => track.id === trackId);
         
         if (track) {
           if (includeVisiblePoints) {
-            const visiblePointsToExport = pointsWithValidImagePaths.filter(point => point.properties.isVisible);
+            const visiblePointsToExport = formattedPoints.filter(point => point.properties.isVisible);
             setGeojson({
               'type': 'FeatureCollection',
               'features': [track as Feature, ...visiblePointsToExport as Array<Feature>]
@@ -48,11 +50,11 @@ export const useGeoJSONExport = (scopeId: UUID, trackId?: UUID, includeVisiblePo
           } 
         }          
       } else { //Export all Scope
-        const allTrack = tracksWithValidImagePaths
+        const allTrack = formattedTracks
           .filter(track => track.geometry);
         setGeojson({
           'type': 'FeatureCollection',
-          'features': [...allTrack as Array<Feature>, ...pointsWithValidImagePaths as Array<Feature>]
+          'features': [...allTrack as Array<Feature>, ...formattedPoints as Array<Feature>]
         });
       }
     }

@@ -81,6 +81,7 @@ const expectedPoints = points
     ...point,
     properties: {
       ...point.properties,
+      formattedDate: new Date(point.properties.timestamp).toLocaleString(),
       images: point.properties.images
         .map(image => 'files/' + getImageNameWithoutPath(image))
     }
@@ -90,6 +91,7 @@ const expectedTracks = tracks
     ...track,
     properties: {
       ...track.properties,
+      formattedDate: new Date(track.properties.timestamp).toLocaleString(),
       images: track.properties.images
         .map(image => 'files/' + getImageNameWithoutPath(image))
     }

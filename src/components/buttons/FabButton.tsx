@@ -14,8 +14,8 @@ import OrientationIcon from '../icons/Compass';
 import LocationDisabledIcon from '@mui/icons-material/LocationDisabled';
 import NoTrackingIcon from '@mui/icons-material/LocationSearching';
 import TrackingIcon from '@mui/icons-material/MyLocation';
-import NavigatingIcon from '@mui/icons-material/Explore';
 import LayersIcon from '@mui/icons-material/Layers';
+import NavigationIcon from '../icons/NavigationIcon';
 import BaseMapsIcon from '@mui/icons-material/Map';
 import ScopesIcon from '@mui/icons-material/Folder';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
@@ -101,10 +101,10 @@ const FabButton: FC<FabButtonProps> = ({
     }
   };
 
-  const orientationBgcolor = bearing == 0 && pitch == 0 ? 'grey.400' : 'grey.800';
-  const orientationIconColor = bearing == 0 && pitch == 0 ? 'rgba(255, 255, 255, 0.33)' : 'common.white';
+  const orientationBgcolor = bearing == 0 && pitch == 0 ? 'grey.800' : 'primary.main';
+  const orientationIconColor = 'common.white';
   const orientationNorthColor = bearing == 0 && pitch == 0 ? '#800' : '#C00';
-  const orientationSouthColor = bearing == 0 && pitch == 0 ? '#FFF' : grey[800];
+  const orientationSouthColor = grey[800];
 
   const orientation = {
     ...buttonBase,
@@ -235,7 +235,7 @@ const FabButton: FC<FabButtonProps> = ({
         locationStatus === LOCATION_STATUS.DISABLED ? <LocationDisabledIcon/> :
           locationStatus === LOCATION_STATUS.NOT_TRACKING ? <NoTrackingIcon/> :
             locationStatus === LOCATION_STATUS.TRACKING ? <TrackingIcon/> :
-              <NavigatingIcon/>
+              <NavigationIcon/>
       }
     </IconButton>
   </Box>;

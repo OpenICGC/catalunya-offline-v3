@@ -12,15 +12,15 @@ export interface OverlaysProps {
   trackList?: Array<ScopeTrack>,
   scopeColor?: HEXColor,
   geolocation: Geolocation,
-  navigateToPointLine?: Feature<LineString>,
+  navigateToLine?: Feature<LineString>,
   gpsPositionColor: HEXColor,
   visibleLayers: Array<number>
 }
 
-const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocation, navigateToPointLine, gpsPositionColor, visibleLayers}) => {
+const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocation, navigateToLine, gpsPositionColor, visibleLayers}) => {
   const [trackListData, setTrackListData] = useState<FeatureCollection<LineString>>();
   const [geolocationData, setGeolocationData] = useState<FeatureCollection<Point>>();
-  const [navigateToPointLineData, setNavigateToPointLineData] = useState<FeatureCollection<LineString>>();
+  const [navigateToLineData, setNavigateToLineData] = useState<FeatureCollection<LineString>>();
 
   const extraLayersLayer = useMemo(() => {
     const props: SymbolLayer = {
@@ -71,10 +71,10 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
     return <Layer {...props}/>;
   }, []);
 
-  const navigateToPointLineLayer = useMemo(() => {
+  const navigateToLineLayer = useMemo(() => {
     const props: LineLayer = {
-      id: 'navigateToPointLine',
-      source: 'navigateToPointLine',
+      id: 'navigateToLine',
+      source: 'navigateToLine',
       type: 'line',
       paint: {
         'line-color': '#000000',
@@ -144,12 +144,12 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
 
   useEffect(() => {
     if (isActive) {
-      setNavigateToPointLineData({
+      setNavigateToLineData({
         type: 'FeatureCollection',
-        features: navigateToPointLine ? [navigateToPointLine] : []
+        features: navigateToLine ? [navigateToLine] : []
       });
     }
-  }, [isActive, navigateToPointLine]);
+  }, [isActive, navigateToLine]);
 
   useEffect(() => {
     if (isActive) {
@@ -176,8 +176,8 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
     <Source id='trackList' type='geojson' data={trackListData}>
       {trackListLayer}
     </Source>
-    <Source id='navigateToPointLine' type='geojson' data={navigateToPointLineData}>
-      {navigateToPointLineLayer}
+    <Source id='navigateToLine' type='geojson' data={navigateToLineData}>
+      {navigateToLineLayer}
     </Source>
     <Source id='geolocation' type='geojson' data={geolocationData}>
       {geolocationLayer}

@@ -1,6 +1,7 @@
 import {ImagePath} from '../types/commonTypes';
 import {useMemo, useState} from 'react';
 import {deletePhoto, takePhoto} from '../utils/camera';
+import i18n from 'i18next';
 
 type ImagesState = {
   initial: Array<ImagePath>,
@@ -20,13 +21,14 @@ const useImages = (images: Array<ImagePath>): ImagesInterface => {
   
   const [state, setState] = useState<ImagesState>({initial: images, created: [], deleted: []});
 
+
   const currentImages = useMemo(() => [
     ...state.initial,
     ...state.created
   ].filter(image => !state.deleted.includes(image)), [state]);
   
   const create = async () => {
-    const path = await takePhoto();
+    const path = await takePhoto(i18n.language);
     if (path) {
       setState({
         ...state,

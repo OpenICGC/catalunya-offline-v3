@@ -46,6 +46,12 @@
     "scope": "Borrar Ámbito",
     "track": "Borrar Traza"
   },
+  "camera": {
+    "cancel": "Cancelar",
+    "header": "Foto",
+    "photo": "Desde galería",
+    "picture": "Tomar una foto"
+  },
   "downloadingAlert": {
     "cancel": "Se ha cancelado la descarga",
     "content_01": "Para poder trabajar en zonas con mala cobertura, te recomendamos descargar el paquete de datos offline.",
