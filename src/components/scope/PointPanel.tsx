@@ -296,11 +296,11 @@ const PointPanel: FC<PointPanelProps> = ({
                 key='latitude'
                 error={!isLatitudeValid}
                 onChange={(e) => handleCoordinatesChange(e,1)}
-                value={point.geometry.coordinates[1]}
+                value={parseFloat(point.geometry.coordinates[1].toFixed(5))}
               /> : <CoordsFieldNoEditable
                 key='latitude'
                 inputProps={{ readOnly: true }}
-                defaultValue={point.geometry.coordinates[1]}
+                defaultValue={parseFloat(point.geometry.coordinates[1].toFixed(5))}
               />
             }
             <Typography sx={coordTitle} variant='caption'>{t('properties.latitude')}</Typography>
@@ -310,10 +310,10 @@ const PointPanel: FC<PointPanelProps> = ({
               <CoordsFieldEditable size='small' label='' variant='outlined' key='longitude'
                 error={!isLongitudeValid}
                 onChange={(e) => handleCoordinatesChange(e,0)}
-                value={point.geometry.coordinates[0]}
+                value={parseFloat(point.geometry.coordinates[0].toFixed(5))}
               /> : <CoordsFieldNoEditable key='longitude'
                 inputProps={{readOnly: true}}
-                defaultValue={point.geometry.coordinates[0]}
+                defaultValue={parseFloat(point.geometry.coordinates[0].toFixed(5))}
               />
             }
             <Typography sx={coordTitle} variant='caption'>{t('properties.longitude')}</Typography>
