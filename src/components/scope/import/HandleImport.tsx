@@ -13,16 +13,18 @@ export type HandleImportProps = {
   scopeId: UUID,
   onSuccess: () => void
   onError: (error: Error) => void
+  onCancel: () => void
 }
 
 const HandleImport: FC<HandleImportProps> = ({
   scopeId,
   onSuccess,
-  onError
+  onError,
+  onCancel
 }) => {
 
   const {t} = useTranslation();
-  const file = useImport({});
+  const file = useImport({}, onCancel);
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
 
@@ -54,7 +56,7 @@ const HandleImport: FC<HandleImportProps> = ({
       }
     };
 
-    if (file){
+    if (file) {
       importData(file);
     }
   }, [file]);
