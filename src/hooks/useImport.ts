@@ -10,7 +10,8 @@ type useImportOptions = {
 } 
 
 const useImport = (
-  options: useImportOptions
+  options: useImportOptions,
+  onCancel: () => void
 ) => {
   const {
     types = [
@@ -24,16 +25,18 @@ const useImport = (
   } = options;
 
   const [file, setFile] = useState<ImportedFile|undefined>(undefined);
-  
+
   useEffect(() => {
     const pickFiles = async () => {
       const result = await FilePicker.pickFiles({
         types,
         multiple: false,
         readData: true
-      });
+      }).catch(() => 
+        onCancel()
+      );
 
-      if (result.files.length && result.files[0].data) {
+      if (result && result.files.length && result.files[0].data) {
         setFile({
           ...result.files[0],
           dataDecoded: window.atob(result.files[0].data)

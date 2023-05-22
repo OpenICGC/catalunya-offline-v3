@@ -98,6 +98,12 @@ const ScopeMain: FC<ScopeMainProps> = ({
     setImportErrors(error);
   };
 
+  const handleImportCancel = () => {
+    setImportingScopeId(undefined);
+  };
+
+  console.log('importing!!: ', importingScopeId);
+
   return !selectedScope ?
     <>
       <MainPanel
@@ -126,6 +132,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
           scopeId={importingScopeId}
           onSuccess={handleImportSuccess}
           onError={handleImportError}
+          onCancel={handleImportCancel}
         />
       }
       {
