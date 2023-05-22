@@ -3,12 +3,17 @@ import {Image, PhotoViewer} from '@capacitor-community/photoviewer';
 import {deleteFile} from './filesystem';
 import {ImagePath} from '../types/commonTypes';
 import {Capacitor} from '@capacitor/core';
+import i18n from 'i18next';
 
-export const takePhoto = () => {
+export const takePhoto = (language: string) => {
 
   const imageOptions: ImageOptions = {
     allowEditing: false,
-    resultType: CameraResultType.Uri
+    resultType: CameraResultType.Uri,
+    promptLabelHeader: i18n.t('camera.header', {lng: language }),
+    promptLabelCancel: i18n.t('camera.cancel', {lng: language }),
+    promptLabelPhoto: i18n.t('camera.photo', {lng: language }),
+    promptLabelPicture: i18n.t('camera.picture', {lng: language })
   };
 
   return Camera.getPhoto(imageOptions)
