@@ -37,6 +37,12 @@
     "title": "Base Maps",
     "userStyles": "My base maps"
   },
+  "camera": {
+    "cancel": "Cancel",
+    "header": "Photo",
+    "photo": "From gallery",
+    "picture": "Take a photo"
+  },
   "downloadingAlert": {
     "cancel": "Download has been canceled",
     "content_01": "The offline data pack is needed to work in areas with poor coverage, and we strongly encourage you to download it as soon as possible.",

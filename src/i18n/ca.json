@@ -37,6 +37,12 @@
     "title": "Mapes Base",
     "userStyles": "Meus mapes base"
   },
+  "camera": {
+    "cancel": "Cancel·la",
+    "header": "Foto",
+    "photo": "De la galeria",
+    "picture": "Fes una foto"
+  },
   "downloadingAlert": {
     "cancel": "S'ha cancel·lat la descàrrega",
     "content_01": "Per poder treballar en zones amb mala cobertura, us recomanem descarregar el paquet de dades offline.",
