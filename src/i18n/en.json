@@ -38,8 +38,8 @@
     "userStyles": "My base maps"
   },
   "camera": {
-    "header": "Photo",
     "cancel": "Cancel",
+    "header": "Photo",
     "photo": "From gallery",
     "picture": "Take a photo"
   },
