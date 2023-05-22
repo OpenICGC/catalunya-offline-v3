@@ -411,6 +411,11 @@ const MapView: FC<MapViewProps> = ({
     recordingTrack.stop();
   }, [recordingTrack.stop]);
 
+  const navigateToFeature = useMemo(() => {
+    if (pointNavigation.isNavigating) return pointNavigation.navigateToFeature;
+    if (trackNavigation.isNavigating) return trackNavigation.navigateToFeature;
+  }, [pointNavigation.isNavigating, trackNavigation.isNavigating, pointNavigation.navigateToFeature, trackNavigation.navigateToFeature]);
+
   return <>
     {isActive && <SearchBoxAndMenu
       onContextualMenuClick={handleContextualMenu}
@@ -454,7 +459,7 @@ const MapView: FC<MapViewProps> = ({
         trackList={trackList}
         scopeColor={scopeColor}
         geolocation={geolocation}
-        navigateToPointLine={pointNavigation.feature}
+        navigateToLine={navigateToFeature}
         gpsPositionColor={gpsPositionColor}
         visibleLayers={visibleLayers}/>
       {isActive && <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>}
@@ -486,8 +491,8 @@ const MapView: FC<MapViewProps> = ({
     {pointNavigation.target && <PointNavigationBottomSheet
       name={pointNavigation.target.name}
       color={pointNavigation.target.color}
-      bearing={pointNavigation.feature?.properties.bearing || 0}
-      distance={pointNavigation.feature?.properties.distance || 0}
+      bearing={pointNavigation.navigateToFeature?.properties.bearing || 0}
+      distance={pointNavigation.navigateToFeature?.properties.distance || 0}
       onStop={pointNavigation.stop}
       onFitBounds={handlePointNavigationFitBounds}
       onShowDetails={handlePointNavigationShowDetails}
