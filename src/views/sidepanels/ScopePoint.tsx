@@ -8,12 +8,16 @@ import usePointNavigation from '../../hooks/singleton/usePointNavigation';
 export interface ScopePointProps {
   scopeId: UUID,
   pointId: UUID,
+  isEditing: boolean,
+  onEditing: (isEditing: boolean) => void,
   onClose: () => void
 }
 
 const ScopePoint: FC<ScopePointProps> = ({
   scopeId,
   pointId,
+  isEditing,
+  onEditing,
   onClose
 }) => {
   const scopeStore = useScopes();
@@ -39,6 +43,8 @@ const ScopePoint: FC<ScopePointProps> = ({
     point={selectedPoint}
     numPoints={numPoints}
     numTracks={numTracks}
+    isEditing={isEditing}
+    onEditing={onEditing}
     onBackButtonClick={onClose}
     onPointChange={handlePointChange}
     onGoTo={goTo}

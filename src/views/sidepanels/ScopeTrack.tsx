@@ -10,12 +10,16 @@ import useIsActive from '../../hooks/singleton/useIsActive';
 export interface ScopeTrackProps {
   scopeId: UUID,
   trackId: UUID,
+  isEditing: boolean,
+  onEditing: (isEditing: boolean) => void,
   onClose: () => void
 }
 
 const ScopeTrack: FC<ScopeTrackProps> = ({
   scopeId, 
-  trackId, 
+  trackId,
+  isEditing,
+  onEditing,
   onClose
 }) => {
   const isActive = useIsActive();
@@ -49,6 +53,8 @@ const ScopeTrack: FC<ScopeTrackProps> = ({
     track={selectedTrack}
     numPoints={numPoints}
     numTracks={numTracks}
+    isEditing={isEditing}
+    onEditing={onEditing}
     onRecordStart={recordTrack}
     onBackButtonClick={onClose}
     onTrackChange={handleTrackChange}

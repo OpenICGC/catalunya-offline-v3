@@ -105,6 +105,8 @@ export type PointPanelProps = {
     point: ScopePoint,
     numPoints: number,
     numTracks: number,
+    isEditing: boolean,
+    onEditing: (isEditing: boolean) => void,
     onBackButtonClick: () => void,
     onPointChange: (newPoint: ScopePoint) => void,
     onGoTo: (pointId: UUID) => void
@@ -115,13 +117,14 @@ const PointPanel: FC<PointPanelProps> = ({
   point,
   numPoints,
   numTracks,
+  isEditing,
+  onEditing,
   onBackButtonClick,
   onPointChange,
   onGoTo
 }) => {
   const {t} = useTranslation();
   const {viewport, setViewport} = useViewport();
-  const [isEditing, setIsEditing] = useState(false);
   const [uneditedPoint, setUneditedPoint] = useState<ScopePoint>();
   const {images, create, remove, save, discard} = useImages(point.properties.images);
   const editingPosition = useEditingPosition();
@@ -150,7 +153,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   // HANDLERS
   const handleActionClick = useCallback((pointId: string, actionId: string) => {
-    actionId === 'rename' ? setIsEditing(true) : onGoTo(pointId);
+    actionId === 'rename' ? onEditing(true) : onGoTo(pointId);
   }, []);
   
   const handleColorChange = useCallback((pointId: UUID, color: HEXColor) =>
@@ -222,7 +225,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const stopEditing = () => {
     editingPosition.cancel();
-    setIsEditing(false);
+    onEditing(false);
   };
 
   const handleAccept = () => {
