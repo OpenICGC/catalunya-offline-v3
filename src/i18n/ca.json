@@ -37,6 +37,12 @@
     "title": "Mapes Base",
     "userStyles": "Meus mapes base"
   },
+  "camera": {
+    "cancel": "Cancel·la",
+    "header": "Foto",
+    "photo": "De la galeria",
+    "picture": "Fes una foto"
+  },
   "delete": {
     "message": {
       "pointTrack": "Esteu segur de voler esborrar  aquest element? Aquesta operació no es podrà desfer.",
@@ -45,12 +51,6 @@
     "point": "Esborra el Punt",
     "scope": "Esborra l'Àmbit",
     "track": "Esborra la Traça"
-  },
-  "camera": {
-    "cancel": "Cancel·la",
-    "header": "Foto",
-    "photo": "De la galeria",
-    "picture": "Fes una foto"
   },
   "downloadingAlert": {
     "cancel": "S'ha cancel·lat la descàrrega",

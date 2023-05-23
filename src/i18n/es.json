@@ -37,6 +37,12 @@
     "title": "Mapas Base",
     "userStyles": "Mis mapas base"
   },
+  "camera": {
+    "cancel": "Cancelar",
+    "header": "Foto",
+    "photo": "Desde galería",
+    "picture": "Tomar una foto"
+  },
   "delete": {
     "message": {
       "pointTrack": "¿Estás seguro de querer borrar este elemento? Esta operación no se podrá deshacer.",
@@ -45,12 +51,6 @@
     "point": "Borrar Punto",
     "scope": "Borrar Ámbito",
     "track": "Borrar Traza"
-  },
-  "camera": {
-    "cancel": "Cancelar",
-    "header": "Foto",
-    "photo": "Desde galería",
-    "picture": "Tomar una foto"
   },
   "downloadingAlert": {
     "cancel": "Se ha cancelado la descarga",
