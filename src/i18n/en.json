@@ -39,8 +39,8 @@
   },
   "delete": {
     "message": {
-      "pointTrack": "Are you sure? It cannot be undone.",
-      "scope": "Are you sure to delete the entire Scope? All points and tracks in this scope will be deleted and cannot be undone."
+      "pointTrack": "Are you sure to delete this element? This action cannot be undone.",
+      "scope": "Are you sure to delete this entire Scope and its associated Points and Tracks? This action cannot be undone."
     },
     "point": "Delete Point",
     "scope": "Delete Scope",

@@ -39,12 +39,12 @@
   },
   "delete": {
     "message": {
-      "pointTrack": "Estàs segur? No es podrà desfer.",
-      "scope": "Esteu segur d'esborrar tot l'Àmbit? S'esborraran tots els punts i les traces d'aquest àmbit i no es podrà desfer."
+      "pointTrack": "Esteu segur de voler esborrar  aquest element? Aquesta operació no es podrà desfer.",
+      "scope": "Esteu segur de voler esborrar aquest àmbit i tots els punts i traces que conté? Aquesta operació no es podrà desfer."
     },
-    "point": "Esborrar Punt",
-    "scope": "Esborrar Ámbit",
-    "track": "Esborrar Trace"
+    "point": "Esborra el Punt",
+    "scope": "Esborra l'Àmbit",
+    "track": "Esborra la Traça"
   },
   "camera": {
     "cancel": "Cancel·la",

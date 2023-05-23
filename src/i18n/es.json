@@ -39,8 +39,8 @@
   },
   "delete": {
     "message": {
-      "pointTrack": "¿Estás seguro? No se podrá deshacer.",
-      "scope": "¿Estás seguro de borrar todo el Ámbito? Se borrarán todos los puntos y trazas de este ámbito y no se podrá deshacer."
+      "pointTrack": "¿Estás seguro de querer borrar este elemento? Esta operación no se podrá deshacer.",
+      "scope": "¿Estás seguro de querer borrar este Ámbito, junto con todos sus puntos y trazas? Esta operación no se podrá deshacer."
     },
     "point": "Borrar Punto",
     "scope": "Borrar Ámbito",
