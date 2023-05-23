@@ -37,6 +37,12 @@
     "title": "Base Maps",
     "userStyles": "My base maps"
   },
+  "camera": {
+    "cancel": "Cancel",
+    "header": "Photo",
+    "photo": "From gallery",
+    "picture": "Take a photo"
+  },
   "delete": {
     "message": {
       "pointTrack": "Are you sure to delete this element? This action cannot be undone.",
@@ -45,12 +51,6 @@
     "point": "Delete Point",
     "scope": "Delete Scope",
     "track": "Delete Track"
-  },
-  "camera": {
-    "cancel": "Cancel",
-    "header": "Photo",
-    "photo": "From gallery",
-    "picture": "Take a photo"
   },
   "downloadingAlert": {
     "cancel": "Download has been canceled",
