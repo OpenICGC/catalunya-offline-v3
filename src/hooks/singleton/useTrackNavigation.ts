@@ -76,7 +76,7 @@ const useTrackNavigation = (): useTrackNavigationType => {
   const currentPositionIndex: number | undefined = snappedFeature?.properties?.index;
   const isOutOfTrack: boolean = snappedDistance ? snappedDistance > trackTolerance : false;
 
-  const navigateToFeature = useMemo(() => fromPosition && snappedFeature && !isOutOfTrack ? navigateToPointFeature(fromPosition, snappedFeature.geometry.coordinates) : undefined, [fromPosition, snappedFeature?.geometry.coordinates]);
+  const navigateToFeature = useMemo(() => fromPosition && snappedFeature ? navigateToPointFeature(fromPosition, snappedFeature.geometry.coordinates) : undefined, [fromPosition, snappedFeature?.geometry.coordinates]);
 
   useEffect(() => {
     if (scopeTrack && !scopeTrack.properties.isVisible) {
