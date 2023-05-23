@@ -37,6 +37,15 @@
     "title": "Mapes Base",
     "userStyles": "Meus mapes base"
   },
+  "delete": {
+    "message": {
+      "pointTrack": "Esteu segur de voler esborrar  aquest element? Aquesta operació no es podrà desfer.",
+      "scope": "Esteu segur de voler esborrar aquest àmbit i tots els punts i traces que conté? Aquesta operació no es podrà desfer."
+    },
+    "point": "Esborra el Punt",
+    "scope": "Esborra l'Àmbit",
+    "track": "Esborra la Traça"
+  },
   "camera": {
     "cancel": "Cancel·la",
     "header": "Foto",

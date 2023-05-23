@@ -37,6 +37,15 @@
     "title": "Mapas Base",
     "userStyles": "Mis mapas base"
   },
+  "delete": {
+    "message": {
+      "pointTrack": "¿Estás seguro de querer borrar este elemento? Esta operación no se podrá deshacer.",
+      "scope": "¿Estás seguro de querer borrar este Ámbito, junto con todos sus puntos y trazas? Esta operación no se podrá deshacer."
+    },
+    "point": "Borrar Punto",
+    "scope": "Borrar Ámbito",
+    "track": "Borrar Traza"
+  },
   "camera": {
     "cancel": "Cancelar",
     "header": "Foto",

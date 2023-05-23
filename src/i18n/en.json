@@ -37,6 +37,15 @@
     "title": "Base Maps",
     "userStyles": "My base maps"
   },
+  "delete": {
+    "message": {
+      "pointTrack": "Are you sure to delete this element? This action cannot be undone.",
+      "scope": "Are you sure to delete this entire Scope and its associated Points and Tracks? This action cannot be undone."
+    },
+    "point": "Delete Point",
+    "scope": "Delete Scope",
+    "track": "Delete Track"
+  },
   "camera": {
     "cancel": "Cancel",
     "header": "Photo",
