@@ -111,7 +111,8 @@ export const BASEMAPS: BaseMaps = [{
   },
   style: `${BASE_URL}/estandard.json`,
   thumbnail: `${BASE_URL}/thumbnail-estandard.png`,
-  sprites: `${BASE_URL}/sprites-estandard.zip`
+  sprites: `${BASE_URL}/sprites-estandard.zip`,
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
 },{
   id: 'lleure',
   labels: {
@@ -121,7 +122,8 @@ export const BASEMAPS: BaseMaps = [{
   },
   style: `${BASE_URL}/lleure.json`,
   thumbnail: `${BASE_URL}/thumbnail-lleure.png`,
-  sprites: `${BASE_URL}/sprites-lleure.zip`
+  sprites: `${BASE_URL}/sprites-lleure.zip`,
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
 },{
   id: 'ortofoto',
   labels: {
@@ -131,5 +133,6 @@ export const BASEMAPS: BaseMaps = [{
   },
   style: 'https://geoserveis.icgc.cat/contextmaps/icgc_orto_estandard.json',
   thumbnail: `${BASE_URL}/thumbnail-ortofoto.png`,
-  maxZoom: 18
+  maxZoom: 18,
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya - Esri, DigitalGlobe, USDA, USGS, GeoEye, Getmapping, AeroGRID, IGN, IGP, UPR-EGP, and the GIS community - © OpenMapTiles © OpenStreetMap contributors'
 }];
