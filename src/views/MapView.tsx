@@ -39,6 +39,7 @@ import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 import useMapStyle from '../hooks/useMapStyle';
 import useIsActive from '../hooks/singleton/useIsActive';
 import Overlays from '../components/map/Overlays';
+import GpsDisabledAlert from '../components/common/GpsDisabledAlert';
 
 const HEADER_HEIGHT = 48;
 const SEARCHBOX_HEIGHT = 64;
@@ -513,6 +514,12 @@ const MapView: FC<MapViewProps> = ({
       onShowDetails={handleTrackNavigationShowDetails}
       onTopChanged={handleTopChanged}
     />}
+    <GpsDisabledAlert
+      isNavigatingToTrack={trackNavigation.target !== undefined}
+      isNavigatingToPoint={pointNavigation.target !== undefined}
+      isRecordingTrack={recordingTrack.isRecording}
+      isGeolocationAvailable={geolocation.latitude !== null && geolocation.longitude !== null}
+    />
     {isSettingsDialogOpen && <SettingsView
       onClose={() => setSettingsDialogOpen(false)}
     />}

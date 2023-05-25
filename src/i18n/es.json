@@ -98,6 +98,10 @@
     "backgroundTitle": "Geolocalización activa en segundo plano",
     "requestPermission": "Catalunya Offline necesita acceder a la geolocalización, pero se ha denegado el permiso.\n\n¿Desea cambiar la configuración?"
   },
+  "gpsAlert": {
+    "message": "Es recomendable habilitar el gps para poder seguir",
+    "title": "GPS Deshabilitado"
+  },
   "layerManager": {
     "camping": "Campings",
     "mountainHut": "Refugios",
