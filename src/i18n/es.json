@@ -99,8 +99,8 @@
     "requestPermission": "Catalunya Offline necesita acceder a la geolocalización, pero se ha denegado el permiso.\n\n¿Desea cambiar la configuración?"
   },
   "gpsAlert": {
-    "title": "GPS Deshabilitado",
-    "message": "Es recomendable habilitar el gps para poder seguir"
+    "message": "Es recomendable habilitar el gps para poder seguir",
+    "title": "GPS Deshabilitado"
   },
   "layerManager": {
     "camping": "Campings",

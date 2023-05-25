@@ -67,7 +67,7 @@ const useTrackNavigation = (): useTrackNavigationType => {
   ,[scopeTrack?.geometry, isReverseDirection]);
 
   const isNavigating: boolean = fromPosition != undefined && toTrack != undefined;
-  console.log('isNavigating', isNavigating);
+
   const snappedFeature = useMemo(() =>
     fromPosition && toTrack ? turfNearestPointOnLine(toTrack, fromPosition, {units: 'kilometers'}) : undefined,
   [fromPosition, toTrack]);
