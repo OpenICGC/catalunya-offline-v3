@@ -98,6 +98,10 @@
     "backgroundTitle": "Background geolocation is active",
     "requestPermission": "Catalunya Offline needs access to geolocation, but access has been denied.\n\nDo you want to change this setting?"
   },
+  "gpsAlert": {
+    "title": "GPS Disabled",
+    "message": "It is recommended to enable the gps to be able to continue"
+  },
   "layerManager": {
     "camping": "Campings",
     "mountainHut": "Mountain Huts",

@@ -21,6 +21,7 @@ import useDownloadStatus from '../hooks/singleton/useDownloadStatus';
 import DownloadRequest from '../components/notifications/DownloadRequest';
 import DownloadManager from './DownloadManager';
 import useBasemapId from '../hooks/persistedStates/useBasemapId';
+import GpsDisabledAlert from '../components/common/GpsDisabledAlert';
 
 const stackSx = {
   height: '100%',
@@ -141,6 +142,7 @@ const MainView: FC = () => {
       onDownload={() => setDownloadRequested(true)}
       bytes={pendingSize}
     />}
+    <GpsDisabledAlert/>
     <Layout
       sidePanelContent={sidePanelContent}
       mainContent={mainContent}
