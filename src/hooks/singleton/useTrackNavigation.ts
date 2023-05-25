@@ -106,7 +106,7 @@ const useTrackNavigation = (): useTrackNavigationType => {
   }, []);
 
   const getBounds = useCallback((): [number, number, number, number] | undefined => toTrack ?
-    [...(fromPosition && !isOutOfTrack ? [fromPosition] : []), ...toTrack.coordinates].reduce<[number, number, number, number]>((bbox, position) => ([
+    [...(fromPosition ? [fromPosition] : []), ...toTrack.coordinates].reduce<[number, number, number, number]>((bbox, position) => ([
       Math.min(bbox[0], position[0]), // xMin
       Math.min(bbox[1], position[1]), // yMin
       Math.max(bbox[2], position[0]), // xMax
