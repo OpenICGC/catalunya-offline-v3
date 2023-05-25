@@ -126,13 +126,13 @@ const MapView: FC<MapViewProps> = ({
 
   const maxZoom = useMemo(() => BASEMAPS.find(({id}) => id === baseMapId)?.maxZoom ?? DEFAULT_MAX_ZOOM, [baseMapId]);
 
-  const fitBounds = useCallback((bounds) => {
+  const fitBounds = useCallback((bounds, extraBottom = 0) => {
     const width = mapRef.current?.getContainer().offsetWidth;
     const height = mapRef.current?.getContainer().offsetHeight;
     width && height && viewportFitBounds(width, height, bounds, {
       padding: {
         top: FIT_BOUNDS_PADDING + topMargin,
-        bottom: FIT_BOUNDS_PADDING + bottomMargin,
+        bottom: FIT_BOUNDS_PADDING + bottomMargin + extraBottom,
         left: FIT_BOUNDS_PADDING,
         right: FIT_BOUNDS_PADDING
       }
@@ -325,8 +325,8 @@ const MapView: FC<MapViewProps> = ({
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
   }, [onLongTap]);
 
-  const handlePointNavigationFitBounds = useCallback(() => {
-    fitBounds(pointNavigation.getBounds());
+  const handlePointNavigationFitBounds = useCallback((bottomMargin = 0) => {
+    fitBounds(pointNavigation.getBounds(), bottomMargin);
   }, [fitBounds, pointNavigation.getBounds]);
 
   useEffect(() => {
@@ -341,6 +341,7 @@ const MapView: FC<MapViewProps> = ({
     if (pointNavigation.isNavigating) {
       trackNavigation?.stop();
       setBottomMargin(POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT);
+      handlePointNavigationFitBounds(POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT);
     } else {
       setBottomMargin(0);
     }
@@ -350,14 +351,15 @@ const MapView: FC<MapViewProps> = ({
     pointNavigation.target && onPointSelected(pointNavigation.target.id);
   }, [pointNavigation.target, onPointSelected]);
 
-  const handleTrackNavigationFitBounds = useCallback(() => {
-    fitBounds(trackNavigation.getBounds());
+  const handleTrackNavigationFitBounds = useCallback((bottomMargin = 0) => {
+    fitBounds(trackNavigation.getBounds(), bottomMargin);
   }, [fitBounds, trackNavigation.getBounds]);
 
   useEffect(() => {
     if (trackNavigation.isNavigating) {
       pointNavigation?.stop();
       setBottomMargin(TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT);
+      handleTrackNavigationFitBounds(TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT);
     } else {
       setBottomMargin(0);
     }
