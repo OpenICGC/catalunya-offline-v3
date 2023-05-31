@@ -8,6 +8,13 @@ export interface ImportedFile extends PickedFile {
 type useImportOptions = {
   types?: string[]
 } 
+// This will support UTF-8 encoded files.
+// See https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+function b64DecodeUnicode(base64string: string) {
+  return decodeURIComponent(Array.prototype.map.call(window.atob(base64string), function(c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+}
 
 const useImport = (
   options: useImportOptions,
@@ -39,7 +46,7 @@ const useImport = (
       if (result && result.files.length && result.files[0].data) {
         setFile({
           ...result.files[0],
-          dataDecoded: window.atob(result.files[0].data)
+          dataDecoded: b64DecodeUnicode(result.files[0].data)
         });
       }
     };

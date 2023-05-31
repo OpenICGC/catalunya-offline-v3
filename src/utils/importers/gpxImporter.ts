@@ -11,7 +11,7 @@ interface ScopeImportResults {
 }
 
 const gpxImporter: (data: string) => ScopeImportResults = (data) => {
-  const gpx = new DOMParser().parseFromString(data, 'utf-8');
+  const gpx = new DOMParser().parseFromString(data, 'application/xml');
   const geoJsonFromGpx = converter.gpx(gpx);
   const geoJsonFormatted = {
     ...geoJsonFromGpx,

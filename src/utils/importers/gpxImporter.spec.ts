@@ -4,6 +4,7 @@ import sampleGpxTrackFromCatOffline from '../../components/fixtures/sampleGpxTra
 import sampleGpxTrackAndPointFromCatOffline from '../../components/fixtures/sampleGpxTrackAndPointFromCatOffline.xml';
 import sampleGpxFromRutaBike from '../../components/fixtures/sampleGpxFromRutaBike.xml';
 import sampleGpxFromWikiloc from '../../components/fixtures/sampleGpxFromWikiloc.xml';
+import sampleGpxFromWikilocWithAccents from '../../components/fixtures/sampleGpxFromWikilocWithAccents.xml';
 import kmlSample_01 from '../../hooks/exporters/kmlSample_01.xml';
 import sampleMultiPolygon from '../../components/fixtures/sampleMultiPolygon.xml';
 
@@ -100,6 +101,7 @@ const expectedImportedFromRutaBike = {
   ],
   numberOfErrors: 0
 };
+
 const expectedImportedFromWikiloc = {
   points: [],
   tracks: [
@@ -119,6 +121,30 @@ const expectedImportedFromWikiloc = {
           [ 2.011152, 42.281275, 1263.541, 1617201788 ],
           [ 2.011242, 42.281302, 1263.215, 1617201817 ],
           [ 2.011462, 42.281354, 1263.308, 1617201856 ]
+        ]
+      }
+    }
+  ],
+  numberOfErrors: 0
+};
+
+const expectedImportedFromWikilocWithAccents = {
+  points: [],
+  tracks: [
+    {
+      type: 'Feature',
+      properties: {
+        name: '110113 ROJALS',
+        color: undefined,
+        description: 'Una mica més enllà hi ha, a mà dreta.',
+        images: [],
+        isVisible: true
+      },
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [1.11249, 41.338297, 978, 1294909567],
+          [1.11213, 41.33826, 982, 1294909600]
         ]
       }
     }
@@ -401,6 +427,43 @@ describe('gpxImporter', () => {
     // THEN
     expect(computedData).to.deep.equal(expectedImportedError);
 
+  });
+
+  it('should import a Gpx file parsing correctly the UTF-8 character encoding', () => {
+    //GIVEN
+    const data = sampleGpxFromWikilocWithAccents;
+
+    //WHEN
+    const computedData = gpxImporter(data);
+
+    const partialComputedData = {
+      points: [],
+      tracks: computedData.tracks.map(track => (
+        {
+          type: track.type,
+          properties: {
+            name: track.properties.name,
+            color: track.properties.color,
+            description: track.properties.description,
+            images: track.properties.images,
+            isVisible: track.properties.isVisible
+          },
+          geometry: track.geometry
+        }
+      )),
+      numberOfErrors: computedData.numberOfErrors
+    };
+
+    // THEN
+    expect(partialComputedData).to.deep.equal(expectedImportedFromWikilocWithAccents);
+
+    // THEN
+    const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
+
+    computedTrack && computedTrack.map(track =>
+      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+      expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
+    );
   });
 
   it('should not import a kml', async () => {
