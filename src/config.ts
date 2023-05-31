@@ -54,7 +54,8 @@ export const COLOR_PALETTES = [
 
 const DATASET: 'icgc' | 'mtc25m' | 'catalunya' | 'madrid' | 'vigo' | 'galicia' = 'icgc';
 
-const BASE_URL = DATASET === 'icgc' ? 'https://datacloud.icgc.cat/datacloud/catalunya-offline' : `https://cdn.geomatico.es/datasets/${DATASET}`; // 'https://d3f7z3c5u0qoak.cloudfront.net';
+//const BASE_URL = `https://cdn.geomatico.es/datasets/${DATASET}`;
+const BASE_URL = 'https://datacloud.icgc.cat/datacloud/catalunya-offline';
 
 const LATITUDES: Record<string, number> = {
   icgc: 40.5,
