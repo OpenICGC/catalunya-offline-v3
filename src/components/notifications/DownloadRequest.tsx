@@ -35,10 +35,10 @@ const DownloadRequest: FC<DownloadRequestProps> = ({isOpen= false, onClose, onDo
     </DialogTitle>
     <Divider/>
     <DialogContent>
-      <DialogContentText gutterBottom sx={{color: 'text.secondary', textAlign: 'justify'}}>
+      <DialogContentText gutterBottom sx={{color: 'text.secondary'}}>
         {t('downloadingAlert.content_01')}
       </DialogContentText>
-      <DialogContentText gutterBottom sx={{color: 'text.primary', textAlign: 'justify'}}>
+      <DialogContentText gutterBottom sx={{color: 'text.primary'}}>
         {t('downloadingAlert.content_02', {pendingSize: bytesToSize(bytes)})}
       </DialogContentText>
     </DialogContent>

@@ -59,10 +59,6 @@ const iconLinkSx = {
   alignItems: 'center'
 };
 
-const textSx = {
-  textAlign: 'justify'
-};
-
 //TYPES
 export type AboutDialogProps = {
   onClose: () => void
@@ -90,9 +86,9 @@ const AboutDialog: FC<AboutDialogProps> = ({
       <Link href={t('about.presentation_link')} target='_blank' rel='noreferrer' sx={{mb:2}}>
         <LogoICGC/>
       </Link>
-      <Typography gutterBottom sx={textSx}>{t('about.content_01')}</Typography>
-      <Typography gutterBottom sx={textSx}>{t('about.content_02')}</Typography>
-      <Typography gutterBottom sx={textSx}>{t('about.content_03')}</Typography>
+      <Typography gutterBottom>{t('about.content_01')}</Typography>
+      <Typography gutterBottom>{t('about.content_02')}</Typography>
+      <Typography gutterBottom>{t('about.content_03')}</Typography>
 
       <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', spacing: 10}}>
 

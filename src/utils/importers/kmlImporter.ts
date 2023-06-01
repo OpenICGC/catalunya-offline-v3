@@ -11,7 +11,7 @@ interface ScopeImportResults {
 }
 
 const kmlImporter: (data: string) => ScopeImportResults = (data) => {
-  const kml = new DOMParser().parseFromString(data, 'utf-8');
+  const kml = new DOMParser().parseFromString(data, 'application/xml');
   const geoJsonFromConverter = converter.kml(kml);
   const geoJsonForImporter: FeatureCollection = {
     ...geoJsonFromConverter,
