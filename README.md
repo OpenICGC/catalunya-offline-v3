@@ -36,7 +36,11 @@ Some relevant dependencies are:
 
 ### iOS
 
-[TBD]
+* Install Xcode
+* Install **Xcode Command Line Tools**: `xcode-select --install`
+* Install Homebrew: `$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+  * In my case I needed to install `cocoapods`: `brew install cocoapods`
+
 
 ## Configure sentry
 
@@ -102,7 +106,24 @@ A complete logcat command could be: `adb -s emulator-5554 logcat *:E` (show the 
 
 ### iOS
 
-[TBD]
+#### Debugging the web code
+
+To run in "auto-reload" mode, first run:
+
+```bash
+npm start
+```
+
+And, once the web is loaded in your browser:
+
+```bash
+npm run start:ios
+```
+
+to load it into a device or emulator. Web contents will be served remotely from the 
+laptop and auto-reloaded as in the web version.
+
+To open a remote Javascript debugging console, open safari, development, and select your iphone.
 
 
 ## Building and deploying for production
@@ -115,7 +136,11 @@ Android Studio.
 
 ### Xcode
 
-[TBD]
+* Use the command `npm run build:ios`, to open the project in Xcode.
+* In Xcode:
+  * Product > Archive
+  * In the Archives panel press `Distribute app` button:
+    * It'll validate the builded app and push to app store, without publising it.
 
 
 ## Multilanguage
