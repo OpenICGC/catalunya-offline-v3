@@ -137,6 +137,10 @@ Android Studio.
 ### Xcode
 
 * Use the command `npm run build:ios`, to open the project in Xcode.
+* In Xcode:
+  * Product > Archive
+  * In the Archives panel press `Distribute app` button:
+    * It'll validate the builded app and push to app store, without publising it.
 
 
 ## Multilanguage
