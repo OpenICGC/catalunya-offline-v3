@@ -1,11 +1,12 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {Position, LineString} from 'geojson';
+import {Position, LineString, Feature} from 'geojson';
 import {singletonHook} from 'react-singleton-hook';
 import {HEXColor, Scope, ScopeTrack, UUID} from '../../types/commonTypes';
 import useGeolocation from './useGeolocation';
 import {useScopes, useScopeTracks} from '../usePersistedCollections';
 import turfNearestPointOnLine from '@turf/nearest-point-on-line';
 import useTrackTolerance from '../settings/useTrackTolerance';
+import navigateToPointFeature from '../../utils/navigateToPointFeature';
 
 type startFn = (scopeId: UUID, scopePointId: UUID) => void;
 
@@ -27,6 +28,10 @@ type useTrackNavigationType = {
     color: HEXColor,
     coordinates: Array<Position>
   } | undefined,
+  navigateToFeature: Feature<LineString, {
+    bearing: number,
+    distance: number
+  }> | undefined,
   isOutOfTrack: boolean,
   currentPositionIndex: number | undefined,
   isReverseDirection: boolean,
@@ -71,6 +76,8 @@ const useTrackNavigation = (): useTrackNavigationType => {
   const currentPositionIndex: number | undefined = snappedFeature?.properties?.index;
   const isOutOfTrack: boolean = snappedDistance ? snappedDistance > trackTolerance : false;
 
+  const navigateToFeature = useMemo(() => fromPosition && snappedFeature ? navigateToPointFeature(fromPosition, snappedFeature.geometry.coordinates) : undefined, [fromPosition, snappedFeature?.geometry.coordinates]);
+
   useEffect(() => {
     if (scopeTrack && !scopeTrack.properties.isVisible) {
       trackStore.update({
@@ -99,7 +106,7 @@ const useTrackNavigation = (): useTrackNavigationType => {
   }, []);
 
   const getBounds = useCallback((): [number, number, number, number] | undefined => toTrack ?
-    [...(fromPosition && !isOutOfTrack ? [fromPosition] : []), ...toTrack.coordinates].reduce<[number, number, number, number]>((bbox, position) => ([
+    [...(fromPosition ? [fromPosition] : []), ...toTrack.coordinates].reduce<[number, number, number, number]>((bbox, position) => ([
       Math.min(bbox[0], position[0]), // xMin
       Math.min(bbox[1], position[1]), // yMin
       Math.max(bbox[2], position[0]), // xMax
@@ -111,6 +118,7 @@ const useTrackNavigation = (): useTrackNavigationType => {
   return {
     isNavigating,
     target,
+    navigateToFeature,
     isOutOfTrack,
     currentPositionIndex,
     isReverseDirection,
@@ -124,6 +132,7 @@ const useTrackNavigation = (): useTrackNavigationType => {
 const initialState: useTrackNavigationType = {
   isNavigating: false,
   target: undefined,
+  navigateToFeature: undefined,
   isOutOfTrack: false,
   currentPositionIndex: undefined,
   isReverseDirection: false,

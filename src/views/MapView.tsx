@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import maplibregl from 'maplibre-gl';
 
 //GEOCOMPONENTS
@@ -20,7 +20,7 @@ import PointNavigationBottomSheet from '../components/map/PointNavigationBottomS
 //UTILS
 import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
-import {FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
+import {BASEMAPS, DEFAULT_MAX_ZOOM, FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/usePersistedCollections';
 import {MapLayerMouseEvent, MapTouchEvent} from 'mapbox-gl';
 import {Position} from 'geojson';
@@ -33,17 +33,20 @@ import useGeolocation from '../hooks/singleton/useGeolocation';
 import usePointNavigation from '../hooks/singleton/usePointNavigation';
 import useRecordingTrack from '../hooks/singleton/useRecordingTrack';
 import useTrackNavigation from '../hooks/singleton/useTrackNavigation';
-import {ContextMapsResult, Manager, ScopePoint, UUID} from '../types/commonTypes';
+import {ContextMapsResult, Manager, ScopePoint, ScopeTrack, UUID} from '../types/commonTypes';
 import useGpsPositionColor from '../hooks/settings/useGpsPositionColor';
 import useIsLargeSize from '../hooks/settings/useIsLargeSize';
 import useMapStyle from '../hooks/useMapStyle';
 import useIsActive from '../hooks/singleton/useIsActive';
 import Overlays from '../components/map/Overlays';
+import GpsDisabledAlert from '../components/common/GpsDisabledAlert';
 
 const HEADER_HEIGHT = 48;
 const SEARCHBOX_HEIGHT = 64;
 const POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT= 144;
 const TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT = 283;
+
+const interactiveLayerIds = ['trackList'];
 
 mbtiles(maplibregl);
 
@@ -53,7 +56,7 @@ mbtiles(maplibregl);
 // See https://github.com/mapbox/mapbox-gl-js/issues/3893
 maplibregl.RasterDEMTileSource.prototype.serialize = maplibregl.RasterTileSource.prototype.serialize;
 
-export type MainContentProps = {
+export type MapViewProps = {
   baseMapId: string,
   onManagerChanged: (newManager: Manager) => void,
   selectedScopeId?: UUID,
@@ -65,7 +68,7 @@ export type MainContentProps = {
   visibleLayers: Array<number>,
 };
 
-const MapView: FC<MainContentProps> = ({
+const MapView: FC<MapViewProps> = ({
   baseMapId,
   onManagerChanged,
   selectedScopeId,
@@ -122,13 +125,15 @@ const MapView: FC<MainContentProps> = ({
   const [isLargeSize] = useIsLargeSize();
   const [gpsPositionColor] = useGpsPositionColor();
 
-  const fitBounds = useCallback((bounds) => {
+  const maxZoom = useMemo(() => BASEMAPS.find(({id}) => id === baseMapId)?.maxZoom ?? DEFAULT_MAX_ZOOM, [baseMapId]);
+
+  const fitBounds = useCallback((bounds, extraBottom = 0) => {
     const width = mapRef.current?.getContainer().offsetWidth;
     const height = mapRef.current?.getContainer().offsetHeight;
     width && height && viewportFitBounds(width, height, bounds, {
       padding: {
         top: FIT_BOUNDS_PADDING + topMargin,
-        bottom: FIT_BOUNDS_PADDING + bottomMargin,
+        bottom: FIT_BOUNDS_PADDING + bottomMargin + extraBottom,
         left: FIT_BOUNDS_PADDING,
         right: FIT_BOUNDS_PADDING
       }
@@ -204,20 +209,31 @@ const MapView: FC<MainContentProps> = ({
     setViewport({
       longitude: point.geometry.coordinates[0],
       latitude: point.geometry.coordinates[1],
-      zoom: MAP_PROPS.maxZoom
+      zoom: maxZoom
     });
     onPointSelected(point.id);
-  }, [onPointSelected, setViewport]);
+  }, [onPointSelected, setViewport, maxZoom]);
+
+  const selectTrack = useCallback((track: ScopeTrack) => {
+    const bounds = track?.geometry?.coordinates.reduce<[number, number, number, number]>((bbox, position) => ([
+      Math.min(bbox[0], position[0]), // xMin
+      Math.min(bbox[1], position[1]), // yMin
+      Math.max(bbox[2], position[0]), // xMax
+      Math.max(bbox[3], position[1])  // yMax
+    ]), [180, 90, -180, -90]);
+    bounds && fitBounds(bounds);
+    onTrackSelected(track.id);
+  }, [fitBounds, onTrackSelected]);
 
   const [acceptPoint, setAcceptPoint] = useState(false);
 
   const onLongTap = useCallback((position: Position) => {
-    setViewport({longitude: position[0], latitude: position[1], zoom: MAP_PROPS.maxZoom});
+    setViewport({longitude: position[0], latitude: position[1], zoom: maxZoom});
     editingPosition.start({
       initialPosition: position,
       onAccept: () => setAcceptPoint(true)
     });
-  }, [setViewport, editingPosition.start]);
+  }, [setViewport, editingPosition.start, maxZoom]);
 
   const longTouchTimer = useRef<number>();
 
@@ -288,19 +304,30 @@ const MapView: FC<MainContentProps> = ({
     }, 500);
   }, [clearLongTouchTimer, longTouchTimer, onLongTap]);
 
-  const handleMapClick = useCallback(() => {
+  const handleMapClick = useCallback(({features}) => {
     setContextualMenuOpen(false);
     setSearchBoxHidden(!isSearchBoxHidden);
     setFabOpen(false);
     setFabHidden(!isFabHidden);
-  }, [isSearchBoxHidden, isFabHidden]);
+    if (features.length) { // A feature was clicked. It can only be from trackList, as it's de only interactiveLayer.
+      // Build a proper ScopeFeature from the information we obtained on the onClick event.
+      const {id, ...properties} = features[0].properties;
+      const scopeFeature = {
+        type: 'Feature',
+        id,
+        properties,
+        geometry: features[0].geometry
+      } as ScopeTrack;
+      selectTrack(scopeFeature);
+    }
+  }, [isSearchBoxHidden, isFabHidden, selectTrack]);
 
   const handleDoubleClick = useCallback((e: MapLayerMouseEvent) => {
     onLongTap([e.lngLat.lng, e.lngLat.lat]);
   }, [onLongTap]);
 
-  const handlePointNavigationFitBounds = useCallback(() => {
-    fitBounds(pointNavigation.getBounds());
+  const handlePointNavigationFitBounds = useCallback((bottomMargin = 0) => {
+    fitBounds(pointNavigation.getBounds(), bottomMargin);
   }, [fitBounds, pointNavigation.getBounds]);
 
   useEffect(() => {
@@ -315,6 +342,7 @@ const MapView: FC<MainContentProps> = ({
     if (pointNavigation.isNavigating) {
       trackNavigation?.stop();
       setBottomMargin(POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT);
+      handlePointNavigationFitBounds(POINT_NAVIGATION_BOTTOM_SHEET_HEIGHT);
     } else {
       setBottomMargin(0);
     }
@@ -324,14 +352,15 @@ const MapView: FC<MainContentProps> = ({
     pointNavigation.target && onPointSelected(pointNavigation.target.id);
   }, [pointNavigation.target, onPointSelected]);
 
-  const handleTrackNavigationFitBounds = useCallback(() => {
-    fitBounds(trackNavigation.getBounds());
+  const handleTrackNavigationFitBounds = useCallback((bottomMargin = 0) => {
+    fitBounds(trackNavigation.getBounds(), bottomMargin);
   }, [fitBounds, trackNavigation.getBounds]);
 
   useEffect(() => {
     if (trackNavigation.isNavigating) {
       pointNavigation?.stop();
       setBottomMargin(TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT);
+      handleTrackNavigationFitBounds(TRACK_NAVIGATION_BOTTOM_SHEET_HEIGHT);
     } else {
       setBottomMargin(0);
     }
@@ -385,6 +414,10 @@ const MapView: FC<MainContentProps> = ({
     recordingTrack.stop();
   }, [recordingTrack.stop]);
 
+  const navigateToFeature = useMemo(() => {
+    if (pointNavigation.isNavigating) return pointNavigation.navigateToFeature;
+    if (trackNavigation.isNavigating) return trackNavigation.navigateToFeature;
+  }, [pointNavigation.isNavigating, trackNavigation.isNavigating, pointNavigation.navigateToFeature, trackNavigation.navigateToFeature]);
 
   return <>
     {isActive && <SearchBoxAndMenu
@@ -398,6 +431,7 @@ const MapView: FC<MainContentProps> = ({
     {mapStyle && <MapComponent
       ref={mapRef}
       mapStyle={mapStyle}
+      maxZoom={maxZoom}
       viewport={viewport}
       onViewportChange={setViewport}
       onDrag={disableTracking}
@@ -408,6 +442,7 @@ const MapView: FC<MainContentProps> = ({
       onTouchCancel={clearLongTouchTimer}
       onClick={handleMapClick}
       onDblClick={handleDoubleClick}
+      interactiveLayerIds={interactiveLayerIds}
     >
       {!editingPosition.isEditing && isActive && <FabButton
         isFabOpen={isFabOpen}
@@ -427,7 +462,7 @@ const MapView: FC<MainContentProps> = ({
         trackList={trackList}
         scopeColor={scopeColor}
         geolocation={geolocation}
-        navigateToPointLine={pointNavigation.feature}
+        navigateToLine={navigateToFeature}
         gpsPositionColor={gpsPositionColor}
         visibleLayers={visibleLayers}/>
       {isActive && <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>}
@@ -459,8 +494,8 @@ const MapView: FC<MainContentProps> = ({
     {pointNavigation.target && <PointNavigationBottomSheet
       name={pointNavigation.target.name}
       color={pointNavigation.target.color}
-      bearing={pointNavigation.feature?.properties.bearing || 0}
-      distance={pointNavigation.feature?.properties.distance || 0}
+      bearing={pointNavigation.navigateToFeature?.properties.bearing || 0}
+      distance={pointNavigation.navigateToFeature?.properties.distance || 0}
       onStop={pointNavigation.stop}
       onFitBounds={handlePointNavigationFitBounds}
       onShowDetails={handlePointNavigationShowDetails}
@@ -479,6 +514,12 @@ const MapView: FC<MainContentProps> = ({
       onShowDetails={handleTrackNavigationShowDetails}
       onTopChanged={handleTopChanged}
     />}
+    <GpsDisabledAlert
+      isNavigatingToTrack={trackNavigation.target !== undefined}
+      isNavigatingToPoint={pointNavigation.target !== undefined}
+      isRecordingTrack={recordingTrack.isRecording}
+      isGeolocationAvailable={geolocation.latitude !== null && geolocation.longitude !== null}
+    />
     {isSettingsDialogOpen && <SettingsView
       onClose={() => setSettingsDialogOpen(false)}
     />}

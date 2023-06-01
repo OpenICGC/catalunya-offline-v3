@@ -15,7 +15,7 @@ import usePointNavigation from '../../hooks/singleton/usePointNavigation';
 import useTrackNavigation from '../../hooks/singleton/useTrackNavigation';
 import useScopeFeaturesPanelTab from '../../hooks/persistedStates/useScopeFeaturesPanelTab';
 import useViewport from '../../hooks/singleton/useViewport';
-import {MAP_PROPS} from '../../config';
+import {DEFAULT_MAX_ZOOM} from '../../config';
 
 type ScopeFeaturesProps = {
   scopeId: UUID,
@@ -41,6 +41,10 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const trackStore = useScopeTracks(scopeId);
   const pointNavigation = usePointNavigation();
   const trackNavigation = useTrackNavigation();
+
+  const [isPointEditing, setPointEditing] = useState<boolean>(false);
+  const [isTrackEditing, setTrackEditing] = useState<boolean>(false);
+
   const {sharePoint}  = useShare();
   const [sharingTrackId, setSharingTrackId] = useState<UUID|undefined>(undefined);
 
@@ -53,6 +57,14 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   const unselectTrack = useCallback(() => onTrackSelected(), [onTrackSelected]);
 
   const [acceptPoint, setAcceptPoint] = useState(false);
+
+  useEffect(() => {
+    if(isPointEditing && !selectedPoint) setPointEditing(false);
+  }, [selectedPoint]);
+
+  useEffect(() => {
+    if(isTrackEditing && !selectedTrack) setTrackEditing(false);
+  }, [selectedTrack]);
 
   useEffect(() => {
     if (acceptPoint) {
@@ -74,12 +86,13 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         }
       });
       onPointSelected(id);
+      setPointEditing(true);
       setAcceptPoint(false);
     }
   }, [acceptPoint]);
 
   const pointAdd = useCallback(() => {
-    setViewport({zoom: MAP_PROPS.maxZoom});
+    setViewport({zoom: DEFAULT_MAX_ZOOM});
     editingPosition.start({
       onAccept: () => setAcceptPoint(true)
     });
@@ -135,9 +148,10 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   }, [pointStore, sharePoint]);
 
   const trackAdd = useCallback(() => {
+    const id = uuid();
     trackStore.create({
       type: 'Feature',
-      id: uuid(),
+      id: id,
       geometry: null,
       properties: {
         name: `${t('track')} ${(trackStore.list()?.length ?? 0) + 1}`,
@@ -147,6 +161,8 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
         isVisible: true
       }
     });
+    onTrackSelected(id);
+    setTrackEditing(true);
   }, [trackStore, t]);
 
   const trackColorChange = useCallback((trackId: UUID, newColor: HEXColor) => {
@@ -202,12 +218,16 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   if (selectedTrack) return <ScopeTrack
     scopeId={scopeId}
     trackId={selectedTrack}
+    isEditing={isTrackEditing}
+    onEditing={setTrackEditing}
     onClose={unselectTrack}
   />;
 
   if (selectedPoint) return <ScopePoint
     scopeId={scopeId}
     pointId={selectedPoint}
+    isEditing={isPointEditing}
+    onEditing={setPointEditing}
     onClose={unselectPoint}
   />;
 

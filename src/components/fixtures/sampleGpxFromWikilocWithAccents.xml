@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="Wikiloc - http://www.wikiloc.com" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <trk>
+    <name>110113 ROJALS</name>
+    <cmt>Una mica més enllà hi ha, a mà dreta.</cmt>
+    <desc>Una mica més enllà hi ha, a mà dreta.</desc>
+    <trkseg>
+      <trkpt lat="41.338297" lon="1.112490">
+        <ele>978.0</ele>
+        <time>2011-01-13T09:06:07Z</time>
+      </trkpt>
+      <trkpt lat="41.338260" lon="1.112130">
+        <ele>982.0</ele>
+        <time>2011-01-13T09:06:40Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

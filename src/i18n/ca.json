@@ -1,7 +1,8 @@
 {
   "about": {
-    "content_01": "Catalunya Offline és una aplicació per mòbil feta per l’Institut Cartogràfic i Geològic de Catalunya (ICGC) que us permet moure-us pel territori català, prendre punts i gravar les vostres rutes i excursions amb el GPS encara que no tingueu cobertura de dades al vostre mòbil.",
-    "content_02": "L’aplicació permet la descàrrega i visualització de la cartografia de l’ICGC, tant del mapa topogràfic com de l’ortofotomapa.",
+    "content_01": "Catalunya Offline és l’aplicació de l'Institut Cartogràfic i Geològic de Catalunya (ICGC) que us permet moure-us pel territori, prendre punts i gravar rutes encara que no tingueu cobertura de dades al vostre mòbil.",
+    "content_02": "Podeu organitzar els vostres punts i traces per àmbits (geogràfics o temàtics) i exportar-los per ser reutilitzats a Instamaps i en altres aplicacions.",
+    "content_03": "L'aplicació treballa amb la cartografia topogràfica de l'ICGC (amb i sense dades al vostre mòbil) i amb l’ortoimatge (només si teniu dades).",
     "moreInfo": "Quant a l'ICGC",
     "otherApps": "Altres apps",
     "otherApps_link": "https://www.icgc.cat/Aplicacions/Apps",
@@ -37,18 +38,32 @@
     "title": "Mapes Base",
     "userStyles": "Meus mapes base"
   },
+  "camera": {
+    "cancel": "Cancel·la",
+    "header": "Foto",
+    "photo": "De la galeria",
+    "picture": "Fes una foto"
+  },
+  "delete": {
+    "message": {
+      "pointTrack": "Esteu segur de voler esborrar  aquest element? Aquesta operació no es podrà desfer.",
+      "scope": "Esteu segur de voler esborrar aquest àmbit i tots els punts i traces que conté? Aquesta operació no es podrà desfer."
+    },
+    "point": "Esborra el Punt",
+    "scope": "Esborra l'Àmbit",
+    "track": "Esborra la Traça"
+  },
   "downloadingAlert": {
     "cancel": "S'ha cancel·lat la descàrrega",
-    "content_01": "Per poder treballar en zones amb mala cobertura, us recomanem descarregar el paquet de dades offline.",
-    "content_02": "Si no voleu decarregar-les ara, podeu continuar navegant amb la versió online, i se us tornarà a oferir més endavant.",
-    "content_03": "Voleu descarregar el paquet de dades offline ara? {{pendingSize}}",
+    "content_01": "Per no dependre de la cobertura de dades del vostre telèfon, podeu descarregar offline la cartografia de tot Catalunya en un sol arxiu. Si no ho voleu fer ara, l’aplicació treballarà online (sempre que tingueu dades) i se us tornarà a oferir aquesta possibilitat més endavant.",
+    "content_02": "Voleu descarregar la cartografia offline ara? (recomanat) {{pendingSize}}",
     "error": "Error descarregant cartografia",
     "glyphs": "Tipografies",
     "mbtiles": "Cartografia",
     "metadata": "Metadades",
     "sprites": "Icones",
     "style": "Estil",
-    "title": "Descàrrega de dades offline"
+    "title": "Cartografia sense dades mòbils"
   },
   "errors": {
     "import": {
@@ -83,8 +98,12 @@
     "backgroundTitle": "Geolocalització activa en segon pla",
     "requestPermission": "Catalunya Offline necessita accedir a la geolocalització, però s'ha denegat el permís.\n\nVoleu canviar aquesta configuració?"
   },
+  "gpsAlert": {
+    "message": "És recomanable habilitar el gps per poder seguir",
+    "title": "GPS Deshabilitat"
+  },
   "layerManager": {
-    "camping": "Campings",
+    "camping": "Càmpings",
     "mountainHut": "Refugis",
     "ruralAccommodation": "Turisme Rural",
     "title": "Capes",

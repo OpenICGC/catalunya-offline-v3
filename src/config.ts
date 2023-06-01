@@ -22,9 +22,10 @@ export const MAX_ALLOWED_IMPORT_FEATURES = 100;
 
 export const FIT_BOUNDS_PADDING = 50;
 
+export const DEFAULT_MAX_ZOOM = 17;
+
 export const MAP_PROPS = {
   minZoom: 6,
-  maxZoom: 16,
   maxPitch: 68,
   hash: false
 };
@@ -53,7 +54,8 @@ export const COLOR_PALETTES = [
 
 const DATASET: 'icgc' | 'mtc25m' | 'catalunya' | 'madrid' | 'vigo' | 'galicia' = 'icgc';
 
-const BASE_URL = /*DATASET === 'icgc' ? 'https://betaserver.icgc.cat/apks/catoffv3' :*/ `https://cdn.geomatico.es/datasets/${DATASET}`;
+//const BASE_URL = `https://cdn.geomatico.es/datasets/${DATASET}`;
+const BASE_URL = 'https://datacloud.icgc.cat/datacloud/catalunya-offline';
 
 const LATITUDES: Record<string, number> = {
   icgc: 40.5,
@@ -110,7 +112,8 @@ export const BASEMAPS: BaseMaps = [{
   },
   style: `${BASE_URL}/estandard.json`,
   thumbnail: `${BASE_URL}/thumbnail-estandard.png`,
-  sprites: `${BASE_URL}/sprites-estandard.zip`
+  sprites: `${BASE_URL}/sprites-estandard.zip`,
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
 },{
   id: 'lleure',
   labels: {
@@ -120,5 +123,17 @@ export const BASEMAPS: BaseMaps = [{
   },
   style: `${BASE_URL}/lleure.json`,
   thumbnail: `${BASE_URL}/thumbnail-lleure.png`,
-  sprites: `${BASE_URL}/sprites-lleure.zip`
+  sprites: `${BASE_URL}/sprites-lleure.zip`,
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya'
+},{
+  id: 'ortofoto',
+  labels: {
+    ca: 'Ortofoto (només online)',
+    en: 'Ortophoto (online only)',
+    es: 'Ortofoto (solo online)'
+  },
+  style: 'https://geoserveis.icgc.cat/contextmaps/icgc_orto_estandard.json',
+  thumbnail: `${BASE_URL}/thumbnail-ortofoto.png`,
+  maxZoom: 18,
+  attribution: 'Institut Cartogràfic i Geològic de Catalunya - Esri, DigitalGlobe, USDA, USGS, GeoEye, Getmapping, AeroGRID, IGN, IGP, UPR-EGP, and the GIS community - © OpenMapTiles © OpenStreetMap contributors'
 }];

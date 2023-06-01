@@ -1,7 +1,8 @@
 {
   "about": {
-    "content_01": "Catalonia Offline is a mobile application created by the Institut Cartogràfic i Geològic de Catalunya (ICGC) that allows you to move around Catalunya, save points and record your routes and excursions with GPS even if you do not have a data plan for your phone.",
-    "content_02": "This application allows download and display of the ICGC cartography, both the topographic map and the orthophoto map.",
+    "content_01": "Catalunya Offline is an application from the Institut Cartogràfic i Geològic de Catalunya (ICGC) that lets you move across the territory, take points and record tracks even without mobile data coverage.",
+    "content_02": "Points and tracks can be organized in scopes (geographic or thematic) and exported t be reused in Instamaps and other applications.",
+    "content_03": "The application uses ICGC's topographic cartography (both online or offline) and with ortho imagery (online only).",
     "moreInfo": "About ICGC",
     "otherApps": "Other apps",
     "otherApps_link": "https://www.icgc.cat/en/Applications/Apps",
@@ -37,18 +38,32 @@
     "title": "Base Maps",
     "userStyles": "My base maps"
   },
+  "camera": {
+    "cancel": "Cancel",
+    "header": "Photo",
+    "photo": "From gallery",
+    "picture": "Take a photo"
+  },
+  "delete": {
+    "message": {
+      "pointTrack": "Are you sure to delete this element? This action cannot be undone.",
+      "scope": "Are you sure to delete this entire Scope and its associated Points and Tracks? This action cannot be undone."
+    },
+    "point": "Delete Point",
+    "scope": "Delete Scope",
+    "track": "Delete Track"
+  },
   "downloadingAlert": {
     "cancel": "Download has been canceled",
-    "content_01": "The offline data pack is needed to work in areas with poor coverage, and we strongly encourage you to download it as soon as possible.",
-    "content_02": "However, if it isn't downloaded now, you can still continue navigating with the online version. You will be prompted to download it in the future.",
-    "content_03": "Do you want to download the offline data pack now? {{pendingSize}}",
+    "content_01": "The whole of Catalunya cartography can be downloaded in a single file, so the map visualization doesn't depend on the data connectivity of your mobile device. If you don't want to download it now, the application will work in online mode (as long as you have data access) and you will be asked again later.",
+    "content_02": "Do you want to download the offline cartography now? (recommended) {{pendingSize}}",
     "error": "Error downloading cartography",
     "glyphs": "Fonts",
     "mbtiles": "Cartography",
     "metadata": "Metadata",
     "sprites": "Icons",
     "style": "Style",
-    "title": "Offline data download"
+    "title": "Offline Cartography"
   },
   "errors": {
     "import": {
@@ -82,6 +97,10 @@
     "backgroundMessage": "The geolocation will remain active while tracks are being followed or recorded",
     "backgroundTitle": "Background geolocation is active",
     "requestPermission": "Catalunya Offline needs access to geolocation, but access has been denied.\n\nDo you want to change this setting?"
+  },
+  "gpsAlert": {
+    "message": "It is recommended to enable the gps to be able to continue",
+    "title": "GPS Disabled"
   },
   "layerManager": {
     "camping": "Campings",

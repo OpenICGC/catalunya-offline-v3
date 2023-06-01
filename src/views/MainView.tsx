@@ -68,7 +68,7 @@ const MainView: FC = () => {
   }, [manager]);
 
   useEffect(() => {
-    isEditingPosition && setSidePanelOpen(false); // Closes panel when editing starts
+    setSidePanelOpen(!isEditingPosition); // Closes panel when editing starts, reopens when editing stops
   }, [isEditingPosition]);
 
   useEffect(() => {

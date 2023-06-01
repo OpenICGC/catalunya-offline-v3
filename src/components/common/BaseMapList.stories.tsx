@@ -18,7 +18,8 @@ const coreStyles = [
     },
     thumbnail: 'https://tileserver.geomatico.es/styles/terrain/8/128/94.png',
     style: 'https://tileserver.geomatico.es/styles/terrain/style.json',
-    sprites: 'https://cdn.geomatico.es/datasets/sprites.zip'
+    sprites: 'https://cdn.geomatico.es/datasets/sprites.zip',
+    attribution: 'Geomatico'
   }, {
     id: 'bright',
     labels: {
@@ -28,7 +29,8 @@ const coreStyles = [
     },
     thumbnail: 'https://tileserver.geomatico.es/styles/osm-bright/7/63/48.png',
     style: 'https://tileserver.geomatico.es/styles/osm-bright/style.json',
-    sprites: 'https://cdn.geomatico.es/datasets/sprites.zip'
+    sprites: 'https://cdn.geomatico.es/datasets/sprites.zip',
+    attribution: 'Geomatico'
   }];
 const userStyles = [
   {
@@ -40,7 +42,8 @@ const userStyles = [
     },
     thumbnail: 'https://tileserver.geomatico.es/styles/osm-bright/7/63/48.png',
     style: 'https://tileserver.geomatico.es/styles/osm-bright/style.json',
-    sprites: undefined
+    sprites: undefined,
+    attribution: 'Geomatico'
   }
 ];
 

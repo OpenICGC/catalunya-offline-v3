@@ -1,7 +1,8 @@
 {
   "about": {
-    "content_01": "Catalunya Offline es una aplicación para móviles hecha por el Institut Cartogràfic i Geològic de Catalunya (ICGC) que permite moverse por el territorio de Catalunya, tomar puntos y grabar sus rutas y excursiones con el GPS aunque no tenga cobertura de datos en el móvil. ",
-    "content_02": "La aplicación permite la descarga y visualización de la cartografía del ICGC, tanto del mapa topográfico como del ortofotomapa.",
+    "content_01": "Catalunya Offline es la aplicación del Institut Cartogràfic i Geològic de Catalunya (ICGC) que te permite moverte por el territorio, tomar puntos y grabar rutas aunque no tengas cobertura de datos en tu móvil.",
+    "content_02": "Puedes organizar tus puntos y trazas por ámbitos (geográficos o temáticos) y exportarlos para ser reutilizados en Instamaps y en otras aplicaciones.",
+    "content_03": "La aplicación trabaja con la cartografia topográfica del ICGC (con y sin datos en vuestro móvil) y con la ortoimagen (solo si tienes datos).",
     "moreInfo": "Sobre el ICGC",
     "otherApps": "Otras apps",
     "otherApps_link": "https://www.icgc.cat/es/Aplicaciones/Apps",
@@ -37,18 +38,32 @@
     "title": "Mapas Base",
     "userStyles": "Mis mapas base"
   },
+  "camera": {
+    "cancel": "Cancelar",
+    "header": "Foto",
+    "photo": "Desde galería",
+    "picture": "Tomar una foto"
+  },
+  "delete": {
+    "message": {
+      "pointTrack": "¿Estás seguro de querer borrar este elemento? Esta operación no se podrá deshacer.",
+      "scope": "¿Estás seguro de querer borrar este Ámbito, junto con todos sus puntos y trazas? Esta operación no se podrá deshacer."
+    },
+    "point": "Borrar Punto",
+    "scope": "Borrar Ámbito",
+    "track": "Borrar Traza"
+  },
   "downloadingAlert": {
     "cancel": "Se ha cancelado la descarga",
-    "content_01": "Para poder trabajar en zonas con mala cobertura, te recomendamos descargar el paquete de datos offline.",
-    "content_02": "Si no quieres descargarlos ahora, puedes continuar navegando con la versión online, y se te ofrecerá descargarlos más adelante.",
-    "content_03": "¿Quieres descargar el Mapa topográfico de Catalunya ahora? {{pendingSize}}",
+    "content_01": "Para no depender de la cobertura de datos de tu teléfono, puedes descargar offline la cartografía de todo Catalunya en un solo archivo. Si no quieres hacerlo ahora, la aplicación trabajará online (siempre que tengas datos) y se os volverá a ofrecer esta posibilidad más adelante.",
+    "content_02": "¿Quieres descargar la cartografía offline ahora? (recomendado) {{pendingSize}}",
     "error": "Error descargando cartografía",
     "glyphs": "Tipografías",
     "mbtiles": "Cartografía",
     "metadata": "Metadatos",
     "sprites": "Iconos",
     "style": "Estilo",
-    "title": "Descarga de datos offline"
+    "title": "Cartografía sin datos móviles"
   },
   "errors": {
     "import": {
@@ -82,6 +97,10 @@
     "backgroundMessage": "La localización permanecerá activa mientras se graban o siguen trazas",
     "backgroundTitle": "Geolocalización activa en segundo plano",
     "requestPermission": "Catalunya Offline necesita acceder a la geolocalización, pero se ha denegado el permiso.\n\n¿Desea cambiar la configuración?"
+  },
+  "gpsAlert": {
+    "message": "Es recomendable habilitar el gps para poder seguir",
+    "title": "GPS Deshabilitado"
   },
   "layerManager": {
     "camping": "Campings",
