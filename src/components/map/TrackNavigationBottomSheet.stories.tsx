@@ -3,8 +3,8 @@ import {Meta, Story} from '@storybook/react';
 
 import {Position} from 'geojson';
 import TrackNavigationBottomSheet, {TrackNavigationBottomSheetProps} from './TrackNavigationBottomSheet';
-import sample from '../fixtures/sampleLineString.geo.json';
-import sampleWithoutHeight from '../fixtures/sampleLineStringWithoutHeight.geo.json';
+import sample from '../scope/fixtures/sampleLineString.geojson';
+import sampleWithoutHeight from '../scope/fixtures/sampleLineStringWithoutHeight.geojson';
 const sampleCoordinates: Position[] = sample.coordinates as Position[];
 const sampleCoordinatesWithoutHeight: Position[] = sampleWithoutHeight.coordinates as Position[];
 import {BASEMAPS, DEFAULT_VIEWPORT} from '../../config';

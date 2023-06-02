@@ -1,10 +1,10 @@
 import {expect} from 'chai';
-import kmlImporter from './kmlImporter';
+import kmlScopeImporter from './kmlScopeImporter';
 
-import sampleKmlFromWikiloc from '../../components/fixtures/sampleKmlFromWikiloc.xml';
-import sampleKmlFromRutaBike from '../../components/fixtures/sampleKmlFromRutaBike.xml';
-import sampleKmlFromGEarth from '../../components/fixtures/sampleKmlFromGEarth.xml';
-import kmlSample_01 from '../../hooks/exporters/kmlSample_01.xml';
+import fromWikiloc from './fixtures/kml/fromWikiloc.kml';
+import fromRutaBike from './fixtures/kml/fromRutaBike.kml';
+import fromGEarth from './fixtures/kml/fromGEarth.kml';
+import sample_01 from './fixtures/kml/sample_01.kml';
 
 const expectedImportedFromWikiloc = {
   points: [
@@ -189,14 +189,14 @@ const expectedImportedFromCatoffline = {
   numberOfErrors: 0
 };
 
-describe('kmlImporter', () => {
+describe('kmlScopeImporter', () => {
 
   it('should import a Kml from Catoffline', async () => {
     //GIVEN
-    const data = kmlSample_01;
+    const data = sample_01;
 
     //WHEN
-    const computedData = kmlImporter(data);
+    const computedData = await kmlScopeImporter(data);
 
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -248,10 +248,10 @@ describe('kmlImporter', () => {
 
   it('should import a Kml from Wikiloc', async () => {
     //GIVEN
-    const data = sampleKmlFromWikiloc;
+    const data = fromWikiloc;
 
     //WHEN
-    const computedData = kmlImporter(data);
+    const computedData = await kmlScopeImporter(data);
 
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -298,10 +298,10 @@ describe('kmlImporter', () => {
 
   it('should import a Kml from RutaBike', async () => {
     //GIVEN
-    const data = sampleKmlFromRutaBike;
+    const data = fromRutaBike;
 
     //WHEN
-    const computedData = kmlImporter(data);
+    const computedData = await kmlScopeImporter(data);
 
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -354,7 +354,7 @@ describe('kmlImporter', () => {
 
   it('should import a Kml from Google Earth', async () => {
     //WHEN
-    const computedData = kmlImporter(sampleKmlFromGEarth);
+    const computedData = await kmlScopeImporter(fromGEarth);
 
     const partialComputedData = {
       points: computedData.points.map(point => (

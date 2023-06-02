@@ -4,7 +4,7 @@ import {Meta, Story} from '@storybook/react';
 import TrackProfile, {TrackProfileProps} from './TrackProfile';
 import {Position} from 'geojson';
 
-import sample from '../../fixtures/sampleLineString.geo.json';
+import sample from '../fixtures/sampleLineString.geojson';
 const sampleCoordinates: Position[] = sample.coordinates as Position[];
 
 export default {

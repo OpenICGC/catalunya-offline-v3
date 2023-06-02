@@ -4,10 +4,10 @@ import {v4 as uuidv4} from 'uuid';
 import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
 import {useScopePoints, useScopes, useScopeTracks} from '../usePersistedCollections';
-import gpxSample_01 from './gpxSample_01.xml';
-import gpxSample_02 from './gpxSample_02.xml';
-import gpxSample_03 from './gpxSample_03.xml';
-import gpxSample_04 from './gpxSample_04.xml';
+import gpxSample_01 from './fixtures/sample_01.gpx';
+import gpxSample_02 from './fixtures/sample_02.gpx';
+import gpxSample_03 from './fixtures/sample_03.gpx';
+import gpxSample_04 from './fixtures/sample_04.gpx';
 
 const scope: Scope = {
   id: uuidv4(),

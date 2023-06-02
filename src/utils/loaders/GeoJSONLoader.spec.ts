@@ -2,7 +2,7 @@ import {expect} from 'chai';
 
 import GeoJSONLoader from './GeoJSONLoader';
 
-import file from '!raw-loader!./fixtures/sample.geojson';
+import file from './fixtures/sample.geojson';
 
 const expectedResult = JSON.parse(file);
 

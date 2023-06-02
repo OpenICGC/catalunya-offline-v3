@@ -1,16 +1,9 @@
 import * as converter from '@tmcw/togeojson';
 import {DOMParser} from 'xmldom';
-import geoJSONImporter from './geoJSONImporter';
-import {ScopePoint, ScopeTrack} from '../../types/commonTypes';
+import geoJSONScopeImporter, {ScopeImportResults} from './geoJSONScopeImporter';
 import GeoJSON from 'geojson';
 
-interface ScopeImportResults {
-  points: Array<ScopePoint>,
-  tracks: Array<ScopeTrack>,
-  numberOfErrors: number
-}
-
-const gpxImporter: (data: string) => ScopeImportResults = (data) => {
+const gpxScopeImporter: (data: string) => Promise<ScopeImportResults> = async(data) => {
   const gpx = new DOMParser().parseFromString(data, 'application/xml');
   const geoJsonFromGpx = converter.gpx(gpx);
   const geoJsonFormatted = {
@@ -73,14 +66,15 @@ const gpxImporter: (data: string) => ScopeImportResults = (data) => {
   };
 
   if(geoJsonFromGpx.features.length === 0) {
+    console.log('Error importing GPX: No features found');
     return {
       points: [],
       tracks: [],
       numberOfErrors: 1
     };
   } else {
-    return geoJSONImporter(geoJsonFormatted);
+    return geoJSONScopeImporter(geoJsonFormatted);
   }
 };
 
-export default gpxImporter;
+export default gpxScopeImporter;

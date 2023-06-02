@@ -2,26 +2,25 @@ import {v4 as uuidv4} from 'uuid';
 import {validate as uuidValidate, version as uuidVersion} from 'uuid';
 import {ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import GeoJSON from 'geojson';
+import GeoJSONLoader from '../loaders/GeoJSONLoader';
 
-interface ScopeImportResults {
+export interface ScopeImportResults {
   points: Array<ScopePoint>,
   tracks: Array<ScopeTrack>,
   numberOfErrors: number
 }
 
-const geoJSONImporter = (data: string | GeoJSON.FeatureCollection) => {
+const geoJSONScopeImporter = async (data: string | GeoJSON.FeatureCollection): Promise<ScopeImportResults> => {
   const hexColorRegex = /^#([0-9a-f]{3}){1,2}$/i;
   const objImport: ScopeImportResults = {
     points: [],
     tracks: [],
     numberOfErrors: 0
   };
-  if (typeof data === 'string') {
-    data = JSON.parse(data) as GeoJSON.FeatureCollection;
-  }
 
+  const fc = typeof data === 'string' ? await GeoJSONLoader.load(data) : data;
 
-  data.features.map(feature => {
+  fc.features.map(feature => {
     if (feature.geometry.type === 'Point') {
       const featureId = uuidv4();
       const pointImport: ScopePoint = {
@@ -55,6 +54,7 @@ const geoJSONImporter = (data: string | GeoJSON.FeatureCollection) => {
       };
       objImport.tracks.push(trackImport);
     } else {
+      console.log(`Error importing GeoJSON: Geometry type ${feature.geometry.type} not supported.`);
       objImport.numberOfErrors++;
     }
     return objImport;
@@ -62,4 +62,4 @@ const geoJSONImporter = (data: string | GeoJSON.FeatureCollection) => {
   return objImport;
 };
 
-export default geoJSONImporter;
+export default geoJSONScopeImporter;
