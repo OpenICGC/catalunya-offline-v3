@@ -22,11 +22,11 @@ const useImport = (
 ) => {
   const {
     types = [
-      //'application/vnd.geo+json',
-      'application/geo+json', // Web, Android
-      'application/vnd.google-earth.kml+xml', // Web, Android
-      //'application/vnd.gpxsee.map+xml',
-      'application/gpx+xml', // Web, Android
+      'application/geo+json',
+      'application/vnd.google-earth.kml+xml',
+      'application/gpx+xml',
+      'text/csv', // Para probar en iOS
+      'application/zip', // Para probar en iOS
       //'application/octet-stream'
     ]
   } = options;
@@ -44,6 +44,7 @@ const useImport = (
       );
 
       if (result && result.files.length && result.files[0].data) {
+        console.log('file', result.files[0]);
         setFile({
           ...result.files[0],
           dataDecoded: b64DecodeUnicode(result.files[0].data)
@@ -53,8 +54,6 @@ const useImport = (
 
     pickFiles();
   }, []);
-
-  console.log('file', file);
 
   return file;
 };
