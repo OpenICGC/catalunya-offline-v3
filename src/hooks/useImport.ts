@@ -22,12 +22,12 @@ const useImport = (
 ) => {
   const {
     types = [
-      'application/vnd.geo+json',
-      'application/geo+json',
-      'application/vnd.google-earth.kml+xml',
-      'vnd.gpxsee.map+xml',
-      'application/gpx+xml',
-      'application/octet-stream'
+      //'application/vnd.geo+json',
+      'application/geo+json', // Web, Android
+      'application/vnd.google-earth.kml+xml', // Web, Android
+      //'application/vnd.gpxsee.map+xml',
+      'application/gpx+xml', // Web, Android
+      //'application/octet-stream'
     ]
   } = options;
 
@@ -53,7 +53,9 @@ const useImport = (
 
     pickFiles();
   }, []);
-  
+
+  console.log('file', file);
+
   return file;
 };
 

@@ -59,5 +59,48 @@
     </array>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <true/>
+    <key>UTImportedTypeDeclarations</key>
+    <array>
+      <dict>
+        <key>UTTypeConformsTo</key>
+        <array>
+          <string>public.xml</string>
+        </array>
+        <key>UTTypeDescription</key>
+        <string>GPS Exchange Format (GPX)</string>
+        <key>UTTypeIdentifier</key>
+        <string>com.topografix.gpx</string>
+        <key>UTTypeTagSpecification</key>
+        <dict>
+          <key>public.filename-extension</key>
+          <array>
+            <string>gpx</string>
+            <string>GPX</string>
+          </array>
+          <key>public.mime-type</key>
+          <string>application/gpx+xml</string>
+        </dict>
+      </dict>
+      <dict>
+        <key>UTTypeConformsTo</key>
+        <array>
+          <string>public.xml</string>
+        </array>
+        <key>UTTypeDescription</key>
+        <string>Google Earth KML Document</string>
+        <key>UTTypeIdentifier</key>
+        <string>com.google.earth.kml</string>
+        <key>UTTypeTagSpecification</key>
+        <dict>
+          <key>public.filename-extension</key>
+          <array>
+            <string>kml</string>
+            <string>KML</string>
+          </array>
+          <key>public.mime-type</key>
+          <string>application/vnd.google-earth.kml+xml</string>
+        </dict>
+      </dict>
+    </array>
   </dict>
 </plist>

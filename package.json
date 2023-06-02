@@ -139,7 +139,7 @@
     "@capacitor/network": "^4.1.0",
     "@capacitor/preferences": "^4.0.2",
     "@capacitor/share": "^4.1.0",
-    "@capawesome/capacitor-file-picker": "^0.6.2",
+    "@capawesome/capacitor-file-picker": "^0.6.3",
     "babel-plugin-typescript-to-proptypes": "^2.0.0",
     "capacitor-zip": "github:GeotrekCE/capacitor-zip",
     "compare-versions": "^6.0.0-rc.1",
