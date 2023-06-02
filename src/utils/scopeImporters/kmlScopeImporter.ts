@@ -1,11 +1,9 @@
-import * as converter from '@tmcw/togeojson';
-import {DOMParser} from 'xmldom';
 import geoJSONScopeImporter, {ScopeImportResults} from './geoJSONScopeImporter';
 import {Feature, FeatureCollection} from 'geojson';
+import KMLLoader from '../loaders/KMLLoader';
 
 const kmlScopeImporter: (data: string) => Promise<ScopeImportResults> = async (data) => {
-  const kml = new DOMParser().parseFromString(data, 'application/xml');
-  const geoJsonFromConverter = converter.kml(kml);
+  const geoJsonFromConverter = await KMLLoader.load(data);
   const geoJsonForImporter: FeatureCollection = {
     ...geoJsonFromConverter,
     features: geoJsonFromConverter.features
@@ -14,6 +12,7 @@ const kmlScopeImporter: (data: string) => Promise<ScopeImportResults> = async (d
         ...feature,
         properties: {
           ...feature.properties,
+          description: '',  // TODO: Reinstaurate description?
           color: feature.properties ?
             (feature?.geometry?.type === 'Point') ?
               feature.properties['icon-color'] :

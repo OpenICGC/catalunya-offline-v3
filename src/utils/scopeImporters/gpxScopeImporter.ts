@@ -1,11 +1,10 @@
-import * as converter from '@tmcw/togeojson';
-import {DOMParser} from 'xmldom';
-import geoJSONScopeImporter, {ScopeImportResults} from './geoJSONScopeImporter';
 import GeoJSON from 'geojson';
+import GPXLoader from '../loaders/GPXLoader';
+import geoJSONScopeImporter, {ScopeImportResults} from './geoJSONScopeImporter';
 
 const gpxScopeImporter: (data: string) => Promise<ScopeImportResults> = async(data) => {
-  const gpx = new DOMParser().parseFromString(data, 'application/xml');
-  const geoJsonFromGpx = converter.gpx(gpx);
+  const geoJsonFromGpx = await GPXLoader.load(data);
+
   const geoJsonFormatted = {
     ...geoJsonFromGpx,
     features: geoJsonFromGpx.features.map(feature => {
@@ -22,7 +21,7 @@ const gpxScopeImporter: (data: string) => Promise<ScopeImportResults> = async(da
           }
         }; 
       } else if (feature.geometry.type === 'LineString') {
-        if(feature?.properties?.coordinateProperties.times){
+        if(feature?.properties?.coordinateProperties?.times){
           const arrayOfTimestamps = feature.properties.coordinateProperties.times.map((time: string | number | Date) => Math.round(new Date(time).getTime() / 1000));  // timestamp in seconds as fourth coord
           const arrayOfCoordinates = feature?.geometry?.coordinates;
     
