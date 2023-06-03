@@ -1,25 +1,18 @@
 import {FC, useCallback, useEffect} from 'react';
 import {Error, UUID} from '../../../types/commonTypes';
-import useFilePicker from '../../../hooks/useFilePicker';
-import geoJSONScopeImporter, {ScopeImportResults} from '../../../utils/scopeImporters/geoJSONScopeImporter';
+import useFilePicker, {FilePickerResult} from '../../../hooks/useFilePicker';
+import geoJSONScopeImporter from '../../../utils/scopeImporters/geoJSONScopeImporter';
 import gpxScopeImporter from '../../../utils/scopeImporters/gpxScopeImporter';
 import kmlScopeImporter from '../../../utils/scopeImporters/kmlScopeImporter';
 import {useScopePoints, useScopeTracks} from '../../../hooks/usePersistedCollections';
 import {MAX_ALLOWED_IMPORT_FEATURES} from '../../../config';
 import {useTranslation} from 'react-i18next';
-import {PickedFile} from '@capawesome/capacitor-file-picker';
+import {ScopeImporter} from '../../../utils/scopeImporters/types';
+import {asDataUrl} from '../../../utils/loaders/helpers';
 
-// This will support UTF-8 encoded files.
-// See https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-/*function b64DecodeUnicode(base64string: string) {
-  return decodeURIComponent(Array.prototype.map.call(window.atob(base64string), function(c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-}*/
+type suppportedMimeType = 'application/geo+json' | 'application/vnd.google-earth.kml+xml' | 'application/gpx+xml';
 
-const asDataUrl = (base64str: string, mimeType: string) => `data:${mimeType};base64,${base64str}`;
-
-const importers: Record<string, (data: string) => Promise<ScopeImportResults>> = {
+const importers: Record<suppportedMimeType, ScopeImporter> = {
   'application/geo+json': geoJSONScopeImporter,
   'application/vnd.google-earth.kml+xml': kmlScopeImporter,
   'application/gpx+xml': gpxScopeImporter
@@ -38,14 +31,15 @@ const HandleImport: FC<HandleImportProps> = ({
 }) => {
 
   const {t} = useTranslation();
-  const pickedFile = useFilePicker(Object.keys(importers), onError);
+  const pickedFile = useFilePicker(Object.keys(importers) as Array<suppportedMimeType>, onError);
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
 
-  const importData = useCallback(async (file: PickedFile) => {
-    const importer = importers[file.mimeType];
+  const importData = useCallback(async (file: FilePickerResult) => {
+    const mimeType = file.mimeType as suppportedMimeType;
+    const importer = importers[mimeType];
     if (importer && file.data) {
-      const {points, tracks, numberOfErrors} = await importer(asDataUrl(file.data, file.mimeType));
+      const {points, tracks, numberOfErrors} = await importer(asDataUrl(file.data, mimeType));
       const totalFeatures = points.length + tracks.length;
       if (totalFeatures > MAX_ALLOWED_IMPORT_FEATURES) {
         onError({name: 'errors.import.length', message: t('errors.import.length', {max_features: MAX_ALLOWED_IMPORT_FEATURES})});

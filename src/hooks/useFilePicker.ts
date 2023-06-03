@@ -1,12 +1,19 @@
 import {useEffect, useState} from 'react';
-import {FilePicker, PickedFile} from '@capawesome/capacitor-file-picker';
+import {FilePicker} from '@capawesome/capacitor-file-picker';
 import {Error} from '../types/commonTypes';
+import {base64string, mimeType} from '../utils/loaders/types';
+
+export type FilePickerResult = {
+  blob?: Blob,
+  data?: base64string,
+  mimeType?: mimeType
+}
 
 const useFilePicker = (
-  mimeTypes: string[],
+  mimeTypes: Array<mimeType>,
   onError: (error: Error) => void
-): PickedFile | undefined => {
-  const [pickedFile, setPickedFile] = useState<PickedFile>();
+): FilePickerResult | undefined => {
+  const [pickedFile, setPickedFile] = useState<FilePickerResult>();
 
   useEffect(() => {
     const pickFiles = async () => {
@@ -19,7 +26,7 @@ const useFilePicker = (
       );
 
       if (result?.files.length) {
-        setPickedFile(result.files[0]);
+        setPickedFile(result.files[0] as FilePickerResult);
       }
     };
 

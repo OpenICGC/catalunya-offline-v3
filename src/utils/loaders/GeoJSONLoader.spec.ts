@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 import GeoJSONLoader from './GeoJSONLoader';
 import sampleGeojson from './fixtures/sample.geojson';
+import {asBlob, asDataUrl, unicodeToBase64} from './helpers';
 
 const expectedResult = {
   type: 'FeatureCollection',
@@ -72,14 +73,11 @@ const expectedResult = {
   ]
 };
 
-const asDataUrl = (str: string, mimeType: string) => `data:${mimeType};base64,${window.btoa(str)}`;
-const asBlob = (str: string, mimeType: string) => new Blob([str], {type: mimeType});
-
 describe('GeoJSONLoader', () => {
 
   it('should import a GeoJSON file from a data url', async () => {
     // GIVEN
-    const url = asDataUrl(sampleGeojson, 'application/geo+json');
+    const url = asDataUrl(unicodeToBase64(sampleGeojson), 'application/geo+json');
 
     // WHEN
     const result = await GeoJSONLoader.load(url);

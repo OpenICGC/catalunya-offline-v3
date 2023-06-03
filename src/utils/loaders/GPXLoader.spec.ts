@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 import GPXLoader from './GPXLoader';
 import sampleGpx from './fixtures/sample.gpx';
+import {asBlob, asDataUrl, unicodeToBase64} from './helpers';
 
 const expectedResult = {
   type: 'FeatureCollection',
@@ -52,14 +53,11 @@ const expectedResult = {
   ]
 };
 
-const asDataUrl = (str: string, mimeType: string) => `data:${mimeType};base64,${window.btoa(str)}`;
-const asBlob = (str: string, mimeType: string) => new Blob([str], {type: mimeType});
-
 describe('GPXLoader', () => {
 
   it('should import a GPX file from a data url', async () => {
     // GIVEN
-    const url = asDataUrl(sampleGpx, 'application/gpx+xml');
+    const url = asDataUrl(unicodeToBase64(sampleGpx), 'application/gpx+xml');
 
     // WHEN
     const result = await GPXLoader.load(url);

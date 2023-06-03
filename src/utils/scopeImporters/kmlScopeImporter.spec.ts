@@ -5,8 +5,7 @@ import fromWikiloc from './fixtures/kml/fromWikiloc.kml';
 import fromRutaBike from './fixtures/kml/fromRutaBike.kml';
 import fromGEarth from './fixtures/kml/fromGEarth.kml';
 import sample_01 from './fixtures/kml/sample_01.kml';
-
-const asDataUrl = (str: string, mimeType: string) => `data:${mimeType};base64,${window.btoa(str)}`;
+import {asDataUrl, unicodeToBase64} from '../loaders/helpers';
 
 const expectedImportedFromWikiloc = {
   points: [
@@ -195,7 +194,7 @@ describe('kmlScopeImporter', () => {
 
   it('should import a Kml from Catoffline', async () => {
     //GIVEN
-    const data = asDataUrl(sample_01, 'application/vnd.google-earth.kml+xml');
+    const data = asDataUrl(unicodeToBase64(sample_01), 'application/vnd.google-earth.kml+xml');
 
     //WHEN
     const computedData = await kmlScopeImporter(data);
@@ -250,7 +249,7 @@ describe('kmlScopeImporter', () => {
 
   it('should import a Kml from Wikiloc', async () => {
     //GIVEN
-    const data = asDataUrl(fromWikiloc, 'application/vnd.google-earth.kml+xml');
+    const data = asDataUrl(unicodeToBase64(fromWikiloc), 'application/vnd.google-earth.kml+xml');
 
     //WHEN
     const computedData = await kmlScopeImporter(data);
@@ -300,7 +299,7 @@ describe('kmlScopeImporter', () => {
 
   it('should import a Kml from RutaBike', async () => {
     //GIVEN
-    const data = asDataUrl(fromRutaBike, 'application/vnd.google-earth.kml+xml');
+    const data = asDataUrl(unicodeToBase64(fromRutaBike), 'application/vnd.google-earth.kml+xml');
 
     //WHEN
     const computedData = await kmlScopeImporter(data);
@@ -356,7 +355,7 @@ describe('kmlScopeImporter', () => {
 
   it('should import a Kml from Google Earth', async () => {
     //GIVEN
-    const data = asDataUrl(fromGEarth, 'application/vnd.google-earth.kml+xml');
+    const data = asDataUrl(unicodeToBase64(fromGEarth), 'application/vnd.google-earth.kml+xml');
 
     //WHEN
     const computedData = await kmlScopeImporter(data);

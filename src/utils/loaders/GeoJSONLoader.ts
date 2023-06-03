@@ -1,5 +1,5 @@
 import {load, JSONLoader} from '@loaders.gl/core';
-import {IGeodataLoader} from './GeodataLoader';
+import {IGeodataLoader} from './types';
 
 const GeoJSONLoader: IGeodataLoader = {
   load: (url) => load(url, JSONLoader)

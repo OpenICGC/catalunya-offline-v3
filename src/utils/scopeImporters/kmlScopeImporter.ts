@@ -1,8 +1,10 @@
-import geoJSONScopeImporter, {ScopeImportResults} from './geoJSONScopeImporter';
 import {Feature, FeatureCollection} from 'geojson';
 import KMLLoader from '../loaders/KMLLoader';
+import {ScopeImporter} from './types';
+import {base64string} from '../loaders/types';
+import geoJSONToScopeFeatures from './geoJSONToScopeFeatures';
 
-const kmlScopeImporter: (data: string) => Promise<ScopeImportResults> = async (data) => {
+const kmlScopeImporter: ScopeImporter = async (data: base64string | Blob) => {
   const geoJsonFromConverter = await KMLLoader.load(data);
   const geoJsonForImporter: FeatureCollection = {
     ...geoJsonFromConverter,
@@ -32,7 +34,7 @@ const kmlScopeImporter: (data: string) => Promise<ScopeImportResults> = async (d
       numberOfErrors: 1
     };
   } else {
-    return geoJSONScopeImporter(geoJsonForImporter);
+    return geoJSONToScopeFeatures(geoJsonForImporter);
   }
 };
 

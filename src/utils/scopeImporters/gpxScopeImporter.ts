@@ -1,8 +1,9 @@
 import GeoJSON from 'geojson';
 import GPXLoader from '../loaders/GPXLoader';
-import geoJSONScopeImporter, {ScopeImportResults} from './geoJSONScopeImporter';
+import {ScopeImporter} from './types';
+import geoJSONToScopeFeatures from './geoJSONToScopeFeatures';
 
-const gpxScopeImporter: (data: string) => Promise<ScopeImportResults> = async(data) => {
+const gpxScopeImporter: ScopeImporter = async(data) => {
   const geoJsonFromGpx = await GPXLoader.load(data);
 
   const geoJsonFormatted = {
@@ -72,7 +73,7 @@ const gpxScopeImporter: (data: string) => Promise<ScopeImportResults> = async(da
       numberOfErrors: 1
     };
   } else {
-    return geoJSONScopeImporter(geoJsonFormatted);
+    return geoJSONToScopeFeatures(geoJsonFormatted);
   }
 };
 

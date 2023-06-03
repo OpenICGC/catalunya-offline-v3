@@ -3,8 +3,7 @@ import geoJSONScopeImporter from './geoJSONScopeImporter';
 
 import fromCatOffline from './fixtures/geojson/fromCatOffline.geojson';
 import withoutPropertiesAndUnsupportedGeometries from './fixtures/geojson/withoutPropertiesAndUnsupportedGeometries.geojson';
-
-const asDataUrl = (str: string, mimeType: string) => `data:${mimeType};base64,${window.btoa(str)}`;
+import {asDataUrl, unicodeToBase64} from '../loaders/helpers';
 
 const expectedImportedFromCatOffline = {
   points: [
@@ -141,7 +140,7 @@ describe('geoJSONScopeImporter', () => {
 
   it('should import a GeoJSON previously exported with CatOffline', async () => {
     // GIVEN
-    const data = asDataUrl(fromCatOffline, 'application/geo+json');
+    const data = asDataUrl(unicodeToBase64(fromCatOffline), 'application/geo+json');
 
     //WHEN
     const computedData = await geoJSONScopeImporter(data);
@@ -152,7 +151,7 @@ describe('geoJSONScopeImporter', () => {
   
   it('should import a GeoJSON with empty properties', async () => {
     // GIVEN
-    const data = asDataUrl(withoutPropertiesAndUnsupportedGeometries, 'application/geo+json');
+    const data = asDataUrl(unicodeToBase64(withoutPropertiesAndUnsupportedGeometries), 'application/geo+json');
     
     // WHEN
     const computedData = await geoJSONScopeImporter(data);

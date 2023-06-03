@@ -8,14 +8,7 @@ import fromWikiloc from './fixtures/gpx/fromWikiloc.gpx';
 import fromWikilocWithAccents from './fixtures/gpx/fromWikilocWithAccents.gpx';
 import sample_01 from './fixtures/kml/sample_01.kml';
 import multiPolygon from './fixtures/gpx/multiPolygon.gpx';
-
-function b64EncodeUnicode(str: string) {
-  return window.btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-    return String.fromCharCode(parseInt(p1, 16));
-  }));
-}
-
-const asDataUrl = (str: string, mimeType: string) => `data:${mimeType};base64,${b64EncodeUnicode(str)}`;
+import {asDataUrl, unicodeToBase64} from '../loaders/helpers';
 
 const expectedImportedTrackFromCatOffline = {
   points: [],
@@ -230,7 +223,7 @@ describe('gpxScopeImporter', () => {
     
   it('should import a Gpx Track and Point from CatOffline', async () => {
     //GIVEN
-    const data = asDataUrl(trackAndPointFromCatOffline, 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64(trackAndPointFromCatOffline), 'application/gpx+xml');
     
     //WHEN
     const computedData = await gpxScopeImporter(data);
@@ -280,7 +273,7 @@ describe('gpxScopeImporter', () => {
 
   it('should import a Gpx Track from CatOffline', async () => {
     //GIVEN
-    const data = asDataUrl(trackFromCatOffline, 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64(trackFromCatOffline), 'application/gpx+xml');
 
     //WHEN
     const computedData = await gpxScopeImporter(data);
@@ -318,7 +311,7 @@ describe('gpxScopeImporter', () => {
 
   it('should import a Gpx Track from RutaBike', async () => {
     //GIVEN
-    const data = asDataUrl(fromRutaBike, 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64(fromRutaBike), 'application/gpx+xml');
 
     //WHEN
     const computedData = await gpxScopeImporter(data);
@@ -354,7 +347,7 @@ describe('gpxScopeImporter', () => {
 
   it('should import a Gpx Track from Wikiloc', async () => {
     //GIVEN
-    const data = asDataUrl(fromWikiloc, 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64(fromWikiloc), 'application/gpx+xml');
 
 
     //WHEN
@@ -392,7 +385,7 @@ describe('gpxScopeImporter', () => {
 
   it('should import a Gpx Track and Point from Wikiloc', async () => {
     //GIVEN
-    const data = asDataUrl(fromWikiloc, 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64(fromWikiloc), 'application/gpx+xml');
 
     //WHEN
     const computedData = await gpxScopeImporter(data);
@@ -429,7 +422,7 @@ describe('gpxScopeImporter', () => {
 
   it('should not import a string', async () => {
     //GIVEN
-    const data = asDataUrl('garbage', 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64('garbage'), 'application/gpx+xml');
 
     //WHEN
     const computedData = await gpxScopeImporter(data);
@@ -441,7 +434,7 @@ describe('gpxScopeImporter', () => {
 
   it('should import a Gpx file parsing correctly the UTF-8 character encoding', async () => {
     //GIVEN
-    const data = asDataUrl(fromWikilocWithAccents, 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64(fromWikilocWithAccents), 'application/gpx+xml');
 
     //WHEN
     const computedData = await gpxScopeImporter(data);
@@ -478,7 +471,7 @@ describe('gpxScopeImporter', () => {
 
   it('should not import a kml', async () => {
     //GIVEN
-    const data = asDataUrl(sample_01, 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64(sample_01), 'application/gpx+xml');
 
     //WHEN
     const computedData = await gpxScopeImporter(data);
@@ -490,7 +483,7 @@ describe('gpxScopeImporter', () => {
 
   it('should not import a MultiPolygon gpx', async () => {
     //GIVEN
-    const data = asDataUrl(multiPolygon, 'application/gpx+xml');
+    const data = asDataUrl(unicodeToBase64(multiPolygon), 'application/gpx+xml');
 
     //WHEN
     const computedData = await gpxScopeImporter(data);

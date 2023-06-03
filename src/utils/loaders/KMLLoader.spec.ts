@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 import KMLLoader from './KMLLoader';
 import sampleKml from './fixtures/sample.kml';
+import {asBlob, asDataUrl, unicodeToBase64} from './helpers';
 
 const expectedResult = {
   type: 'FeatureCollection',
@@ -107,14 +108,11 @@ const expectedResult = {
   ]
 };
 
-const asDataUrl = (str: string, mimeType: string) => `data:${mimeType};base64,${window.btoa(str)}`;
-const asBlob = (str: string, mimeType: string) => new Blob([str], {type: mimeType});
-
 describe('KMLLoader', () => {
 
   it('should import a KML file from a data url', async () => {
     // GIVEN
-    const url = asDataUrl(sampleKml, 'application/vnd.google-earth.kml+xml');
+    const url = asDataUrl(unicodeToBase64(sampleKml), 'application/vnd.google-earth.kml+xml');
 
     // WHEN
     const result = await KMLLoader.load(url);
