@@ -38,9 +38,9 @@ const HandleImport: FC<HandleImportProps> = ({
   const importData = useCallback(async (file: FilePickerResult) => {
     const mimeType = file.mimeType as suppportedMimeType;
     const importer = importers[mimeType];
-    if (importer && file.data) {
+    if (importer && (file.blob || file.data)) {
       const importResult =
-        await importer(asDataUrl(file.data, mimeType))
+        await importer(file.blob ?? asDataUrl(file.data as string, mimeType))
           .catch(() => {
             onError({
               name: 'errors.import.read',
