@@ -3,7 +3,7 @@ import {Meta, Story} from '@storybook/react';
 
 import GeometryThumbnail, {GeometryThumbnailProps} from './GeometryThumbnail';
 import GeoJSON from 'geojson';
-import sample from '../../fixtures/sampleLineString.geo.json';
+import sample from '../fixtures/sampleLineString.geojson';
 const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
 
 export default {

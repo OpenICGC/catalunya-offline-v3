@@ -3,8 +3,8 @@ import {useKmlExport} from './useKmlExport';
 import {act, renderHook} from '@testing-library/react-hooks/dom';
 import {useScopePoints, useScopes, useScopeTracks} from '../usePersistedCollections';
 import {Scope, ScopePoint, ScopeTrack} from '../../types/commonTypes';
-import kmlSample_01 from './kmlSample_01.xml';
-import kmlSample_02 from './kmlSample_02.xml';
+import kmlSample_01 from './fixtures/sample_01.kml';
+import kmlSample_02 from './fixtures/sample_02.kml';
 
 const scope: Scope = {
   id: '9c3981d3-8ca5-4b7b-a3bc-a949761591ab',

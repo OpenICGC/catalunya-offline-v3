@@ -1,46 +1,60 @@
-import {FC, useEffect} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {Error, UUID} from '../../../types/commonTypes';
-import useImport, {ImportedFile} from '../../../hooks/useImport';
-import geoJSONImporter from '../../../utils/importers/geoJSONImporter';
-import gpxImporter from '../../../utils/importers/gpxImporter';
-import kmlImporter from '../../../utils/importers/kmlImporter';
+import useFilePicker, {FilePickerResult} from '../../../hooks/useFilePicker';
+import geoJSONScopeImporter from '../../../utils/scopeImporters/geoJSONScopeImporter';
+import gpxScopeImporter from '../../../utils/scopeImporters/gpxScopeImporter';
+import kmlScopeImporter from '../../../utils/scopeImporters/kmlScopeImporter';
 import {useScopePoints, useScopeTracks} from '../../../hooks/usePersistedCollections';
 import {MAX_ALLOWED_IMPORT_FEATURES} from '../../../config';
 import {useTranslation} from 'react-i18next';
+import {ScopeImporter} from '../../../utils/scopeImporters/types';
+import {asDataUrl} from '../../../utils/loaders/helpers';
 
+type suppportedMimeType = 'application/geo+json' | 'application/vnd.google-earth.kml+xml' | 'application/gpx+xml';
+
+const importers: Record<suppportedMimeType, ScopeImporter> = {
+  'application/geo+json': geoJSONScopeImporter,
+  'application/vnd.google-earth.kml+xml': kmlScopeImporter,
+  'application/gpx+xml': gpxScopeImporter
+};
 
 export type HandleImportProps = {
   scopeId: UUID,
   onSuccess: () => void
   onError: (error: Error) => void
-  onCancel: () => void
 }
 
 const HandleImport: FC<HandleImportProps> = ({
   scopeId,
   onSuccess,
-  onError,
-  onCancel
+  onError
 }) => {
 
   const {t} = useTranslation();
-  const file = useImport({}, onCancel);
+  const pickedFile = useFilePicker(Object.keys(importers) as Array<suppportedMimeType>, onError);
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
 
-  useEffect(() => {
-    const importData = async (file: ImportedFile) => {
-      const extension = file.name.split('.').pop()?.toLowerCase();
-      const importer =
-       extension === 'geojson' ? geoJSONImporter :
-         extension === 'gpx' ? gpxImporter :
-           extension === 'kml' ? kmlImporter :
-             undefined;
-      if (importer) {
-        const {points, tracks, numberOfErrors} = await importer(file.dataDecoded);
+  const importData = useCallback(async (file: FilePickerResult) => {
+    const mimeType = file.mimeType as suppportedMimeType;
+    const importer = importers[mimeType];
+    if (importer && (file.blob || file.data)) {
+      const importResult =
+        await importer(file.blob ?? asDataUrl(file.data as string, mimeType))
+          .catch(() => {
+            onError({
+              name: 'errors.import.read',
+              message:  t('errors.import.read')
+            });
+          });
+      if (importResult) {
+        const {points, tracks, numberOfErrors} = importResult;
         const totalFeatures = points.length + tracks.length;
         if (totalFeatures > MAX_ALLOWED_IMPORT_FEATURES) {
-          onError({name: 'errors.import.length', message: t('errors.import.length', {max_features: MAX_ALLOWED_IMPORT_FEATURES})});
+          onError({
+            name: 'errors.import.length',
+            message: t('errors.import.length', {max_features: MAX_ALLOWED_IMPORT_FEATURES})
+          });
         } else if (numberOfErrors) {
           onError({
             name: 'errors.import.unmanaged_errors',
@@ -51,15 +65,17 @@ const HandleImport: FC<HandleImportProps> = ({
           await trackStore.create(tracks);
           onSuccess();
         }
-      } else {
-        onError({name: 'errors.import.format', message: t('errors.import.format')});
       }
-    };
-
-    if (file) {
-      importData(file);
+    } else {
+      onError({name: 'errors.import.format', message: t('errors.import.format')});
     }
-  }, [file]);
+  }, [onSuccess, onError, trackStore.create, pointStore.create]);
+
+  useEffect(() => {
+    if (pickedFile) {
+      importData(pickedFile);
+    }
+  }, [pickedFile]);
 
   return null;
 };

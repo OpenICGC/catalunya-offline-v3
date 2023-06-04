@@ -1,18 +1,11 @@
-import * as converter from '@tmcw/togeojson';
-import {DOMParser} from 'xmldom';
-import geoJSONImporter from './geoJSONImporter';
-import {ScopePoint, ScopeTrack} from '../../types/commonTypes';
 import GeoJSON from 'geojson';
+import GPXLoader from '../loaders/GPXLoader';
+import {ScopeImporter} from './types';
+import geoJSONToScopeFeatures from './geoJSONToScopeFeatures';
 
-interface ScopeImportResults {
-  points: Array<ScopePoint>,
-  tracks: Array<ScopeTrack>,
-  numberOfErrors: number
-}
+const gpxScopeImporter: ScopeImporter = async(data) => {
+  const geoJsonFromGpx = await GPXLoader.load(data);
 
-const gpxImporter: (data: string) => ScopeImportResults = (data) => {
-  const gpx = new DOMParser().parseFromString(data, 'application/xml');
-  const geoJsonFromGpx = converter.gpx(gpx);
   const geoJsonFormatted = {
     ...geoJsonFromGpx,
     features: geoJsonFromGpx.features.map(feature => {
@@ -29,7 +22,7 @@ const gpxImporter: (data: string) => ScopeImportResults = (data) => {
           }
         }; 
       } else if (feature.geometry.type === 'LineString') {
-        if(feature?.properties?.coordinateProperties.times){
+        if(feature?.properties?.coordinateProperties?.times){
           const arrayOfTimestamps = feature.properties.coordinateProperties.times.map((time: string | number | Date) => Math.round(new Date(time).getTime() / 1000));  // timestamp in seconds as fourth coord
           const arrayOfCoordinates = feature?.geometry?.coordinates;
     
@@ -73,14 +66,15 @@ const gpxImporter: (data: string) => ScopeImportResults = (data) => {
   };
 
   if(geoJsonFromGpx.features.length === 0) {
+    console.log('Error importing GPX: No features found');
     return {
       points: [],
       tracks: [],
       numberOfErrors: 1
     };
   } else {
-    return geoJSONImporter(geoJsonFormatted);
+    return geoJSONToScopeFeatures(geoJsonFormatted);
   }
 };
 
-export default gpxImporter;
+export default gpxScopeImporter;

@@ -1,12 +1,14 @@
 import {expect} from 'chai';
-import gpxImporter from './gpxImporter';
-import sampleGpxTrackFromCatOffline from '../../components/fixtures/sampleGpxTrackFromCatOffline.xml';
-import sampleGpxTrackAndPointFromCatOffline from '../../components/fixtures/sampleGpxTrackAndPointFromCatOffline.xml';
-import sampleGpxFromRutaBike from '../../components/fixtures/sampleGpxFromRutaBike.xml';
-import sampleGpxFromWikiloc from '../../components/fixtures/sampleGpxFromWikiloc.xml';
-import sampleGpxFromWikilocWithAccents from '../../components/fixtures/sampleGpxFromWikilocWithAccents.xml';
-import kmlSample_01 from '../../hooks/exporters/kmlSample_01.xml';
-import sampleMultiPolygon from '../../components/fixtures/sampleMultiPolygon.xml';
+import gpxScopeImporter from './gpxScopeImporter';
+
+import trackFromCatOffline from './fixtures/gpx/trackFromCatOffline.gpx';
+import trackAndPointFromCatOffline from './fixtures/gpx/trackAndPointFromCatOffline.gpx';
+import fromRutaBike from './fixtures/gpx/fromRutaBike.gpx';
+import fromWikiloc from './fixtures/gpx/fromWikiloc.gpx';
+import fromWikilocWithAccents from './fixtures/gpx/fromWikilocWithAccents.gpx';
+import sample_01 from './fixtures/kml/sample_01.kml';
+import multiPolygon from './fixtures/gpx/multiPolygon.gpx';
+import {asDataUrl, unicodeToBase64} from '../loaders/helpers';
 
 const expectedImportedTrackFromCatOffline = {
   points: [],
@@ -217,14 +219,14 @@ const expectedMultiPolygon = {
   ],
   numberOfErrors: 0
 };
-describe('gpxImporter', () => {
+describe('gpxScopeImporter', () => {
     
   it('should import a Gpx Track and Point from CatOffline', async () => {
     //GIVEN
-    const data = sampleGpxTrackAndPointFromCatOffline;
+    const data = asDataUrl(unicodeToBase64(trackAndPointFromCatOffline), 'application/gpx+xml');
     
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     const partialComputedData = {
       points: computedData.points.map(point => (
@@ -271,10 +273,10 @@ describe('gpxImporter', () => {
 
   it('should import a Gpx Track from CatOffline', async () => {
     //GIVEN
-    const data = sampleGpxTrackFromCatOffline;
+    const data = asDataUrl(unicodeToBase64(trackFromCatOffline), 'application/gpx+xml');
 
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -309,10 +311,10 @@ describe('gpxImporter', () => {
 
   it('should import a Gpx Track from RutaBike', async () => {
     //GIVEN
-    const data = sampleGpxFromRutaBike;
+    const data = asDataUrl(unicodeToBase64(fromRutaBike), 'application/gpx+xml');
 
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -345,10 +347,11 @@ describe('gpxImporter', () => {
 
   it('should import a Gpx Track from Wikiloc', async () => {
     //GIVEN
-    const data = sampleGpxFromWikiloc;
+    const data = asDataUrl(unicodeToBase64(fromWikiloc), 'application/gpx+xml');
+
 
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -382,10 +385,10 @@ describe('gpxImporter', () => {
 
   it('should import a Gpx Track and Point from Wikiloc', async () => {
     //GIVEN
-    const data = sampleGpxFromWikiloc;
+    const data = asDataUrl(unicodeToBase64(fromWikiloc), 'application/gpx+xml');
 
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -419,22 +422,22 @@ describe('gpxImporter', () => {
 
   it('should not import a string', async () => {
     //GIVEN
-    const data = 'hello world';
+    const data = asDataUrl(unicodeToBase64('garbage'), 'application/gpx+xml');
 
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     // THEN
     expect(computedData).to.deep.equal(expectedImportedError);
 
   });
 
-  it('should import a Gpx file parsing correctly the UTF-8 character encoding', () => {
+  it('should import a Gpx file parsing correctly the UTF-8 character encoding', async () => {
     //GIVEN
-    const data = sampleGpxFromWikilocWithAccents;
+    const data = asDataUrl(unicodeToBase64(fromWikilocWithAccents), 'application/gpx+xml');
 
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     const partialComputedData = {
       points: [],
@@ -468,22 +471,22 @@ describe('gpxImporter', () => {
 
   it('should not import a kml', async () => {
     //GIVEN
-    const data = kmlSample_01;
+    const data = asDataUrl(unicodeToBase64(sample_01), 'application/gpx+xml');
 
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     // THEN
     expect(computedData).to.deep.equal(expectedImportedError);
 
   });
 
-  it('should not import a MultyPoligon gpx', async () => {
+  it('should not import a MultiPolygon gpx', async () => {
     //GIVEN
-    const data = sampleMultiPolygon;
+    const data = asDataUrl(unicodeToBase64(multiPolygon), 'application/gpx+xml');
 
     //WHEN
-    const computedData = gpxImporter(data);
+    const computedData = await gpxScopeImporter(data);
 
     const partialComputedData = {
       points: [],

@@ -69,6 +69,7 @@
     "import": {
       "format": "Format no suportat.",
       "length": "No es poden importar més de {{max_features}} entitats.",
+      "read": "Error llegint el fitxer.",
       "unmanaged_errors": "S'han processat {{totalFeatures}} entitats de les quals {{numberOfErrors}} han donat un error en importar."
     },
     "search": {

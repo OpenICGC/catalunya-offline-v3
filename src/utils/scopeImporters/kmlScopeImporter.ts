@@ -1,18 +1,11 @@
-import * as converter from '@tmcw/togeojson';
-import {DOMParser} from 'xmldom';
-import {ScopePoint, ScopeTrack} from '../../types/commonTypes';
-import geoJSONImporter from './geoJSONImporter';
 import {Feature, FeatureCollection} from 'geojson';
+import KMLLoader from '../loaders/KMLLoader';
+import {ScopeImporter} from './types';
+import {base64string} from '../loaders/types';
+import geoJSONToScopeFeatures from './geoJSONToScopeFeatures';
 
-interface ScopeImportResults {
-  points: Array<ScopePoint>,
-  tracks: Array<ScopeTrack>,
-  numberOfErrors: number
-}
-
-const kmlImporter: (data: string) => ScopeImportResults = (data) => {
-  const kml = new DOMParser().parseFromString(data, 'application/xml');
-  const geoJsonFromConverter = converter.kml(kml);
+const kmlScopeImporter: ScopeImporter = async (data: base64string | Blob) => {
+  const geoJsonFromConverter = await KMLLoader.load(data);
   const geoJsonForImporter: FeatureCollection = {
     ...geoJsonFromConverter,
     features: geoJsonFromConverter.features
@@ -33,14 +26,15 @@ const kmlImporter: (data: string) => ScopeImportResults = (data) => {
   };
 
   if(geoJsonFromConverter.features.length === 0) {
+    console.log('Error importing KML: No features found');
     return {
       points: [],
       tracks: [],
       numberOfErrors: 1
     };
   } else {
-    return geoJSONImporter(geoJsonForImporter);
+    return geoJSONToScopeFeatures(geoJsonForImporter);
   }
 };
 
-export default kmlImporter;
+export default kmlScopeImporter;

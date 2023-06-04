@@ -1,8 +1,9 @@
 import {expect} from 'chai';
-import geoJSONImporter from './geoJSONImporter';
+import geoJSONScopeImporter from './geoJSONScopeImporter';
 
-import sampleGeoJSONExportedFromCatOffline from '../../components/fixtures/sampleGeoJSONExportedFromCatOffline.geo.json';
-import sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries from '../../components/fixtures/sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries.geo.json';
+import fromCatOffline from './fixtures/geojson/fromCatOffline.geojson';
+import withoutPropertiesAndUnsupportedGeometries from './fixtures/geojson/withoutPropertiesAndUnsupportedGeometries.geojson';
+import {asDataUrl, unicodeToBase64} from '../loaders/helpers';
 
 const expectedImportedFromCatOffline = {
   points: [
@@ -135,23 +136,25 @@ const expectedImportedWithUnsupportedGeometries = {
   numberOfErrors: 1
 };
 
-describe('geoJSONImporter', () => {
+describe('geoJSONScopeImporter', () => {
 
   it('should import a GeoJSON previously exported with CatOffline', async () => {
     // GIVEN
-    const data = JSON.stringify(sampleGeoJSONExportedFromCatOffline);
+    const data = asDataUrl(unicodeToBase64(fromCatOffline), 'application/geo+json');
 
     //WHEN
-    const computedData = geoJSONImporter(data);
+    const computedData = await geoJSONScopeImporter(data);
 
     // THEN
     expect(computedData).to.deep.equal(expectedImportedFromCatOffline);
   });
   
   it('should import a GeoJSON with empty properties', async () => {
+    // GIVEN
+    const data = asDataUrl(unicodeToBase64(withoutPropertiesAndUnsupportedGeometries), 'application/geo+json');
     
     // WHEN
-    const computedData = geoJSONImporter(JSON.stringify(sampleGeoJSONWithoutPropertiesNorUnsupportedGeometries));
+    const computedData = await geoJSONScopeImporter(data);
       
     const partialComputedData = {
       points: computedData.points.map(point => (
