@@ -14,7 +14,7 @@ const expectedImportedFromWikiloc = {
       properties: {
         name: 'paki estacio',
         color: undefined,
-        description: '',
+        description:  '<table width="400" style="color:#666"><tr><td colspan="2" align="left"><a href="https://www.wikiloc.com"><img src="https://sc.wklcdn.com/wikiloc/images/wikiloc.png?v=3.0" alt="Wikiloc"></a></td></tr><tr><td colspan="2"><font style="font-size:14pt;color:#2B60DE"><a href="https://www.wikiloc.com/hiking-trails/paki-estacio-21063457">paki estacio</a></font><br/>near La Floresta Pearson, Catalunya (España) by <a style="color:#2B60DE" href="https://www.wikiloc.com/wikiloc/user.do?id=607096">Carme Burrel</a></td></tr><tr><td width="40"><img src="https://sc.wklcdn.com/wikiloc/images/pictograms/1.png" alt=""/></td><td align="left"><font style="color:black"><b>Walking distance:</b> 0 mi. - 0 km.</font><br/><br/><b>Elevation min:</b> 209 meters <b>max:</b> 219 meters<br/><b>Uphill:</b> 7 meters <b>down:</b> 7 meters<br/><b>Type: </b>One way<br/></td></tr><tr><td colspan="2"> </td></tr><tr><td align="right" colspan="2"><br/><a style="color:#2B60DE"href="https://www.wikiloc.com/wikiloc/upload.do"><b>Upload your trail to wikiloc.com &rarr;</b></a></td></tr></table>',
         images: [],
         isVisible: true,
       },
@@ -54,7 +54,7 @@ const expectedImportedFromRutaBike = {
       type: 'Feature',
       properties: {
         color: undefined,
-        description: '',
+        description: '\n              <table>\n                <tr><td>Longitude: 2.417380 </td></tr>\n                <tr><td>Latitude: 41.869000 </td></tr>\n                <tr><td>Altitude: 751.027 meters </td></tr>\n                <tr><td>Speed: 15.9 meters/hour </td></tr>\n                <tr><td>Heading: 2.7 </td></tr>\n                <tr><td>Time: 2003-07-03T17:39:31Z </td></tr>\n              </table>\n            ',
         images: [],
         isVisible: true,
       },
@@ -67,7 +67,7 @@ const expectedImportedFromRutaBike = {
       type: 'Feature',
       properties: {
         color: undefined,
-        description: '',
+        description: '\n              <table>\n                <tr><td>Longitude: 2.425380 </td></tr>\n                <tr><td>Latitude: 41.872720 </td></tr>\n                <tr><td>Altitude: 838.505 meters </td></tr>\n                <tr><td>Speed: 5.6 km/hour </td></tr>\n                <tr><td>Heading: 44.8 </td></tr>\n                <tr><td>Time: 2003-07-03T17:51:59Z </td></tr>\n              </table>\n            ',
         images: [],
         isVisible: true,
       },
@@ -114,7 +114,7 @@ const expectedImportedFromGEarth = {
       properties: {
         name: 'KmlPath',
         color: '#aa00ff',
-        description: '', // 'A kmlPath description' // TODO: Reinstaurate description?
+        description: 'A kmlPath description',
         images: [],
         isVisible: true,
       },
@@ -140,7 +140,7 @@ const expectedImportedFromCatoffline = {
       properties: {
         name: 'Point 1',
         color: '#973572',
-        description: '',
+        description: '\n                    \n                        Point 1 description\n                        <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/image1Point1.jpg">\n                        <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/image2Point1.jpg">\n                    \n                ',
         images: [],
         isVisible: true
       },
@@ -154,7 +154,7 @@ const expectedImportedFromCatoffline = {
       properties: {
         name: 'Point 2',
         color: '#973572',
-        description: '',
+        description: '\n                    \n                        Point 2 description\n                    \n                ',
         images: [],
         isVisible: true
       },
@@ -170,7 +170,7 @@ const expectedImportedFromCatoffline = {
       properties: {
         name: 'Track 1',
         color: '#973572',
-        description: '',
+        description: '\n                    \n                        Track 1 description\n                        <p>Timestamp: 1673876115769</p>\n                        <img style="max-width:500px; margin-bottom: 10px" src="9c3981d3-8ca5-4b7b-a3bc-a949761591ab/files/imageTrack1.jpg">\n                    \n                ',
         images: [],
         isVisible: true
       },

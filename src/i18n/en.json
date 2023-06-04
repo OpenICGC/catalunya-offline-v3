@@ -69,6 +69,7 @@
     "import": {
       "format": "Unsupported file extension.",
       "length": "Importing more than {{max_features}} features is not allowed.",
+      "read": "Error reading file",
       "unmanaged_errors": "{{totalFeatures}} entities have been processed for which {{numberOfErrors}} failed to import."
     },
     "search": {

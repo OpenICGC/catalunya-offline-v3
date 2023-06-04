@@ -14,7 +14,6 @@ const kmlScopeImporter: ScopeImporter = async (data: base64string | Blob) => {
         ...feature,
         properties: {
           ...feature.properties,
-          description: '',  // TODO: Reinstaurate description?
           color: feature.properties ?
             (feature?.geometry?.type === 'Point') ?
               feature.properties['icon-color'] :

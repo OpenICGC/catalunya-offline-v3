@@ -39,19 +39,32 @@ const HandleImport: FC<HandleImportProps> = ({
     const mimeType = file.mimeType as suppportedMimeType;
     const importer = importers[mimeType];
     if (importer && file.data) {
-      const {points, tracks, numberOfErrors} = await importer(asDataUrl(file.data, mimeType));
-      const totalFeatures = points.length + tracks.length;
-      if (totalFeatures > MAX_ALLOWED_IMPORT_FEATURES) {
-        onError({name: 'errors.import.length', message: t('errors.import.length', {max_features: MAX_ALLOWED_IMPORT_FEATURES})});
-      } else if (numberOfErrors) {
-        onError({
-          name: 'errors.import.unmanaged_errors',
-          message: t('errors.import.unmanaged_errors', {totalFeatures, numberOfErrors})
-        });
-      } else {
-        await pointStore.create(points);
-        await trackStore.create(tracks);
-        onSuccess();
+      const importResult =
+        await importer(asDataUrl(file.data, mimeType))
+          .catch(() => {
+            onError({
+              name: 'errors.import.read',
+              message:  t('errors.import.read')
+            });
+          });
+      if (importResult) {
+        const {points, tracks, numberOfErrors} = importResult;
+        const totalFeatures = points.length + tracks.length;
+        if (totalFeatures > MAX_ALLOWED_IMPORT_FEATURES) {
+          onError({
+            name: 'errors.import.length',
+            message: t('errors.import.length', {max_features: MAX_ALLOWED_IMPORT_FEATURES})
+          });
+        } else if (numberOfErrors) {
+          onError({
+            name: 'errors.import.unmanaged_errors',
+            message: t('errors.import.unmanaged_errors', {totalFeatures, numberOfErrors})
+          });
+        } else {
+          await pointStore.create(points);
+          await trackStore.create(tracks);
+          onSuccess();
+        }
       }
     } else {
       onError({name: 'errors.import.format', message: t('errors.import.format')});

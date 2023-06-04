@@ -69,6 +69,7 @@
     "import": {
       "format": "Formato no soportado",
       "length": "No se pueden importar más de {{max_features}} entidades.",
+      "read": "Error leyendo el fichero.",
       "unmanaged_errors": "Se han procesado {{totalFeatures}} entidades de las cuales {{numberOfErrors}} han dado error al importar."
     },
     "search": {
