@@ -14,7 +14,7 @@ export interface OverlaysProps {
   geolocation: Geolocation,
   navigateToLine?: Feature<LineString>,
   gpsPositionColor: HEXColor,
-  visibleLayers: Array<number>
+  visibleLayers: Array<string>
 }
 
 const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocation, navigateToLine, gpsPositionColor, visibleLayers}) => {
