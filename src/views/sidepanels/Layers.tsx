@@ -10,10 +10,10 @@ import Header from '../../components/common/Header';
 import UserLayerPanel from '../../components/common/UserLayerPanel';
 
 //CATOFFLINE-ICONS
-import RuralAccommodation from '../../components/icons/RuralAccommodation';
+/*import RuralAccommodation from '../../components/icons/RuralAccommodation';
 import MountainHut from '../../components/icons/MountainHut';
 import YouthHostel from '../../components/icons/YouthHostel';
-import Camping from '../../components/icons/Camping';
+import Camping from '../../components/icons/Camping';*/
 import {UserLayer} from '../../types/commonTypes';
 
 /*const itemConfig = [
