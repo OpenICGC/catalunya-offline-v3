@@ -1,26 +1,24 @@
 import React, {FC, useCallback, useMemo, useState} from 'react';
 
 //MUI
-import IconButton from '@mui/material/IconButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import MuiListItem from '@mui/material/ListItem';
-import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 
 //MUI-ICONS
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+
+//CATOFFLINE
+import AddButton from '../buttons/AddButton';
+import AddLayer from '../icons/AddLayer';
+import DeleteDialog, {FEATURE_DELETED} from './DeleteDialog';
+import List from '../scope/List';
 
 //UTILS
 import {HEXColor, UserLayer, UUID} from '../../types/commonTypes';
-import List from '../scope/List';
-import DeleteDialog, {FEATURE_DELETED} from './DeleteDialog';
-import Box from '@mui/material/Box';
-import AddButton from '../buttons/AddButton';
-import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
 import {useTranslation} from 'react-i18next';
 
 export type UserLayerPanelProps = {
@@ -116,7 +114,7 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
   }
   <Box sx={boxSx}>
     <AddButton onClick={onAdd}>
-      <CreateNewFolderIcon/>
+      <AddLayer/>
     </AddButton>
   </Box>
   </>;
