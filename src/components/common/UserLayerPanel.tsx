@@ -8,7 +8,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
