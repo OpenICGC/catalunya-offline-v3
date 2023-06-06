@@ -5,7 +5,7 @@ import TrackProfile, {TrackProfileProps} from './TrackProfile';
 import {Position} from 'geojson';
 
 import sample from '../fixtures/sampleLineString.geojson';
-const sampleCoordinates: Position[] = sample.coordinates as Position[];
+const sampleCoordinates: Position[] = JSON.parse(sample).coordinates as Position[];
 
 export default {
   title: 'Scope/Inputs/TrackProfile',

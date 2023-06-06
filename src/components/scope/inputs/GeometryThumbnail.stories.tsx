@@ -4,7 +4,7 @@ import {Meta, Story} from '@storybook/react';
 import GeometryThumbnail, {GeometryThumbnailProps} from './GeometryThumbnail';
 import GeoJSON from 'geojson';
 import sample from '../fixtures/sampleLineString.geojson';
-const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
+const sampleGeometry: GeoJSON.LineString = JSON.parse(sample) as GeoJSON.LineString;
 
 export default {
   title: 'Scope/Inputs/GeometryThumbnail',

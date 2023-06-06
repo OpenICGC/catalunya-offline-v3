@@ -11,10 +11,10 @@ import sample from './fixtures/sampleLineString.geojson';
 import sampleWithoutHeight from './fixtures/sampleLineStringWithoutHeight.geojson';
 import sampleWithZeroHeight from './fixtures/sampleLineStringWithZeroHeight.geojson';
 import sampleWithoutTimestamp from './fixtures/sampleLineStringWithoutTimestamp.geojson';
-const sampleGeometry: GeoJSON.LineString = sample as GeoJSON.LineString;
-const sampleGeometryWithoutHeight: GeoJSON.LineString = sampleWithoutHeight as GeoJSON.LineString;
-const sampleGeometryWithZeroHeight: GeoJSON.LineString = sampleWithZeroHeight as GeoJSON.LineString;
-const sampleGeomatryWithoutTimestamp: GeoJSON.LineString = sampleWithoutTimestamp as GeoJSON.LineString;
+const sampleGeometry: GeoJSON.LineString = JSON.parse(sample);
+const sampleGeometryWithoutHeight: GeoJSON.LineString = JSON.parse(sampleWithoutHeight);
+const sampleGeometryWithZeroHeight: GeoJSON.LineString = JSON.parse(sampleWithZeroHeight);
+const sampleGeometryWithoutTimestamp: GeoJSON.LineString = JSON.parse(sampleWithoutTimestamp);
 
 export default {
   title: 'Scope/TrackPanel',
@@ -91,7 +91,7 @@ DeviceWithoutTimestamp.args = {
       color: '#973572',
       isVisible: true
     },
-    geometry: sampleGeomatryWithoutTimestamp
+    geometry: sampleGeometryWithoutTimestamp
   }
 };
 
