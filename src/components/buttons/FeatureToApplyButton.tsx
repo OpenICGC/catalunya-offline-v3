@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from 'react';
+import React, {FC} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
