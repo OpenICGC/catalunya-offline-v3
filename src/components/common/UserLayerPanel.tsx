@@ -32,23 +32,6 @@ export type UserLayerPanelProps = {
 //STYLES
 const boxSx = {width: '100%', height: 0};
 
-
-/*const muiListItemSx = {height: '48px', p: 0, m: 0};
-const listItemIconSx = {minWidth: '24px', p: 0};
-const noEditableTextField = {
-  mr: 1,
-  flexGrow: 1,
-  '& fieldset.MuiOutlinedInput-notchedOutline': {
-    borderColor: 'transparent',
-  },
-  '&:hover fieldset.MuiOutlinedInput-notchedOutline': {
-    borderColor: 'transparent',
-  },
-  '& fieldset.MuiOutlinedInput-notchedOutline:hover': {
-    borderColor: 'transparent',
-  }
-};*/
-
 const UserLayerPanel: FC<UserLayerPanelProps> = ({
   userLayers,
   onAdd,
@@ -109,7 +92,7 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
     onNameChange={onRename}
   />
   {
-    deleteRequestId !== undefined && <DeleteDialog featureDeleted={FEATURE_DELETED.SCOPE} onAccept={handleDeleteAccept} onCancel={handleDeleteCancel}/>
+    deleteRequestId !== undefined && <DeleteDialog featureDeleted={FEATURE_DELETED.LAYER} onAccept={handleDeleteAccept} onCancel={handleDeleteCancel}/>
   }
   <Box sx={boxSx}>
     <AddButton onClick={onAdd}>
