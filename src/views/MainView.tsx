@@ -43,7 +43,7 @@ const MainView: FC = () => {
 
   const [visibleLayers, setVisibleLayers] = useVisibleLayers();
 
-  const toggleLayerVisibility = useCallback((layerId: number) => {
+  const toggleLayerVisibility = useCallback((layerId: string) => {
     if(visibleLayers.includes(layerId)) {
       setVisibleLayers(visibleLayers.filter(layer => layer !== layerId));
     } else {
@@ -95,9 +95,11 @@ const MainView: FC = () => {
     handleManagerChanged('SCOPES');
   }, [setTrack, setPoint]);
 
+
   const sidePanelContent = useMemo(() => manager
     ? <Stack sx={stackSx}>
       {manager === 'LAYERS' && <Layers
+        userLayers={[]}
         visibleLayers={visibleLayers}
         toggleLayerVisibility={toggleLayerVisibility}
       />}

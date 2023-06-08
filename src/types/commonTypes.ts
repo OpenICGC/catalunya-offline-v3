@@ -116,3 +116,11 @@ export type ContextMapsResult = {
   nom: string,
   coordenades: string
 }
+
+export type UserLayer = {
+  id: UUID,
+  name: string,
+  color: HEXColor,
+  isVisible: boolean,
+  data: GeoJSON.FeatureCollection
+}

@@ -46,6 +46,7 @@
   },
   "delete": {
     "message": {
+      "layer": "¿Estás seguro de querer borrar esta Capa? Esta operación no se podrá deshacer.",
       "pointTrack": "¿Estás seguro de querer borrar este elemento? Esta operación no se podrá deshacer.",
       "scope": "¿Estás seguro de querer borrar este Ámbito, junto con todos sus puntos y trazas? Esta operación no se podrá deshacer."
     },

@@ -46,6 +46,7 @@
   },
   "delete": {
     "message": {
+      "layer": "Esteu segur de voler esborrar aquest capa? Aquesta operació no es podrà desfer.",
       "pointTrack": "Esteu segur de voler esborrar  aquest element? Aquesta operació no es podrà desfer.",
       "scope": "Esteu segur de voler esborrar aquest àmbit i tots els punts i traces que conté? Aquesta operació no es podrà desfer."
     },
