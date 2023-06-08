@@ -116,3 +116,10 @@ export type ContextMapsResult = {
   nom: string,
   coordenades: string
 }
+
+export type SchemaFieldType = {
+  id: UUID,
+  name: string,
+  appliesToPoints: boolean,
+  appliesToTracks: boolean,
+}

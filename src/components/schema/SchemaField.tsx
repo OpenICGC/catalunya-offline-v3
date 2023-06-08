@@ -10,14 +10,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FeatureToApplyButton, {FEATURE_APPLIED} from '../buttons/FeatureToApplyButton';
 
 //UTILS
-import {UUID} from '../../types/commonTypes';
+import {SchemaFieldType, UUID} from '../../types/commonTypes';
 import TextField from '@mui/material/TextField';
 
 //STYLES
 const wrapperSx = {
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'center'
+  alignItems: 'center',
+  mb: 1
 };
 
 const textFieldSx = {
@@ -38,42 +39,34 @@ const textFieldSx = {
 };
 
 export type SchemaFieldProps = {
-  id: UUID,
-  name: string,
-  error?: string,
-  appliesToPoints: boolean,
-  appliesToTracks: boolean,
+  schemaField: SchemaFieldType
   onDelete: (fieldId: UUID) => void,
   onNameChange: (fieldId: UUID, name: string) => void
-  onPointApply: (isSelected: boolean) => void,
-  onTrackApply: (isSelected: boolean) => void,
+  onPointToApplyChange: (fieldId: UUID) => void,
+  onTrackToApplyChange: (fieldId: UUID) => void
 };
 
 const SchemaField: FC<SchemaFieldProps> = ({
-  id,
-  name,
-  appliesToPoints,
-  appliesToTracks,
-  error = undefined,
-  onPointApply,
-  onTrackApply,
+  schemaField,
+  onPointToApplyChange,
+  onTrackToApplyChange,
   onDelete,
   onNameChange
 }) => {
 
-  const handlePointClick = (selected: boolean) => onPointApply(selected);
-  const handleTrackClick = (selected: boolean) => onTrackApply(selected);
+  const handlePointButtonClick = () => onPointToApplyChange(schemaField.id);
+  const handleTrackButtonClick = () => onTrackToApplyChange(schemaField.id);
 
-  const handleDelete = () => onDelete(id);
-  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(id, e.target.value);
+  const handleDelete = () => onDelete(schemaField.id);
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement>) => onNameChange(schemaField.id, e.target.value);
 
 
   return <Box sx={wrapperSx}>
     <Box sx={wrapperSx} gap={1}>
-      <FeatureToApplyButton isSelected={appliesToPoints} onClick={handlePointClick} feature={FEATURE_APPLIED.POINT}/>
-      <FeatureToApplyButton isSelected={appliesToTracks} onClick={handleTrackClick} feature={FEATURE_APPLIED.TRACK}/>
+      <FeatureToApplyButton isSelected={schemaField.appliesToPoints} onClick={handlePointButtonClick} feature={FEATURE_APPLIED.POINT}/>
+      <FeatureToApplyButton isSelected={schemaField.appliesToTracks} onClick={handleTrackButtonClick} feature={FEATURE_APPLIED.TRACK}/>
     </Box>
-    <TextField size='small' value={name} sx={textFieldSx} onChange={handleFieldChange} error={!!error}/>
+    <TextField size='small' value={schemaField.name} sx={textFieldSx} onChange={handleFieldChange}/>
     <DeleteIcon onClick={handleDelete} sx={{color: 'action.active'}}/>
   </Box>;
 };
