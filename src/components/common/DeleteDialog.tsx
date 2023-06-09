@@ -28,7 +28,8 @@ const dialogSx = {
 export enum FEATURE_DELETED {
   SCOPE,
   TRACK,
-  POINT
+  POINT,
+  LAYER
 }
 
 export type DeleteDialogProps = {
@@ -55,7 +56,8 @@ const DeleteDialog: FC<DeleteDialogProps> = ({
         {
           featureDeleted === FEATURE_DELETED.SCOPE
             ? t(`delete.message.${FEATURE_DELETED[featureDeleted].toLowerCase()}`)
-            : t('delete.message.pointTrack')
+            : featureDeleted === FEATURE_DELETED.LAYER ?
+              t('delete.message.layer') : t('delete.message.pointTrack')
         }
       </Typography>
     </DialogContent>

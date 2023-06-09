@@ -46,6 +46,7 @@
   },
   "delete": {
     "message": {
+      "layer": "Are you sure to delete this Layer? This action cannot be undone.",
       "pointTrack": "Are you sure to delete this element? This action cannot be undone.",
       "scope": "Are you sure to delete this entire Scope and its associated Points and Tracks? This action cannot be undone."
     },

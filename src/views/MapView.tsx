@@ -65,7 +65,7 @@ export type MapViewProps = {
   onPointSelected: (pointId: UUID) => void,
   selectedTrackId?: UUID,
   onTrackSelected: (trackId: UUID) => void,
-  visibleLayers: Array<number>,
+  visibleLayers: Array<string>,
 };
 
 const MapView: FC<MapViewProps> = ({

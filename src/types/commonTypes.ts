@@ -118,6 +118,7 @@ export type ContextMapsResult = {
   coordenades: string
 }
 
+
 export type SchemaFieldType = {
   id: UUID,
   name: string,
@@ -126,3 +127,12 @@ export type SchemaFieldType = {
 }
 
 export type Schema = Array<SchemaFieldType>
+
+export type UserLayer = {
+  id: UUID,
+  name: string,
+  color: HEXColor,
+  isVisible: boolean,
+  data: GeoJSON.FeatureCollection
+}
+
