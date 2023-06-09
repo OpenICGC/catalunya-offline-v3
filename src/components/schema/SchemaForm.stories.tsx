@@ -26,7 +26,7 @@ const DeviceTemplate: Story<SchemaFormProps> = args => <Stack sx={stackSx}><Sche
 
 export const Default = Template.bind({});
 Default.args = {
-  schemaFields: [
+  schema: [
     {
       id: uuidv4(),
       name: 'Denominación',

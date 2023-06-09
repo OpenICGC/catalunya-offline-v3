@@ -129,6 +129,11 @@
     "remainingToGo": "Restant per recórrer",
     "total": "Total"
   },
+  "schema": {
+    "customFieldsTitle": "Camps personalitzats per a aquest àmbit.",
+    "defaultFieldsTitle": "Camps per defecte",
+    "title": "Diccionari de dades"
+  },
   "scope": "Àmbit",
   "scopeList": {
     "empty": "Encara no s'ha creat cap element",

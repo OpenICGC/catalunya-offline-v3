@@ -7,10 +7,10 @@ import MuiList from '@mui/material/List';
 import SchemaField from './SchemaField';
 
 //UTILS
-import {SchemaFieldType} from '../../types/commonTypes';
+import {Schema} from '../../types/commonTypes';
 
 export type SchemaFormProps = {
-  schemaFields: Array<SchemaFieldType>,
+  schema: Schema,
   onDelete: () => void,
   onNameChange: () => void
   onPointToApplyChange: () => void,
@@ -18,7 +18,7 @@ export type SchemaFormProps = {
 };
 
 const SchemaForm: FC<SchemaFormProps> = ({
-  schemaFields,
+  schema,
   onDelete,
   onNameChange,
   onPointToApplyChange,
@@ -27,7 +27,7 @@ const SchemaForm: FC<SchemaFormProps> = ({
 
   return <><MuiList dense sx={{mx:1}}>
     {
-      schemaFields.map(schemaField => <SchemaField
+      schema.map(schemaField => <SchemaField
         key={schemaField.id}
         schemaField={schemaField}
         onDelete={onDelete}
