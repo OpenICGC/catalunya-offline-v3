@@ -130,6 +130,11 @@
     "remainingToGo": "Pendiente de recorrer",
     "total": "Total"
   },
+  "schema": {
+    "customFieldsTitle": "Campos personalizados para este ámbito.",
+    "defaultFieldsTitle": "Campos por defecto",
+    "title": "Diccionario de datos"
+  },
   "scope": "Ámbito",
   "scopeList": {
     "empty": "No existe ningún elemento",

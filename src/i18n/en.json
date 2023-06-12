@@ -130,6 +130,11 @@
     "remainingToGo": "Remaining to finish",
     "total": "Total"
   },
+  "schema": {
+    "customFieldsTitle": "Custom fields for this scope",
+    "defaultFieldsTitle": "Default fields",
+    "title": "Data dictionary"
+  },
   "scope": "Scope",
   "scopeList": {
     "empty": "No elements available",

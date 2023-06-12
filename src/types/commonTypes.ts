@@ -60,7 +60,8 @@ export type HEXColor = `#${string}`;
 export type Scope = {
   id: UUID,
   name: string,
-  color: HEXColor
+  color: HEXColor,
+  schema?: Schema
 }
 
 export interface ScopeFeature extends GeoJSON.Feature<GeoJSON.Geometry | null> {
@@ -117,6 +118,16 @@ export type ContextMapsResult = {
   coordenades: string
 }
 
+
+export type SchemaFieldType = {
+  id: UUID,
+  name: string,
+  appliesToPoints: boolean,
+  appliesToTracks: boolean,
+}
+
+export type Schema = Array<SchemaFieldType>
+
 export type UserLayer = {
   id: UUID,
   name: string,
@@ -124,3 +135,4 @@ export type UserLayer = {
   isVisible: boolean,
   data: GeoJSON.FeatureCollection
 }
+
