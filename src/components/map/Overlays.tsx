@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import {Source, Layer} from 'react-map-gl';
-import {CircleLayer, LineLayer, SymbolLayer} from 'mapbox-gl';
+import {CircleLayer, LineLayer} from 'mapbox-gl';
 import {Feature, FeatureCollection, LineString, Point} from 'geojson';
 
 import {HEXColor, ScopeTrack} from '../../types/commonTypes';
@@ -13,50 +13,15 @@ export interface OverlaysProps {
   scopeColor?: HEXColor,
   geolocation: Geolocation,
   navigateToLine?: Feature<LineString>,
-  gpsPositionColor: HEXColor,
-  visibleLayers: Array<string>
+  gpsPositionColor: HEXColor
 }
 
-const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocation, navigateToLine, gpsPositionColor, visibleLayers}) => {
+const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocation, navigateToLine, gpsPositionColor}) => {
   const [trackListData, setTrackListData] = useState<FeatureCollection<LineString>>();
   const [geolocationData, setGeolocationData] = useState<FeatureCollection<Point>>();
   const [navigateToLineData, setNavigateToLineData] = useState<FeatureCollection<LineString>>();
 
-  const extraLayersLayer = useMemo(() => {
-    const props: SymbolLayer = {
-      id: 'extraLayers',
-      source: 'extraLayers',
-      type: 'symbol',
-      filter: ['in', ['get', 't'], ['literal', visibleLayers]],
-      layout: {
-        'text-font': ['pictos_25_icgc-Regular'],
-        'text-size': 18,
-        'text-anchor': 'center',
-        'text-justify': 'center',
-        'symbol-placement': 'point',
-        'text-allow-overlap': true,
-        'text-field': ['match', ['get', 't'], // Tipus
-          0, '\u0055', // Refugi
-          1, '\u0062', // Camping
-          2, '\u002C', // Turisme Rural
-          3, '\u003A', // Alberg
-          '\u0020' // Default
-        ]
-      },
-      paint: {
-        'text-halo-width': 1,
-        'text-halo-color': '#fff',
-        'text-color': ['match', ['get', 't'], // Tipus
-          0, '#D4121E', // 0, '#FE946C', // Refugi
-          1, '#F1BE25', // 1, '#6FC6B5', // Camping
-          2, '#4A8A63', // 2, '#8DA0CB', // Turisme Rural
-          3, '#1FA1E2', // 3, '#E78AC3', // Alberg
-          '#000000' // Default
-        ]
-      }
-    };
-    return <Layer {...props}/>;
-  }, [visibleLayers]);
+  // TODO COF-291 Add sources & layers for each of the userLayers
 
   const trackListLayer = useMemo(() => {
     const props: LineLayer = {
@@ -170,9 +135,6 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
   }, [isActive, geolocation.longitude, geolocation.latitude]);
 
   return <>
-    <Source id='extraLayers' type='geojson' data='extra-layers.json'>
-      {extraLayersLayer}
-    </Source>
     <Source id='trackList' type='geojson' data={trackListData}>
       {trackListLayer}
     </Source>

@@ -71,7 +71,7 @@
       "format": "Unsupported file extension.",
       "length": "Importing more than {{max_features}} features is not allowed.",
       "read": "Error reading file",
-      "unmanaged_errors": "{{totalFeatures}} entities have been processed for which {{numberOfErrors}} failed to import."
+      "unmanaged_errors": "{{totalFeatures}} features have been processed for which {{numberOfErrors}} failed."
     },
     "search": {
       "noConnectivity": "Cannot search because there is no connection."
@@ -103,13 +103,6 @@
   "gpsAlert": {
     "message": "It is recommended to enable the gps to be able to continue",
     "title": "GPS Disabled"
-  },
-  "layerManager": {
-    "camping": "Campings",
-    "mountainHut": "Mountain Huts",
-    "ruralAccommodation": "Rural Accommodations",
-    "title": "Layers",
-    "youthHostel": "Youth Hostels"
   },
   "noScopeAlert": "Choose the point's scope",
   "point": "Point",
@@ -162,5 +155,16 @@
   "trackAlert": {
     "noTrack": "No height data",
     "outOfTrack": "Out of track"
+  },
+  "userLayers": {
+    "defaultName": "Layer",
+    "empty": "No user layers",
+    "sample": {
+      "camping": "Campings",
+      "mountainHut": "Mountain Huts",
+      "ruralAccommodation": "Rural Accommodations",
+      "youthHostel": "Youth Hostels"
+    },
+    "title": "User layers"
   }
 }
