@@ -1,11 +1,46 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import {Source, Layer} from 'react-map-gl';
-import {CircleLayer, LineLayer} from 'mapbox-gl';
+import {CircleLayer, FillLayer, LineLayer} from 'mapbox-gl';
 import {Feature, FeatureCollection, LineString, Point} from 'geojson';
 
-import {HEXColor, ScopeTrack} from '../../types/commonTypes';
+import {HEXColor, ScopeTrack, UUID} from '../../types/commonTypes';
 import {Geolocation} from '../../hooks/singleton/useGeolocation';
 import {DEFAULT_VIEWPORT} from '../../config';
+import {useUserLayers} from '../../hooks/usePersistedCollections';
+
+const pointStyle = (id: UUID, color: HEXColor): CircleLayer => ({
+  id: `user-${id}-point`,
+  filter: ['==', ['geometry-type'], 'Point'],
+  type: 'circle',
+  paint: {
+    'circle-color': color,
+    'circle-opacity': 0.33,
+    'circle-radius': 7,
+    'circle-stroke-color': color,
+    'circle-stroke-opacity': 0.67,
+    'circle-stroke-width': 1
+  }
+});
+const lineStyle = (id: UUID, color: HEXColor): LineLayer => ({
+  id: `user-${id}-line`,
+  filter: ['==', ['geometry-type'], 'LineString'],
+  type: 'line',
+  paint: {
+    'line-color': color,
+    'line-width': 4
+  }
+});
+
+const polygonStyle = (id: UUID, color: HEXColor): FillLayer => ({
+  id: `user-${id}-polygon`,
+  filter: ['==', ['geometry-type'], 'Polygon'],
+  type: 'fill',
+  paint: {
+    'fill-color': color,
+    'fill-opacity': 0.33,
+    'fill-outline-color': color
+  }
+});
 
 export interface OverlaysProps {
   isActive: boolean,
@@ -21,7 +56,8 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
   const [geolocationData, setGeolocationData] = useState<FeatureCollection<Point>>();
   const [navigateToLineData, setNavigateToLineData] = useState<FeatureCollection<LineString>>();
 
-  // TODO COF-291 Add sources & layers for each of the userLayers
+  const userLayersStore = useUserLayers();
+  const userLayers = userLayersStore.list();
 
   const trackListLayer = useMemo(() => {
     const props: LineLayer = {
@@ -134,7 +170,19 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
     }
   }, [isActive, geolocation.longitude, geolocation.latitude]);
 
+  const userLayerSources = useMemo(() => userLayers
+    ?.filter(userLayer => userLayer.isVisible)
+    .map(userLayer =>
+      <Source key={userLayer.id} id={userLayer.id} type='geojson' data={userLayer.data}>
+        <Layer {...pointStyle(userLayer.id, userLayer.color)}/>
+        <Layer {...lineStyle(userLayer.id, userLayer.color)}/>
+        <Layer {...polygonStyle(userLayer.id, userLayer.color)}/>
+      </Source>),
+  [userLayers]);
+
+
   return <>
+    {userLayerSources}
     <Source id='trackList' type='geojson' data={trackListData}>
       {trackListLayer}
     </Source>
