@@ -1,11 +1,46 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import {Source, Layer} from 'react-map-gl';
-import {CircleLayer, LineLayer, SymbolLayer} from 'mapbox-gl';
+import {CircleLayer, FillLayer, LineLayer} from 'mapbox-gl';
 import {Feature, FeatureCollection, LineString, Point} from 'geojson';
 
-import {HEXColor, ScopeTrack} from '../../types/commonTypes';
+import {HEXColor, ScopeTrack, UUID} from '../../types/commonTypes';
 import {Geolocation} from '../../hooks/singleton/useGeolocation';
 import {DEFAULT_VIEWPORT} from '../../config';
+import {useUserLayers} from '../../hooks/usePersistedCollections';
+
+const pointStyle = (id: UUID, color: HEXColor): CircleLayer => ({
+  id: `user-${id}-point`,
+  filter: ['==', ['geometry-type'], 'Point'],
+  type: 'circle',
+  paint: {
+    'circle-color': color,
+    'circle-opacity': 0.33,
+    'circle-radius': 7,
+    'circle-stroke-color': color,
+    'circle-stroke-opacity': 0.67,
+    'circle-stroke-width': 1
+  }
+});
+const lineStyle = (id: UUID, color: HEXColor): LineLayer => ({
+  id: `user-${id}-line`,
+  filter: ['==', ['geometry-type'], 'LineString'],
+  type: 'line',
+  paint: {
+    'line-color': color,
+    'line-width': 4
+  }
+});
+
+const polygonStyle = (id: UUID, color: HEXColor): FillLayer => ({
+  id: `user-${id}-polygon`,
+  filter: ['==', ['geometry-type'], 'Polygon'],
+  type: 'fill',
+  paint: {
+    'fill-color': color,
+    'fill-opacity': 0.33,
+    'fill-outline-color': color
+  }
+});
 
 export interface OverlaysProps {
   isActive: boolean,
@@ -13,50 +48,16 @@ export interface OverlaysProps {
   scopeColor?: HEXColor,
   geolocation: Geolocation,
   navigateToLine?: Feature<LineString>,
-  gpsPositionColor: HEXColor,
-  visibleLayers: Array<string>
+  gpsPositionColor: HEXColor
 }
 
-const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocation, navigateToLine, gpsPositionColor, visibleLayers}) => {
+const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocation, navigateToLine, gpsPositionColor}) => {
   const [trackListData, setTrackListData] = useState<FeatureCollection<LineString>>();
   const [geolocationData, setGeolocationData] = useState<FeatureCollection<Point>>();
   const [navigateToLineData, setNavigateToLineData] = useState<FeatureCollection<LineString>>();
 
-  const extraLayersLayer = useMemo(() => {
-    const props: SymbolLayer = {
-      id: 'extraLayers',
-      source: 'extraLayers',
-      type: 'symbol',
-      filter: ['in', ['get', 't'], ['literal', visibleLayers]],
-      layout: {
-        'text-font': ['pictos_25_icgc-Regular'],
-        'text-size': 18,
-        'text-anchor': 'center',
-        'text-justify': 'center',
-        'symbol-placement': 'point',
-        'text-allow-overlap': true,
-        'text-field': ['match', ['get', 't'], // Tipus
-          0, '\u0055', // Refugi
-          1, '\u0062', // Camping
-          2, '\u002C', // Turisme Rural
-          3, '\u003A', // Alberg
-          '\u0020' // Default
-        ]
-      },
-      paint: {
-        'text-halo-width': 1,
-        'text-halo-color': '#fff',
-        'text-color': ['match', ['get', 't'], // Tipus
-          0, '#D4121E', // 0, '#FE946C', // Refugi
-          1, '#F1BE25', // 1, '#6FC6B5', // Camping
-          2, '#4A8A63', // 2, '#8DA0CB', // Turisme Rural
-          3, '#1FA1E2', // 3, '#E78AC3', // Alberg
-          '#000000' // Default
-        ]
-      }
-    };
-    return <Layer {...props}/>;
-  }, [visibleLayers]);
+  const userLayersStore = useUserLayers();
+  const userLayers = userLayersStore.list();
 
   const trackListLayer = useMemo(() => {
     const props: LineLayer = {
@@ -169,10 +170,19 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
     }
   }, [isActive, geolocation.longitude, geolocation.latitude]);
 
+  const userLayerSources = useMemo(() => userLayers
+    ?.filter(userLayer => userLayer.isVisible)
+    .map(userLayer =>
+      <Source key={userLayer.id} id={userLayer.id} type='geojson' data={userLayer.data}>
+        <Layer {...pointStyle(userLayer.id, userLayer.color)}/>
+        <Layer {...lineStyle(userLayer.id, userLayer.color)}/>
+        <Layer {...polygonStyle(userLayer.id, userLayer.color)}/>
+      </Source>),
+  [userLayers]);
+
+
   return <>
-    <Source id='extraLayers' type='geojson' data='extra-layers.json'>
-      {extraLayersLayer}
-    </Source>
+    {userLayerSources}
     <Source id='trackList' type='geojson' data={trackListData}>
       {trackListLayer}
     </Source>

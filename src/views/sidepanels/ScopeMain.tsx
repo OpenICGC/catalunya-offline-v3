@@ -10,7 +10,7 @@ import {useScopes} from '../../hooks/usePersistedCollections';
 import MainPanel from '../../components/scope/MainPanel';
 import ScopeFeatures from './ScopeFeatures';
 import HandleExport from '../../components/scope/export/HandleExport';
-import HandleImport from '../../components/scope/import/HandleImport';
+import ScopeImporter from '../../components/importers/ScopeImporter';
 import Notification from '../../components/notifications/Notification';
 import useColorPalette from '../../hooks/settings/useColorPalette';
 
@@ -122,7 +122,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
       }
       {
         importingScopeId &&
-        <HandleImport
+        <ScopeImporter
           scopeId={importingScopeId}
           onSuccess={handleImportSuccess}
           onError={handleImportError}

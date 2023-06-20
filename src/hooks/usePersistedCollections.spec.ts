@@ -1,7 +1,7 @@
 import {renderHook, act} from '@testing-library/react-hooks/dom';
 import {expect} from 'chai';
-import {useScopes, useScopePoints, useScopeTracks} from './usePersistedCollections';
-import {Scope, ScopeTrack, ScopePoint} from '../types/commonTypes';
+import {useScopes, useScopePoints, useScopeTracks, useUserLayers} from './usePersistedCollections';
+import {Scope, ScopeTrack, ScopePoint, UserLayer} from '../types/commonTypes';
 import {v4 as uuidv4} from 'uuid';
 
 describe('useStoredCollections',() => {
@@ -143,6 +143,63 @@ describe('useStoredCollections',() => {
 
     // WHEN
     act(() => result.current.delete(modifiedTrack.id));
+
+    // THEN
+    expect(result.current.list()).to.deep.equal([]);
+  });
+
+  it('useUserLayers should list, create, retrieve, update and delete UserLayers', async () => {
+
+    // GIVEN
+    const sampleUserLayer: UserLayer = {
+      id: uuidv4(),
+      name: 'My stuff',
+      color: '#FABADA',
+      isVisible: true,
+      data: {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          properties: {
+            property: 'Value'
+          },
+          geometry: {
+            type: 'LineString',
+            coordinates: [[0, 0], [1, 1]]
+          }
+        }]
+      }
+    };
+
+    const modifiedUserLayer: UserLayer = {
+      ...sampleUserLayer,
+      name: 'New Name',
+      color: '#FF00FF',
+      isVisible: false,
+      data: {
+        type: 'FeatureCollection',
+        features: []
+      }
+    };
+
+    const {result, waitForValueToChange} = renderHook(() => useUserLayers());
+    await waitForValueToChange(() => result.current.list() !== undefined);
+
+    // WHEN
+    act(() => result.current.create(sampleUserLayer));
+
+    // THEN
+    expect(result.current.list()).to.deep.equal([sampleUserLayer]);
+    expect(result.current.retrieve(sampleUserLayer.id)).to.deep.equal(sampleUserLayer);
+
+    // WHEN
+    act(() => result.current.update(modifiedUserLayer));
+
+    // THEN
+    expect(result.current.list()).to.deep.equal([modifiedUserLayer]);
+
+    // WHEN
+    act(() => result.current.delete(modifiedUserLayer.id));
 
     // THEN
     expect(result.current.list()).to.deep.equal([]);

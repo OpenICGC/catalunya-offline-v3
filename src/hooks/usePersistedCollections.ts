@@ -1,4 +1,4 @@
-import {Scope, ScopeTrack, ScopePoint, UUID} from '../types/commonTypes';
+import {Scope, ScopeTrack, ScopePoint, UUID, UserLayer} from '../types/commonTypes';
 import {useEffect, useMemo} from 'react';
 import usePersistedState, {clear} from './usePersistedState';
 
@@ -76,3 +76,5 @@ export const useScopes = (): persistedCollectionInterface<Scope> => {
 
 export const useScopePoints = (scopeId?: UUID) => usePersistedCollection<ScopePoint>(scopeId ? `scopes/${scopeId}/points` : '');
 export const useScopeTracks = (scopeId?: UUID) => usePersistedCollection<ScopeTrack>(scopeId ? `scopes/${scopeId}/tracks` : '');
+
+export const useUserLayers = () => usePersistedCollection<UserLayer>('userLayers');

@@ -23,7 +23,7 @@ import {useTranslation} from 'react-i18next';
 export type UserLayerPanelProps = {
   userLayers: Array<UserLayer>,
   onAdd: () => void,
-  onColorChange: (layerId: UUID, color: HEXColor) => void,
+  onColorChange: (layerId: UUID, newColor: HEXColor) => void,
   onRename: (layerId: UUID, newName: string) => void,
   onToggleVisibility: (layerId: UUID) => void,
   onDelete: (layerId: UUID) => void
@@ -65,7 +65,6 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
     }
   }, [contextualMenu]);
 
-
   const actionIcons = [
     {
       id: 'visibility',
@@ -81,24 +80,26 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
 
   const handleDeleteCancel = () => setDeleteRequestId(undefined);
 
-  return <><List
-    isLargeSize={isLargeSize}
-    items={userLayers}
-    contextualMenu={contextualMenu}
-    actionIcons={actionIcons}
-    onActionClick={onToggleVisibility}
-    onColorChange={onColorChange}
-    onContextualMenuClick={handleContextualMenuClick}
-    onNameChange={onRename}
-  />
-  {
-    deleteRequestId !== undefined && <DeleteDialog featureDeleted={FEATURE_DELETED.LAYER} onAccept={handleDeleteAccept} onCancel={handleDeleteCancel}/>
-  }
-  <Box sx={boxSx}>
-    <AddButton onClick={onAdd}>
-      <AddLayer/>
-    </AddButton>
-  </Box>
+  return <>
+    {<List
+      isLargeSize={isLargeSize}
+      items={userLayers}
+      contextualMenu={contextualMenu}
+      actionIcons={actionIcons}
+      onActionClick={onToggleVisibility}
+      onColorChange={onColorChange}
+      onContextualMenuClick={handleContextualMenuClick}
+      onNameChange={onRename}
+    />}
+    {
+      deleteRequestId !== undefined && <DeleteDialog featureDeleted={FEATURE_DELETED.LAYER} onAccept={handleDeleteAccept} onCancel={handleDeleteCancel}/>
+    }
+    <Box sx={boxSx}>
+      <AddButton onClick={onAdd}>
+        <AddLayer/>
+      </AddButton>
+    </Box>
   </>;
 };
+
 export default UserLayerPanel;

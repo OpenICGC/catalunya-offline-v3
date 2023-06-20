@@ -1,14 +1,17 @@
 import {FC, useCallback, useEffect} from 'react';
-import {Error, UUID} from '../../../types/commonTypes';
-import useFilePicker, {FilePickerResult} from '../../../hooks/useFilePicker';
-import geoJSONScopeImporter from '../../../utils/scopeImporters/geoJSONScopeImporter';
-import gpxScopeImporter from '../../../utils/scopeImporters/gpxScopeImporter';
-import kmlScopeImporter from '../../../utils/scopeImporters/kmlScopeImporter';
-import {useScopePoints, useScopeTracks} from '../../../hooks/usePersistedCollections';
-import {MAX_ALLOWED_IMPORT_FEATURES} from '../../../config';
 import {useTranslation} from 'react-i18next';
-import {ScopeImporter} from '../../../utils/scopeImporters/types';
-import {asDataUrl} from '../../../utils/loaders/helpers';
+
+import {Error, UUID} from '../../types/commonTypes';
+import {MAX_ALLOWED_IMPORT_FEATURES} from '../../config';
+
+import useFilePicker, {FilePickerResult} from '../../hooks/useFilePicker';
+import geoJSONScopeImporter from '../../utils/scopeImporters/geoJSONScopeImporter';
+import gpxScopeImporter from '../../utils/scopeImporters/gpxScopeImporter';
+import kmlScopeImporter from '../../utils/scopeImporters/kmlScopeImporter';
+import {useScopePoints, useScopeTracks} from '../../hooks/usePersistedCollections';
+
+import {ScopeImporter} from '../../utils/scopeImporters/types';
+import {asDataUrl} from '../../utils/loaders/helpers';
 
 type suppportedMimeType = 'application/geo+json' | 'application/vnd.google-earth.kml+xml' | 'application/gpx+xml';
 
@@ -18,13 +21,13 @@ const importers: Record<suppportedMimeType, ScopeImporter> = {
   'application/gpx+xml': gpxScopeImporter
 };
 
-export type HandleImportProps = {
+export type ScopeImporterProps = {
   scopeId: UUID,
   onSuccess: () => void
   onError: (error: Error) => void
 }
 
-const HandleImport: FC<HandleImportProps> = ({
+const ScopeImporter: FC<ScopeImporterProps> = ({
   scopeId,
   onSuccess,
   onError
@@ -80,4 +83,4 @@ const HandleImport: FC<HandleImportProps> = ({
   return null;
 };
 
-export default HandleImport;
+export default ScopeImporter;

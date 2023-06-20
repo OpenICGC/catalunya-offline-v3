@@ -69,9 +69,9 @@
   "errors": {
     "import": {
       "format": "Format no suportat.",
-      "length": "No es poden importar més de {{max_features}} entitats.",
+      "length": "No es poden importar més de {{max_features}} elements.",
       "read": "Error llegint el fitxer.",
-      "unmanaged_errors": "S'han processat {{totalFeatures}} entitats de les quals {{numberOfErrors}} han donat un error en importar."
+      "unmanaged_errors": "S'han processat {{totalFeatures}} elements dels quals {{numberOfErrors}} han donat error en importar."
     },
     "search": {
       "noConnectivity": "No es pot fer la cerca perquè no hi ha connexió."
@@ -103,13 +103,6 @@
   "gpsAlert": {
     "message": "És recomanable habilitar el gps per poder seguir",
     "title": "GPS Deshabilitat"
-  },
-  "layerManager": {
-    "camping": "Càmpings",
-    "mountainHut": "Refugis",
-    "ruralAccommodation": "Turisme Rural",
-    "title": "Capes",
-    "youthHostel": "Albergs"
   },
   "noScopeAlert": "Trieu un àmbit per al punt",
   "point": "Punt",
@@ -162,5 +155,16 @@
   "trackAlert": {
     "noTrack": "No hi ha dades d'alçada",
     "outOfTrack": "Fora de traça"
+  },
+  "userLayers": {
+    "defaultName": "Capa",
+    "empty": "No hi ha capes d'usuari",
+    "sample": {
+      "camping": "Càmpings",
+      "mountainHut": "Refugis",
+      "ruralAccommodation": "Turisme Rural",
+      "youthHostel": "Albergs"
+    },
+    "title": "Capes d'usuari"
   }
 }

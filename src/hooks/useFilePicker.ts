@@ -5,6 +5,7 @@ import {base64string, mimeType} from '../utils/loaders/types';
 import {IS_WEB} from '../config';
 
 export type FilePickerResult = {
+  name: string,
   blob?: Blob,
   data?: base64string,
   mimeType?: mimeType

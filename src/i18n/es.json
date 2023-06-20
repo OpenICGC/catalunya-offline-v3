@@ -69,9 +69,9 @@
   "errors": {
     "import": {
       "format": "Formato no soportado",
-      "length": "No se pueden importar más de {{max_features}} entidades.",
+      "length": "No se pueden importar más de {{max_features}} elementos.",
       "read": "Error leyendo el fichero.",
-      "unmanaged_errors": "Se han procesado {{totalFeatures}} entidades de las cuales {{numberOfErrors}} han dado error al importar."
+      "unmanaged_errors": "Se han procesado {{totalFeatures}} elementos de los cuales {{numberOfErrors}} han dado error al importar."
     },
     "search": {
       "noConnectivity": "No se puede realizar la búsqueda porque no hay conexión."
@@ -103,13 +103,6 @@
   "gpsAlert": {
     "message": "Es recomendable habilitar el gps para poder seguir",
     "title": "GPS Deshabilitado"
-  },
-  "layerManager": {
-    "camping": "Campings",
-    "mountainHut": "Refugios",
-    "ruralAccommodation": "Turismo Rural",
-    "title": "Capas",
-    "youthHostel": "Albergues"
   },
   "noScopeAlert": "Elige un ámbito para el punto",
   "point": "Punto",
@@ -162,5 +155,16 @@
   "trackAlert": {
     "noTrack": "No hay datos de altura",
     "outOfTrack": "Fuera de ruta"
+  },
+  "userLayers": {
+    "defaultName": "Capa",
+    "empty": "Sin capas de usuario",
+    "sample": {
+      "camping": "Campings",
+      "mountainHut": "Refugios",
+      "ruralAccommodation": "Turismo Rural",
+      "youthHostel": "Albergues"
+    },
+    "title": "Capas de usuario"
   }
 }

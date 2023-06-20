@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 import MapView from './MapView';
 
 import {Manager, UUID} from '../types/commonTypes';
-import Layers from './sidepanels/Layers';
+import UserLayersView from './sidepanels/UserLayersView';
 import BaseMaps from './sidepanels/BaseMaps';
 import ScopeMain from './sidepanels/ScopeMain';
 import Stack from '@mui/material/Stack';
@@ -16,7 +16,6 @@ import {IS_WEB} from '../config';
 import useSelectedScopeId from '../hooks/persistedStates/useSelectedScopeId';
 import useSelectedPointId from '../hooks/persistedStates/useSelectedPointId';
 import useSelectedTrackId from '../hooks/persistedStates/useSelectedTrackId';
-import useVisibleLayers from '../hooks/persistedStates/useVisibleLayers';
 import useDownloadStatus from '../hooks/singleton/useDownloadStatus';
 import DownloadRequest from '../components/notifications/DownloadRequest';
 import DownloadManager from './DownloadManager';
@@ -40,16 +39,6 @@ const MainView: FC = () => {
 
   const [downloadRequested, setDownloadRequested] = useState<boolean>();
   const {isOfflineReady, pendingSize} = useDownloadStatus();
-
-  const [visibleLayers, setVisibleLayers] = useVisibleLayers();
-
-  const toggleLayerVisibility = useCallback((layerId: string) => {
-    if(visibleLayers.includes(layerId)) {
-      setVisibleLayers(visibleLayers.filter(layer => layer !== layerId));
-    } else {
-      setVisibleLayers([...visibleLayers, layerId].sort());
-    }
-  }, [visibleLayers, setVisibleLayers]);
 
   const isEditingPosition = useEditingPosition().isEditing;
   const isRecordingTrack =  useRecordingTrack().isRecording;
@@ -98,11 +87,7 @@ const MainView: FC = () => {
 
   const sidePanelContent = useMemo(() => manager
     ? <Stack sx={stackSx}>
-      {manager === 'LAYERS' && <Layers
-        userLayers={[]}
-        visibleLayers={visibleLayers}
-        toggleLayerVisibility={toggleLayerVisibility}
-      />}
+      {manager === 'LAYERS' && <UserLayersView/>}
       {manager === 'BASEMAPS' && <BaseMaps
         baseMapId={baseMapId}
         onMapStyleChanged={setBaseMapId}
@@ -119,7 +104,7 @@ const MainView: FC = () => {
       />}
     </Stack>
     : null
-  , [manager, visibleLayers, toggleLayerVisibility, baseMapId, setBaseMapId, scope, setScope, point, setPoint, track, setTrack]);
+  , [manager, baseMapId, setBaseMapId, scope, setScope, point, setPoint, track, setTrack]);
 
   const mainContent = useMemo(() => <MapView
     baseMapId={baseMapId}
@@ -130,8 +115,7 @@ const MainView: FC = () => {
     onPointSelected={handleSelectPoint}
     selectedTrackId={track}
     onTrackSelected={handleSelectTrack}
-    visibleLayers={visibleLayers}
-  />, [baseMapId, handleManagerChanged, scope, setScope, point, handleSelectPoint, track, handleSelectTrack, visibleLayers]);
+  />, [baseMapId, handleManagerChanged, scope, setScope, point, handleSelectPoint, track, handleSelectTrack]);
 
   return <>
     {downloadRequested === true && isOfflineReady === false &&

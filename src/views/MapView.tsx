@@ -64,8 +64,7 @@ export type MapViewProps = {
   selectedPointId?: UUID,
   onPointSelected: (pointId: UUID) => void,
   selectedTrackId?: UUID,
-  onTrackSelected: (trackId: UUID) => void,
-  visibleLayers: Array<string>,
+  onTrackSelected: (trackId: UUID) => void
 };
 
 const MapView: FC<MapViewProps> = ({
@@ -76,8 +75,7 @@ const MapView: FC<MapViewProps> = ({
   selectedPointId,
   onPointSelected,
   selectedTrackId,
-  onTrackSelected,
-  visibleLayers
+  onTrackSelected
 }) => {
   const mapRef = useRef<MapRef>(null);
   const isActive = useIsActive();
@@ -463,8 +461,7 @@ const MapView: FC<MapViewProps> = ({
         scopeColor={scopeColor}
         geolocation={geolocation}
         navigateToLine={navigateToFeature}
-        gpsPositionColor={gpsPositionColor}
-        visibleLayers={visibleLayers}/>
+        gpsPositionColor={gpsPositionColor}/>
       {isActive && <LocationMarker geolocation={geolocation} heading={heading} color={gpsPositionColor}/>}
       <PointMarkers points={pointList} defaultColor={scopeColor} onClick={selectPoint}/>
     </MapComponent>}
