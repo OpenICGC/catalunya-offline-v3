@@ -49,6 +49,26 @@ Default.args = {
     id: uuidv4(),
     name: 'Montseny',
     color: '#095c7a',
+    schema: [
+      {
+        id: '380148a0-d32e-4822-bac6-3875f664f8c5',
+        name: 'Conservación',
+        appliesToPoints: true,
+        appliesToTracks: true,
+      },
+      {
+        id: '523148a1-e45f-7676-bac8-1234f789f9c9',
+        name: 'Altura de árbol',
+        appliesToPoints: true,
+        appliesToTracks: false,
+      },
+      {
+        id: 'ad7074f8-7238-45f1-96ab-73e1f376a0b2',
+        name: 'Circular',
+        appliesToPoints: false,
+        appliesToTracks: true,
+      }
+    ]
   },
   track: {
     type: 'Feature',
@@ -61,10 +81,16 @@ Default.args = {
       color: '#973572',
       isVisible: true
     },
+    schemaValues: {
+      '380148a0-d32e-4822-bac6-3875f664f8c5': 'Valor Conservación',
+      'ad7074f8-7238-45f1-96ab-73e1f376a0b2': 'Valor Circular',
+    },
     geometry: sampleGeometry
   },
   numPoints: 13,
-  numTracks: 5
+  numTracks: 5,
+  isEditing: false,
+  isActive: false
 };
 
 export const Device = DeviceTemplate.bind({});

@@ -79,7 +79,6 @@ Default.args = {
     schemaValues: {
       '380148a0-d32e-4822-bac6-3875f664f8c5': 'Valor Conservación',
       '523148a1-e45f-7676-bac8-1234f789f9c9': 'Valor Altura',
-      'ad7074f8-7238-45f1-96ab-73e1f376a0b2': 'Valor Circular',
     }
   },
   numPoints: 13,
