@@ -53,6 +53,29 @@ const sxInput = {
   '& .GenericInput-title': sectionTitleSx
 };
 
+const textFieldNoEditableSx = {
+  borderRadius: '4px',
+  flexGrow: 1,
+  fontSize: '0.875rem',
+  '& .MuiInputBase-input': {
+    padding: '8px',
+    fontSize: '0.875rem',
+    minWidth: '25px',
+    cursor: 'default'
+  }
+};
+
+const textFieldEditableSx = {
+  flexGrow: 1,
+  fontSize: '0.875rem',
+  '& .MuiInputBase-input': {
+    outline: '0px solid white',
+    padding: '8px',
+    fontSize: '0.875rem',
+    minWidth: '30px'
+  }
+};
+
 const CoordsFieldEditable = styled(TextField)({
   flexGrow: 1,
   fontSize: '0.875rem',
@@ -207,6 +230,15 @@ const PointPanel: FC<PointPanelProps> = ({
     });
   }, [point]);
 
+  const handleSchemaValueChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, schemaFieldId: string) =>
+    onPointChange({
+      ...point,
+      schemaValues: {
+        ...point.schemaValues,
+        [schemaFieldId]: e.target.value
+      }
+    }), [point]);
+
   const setPosition = useCallback((newPosition?: Position) =>
     newPosition && onPointChange({
       ...point,
@@ -264,6 +296,9 @@ const PointPanel: FC<PointPanelProps> = ({
     });
   };
 
+  const pointSchema = useMemo(() => scope.schema?.filter(
+    field => field.appliesToPoints), [scope]);
+  
   return <>
     <Header
       startIcon={isEditing ? <></> : <ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
@@ -354,6 +389,20 @@ const PointPanel: FC<PointPanelProps> = ({
         onDeleteImage={handleDeleteImage}
         onDownloadImage={handleOpenImage}
       />}
+      {
+        pointSchema && pointSchema.map(field => <Stack sx={sectionWrapperSx} key={field.id} id={field.id}>
+          <Typography sx={sectionTitleSx} variant='caption'>{field.name}</Typography>
+          { isEditing 
+            ? <TextField size='small' label='' variant='outlined' sx={textFieldEditableSx}
+              onChange={(e) => handleSchemaValueChange(e,field.id)}
+              value={point.schemaValues && point.schemaValues[field.id]}/>
+            : <InputBase inputProps={{ readOnly: true }} sx={textFieldNoEditableSx}
+              defaultValue={point.schemaValues ? point.schemaValues[field.id] : '-'}
+            />
+          }
+        </Stack>
+        )
+      }
     </ScrollableContent>
     { isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>
