@@ -26,7 +26,7 @@ const matchCoords = (coordinates: GeoJSON.Position[][], delta: number) => {
   }));
 };
 
-describe.only('ShpZipLoader', () => {
+describe('ShpZipLoader', () => {
 
   it('should import a zip-compressed Shapefile from a url', async () => {
     // WHEN

@@ -45,7 +45,7 @@ module.exports = (env) => ({
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(svg|xml|kml|gpx|geojson)$/i,
+        test: /\.(svg|xml|csv|geojson|gpx|kml)$/i,
         use: 'raw-loader',
       },
       {
