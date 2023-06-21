@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -36,6 +36,7 @@ import {openPhoto} from '../../utils/camera';
 import useEditingPosition from '../../hooks/singleton/useEditingPosition';
 import {Position} from 'geojson';
 import useViewport from '../../hooks/singleton/useViewport';
+import TextInput from './inputs/TextInput';
 
 //STYLES
 const sectionWrapperSx = {
@@ -51,29 +52,6 @@ const coordTitle = {
 const sxInput = {
   '&.GenericInput-wrapper': sectionWrapperSx,
   '& .GenericInput-title': sectionTitleSx
-};
-
-const textFieldNoEditableSx = {
-  borderRadius: '4px',
-  flexGrow: 1,
-  fontSize: '0.875rem',
-  '& .MuiInputBase-input': {
-    padding: '8px',
-    fontSize: '0.875rem',
-    minWidth: '25px',
-    cursor: 'default'
-  }
-};
-
-const textFieldEditableSx = {
-  flexGrow: 1,
-  fontSize: '0.875rem',
-  '& .MuiInputBase-input': {
-    outline: '0px solid white',
-    padding: '8px',
-    fontSize: '0.875rem',
-    minWidth: '30px'
-  }
 };
 
 const CoordsFieldEditable = styled(TextField)({
@@ -215,11 +193,11 @@ const PointPanel: FC<PointPanelProps> = ({
       }
     }), [point]);
 
-  const handleCoordinatesChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, coordIndex: number) => {
+  const handleCoordinatesChange = useCallback((value: string, coordIndex: number) => {
     const newCoords = [...point.geometry.coordinates];
-    (e.target.value === '' || e.target.value === '-') ?
+    (value === '' || value === '-') ?
       coordIndex === 2 ? newCoords.pop() : 0
-      : newCoords[coordIndex] = parseFloat(e.target.value);
+      : newCoords[coordIndex] = parseFloat(value);
 
     onPointChange({
       ...point,
@@ -230,12 +208,12 @@ const PointPanel: FC<PointPanelProps> = ({
     });
   }, [point]);
 
-  const handleSchemaValueChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, schemaFieldId: string) =>
+  const handleSchemaValueChange = useCallback((value: string, schemaFieldId: string) =>
     onPointChange({
       ...point,
       schemaValues: {
         ...point.schemaValues,
-        [schemaFieldId]: e.target.value
+        [schemaFieldId]: value
       }
     }), [point]);
 
@@ -333,7 +311,7 @@ const PointPanel: FC<PointPanelProps> = ({
                 variant='outlined'
                 key='latitude'
                 error={!isLatitudeValid}
-                onChange={(e) => handleCoordinatesChange(e,1)}
+                onChange={(e) => handleCoordinatesChange(e.target.value,1)}
                 value={parseFloat(point.geometry.coordinates[1].toFixed(5))}
               /> : <CoordsFieldNoEditable
                 key='latitude'
@@ -347,7 +325,7 @@ const PointPanel: FC<PointPanelProps> = ({
             { isEditing ?
               <CoordsFieldEditable size='small' label='' variant='outlined' key='longitude'
                 error={!isLongitudeValid}
-                onChange={(e) => handleCoordinatesChange(e,0)}
+                onChange={(e) => handleCoordinatesChange(e.target.value,0)}
                 value={parseFloat(point.geometry.coordinates[0].toFixed(5))}
               /> : <CoordsFieldNoEditable key='longitude'
                 inputProps={{readOnly: true}}
@@ -363,7 +341,7 @@ const PointPanel: FC<PointPanelProps> = ({
                 label=''
                 variant='outlined'
                 key='height'
-                onChange={(e) => handleCoordinatesChange(e,2)}
+                onChange={(e) => handleCoordinatesChange(e.target.value,2)}
                 value={point.geometry.coordinates[2]}
               />
               : <CoordsFieldNoEditable key='height'
@@ -389,20 +367,17 @@ const PointPanel: FC<PointPanelProps> = ({
         onDeleteImage={handleDeleteImage}
         onDownloadImage={handleOpenImage}
       />}
-      {
-        pointSchema && pointSchema.map(field => <Stack sx={sectionWrapperSx} key={field.id} id={field.id}>
+      {pointSchema && pointSchema.map(field =>
+        <Stack sx={sectionWrapperSx} key={field.id}>
           <Typography sx={sectionTitleSx} variant='caption'>{field.name}</Typography>
-          { isEditing 
-            ? <TextField size='small' label='' variant='outlined' sx={textFieldEditableSx}
-              onChange={(e) => handleSchemaValueChange(e,field.id)}
-              value={point.schemaValues && point.schemaValues[field.id]}/>
-            : <InputBase inputProps={{ readOnly: true }} sx={textFieldNoEditableSx}
-              defaultValue={point.schemaValues ? point.schemaValues[field.id] : '-'}
-            />
-          }
+          <TextInput
+            isEditing={isEditing}
+            id={field.id}
+            text={point.schemaValues ? point.schemaValues[field.id] : undefined}
+            onChange={handleSchemaValueChange}
+          />
         </Stack>
-        )
-      }
+      )}
     </ScrollableContent>
     { isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>

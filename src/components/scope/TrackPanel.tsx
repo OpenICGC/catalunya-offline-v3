@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 
 //MUI
 import Box from '@mui/material/Box';
@@ -41,8 +41,7 @@ import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';
 import {openPhoto} from '../../utils/camera';
 import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
-import TextField from '@mui/material/TextField';
-import InputBase from '@mui/material/InputBase';
+import TextInput from './inputs/TextInput';
 
 //STYLES
 const sectionWrapperSx = {
@@ -55,29 +54,6 @@ const sectionTitleSx = {
 const sxInput = {
   '&.GenericInput-wrapper': sectionWrapperSx,
   '& .GenericInput-title': sectionTitleSx
-};
-
-const textFieldNoEditableSx = {
-  borderRadius: '4px',
-  flexGrow: 1,
-  fontSize: '0.875rem',
-  '& .MuiInputBase-input': {
-    padding: '8px',
-    fontSize: '0.875rem',
-    minWidth: '25px',
-    cursor: 'default'
-  }
-};
-
-const textFieldEditableSx = {
-  flexGrow: 1,
-  fontSize: '0.875rem',
-  '& .MuiInputBase-input': {
-    outline: '0px solid white',
-    padding: '8px',
-    fontSize: '0.875rem',
-    minWidth: '30px'
-  }
 };
 
 const ScrollableContent = styled(Box)({
@@ -186,12 +162,12 @@ const TrackPanel: FC<TrackPanelProps> = ({
       }
     }), [track]);
 
-  const handleSchemaValueChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, schemaFieldId: string) =>
+  const handleSchemaValueChange = useCallback((value: string, schemaFieldId: string) =>
     onTrackChange({
       ...track,
       schemaValues: {
         ...track.schemaValues,
-        [schemaFieldId]: e.target.value
+        [schemaFieldId]: value
       }
     }), [track]);
 
@@ -289,20 +265,17 @@ const TrackPanel: FC<TrackPanelProps> = ({
         onDeleteImage={handleDeleteImage}
         onDownloadImage={handleOpenImage}
       />}
-      {
-        trackSchema && trackSchema.map(field => <Stack sx={sectionWrapperSx} key={field.id} id={field.id}>
+      {trackSchema && trackSchema.map(field =>
+        <Stack sx={sectionWrapperSx} key={field.id}>
           <Typography sx={sectionTitleSx} variant='caption'>{field.name}</Typography>
-          { isEditing
-            ? <TextField size='small' label='' variant='outlined' sx={textFieldEditableSx}
-              onChange={(e) => handleSchemaValueChange(e,field.id)}
-              value={track.schemaValues && track.schemaValues[field.id]}/>
-            : <InputBase inputProps={{ readOnly: true }} sx={textFieldNoEditableSx}
-              defaultValue={track.schemaValues ? track.schemaValues[field.id] : '-'}
-            />
-          }
+          <TextInput
+            isEditing={isEditing}
+            id={field.id}
+            text={track.schemaValues ? track.schemaValues[field.id] : undefined}
+            onChange={handleSchemaValueChange}
+          />
         </Stack>
-        )
-      }
+      )}
     </ScrollableContent>
     {isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>

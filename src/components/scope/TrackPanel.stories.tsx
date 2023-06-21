@@ -90,7 +90,7 @@ Default.args = {
   numPoints: 13,
   numTracks: 5,
   isEditing: false,
-  isActive: false
+  isActive: true
 };
 
 export const Device = DeviceTemplate.bind({});
