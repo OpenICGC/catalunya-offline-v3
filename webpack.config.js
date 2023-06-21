@@ -51,6 +51,10 @@ module.exports = (env) => ({
       {
         test: /\.(png|jpe?g|gif|eot|ttf|woff|woff2)$/i,
         loader: 'url-loader'
+      },
+      {
+        test: /\.(zip)$/i,
+        type: 'asset/resource'
       }
     ]
   },
@@ -62,13 +66,6 @@ module.exports = (env) => ({
       template: './src/template.html',
       filename: './index.html',
       chunks: ['main']
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: 'static'
-        }
-      ]
     }),
     new DotenvWebpackPlugin(),
     ...(process.env.SENTRY_AUTH_TOKEN ? [new SentryWebpackPlugin({

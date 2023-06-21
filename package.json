@@ -41,6 +41,8 @@
     "@geomatico/geocomponents": "3.0.2",
     "@loaders.gl/core": "^3.4.4",
     "@loaders.gl/kml": "^3.4.4",
+    "@loaders.gl/shapefile": "^3.4.4",
+    "@loaders.gl/zip": "^3.4.4",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.1.0",
     "@mui/styles": "^5.1.0",

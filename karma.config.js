@@ -1,7 +1,13 @@
+const os = require('os');
+const path = require('path');
 const ExitOnErrorPlugin = require('exit-on-error-webpack-plugin');
 const webpackConfig = require('./webpack.config')({
   test: true,
 });
+
+const output = {
+  path: path.join(os.tmpdir(), '_karma_webpack_') + Math.floor(Math.random() * 1000000),
+};
 
 // eslint-disable-next-line no-undef
 module.exports = (config) => {
@@ -22,7 +28,16 @@ module.exports = (config) => {
     ],
 
     files: [
-      { pattern: 'test.ts', watched: false }
+      {
+        pattern: 'test.ts',
+        watched: false
+      },
+      {
+        pattern: `${output.path}/**/*`,
+        watched: false,
+        included: false,
+        served: true
+      }
     ],
 
     exclude: [],
@@ -33,6 +48,7 @@ module.exports = (config) => {
     },
     webpack: {
       ...webpackConfig,
+      output,
       plugins: [
         ...webpackConfig.plugins,
         new ExitOnErrorPlugin()
