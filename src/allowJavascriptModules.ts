@@ -4,3 +4,4 @@
 declare module '*.geojson';
 declare module '*.gpx';
 declare module '*.kml';
+declare module '*.zip';
