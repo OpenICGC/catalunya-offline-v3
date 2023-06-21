@@ -10,16 +10,18 @@ import useFilePicker, {FilePickerResult} from '../../hooks/useFilePicker';
 import {asDataUrl} from '../../utils/loaders/helpers';
 import GeoJSONLoader from '../../utils/loaders/GeoJSONLoader';
 import GPXLoader from '../../utils/loaders/GPXLoader';
+import ShpZipLoader from '../../utils/loaders/ShpZipLoader';
 import {IGeodataLoader} from '../../utils/loaders/types';
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 import useColorPalette from '../../hooks/settings/useColorPalette';
 import {useUserLayers} from '../../hooks/usePersistedCollections';
 
-type suppportedMimeType = 'application/geo+json' | 'application/gpx+xml'; // 'application/zip', 'text/csv'
+type suppportedMimeType = 'application/geo+json' | 'application/gpx+xml' | 'application/zip'; //, 'text/csv'
 
 const loaders: Record<suppportedMimeType, IGeodataLoader> = {
   'application/geo+json': GeoJSONLoader,
-  'application/gpx+xml': GPXLoader
+  'application/gpx+xml': GPXLoader,
+  'application/zip': ShpZipLoader
 };
 
 export type UserLayerImporter = {

@@ -72,6 +72,7 @@ const ShpZipLoader: IGeodataLoader = {
       const prj = asString(files.prj);
 
       if (files.shp && files.dbf) {
+        // TODO create a composite loaders.gl loader that takes advantage of workers and chunked loading.
         const shpPromise = parse(files.shp, SHPLoader, {worker: false});
         const dbfPromise = parse(files.dbf, DBFLoader, {worker: false, dbf: {encoding: cpg || 'latin1'}});
         return Promise.all([shpPromise, dbfPromise])
