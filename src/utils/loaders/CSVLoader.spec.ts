@@ -53,7 +53,7 @@ describe('CSVLoader', () => {
       await CSVLoader.load(blob);
     } catch (err) {
       // THEN
-      expect((err as Error).message).to.deep.equal('CSV: "lat" and a "lon" columns are mandatory');
+      expect(err).to.deep.equal('errors.CSVLoader.missingColumns');
     }
   });
 

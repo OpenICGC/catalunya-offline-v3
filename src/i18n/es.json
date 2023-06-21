@@ -46,9 +46,9 @@
   },
   "delete": {
     "message": {
-      "layer": "¿Estás seguro de querer borrar esta Capa? Esta operación no se podrá deshacer.",
-      "pointTrack": "¿Estás seguro de querer borrar este elemento? Esta operación no se podrá deshacer.",
-      "scope": "¿Estás seguro de querer borrar este Ámbito, junto con todos sus puntos y trazas? Esta operación no se podrá deshacer."
+      "layer": "¿Estás seguro de querer borrar esta Capa? Esta operación no se podrá deshacer",
+      "pointTrack": "¿Estás seguro de querer borrar este elemento? Esta operación no se podrá deshacer",
+      "scope": "¿Estás seguro de querer borrar este Ámbito, junto con todos sus puntos y trazas? Esta operación no se podrá deshacer"
     },
     "point": "Borrar Punto",
     "scope": "Borrar Ámbito",
@@ -67,14 +67,28 @@
     "title": "Cartografía sin datos móviles"
   },
   "errors": {
+    "CSVLoader": {
+      "missingColumns": "CSV las columnas \"lat\" y \"lon\" son obligatorias",
+      "noData": "El CSV no contiene datos"
+    },
+    "ShpZipLoader": {
+      "missingFiles": "No se ha encontrado el fichero .shp o .dbf dentro del zip"
+    },
+    "filePicker": "No se ha escogido ningún archivo",
+    "geolocation": {
+      "default": "Error de geolocalización",
+      "permissionDenied": "Se ha denegado el permiso de acceso a la geolocalización",
+      "timeout": "Tiempo agotado esperando geolocalización",
+      "unavailable": "Geolocalización no disponible"
+    },
     "import": {
       "format": "Formato no soportado",
-      "length": "No se pueden importar más de {{max_features}} elementos.",
-      "read": "Error leyendo el fichero.",
-      "unmanaged_errors": "Se han procesado {{totalFeatures}} elementos de los cuales {{numberOfErrors}} han dado error al importar."
+      "length": "No se pueden importar más de {{maxFeatures}} elementos",
+      "read": "Error leyendo el fichero",
+      "someFeatures": "Se han procesado {{totalFeatures}} elementos de los cuales {{numberOfErrors}} han dado error al importar"
     },
     "search": {
-      "noConnectivity": "No se puede realizar la búsqueda porque no hay conexión."
+      "noConnectivity": "No se puede realizar la búsqueda porque no hay conexión"
     }
   },
   "features": {
@@ -124,7 +138,7 @@
     "total": "Total"
   },
   "schema": {
-    "customFieldsTitle": "Campos personalizados para este ámbito.",
+    "customFieldsTitle": "Campos personalizados para este ámbito",
     "defaultFieldsTitle": "Campos por defecto",
     "title": "Diccionario de datos"
   },

@@ -63,10 +63,10 @@ const useGeolocation = (): useGeolocationType => {
     distanceFilter: 1
   };
 
-  const handleCapacitorPermission = (error: CallbackError) => {
+  const handleCapacitorPermission = (backgroundGeolocationError: CallbackError) => {
     if (
-      error.code === 'NOT_AUTHORIZED' &&
-      error.message !== 'Location services disabled.' &&
+      backgroundGeolocationError.code === 'NOT_AUTHORIZED' &&
+      backgroundGeolocationError.message !== 'Location services disabled.' &&
       window.confirm(t('geolocation.requestPermission'))
     ) {
       BackgroundGeolocation.openSettings();
@@ -87,7 +87,7 @@ const useGeolocation = (): useGeolocationType => {
   useEffect( () => {
     positionTimeout && clearTimeout(positionTimeout);
     setPositionTimeout(window.setTimeout(() => {
-      setError({code: 'NO_FRESH_LOCATION', message: `No new location set in ${POSITION_TIMEOUT} seconds`});
+      setError({code: 'errors.geolocation.timeout'});
       setGeolocation(nullGeolocation());
     }, POSITION_TIMEOUT * 1000));
     return () => window.clearTimeout(positionTimeout);
@@ -126,21 +126,23 @@ const useGeolocation = (): useGeolocationType => {
   };
 
   const handleWebError = (webError: GeolocationPositionError) => {
-    const errorCodes = [ // From https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError/code
-      {code: 'GEOLOCATION_ERROR', message: 'Geolocation Error'},
-      {code: 'GEOLOCATION_PERMISSION_DENIED', message: 'Geolocation Permission Denied'},
-      {code: 'GEOLOCATION_POSITION_UNAVAILABLE', message: 'Geolocation Position Unavailable'},
-      {code: 'GEOLOCATION_TIMEOUT', message: 'Geolocation Timeout'}
-    ];
-    const error: CatOfflineError = errorCodes[webError.code] || errorCodes[0];
-    console.error('[Geolocation] Got Web error', error);
+    const errorCodes: Record<string, string> = {
+      // From https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError/code
+      'GEOLOCATION_ERROR': 'errors.geolocation.default',
+      'GEOLOCATION_PERMISSION_DENIED': 'errors.geolocation.permissionDenied',
+      'GEOLOCATION_POSITION_UNAVAILABLE': 'errors.geolocation.unavailable',
+      'GEOLOCATION_TIMEOUT': 'errors.geolocation.timeout'
+    };
+    const error: CatOfflineError = {code: errorCodes[webError.code] || errorCodes['GEOLOCATION_ERROR']};
+    console.error('[Geolocation] Got Web error', webError);
     setError(error);
     setGeolocation(nullGeolocation());
   };
 
   const handleCapacitorError = (capacitorError: CallbackError) => {
-    const error: CatOfflineError = {message: capacitorError.message, code: capacitorError.code};
-    console.error('[Geolocation] Got Capacitor error', error);
+    // TODO list possible capacitorError values, convert to catoffline error code and i18n.
+    const error: CatOfflineError = {code: capacitorError.code ?? capacitorError.message};
+    console.error('[Geolocation] Got Capacitor error', capacitorError);
     setError(error);
     setGeolocation(nullGeolocation());
   };

@@ -1,9 +1,8 @@
 import {FC, useCallback, useEffect} from 'react';
-import {useTranslation} from 'react-i18next';
 
 import {v4 as uuid} from 'uuid';
 
-import {Error, UserLayer} from '../../types/commonTypes';
+import {CatOfflineError, UserLayer} from '../../types/commonTypes';
 import {MAX_ALLOWED_IMPORT_FEATURES} from '../../config';
 
 import useFilePicker, {FilePickerResult} from '../../hooks/useFilePicker';
@@ -28,11 +27,10 @@ const loaders: Record<suppportedMimeType, IGeodataLoader> = {
 
 export type UserLayerImporter = {
   onSuccess: () => void
-  onError: (error: Error) => void
+  onError: (error: CatOfflineError) => void
 }
 
 const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
-  const {t} = useTranslation();
   const pickedFile = useFilePicker(Object.keys(loaders) as Array<suppportedMimeType>, onError);
   const [colorPalette] = useColorPalette();
   const {hexColors: palette} = useColorRamp(colorPalette);
@@ -44,17 +42,17 @@ const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
     if (loader && (file.blob || file.data)) {
       const data =
         await loader.load(file.blob ?? asDataUrl(file.data as string, mimeType))
-          .catch(() => {
+          .catch((reason) => {
+            console.log('reason', reason);
             onError({
-              name: 'errors.import.read',
-              message:  t('errors.import.read')
+              code: reason.toString() || 'errors.import.read'
             });
           });
       if (data) {
         if (data.features.length > MAX_ALLOWED_IMPORT_FEATURES) {
           onError({
-            name: 'errors.import.length',
-            message: t('errors.import.length', {max_features: MAX_ALLOWED_IMPORT_FEATURES})
+            code: 'errors.import.length',
+            params: {maxFeatures: MAX_ALLOWED_IMPORT_FEATURES}
           });
         } else {
           const numLayers = userLayersStore.list()?.length ?? 0;
@@ -70,7 +68,7 @@ const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
         }
       }
     } else {
-      onError({name: 'errors.import.format', message: t('errors.import.format')});
+      onError({code: 'errors.import.format'});
     }
   }, [onSuccess, onError, userLayersStore.list, userLayersStore.create]);
 

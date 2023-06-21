@@ -88,7 +88,7 @@ const ShpZipLoader: IGeodataLoader = {
             };
           });
       } else {
-        return Promise.reject(Error('No .shp or .dbf files found in zip'));
+        return Promise.reject('errors.ShpZipLoader.missingFiles');
       }
     });
   }

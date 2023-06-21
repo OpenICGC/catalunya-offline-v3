@@ -42,7 +42,7 @@ describe('ShpZipLoader', () => {
       await ShpZipLoader.load(sampleNoShpZip);
     } catch (err) {
       // THEN
-      expect((err as Error).message).to.deep.equal('No .shp or .dbf files found in zip');
+      expect(err).to.deep.equal('errors.ShpZipLoader.missingFiles');
     }
   });
 

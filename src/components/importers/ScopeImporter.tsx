@@ -1,7 +1,6 @@
 import {FC, useCallback, useEffect} from 'react';
-import {useTranslation} from 'react-i18next';
 
-import {Error, UUID} from '../../types/commonTypes';
+import {CatOfflineError, UUID} from '../../types/commonTypes';
 import {MAX_ALLOWED_IMPORT_FEATURES} from '../../config';
 
 import useFilePicker, {FilePickerResult} from '../../hooks/useFilePicker';
@@ -24,7 +23,7 @@ const importers: Record<suppportedMimeType, ScopeImporter> = {
 export type ScopeImporterProps = {
   scopeId: UUID,
   onSuccess: () => void
-  onError: (error: Error) => void
+  onError: (error: CatOfflineError) => void
 }
 
 const ScopeImporter: FC<ScopeImporterProps> = ({
@@ -33,7 +32,6 @@ const ScopeImporter: FC<ScopeImporterProps> = ({
   onError
 }) => {
 
-  const {t} = useTranslation();
   const pickedFile = useFilePicker(Object.keys(importers) as Array<suppportedMimeType>, onError);
   const trackStore = useScopeTracks(scopeId);
   const pointStore = useScopePoints(scopeId);
@@ -44,10 +42,9 @@ const ScopeImporter: FC<ScopeImporterProps> = ({
     if (importer && (file.blob || file.data)) {
       const importResult =
         await importer(file.blob ?? asDataUrl(file.data as string, mimeType))
-          .catch(() => {
+          .catch((reason) => {
             onError({
-              name: 'errors.import.read',
-              message:  t('errors.import.read')
+              code: reason.toString() || 'errors.import.read'
             });
           });
       if (importResult) {
@@ -55,13 +52,13 @@ const ScopeImporter: FC<ScopeImporterProps> = ({
         const totalFeatures = points.length + tracks.length;
         if (totalFeatures > MAX_ALLOWED_IMPORT_FEATURES) {
           onError({
-            name: 'errors.import.length',
-            message: t('errors.import.length', {max_features: MAX_ALLOWED_IMPORT_FEATURES})
+            code: 'errors.import.length',
+            params: {maxFeatures: MAX_ALLOWED_IMPORT_FEATURES}
           });
         } else if (numberOfErrors) {
           onError({
-            name: 'errors.import.unmanaged_errors',
-            message: t('errors.import.unmanaged_errors', {totalFeatures, numberOfErrors})
+            code: 'errors.import.someFeatures',
+            params: {totalFeatures, numberOfErrors}
           });
         } else {
           await pointStore.create(points);
@@ -70,7 +67,7 @@ const ScopeImporter: FC<ScopeImporterProps> = ({
         }
       }
     } else {
-      onError({name: 'errors.import.format', message: t('errors.import.format')});
+      onError({code: 'errors.import.format'});
     }
   }, [onSuccess, onError, trackStore.create, pointStore.create]);
 

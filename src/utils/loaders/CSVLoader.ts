@@ -7,10 +7,10 @@ const asCoord = (str: string) => parseFloat(str.replace(',', '.'));
 const CSVLoader: IGeodataLoader = {
   load: (url) => load(url, glCSVLoader).then(rows => {
     if (!rows?.length) {
-      return Promise.reject(Error('CSV is empty'));
+      return Promise.reject('errors.CSVLoader.noData');
     }
     if (!rows[0].lat || !rows[0].lon) {
-      return Promise.reject(Error('CSV: "lat" and a "lon" columns are mandatory'));
+      return Promise.reject('errors.CSVLoader.missingColumns');
     }
     return {
       type: 'FeatureCollection',
