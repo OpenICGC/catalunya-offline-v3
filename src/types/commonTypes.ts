@@ -79,11 +79,13 @@ export interface ScopeFeature extends GeoJSON.Feature<GeoJSON.Geometry | null> {
 }
 
 export interface ScopePoint extends ScopeFeature {
-  geometry: GeoJSON.Point// Point geometry is required (not nullable)
+  geometry: GeoJSON.Point, // Point geometry is required (not nullable)
+  schemaValues?: Record<UUID, string>
 }
 
 export interface ScopeTrack extends ScopeFeature {
-  geometry: GeoJSON.LineString | null // Track geometry is nullable
+  geometry: GeoJSON.LineString | null, // Track geometry is nullable
+  schemaValues?: Record<UUID, string>
 }
 
 export type ImagePath = string

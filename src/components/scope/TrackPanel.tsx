@@ -41,6 +41,7 @@ import useImages from '../../hooks/useImages';
 import {IS_WEB} from '../../config';
 import {openPhoto} from '../../utils/camera';
 import {getSignificantDistanceUnits} from '../../utils/getSignificantDistanceUnits';
+import TextInput from './inputs/TextInput';
 
 //STYLES
 const sectionWrapperSx = {
@@ -161,6 +162,15 @@ const TrackPanel: FC<TrackPanelProps> = ({
       }
     }), [track]);
 
+  const handleSchemaValueChange = useCallback((value: string, schemaFieldId: string) =>
+    onTrackChange({
+      ...track,
+      schemaValues: {
+        ...track.schemaValues,
+        [schemaFieldId]: value
+      }
+    }), [track]);
+
   const handleAddImage = () => create();
 
   const handleDeleteImage = (image: ImagePath) => remove(image);
@@ -186,6 +196,8 @@ const TrackPanel: FC<TrackPanelProps> = ({
   };
 
   const backIcon = useMemo(() => <ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>, []);
+  const trackSchema = useMemo(() => scope.schema?.filter(
+    field => field.appliesToTracks), [scope]);
 
   return (isActive || isEditing) ? <>
     <Header
@@ -253,6 +265,17 @@ const TrackPanel: FC<TrackPanelProps> = ({
         onDeleteImage={handleDeleteImage}
         onDownloadImage={handleOpenImage}
       />}
+      {trackSchema && trackSchema.map(field =>
+        <Stack sx={sectionWrapperSx} key={field.id}>
+          <Typography sx={sectionTitleSx} variant='caption'>{field.name}</Typography>
+          <TextInput
+            isEditing={isEditing}
+            id={field.id}
+            text={track.schemaValues ? track.schemaValues[field.id] : undefined}
+            onChange={handleSchemaValueChange}
+          />
+        </Stack>
+      )}
     </ScrollableContent>
     {isEditing &&
       <Stack direction="row" justifyContent="center" gap={1} sx={{px: 1, pb: 2}}>
