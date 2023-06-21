@@ -50,8 +50,8 @@ export type Styles = Array<Style>
 export type Manager = 'LAYERS' | 'BASEMAPS' | 'SCOPES' | undefined;
 
 export interface CatOfflineError {
-  code?: string;
-  message?: string;
+  code: string,
+  params?: Record<string, string | number>
 }
 
 export type UUID = string;
@@ -101,25 +101,10 @@ export enum SCOPE_FEATURES_PANEL_TAB {
   TRACKS
 }
 
-export interface AppState {
-  basemapId: string,
-  selectedScopeId?: UUID,
-  selectedPointId?: UUID,
-  selectedTrackId?: UUID,
-  visibleLayers: Array<number>,
-  scopeFeaturesPanelTab: SCOPE_FEATURES_PANEL_TAB
-}
-
-export type Error = {
-  name: string,
-  message: string
-}
-
 export type ContextMapsResult = {
   nom: string,
   coordenades: string
 }
-
 
 export type SchemaFieldType = {
   id: UUID,
@@ -137,4 +122,3 @@ export type UserLayer = {
   isVisible: boolean,
   data: GeoJSON.FeatureCollection
 }
-

@@ -26,7 +26,7 @@ const matchCoords = (coordinates: GeoJSON.Position[][], delta: number) => {
   }));
 };
 
-describe.only('ShpZipLoader', () => {
+describe('ShpZipLoader', () => {
 
   it('should import a zip-compressed Shapefile from a url', async () => {
     // WHEN
@@ -42,7 +42,7 @@ describe.only('ShpZipLoader', () => {
       await ShpZipLoader.load(sampleNoShpZip);
     } catch (err) {
       // THEN
-      expect((err as Error).message).to.deep.equal('No .shp or .dbf files found in zip');
+      expect(err).to.deep.equal('errors.ShpZipLoader.missingFiles');
     }
   });
 

@@ -46,7 +46,7 @@ const useFakeGeolocation = (): useGeolocationType => {
     }
   }, []);
 
-  const error = undefined; //{code: 'GEOLOCATION_POSITION_UNAVAILABLE', message: 'Geolocation Position Unavailable'};
+  const error = undefined; //{code: 'errors.geolocation.unavailable'};
   const setWatchInBackground = useCallback(() => undefined, []);
 
   return {geolocation, error, setWatchInBackground};

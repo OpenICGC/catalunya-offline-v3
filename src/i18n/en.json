@@ -46,9 +46,9 @@
   },
   "delete": {
     "message": {
-      "layer": "Are you sure to delete this Layer? This action cannot be undone.",
-      "pointTrack": "Are you sure to delete this element? This action cannot be undone.",
-      "scope": "Are you sure to delete this entire Scope and its associated Points and Tracks? This action cannot be undone."
+      "layer": "Are you sure to delete this Layer? This action cannot be undone",
+      "pointTrack": "Are you sure to delete this element? This action cannot be undone",
+      "scope": "Are you sure to delete this entire Scope and its associated Points and Tracks? This action cannot be undone"
     },
     "point": "Delete Point",
     "scope": "Delete Scope",
@@ -67,14 +67,28 @@
     "title": "Offline Cartography"
   },
   "errors": {
+    "CSVLoader": {
+      "missingColumns": "CSV \"lat\" and a \"lon\" columns are mandatory",
+      "noData": "CSV does not contain data"
+    },
+    "ShpZipLoader": {
+      "missingFiles": "No .shp or .dbf files found in zip"
+    },
+    "filePicker": "No file picked",
+    "geolocation": {
+      "default": "Geolocation Error",
+      "permissionDenied": "Geolocation Permission Denied",
+      "timeout": "Geolocation Timeout",
+      "unavailable": "Geolocation Position Unavailable"
+    },
     "import": {
-      "format": "Unsupported file extension.",
-      "length": "Importing more than {{max_features}} features is not allowed.",
+      "format": "Unsupported file extension",
+      "length": "Importing more than {{maxFeatures}} features is not allowed",
       "read": "Error reading file",
-      "unmanaged_errors": "{{totalFeatures}} features have been processed for which {{numberOfErrors}} failed."
+      "someFeatures": "{{totalFeatures}} features have been processed for which {{numberOfErrors}} failed"
     },
     "search": {
-      "noConnectivity": "Cannot search because there is no connection."
+      "noConnectivity": "Cannot search because there is no connection"
     }
   },
   "features": {

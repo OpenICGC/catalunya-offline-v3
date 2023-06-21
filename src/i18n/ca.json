@@ -46,9 +46,9 @@
   },
   "delete": {
     "message": {
-      "layer": "Esteu segur de voler esborrar aquest capa? Aquesta operació no es podrà desfer.",
-      "pointTrack": "Esteu segur de voler esborrar  aquest element? Aquesta operació no es podrà desfer.",
-      "scope": "Esteu segur de voler esborrar aquest àmbit i tots els punts i traces que conté? Aquesta operació no es podrà desfer."
+      "layer": "Esteu segur de voler esborrar aquest capa? Aquesta operació no es podrà desfer",
+      "pointTrack": "Esteu segur de voler esborrar  aquest element? Aquesta operació no es podrà desfer",
+      "scope": "Esteu segur de voler esborrar aquest àmbit i tots els punts i traces que conté? Aquesta operació no es podrà desfer"
     },
     "point": "Esborra el Punt",
     "scope": "Esborra l'Àmbit",
@@ -67,14 +67,28 @@
     "title": "Cartografia sense dades mòbils"
   },
   "errors": {
+    "CSVLoader": {
+      "missingColumns": "CSV les columnes \"lat\" i \"lon\" són obligatòries",
+      "noData": "El CSV no conté dades"
+    },
+    "ShpZipLoader": {
+      "missingFiles": "No s'ha trobat el fitxer .shp o .dbf a dins del zip"
+    },
+    "filePicker": "No s'ha escollit cap arxiu",
+    "geolocation": {
+      "default": "Error de geolocalització",
+      "permissionDenied": "S'ha denegat l'accés a la geolocalització",
+      "timeout": "Temps exhaurit esperant la geolocalització",
+      "unavailable": "Geolocalització no disponible"
+    },
     "import": {
-      "format": "Format no suportat.",
-      "length": "No es poden importar més de {{max_features}} elements.",
-      "read": "Error llegint el fitxer.",
-      "unmanaged_errors": "S'han processat {{totalFeatures}} elements dels quals {{numberOfErrors}} han donat error en importar."
+      "format": "Format no suportat",
+      "length": "No es poden importar més de {{maxFeatures}} elements",
+      "read": "Error llegint el fitxer",
+      "someFeatures": "S'han processat {{totalFeatures}} elements dels quals {{numberOfErrors}} han donat error en importar"
     },
     "search": {
-      "noConnectivity": "No es pot fer la cerca perquè no hi ha connexió."
+      "noConnectivity": "No es pot fer la cerca perquè no hi ha connexió"
     }
   },
   "features": {
@@ -124,7 +138,7 @@
     "total": "Total"
   },
   "schema": {
-    "customFieldsTitle": "Camps personalitzats per a aquest àmbit.",
+    "customFieldsTitle": "Camps personalitzats per a aquest àmbit",
     "defaultFieldsTitle": "Camps per defecte",
     "title": "Diccionari de dades"
   },

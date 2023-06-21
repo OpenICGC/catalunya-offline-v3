@@ -9,7 +9,7 @@ import LayersIcon from '@mui/icons-material/Layers';
 import Header from '../../components/common/Header';
 import UserLayerPanel from '../../components/common/UserLayerPanel';
 
-import {Error, HEXColor, UserLayer, UUID} from '../../types/commonTypes';
+import {CatOfflineError, HEXColor, UserLayer, UUID} from '../../types/commonTypes';
 import {useUserLayers} from '../../hooks/usePersistedCollections';
 import GeoJSON from 'geojson';
 import {v4 as uuid} from 'uuid';
@@ -42,7 +42,7 @@ const UserLayersView: FC = () => {
   const userLayers = userLayersStore.list();
 
   const [isImportingLayer, setImportingLayer] = useState<boolean>(false);
-  const [importErrors, setImportErrors] = useState<Error | undefined>(undefined);
+  const [importErrors, setImportErrors] = useState<CatOfflineError | undefined>(undefined);
 
   useEffect(() => {
     if (userLayers?.length === 0) {
@@ -71,7 +71,7 @@ const UserLayersView: FC = () => {
     setImportingLayer(false);
   };
 
-  const handleImportError = (error: Error) => {
+  const handleImportError = (error: CatOfflineError) => {
     setImportingLayer(false);
     setImportErrors(error);
   };
@@ -129,7 +129,7 @@ const UserLayersView: FC = () => {
     }
     {importErrors &&
       <Notification
-        message={importErrors.message}
+        message={t(importErrors.code, importErrors.params)}
         isOpen={true}
         isPersistent={true}
         onClose={() => setImportErrors(undefined)}

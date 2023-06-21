@@ -1,13 +1,13 @@
 import {FC, useCallback, useEffect} from 'react';
-import {useTranslation} from 'react-i18next';
 
 import {v4 as uuid} from 'uuid';
 
-import {Error, UserLayer} from '../../types/commonTypes';
+import {CatOfflineError, UserLayer} from '../../types/commonTypes';
 import {MAX_ALLOWED_IMPORT_FEATURES} from '../../config';
 
 import useFilePicker, {FilePickerResult} from '../../hooks/useFilePicker';
 import {asDataUrl} from '../../utils/loaders/helpers';
+import CSVLoader from '../../utils/loaders/CSVLoader';
 import GeoJSONLoader from '../../utils/loaders/GeoJSONLoader';
 import GPXLoader from '../../utils/loaders/GPXLoader';
 import ShpZipLoader from '../../utils/loaders/ShpZipLoader';
@@ -16,21 +16,21 @@ import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 import useColorPalette from '../../hooks/settings/useColorPalette';
 import {useUserLayers} from '../../hooks/usePersistedCollections';
 
-type suppportedMimeType = 'application/geo+json' | 'application/gpx+xml' | 'application/zip'; //, 'text/csv'
+type suppportedMimeType = 'application/geo+json' | 'application/gpx+xml' | 'application/zip' | 'text/csv';
 
 const loaders: Record<suppportedMimeType, IGeodataLoader> = {
   'application/geo+json': GeoJSONLoader,
   'application/gpx+xml': GPXLoader,
-  'application/zip': ShpZipLoader
+  'application/zip': ShpZipLoader,
+  'text/csv': CSVLoader
 };
 
 export type UserLayerImporter = {
   onSuccess: () => void
-  onError: (error: Error) => void
+  onError: (error: CatOfflineError) => void
 }
 
 const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
-  const {t} = useTranslation();
   const pickedFile = useFilePicker(Object.keys(loaders) as Array<suppportedMimeType>, onError);
   const [colorPalette] = useColorPalette();
   const {hexColors: palette} = useColorRamp(colorPalette);
@@ -42,17 +42,17 @@ const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
     if (loader && (file.blob || file.data)) {
       const data =
         await loader.load(file.blob ?? asDataUrl(file.data as string, mimeType))
-          .catch(() => {
+          .catch((reason) => {
+            console.log('reason', reason);
             onError({
-              name: 'errors.import.read',
-              message:  t('errors.import.read')
+              code: reason.toString() || 'errors.import.read'
             });
           });
       if (data) {
         if (data.features.length > MAX_ALLOWED_IMPORT_FEATURES) {
           onError({
-            name: 'errors.import.length',
-            message: t('errors.import.length', {max_features: MAX_ALLOWED_IMPORT_FEATURES})
+            code: 'errors.import.length',
+            params: {maxFeatures: MAX_ALLOWED_IMPORT_FEATURES}
           });
         } else {
           const numLayers = userLayersStore.list()?.length ?? 0;
@@ -68,7 +68,7 @@ const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
         }
       }
     } else {
-      onError({name: 'errors.import.format', message: t('errors.import.format')});
+      onError({code: 'errors.import.format'});
     }
   }, [onSuccess, onError, userLayersStore.list, userLayersStore.create]);
 

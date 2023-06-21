@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 
 import useColorRamp from '@geomatico/geocomponents/hooks/useColorRamp';
 
-import {Error, HEXColor, UUID} from '../../types/commonTypes';
+import {CatOfflineError, HEXColor, UUID} from '../../types/commonTypes';
 import {useScopes} from '../../hooks/usePersistedCollections';
 import MainPanel from '../../components/scope/MainPanel';
 import ScopeFeatures from './ScopeFeatures';
@@ -38,7 +38,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
   const [sharingScopeId, setSharingScopeId] = useState<UUID|undefined>(undefined);
   const [importingScopeId, setImportingScopeId] = useState<UUID|undefined>(undefined);
 
-  const [importErrors, setImportErrors] = useState<Error | undefined>(undefined);
+  const [importErrors, setImportErrors] = useState<CatOfflineError | undefined>(undefined);
 
   const scopeStore = useScopes();
   const unselectScope = () => onScopeSelected('');
@@ -93,7 +93,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
     importingScopeId && onScopeSelected(importingScopeId);
     setImportingScopeId(undefined);
   };
-  const handleImportError = (error: Error) => {
+  const handleImportError = (error: CatOfflineError) => {
     setImportingScopeId(undefined);
     setImportErrors(error);
   };
@@ -131,7 +131,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
       {
         importErrors &&
         <Notification
-          message={importErrors.message}
+          message={t(importErrors.code, importErrors.params)}
           isOpen={true}
           isPersistent={true}
           onClose={() => setImportErrors(undefined)} />
