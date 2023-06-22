@@ -140,8 +140,8 @@
   "schema": {
     "customFieldsTitle": "Campos personalizados para este ámbito",
     "defaultFieldsTitle": "Campos por defecto",
-    "title": "Diccionario de datos",
-    "field": "Campo"
+    "field": "Campo",
+    "title": "Diccionario de datos"
   },
   "scope": "Ámbito",
   "scopeList": {

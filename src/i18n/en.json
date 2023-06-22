@@ -140,8 +140,8 @@
   "schema": {
     "customFieldsTitle": "Custom fields for this scope",
     "defaultFieldsTitle": "Default fields",
-    "title": "Data dictionary",
-    "field": "Field"
+    "field": "Field",
+    "title": "Data dictionary"
   },
   "scope": "Scope",
   "scopeList": {

@@ -140,8 +140,8 @@
   "schema": {
     "customFieldsTitle": "Camps personalitzats per a aquest àmbit",
     "defaultFieldsTitle": "Camps per defecte",
-    "title": "Diccionari de dades",
-    "field": "Camp"
+    "field": "Camp",
+    "title": "Diccionari de dades"
   },
   "scope": "Àmbit",
   "scopeList": {
