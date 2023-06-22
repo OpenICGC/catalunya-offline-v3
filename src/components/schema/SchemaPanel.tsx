@@ -6,9 +6,9 @@ import MuiList from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 
 //MUI-ICONS
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import ArrowBackIcon from '@mui/icons-material/DoubleArrow';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import SchemaIcon from '@mui/icons-material/AccountTree';
+import BackIcon from '@mui/icons-material/DoubleArrow';
+import AddIcon from '@mui/icons-material/AddBox';
 
 //CATOFFLINE
 import AddButton from '../buttons/AddButton';
@@ -17,7 +17,7 @@ import ListItem from '../scope/ListItem';
 import SchemaForm from './SchemaForm';
 
 //UTILS
-import {Scope} from '../../types/commonTypes';
+import {Scope, UUID} from '../../types/commonTypes';
 import {useTranslation} from 'react-i18next';
 import styled from '@mui/material/styles/styled';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
@@ -37,11 +37,11 @@ export type SchemaPanelProps = {
   scopes: Array<Scope>;
   onAddField: () => void,
   onBackButtonClick: () => void,
-  onDelete: () => void,
-  onImportFieldsFromScope: () => void
-  onNameChange: () => void
-  onPointToApplyChange: () => void,
-  onTrackToApplyChange: () => void,
+  onImportFieldsFromScope: (scopeId: UUID) => void,
+  onDelete: (fieldId: UUID) => void,
+  onNameChange: (fieldId: UUID, name: string) => void
+  onPointToApplyChange: (fieldId: UUID) => void,
+  onTrackToApplyChange: (fieldId: UUID) => void
 };
 
 
@@ -69,13 +69,13 @@ const SchemaPanel: FC<SchemaPanelProps> = ({
   }), [isLargeSize]);
 
   return <><Header
-    startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}
+    startIcon={<BackIcon sx={{transform: 'rotate(180deg)'}}/>}
     name={scope.name}
     color={scope.color}
     onStartIconClick={onBackButtonClick}
   />
   <Header
-    startIcon={<AccountTreeIcon/>}
+    startIcon={<SchemaIcon/>}
     name={t('schema.title')}
     color={`${scope.color}bf`}//scope color with 75% transparency
     onStartIconClick={onBackButtonClick}
@@ -107,7 +107,7 @@ const SchemaPanel: FC<SchemaPanelProps> = ({
   </ScrollableContent>
   <Box sx={{width: '100%', height: 0}}>
     <AddButton onClick={onAddField}>
-      <AddBoxIcon/>
+      <AddIcon/>
     </AddButton>
   </Box>
   </>;

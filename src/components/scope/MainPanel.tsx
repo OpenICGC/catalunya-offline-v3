@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 //MUI-ICONS
 import AddIcon from '@mui/icons-material/Add';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
-/*import DashboardIcon from '@mui/icons-material/Dashboard';*/
+import SchemaIcon from '@mui/icons-material/AccountTree';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
@@ -35,7 +35,7 @@ export type MainPanelProps = {
   onShare: (scopeId: UUID) => void,
   onDelete: (scopeId: UUID) => void,
   /*onInstamaps: (scopeId: UUID) => void,*/
-  /*onDataSchema: (scopeId: UUID) => void,*/
+  onDataSchema: (scopeId: UUID) => void,
   onImport: (scopeId: UUID) => void
 };
 
@@ -48,7 +48,7 @@ const MainPanel: FC<MainPanelProps> = ({
   onShare,
   onDelete,
   /*onInstamaps,*/
-  /*onDataSchema,*/
+  onDataSchema,
   onImport
 }) => {
   const {t} = useTranslation();
@@ -73,13 +73,13 @@ const MainPanel: FC<MainPanelProps> = ({
       label: t('actions.instamaps'),
       icon: <MoreHorizIcon/>,
       callbackProp: onInstamaps
-    },
+    },*/
     {
       id: 'dataSchema',
       label: t('actions.dataSchema'),
-      icon: <DashboardIcon/>,
+      icon: <SchemaIcon/>,
       callbackProp: onDataSchema
-    },*/
+    },
     {
       id: 'import',
       label: t('actions.import'),

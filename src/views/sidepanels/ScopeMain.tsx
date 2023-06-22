@@ -13,6 +13,7 @@ import HandleExport from '../../components/scope/export/HandleExport';
 import ScopeImporter from '../../components/importers/ScopeImporter';
 import Notification from '../../components/notifications/Notification';
 import useColorPalette from '../../hooks/settings/useColorPalette';
+import ScopeSchemaEditor from './ScopeSchemaEditor';
 
 export interface ScopeMainProps {
   selectedScope?: UUID,
@@ -36,6 +37,7 @@ const ScopeMain: FC<ScopeMainProps> = ({
   const {hexColors: palette} = useColorRamp(colorPalette);
 
   const [sharingScopeId, setSharingScopeId] = useState<UUID|undefined>(undefined);
+  const [editingSchemaScopeId, setEditingSchemaScopeId] = useState<UUID|undefined>(undefined);
   const [importingScopeId, setImportingScopeId] = useState<UUID|undefined>(undefined);
 
   const [importErrors, setImportErrors] = useState<CatOfflineError | undefined>(undefined);
@@ -84,9 +86,13 @@ const ScopeMain: FC<ScopeMainProps> = ({
     console.log('Unimplemented Instamaps, Scope', scopeId); // TODO
   };*/
 
-  /*const dataSchema = (id: UUID) => {
-    console.log('Unimplemented Data Schema, Scope', id); // TODO
-  };*/
+  const dataSchema = (scopeId: UUID) => {
+    setEditingSchemaScopeId(scopeId);
+  };
+
+  const closeSchemaEditor = () => {
+    setEditingSchemaScopeId(undefined);
+  };
 
   const closeHandleExport = () => setSharingScopeId(undefined);
   const handleImportSuccess = () => {
@@ -100,18 +106,24 @@ const ScopeMain: FC<ScopeMainProps> = ({
 
   return !selectedScope ?
     <>
-      <MainPanel
-        scopes={scopeStore.list() ?? []}
-        onSelect={onScopeSelected}
-        onAdd={scopeAdd}
-        onColorChange={scopeColorChange}
-        onRename={scopeRename}
-        onDelete={scopeDelete}
-        onShare={share}
-        /*onInstamaps={instamaps}*/
-        /*onDataSchema={dataSchema}*/
-        onImport={importFile}
-      />
+      {editingSchemaScopeId ?
+        <ScopeSchemaEditor
+          scopeId={editingSchemaScopeId}
+          onClose={closeSchemaEditor}
+        /> :
+        <MainPanel
+          scopes={scopeStore.list() ?? []}
+          onSelect={onScopeSelected}
+          onAdd={scopeAdd}
+          onColorChange={scopeColorChange}
+          onRename={scopeRename}
+          onDelete={scopeDelete}
+          onShare={share}
+          /*onInstamaps={instamaps}*/
+          onDataSchema={dataSchema}
+          onImport={importFile}
+        />
+      }
       {
         sharingScopeId &&
         <HandleExport

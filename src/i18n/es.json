@@ -17,7 +17,7 @@
     "addPoint": "Añadir punto",
     "cancel": "Cancelar",
     "close": "Cerrar",
-    "dataSchema": "Esquema de datos",
+    "dataSchema": "Diccionario de datos",
     "delete": "Borrar",
     "download": "Descargar",
     "downloading": "Descargando...",
@@ -140,7 +140,8 @@
   "schema": {
     "customFieldsTitle": "Campos personalizados para este ámbito",
     "defaultFieldsTitle": "Campos por defecto",
-    "title": "Diccionario de datos"
+    "title": "Diccionario de datos",
+    "field": "Campo"
   },
   "scope": "Ámbito",
   "scopeList": {
