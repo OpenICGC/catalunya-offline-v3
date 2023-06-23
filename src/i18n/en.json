@@ -17,7 +17,7 @@
     "addPoint": "Add point",
     "cancel": "Cancel",
     "close": "Close",
-    "dataSchema": "Data Schema",
+    "dataSchema": "Data Dictionary",
     "delete": "Delete",
     "download": "Download",
     "downloading": "Downloading...",
@@ -140,6 +140,7 @@
   "schema": {
     "customFieldsTitle": "Custom fields for this scope",
     "defaultFieldsTitle": "Default fields",
+    "field": "Field",
     "title": "Data dictionary"
   },
   "scope": "Scope",

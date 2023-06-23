@@ -17,7 +17,7 @@
     "addPoint": "Afegir punt",
     "cancel": "Cancel·la",
     "close": "Tanca",
-    "dataSchema": "Esquema de dades",
+    "dataSchema": "Diccionari de dades",
     "delete": "Esborra",
     "download": "Descarrega",
     "downloading": "Descarregant...",
@@ -140,6 +140,7 @@
   "schema": {
     "customFieldsTitle": "Camps personalitzats per a aquest àmbit",
     "defaultFieldsTitle": "Camps per defecte",
+    "field": "Camp",
     "title": "Diccionari de dades"
   },
   "scope": "Àmbit",

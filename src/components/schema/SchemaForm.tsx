@@ -7,14 +7,14 @@ import MuiList from '@mui/material/List';
 import SchemaField from './SchemaField';
 
 //UTILS
-import {Schema} from '../../types/commonTypes';
+import {Schema, UUID} from '../../types/commonTypes';
 
 export type SchemaFormProps = {
   schema: Schema,
-  onDelete: () => void,
-  onNameChange: () => void
-  onPointToApplyChange: () => void,
-  onTrackToApplyChange: () => void
+  onDelete: (fieldId: UUID) => void,
+  onNameChange: (fieldId: UUID, name: string) => void
+  onPointToApplyChange: (fieldId: UUID) => void,
+  onTrackToApplyChange: (fieldId: UUID) => void
 };
 
 const SchemaForm: FC<SchemaFormProps> = ({
