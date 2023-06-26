@@ -27,7 +27,7 @@ const emptySampleUserLayer = (name: string, color: HEXColor): UserLayer => ({
   id: uuid(),
   name: name,
   color: color,
-  isVisible: true,
+  isVisible: false,
   data: {
     type: 'FeatureCollection',
     features: [] as Array<GeoJSON.Feature<GeoJSON.Geometry, SampleLayersProperties>>

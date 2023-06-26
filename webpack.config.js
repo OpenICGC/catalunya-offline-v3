@@ -67,6 +67,13 @@ module.exports = (env) => ({
       filename: './index.html',
       chunks: ['main']
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'static'
+        }
+      ]
+    }),
     new DotenvWebpackPlugin(),
     ...(process.env.SENTRY_AUTH_TOKEN ? [new SentryWebpackPlugin({
       org: 'geomatico',

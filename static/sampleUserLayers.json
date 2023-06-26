@@ -1,5 +1,5 @@
 {"type":"FeatureCollection","features":[
- {"type":"Feature","properties":{"n":"Alberg d'Empúries","m":"l'Escala","t":3,"l":"http://www.xanascat.cat/showhostel.tjc?id=237&index=10"},"geometry":{"type":"Point","coordinates":[3.12135,42.12779]}},
+{"type":"Feature","properties":{"n":"Alberg d'Empúries","m":"l'Escala","t":3,"l":"http://www.xanascat.cat/showhostel.tjc?id=237&index=10"},"geometry":{"type":"Point","coordinates":[3.12135,42.12779]}},
 {"type":"Feature","properties":{"n":"Alberg Ca la Jepa","m":"Prat de Comte","t":3,"l":"http://www.xanascat.cat/showhostel.tjc?id=237&index=38"},"geometry":{"type":"Point","coordinates":[0.40492,40.98333]}},
 {"type":"Feature","properties":{"n":"Alberg-Residència Cerverí de Girona","m":"Girona","t":3,"l":"http://www.xanascat.cat/showhostel.tjc?id=237&index=7"},"geometry":{"type":"Point","coordinates":[2.82516,41.98379]}},
 {"type":"Feature","properties":{"n":"Alberg Equity Point Girona","m":"Girona","t":3,"l":"http://www.xanascat.cat/showhostel.tjc?id=237&index=46"},"geometry":{"type":"Point","coordinates":[2.82292,41.98172]}},
