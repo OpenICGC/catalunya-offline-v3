@@ -45,10 +45,12 @@
     "picture": "Take a photo"
   },
   "delete": {
+    "layer": "Delete Layer",
     "message": {
-      "layer": "Are you sure to delete this Layer? This action cannot be undone",
-      "pointTrack": "Are you sure to delete this element? This action cannot be undone",
-      "scope": "Are you sure to delete this entire Scope and its associated Points and Tracks? This action cannot be undone"
+      "layer": "Are you sure to delete this User Layer? This action cannot be undone.",
+      "point": "Are you sure to delete this Point? This action cannot be undone.",
+      "scope": "Are you sure to delete this entire Scope and its associated Points and Tracks? This action cannot be undone.",
+      "track": "Are you sure to delete this Track? This action cannot be undone."
     },
     "point": "Delete Point",
     "scope": "Delete Scope",

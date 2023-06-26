@@ -45,10 +45,12 @@
     "picture": "Tomar una foto"
   },
   "delete": {
+    "layer": "Borrar Capa",
     "message": {
-      "layer": "¿Estás seguro de querer borrar esta Capa? Esta operación no se podrá deshacer",
-      "pointTrack": "¿Estás seguro de querer borrar este elemento? Esta operación no se podrá deshacer",
-      "scope": "¿Estás seguro de querer borrar este Ámbito, junto con todos sus puntos y trazas? Esta operación no se podrá deshacer"
+      "layer": "¿Estás seguro de querer borrar esta capa de usuario? Esta operación no se podrá deshacer.",
+      "point": "¿Estás seguro de querer borrar este punto? Esta operación no se podrá deshacer.",
+      "scope": "¿Estás seguro de querer borrar este ámbito, junto con todos sus puntos y trazas? Esta operación no se podrá deshacer.",
+      "track": "¿Estás seguro de querer borrar esta traza? Esta operación no se podrá deshacer."
     },
     "point": "Borrar Punto",
     "scope": "Borrar Ámbito",

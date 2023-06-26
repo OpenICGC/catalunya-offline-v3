@@ -25,6 +25,15 @@ const dialogSx = {
   letterSpacing: 1.35
 };
 
+const paperProps = {sx: {height: 'auto', pb: 8}};
+
+const actionsSx = {position: 'absolute', bottom: 0, right: 0};
+
+const deleteIconSx = {mr: 2};
+
+const dialogContentSx = {mt: 2};
+
+
 export enum FEATURE_DELETED {
   SCOPE,
   TRACK,
@@ -45,23 +54,21 @@ const DeleteDialog: FC<DeleteDialogProps> = ({
 }) => {
   const {t} = useTranslation();
 
+  const type= FEATURE_DELETED[featureDeleted].toLowerCase();
 
-  return <Dialog open={true} onClose={() => onCancel()} fullWidth PaperProps={{sx: {height: 'auto', pb: 8}}}>
+  const handleClose = () => onCancel();
+
+  return <Dialog open={true} onClose={handleClose} fullWidth PaperProps={paperProps}>
     <DialogTitle sx={dialogSx}>
-      <DeleteIcon sx={{mr: 2}}/>
-      {t(`delete.${FEATURE_DELETED[featureDeleted].toLowerCase()}`)}
+      <DeleteIcon sx={deleteIconSx}/>
+      {t(`delete.${type}`)}
     </DialogTitle>
-    <DialogContent sx={{mt: 2}}>
+    <DialogContent sx={dialogContentSx}>
       <Typography>
-        {
-          featureDeleted === FEATURE_DELETED.SCOPE
-            ? t(`delete.message.${FEATURE_DELETED[featureDeleted].toLowerCase()}`)
-            : featureDeleted === FEATURE_DELETED.LAYER ?
-              t('delete.message.layer') : t('delete.message.pointTrack')
-        }
+        {t(`delete.message.${type}`)}
       </Typography>
     </DialogContent>
-    <DialogActions sx={{position: 'absolute', bottom: 0, right: 0}}>
+    <DialogActions sx={actionsSx}>
       <AcceptButton onAccept={onAccept}/>
       <CancelButton onCancel={onCancel}/>
     </DialogActions>
