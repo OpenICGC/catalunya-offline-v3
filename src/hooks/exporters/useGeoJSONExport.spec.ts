@@ -116,7 +116,7 @@ const expectedPoints = [{
     ],
     isVisible: true,
     'Point Custom Field': 'Point Value 1',
-    formattedDate: '1/16/2023, 2:36:11 PM'
+    formattedDate: new Date(1673876171254).toLocaleString()
   }
 }, {
   type: 'Feature',
@@ -132,7 +132,7 @@ const expectedPoints = [{
     images: [],
     isVisible: false,
     'Point Custom Field': 'Point Value 2',
-    formattedDate: '1/16/2023, 2:36:11 PM'
+    formattedDate: new Date(1673876171245).toLocaleString()
   }
 }];
 
@@ -150,7 +150,7 @@ const expectedTracks = [{
     images: ['files/imageTrack1.jpg'],
     isVisible: true,
     'Track Custom Field': 'Track Value 1',
-    formattedDate: '1/16/2023, 2:35:15 PM'
+    formattedDate: new Date(1673876115769).toLocaleString()
   }
 }, {
   type: 'Feature',
@@ -166,7 +166,7 @@ const expectedTracks = [{
     images: [],
     isVisible: true,
     'Track Custom Field': 'Track Value 2',
-    formattedDate: '1/16/2023, 2:35:15 PM'
+    formattedDate: new Date(1673876115785).toLocaleString()
   }
 }];
 
