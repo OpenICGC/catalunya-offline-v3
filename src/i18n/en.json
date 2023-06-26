@@ -138,6 +138,8 @@
     "total": "Total"
   },
   "schema": {
+    "addManually": "Or added manually:",
+    "copyFromScope": "Custom fields can be copied from another scope:",
     "customFieldsTitle": "Custom fields for this scope",
     "defaultFieldsTitle": "Default fields",
     "field": "Field",

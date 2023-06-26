@@ -77,7 +77,7 @@ const SchemaPanel: FC<SchemaPanelProps> = ({
   <Header
     startIcon={<SchemaIcon/>}
     name={t('schema.title')}
-    color={`${scope.color}bf`}//scope color with 75% transparency
+    color={`${scope.color}bf`} //scope color with 75% transparency
     onStartIconClick={onBackButtonClick}
   />
 
@@ -85,15 +85,17 @@ const SchemaPanel: FC<SchemaPanelProps> = ({
     <Box mt={1} mb={1} ml={1} display="flex" flexDirection="column">
       <Typography variant="caption" sx={titleSx} gutterBottom>{t('schema.customFieldsTitle')}</Typography>
       {
-        scopesWithSchema.length !== 0 && !scope.schema //There are scopes with schema and this scope hasn't schema
+        scopesWithSchema.length !== 0 && !scope.schema // This scope doesn't have a schema, but other scopes have
           ? <>
-            <Typography variant="caption" sx={titleSx}>Puedes copiar los campos personalizados desde otro ámbito:</Typography>
+            <Typography variant="caption" sx={titleSx}>{t('schema.copyFromScope')}</Typography>
             <MuiList dense sx={muiListSx}>
               {
-                scopesWithSchema.map(scope => <ListItem key={scope.id} itemId={scope.id} name={scope.name} color={scope.color} onClick={onImportFieldsFromScope}/>)
+                scopesWithSchema.map(scope =>
+                  <ListItem key={scope.id} itemId={scope.id}
+                    name={scope.name} color={scope.color} onClick={onImportFieldsFromScope}/>)
               }
             </MuiList>
-            <Typography variant="caption" sx={titleSx}>O añadirlos manualmente:</Typography>
+            <Typography variant="caption" sx={titleSx}>{t('schema.addManually')}</Typography>
           </>
           : scope.schema && <SchemaForm
             schema={scope.schema}

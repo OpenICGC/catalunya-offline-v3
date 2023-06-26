@@ -138,6 +138,8 @@
     "total": "Total"
   },
   "schema": {
+    "addManually": "O afegir-los-hi manualment:",
+    "copyFromScope": "Podeu copiar els camps personalitzats d'un altre àmbit:",
     "customFieldsTitle": "Camps personalitzats per a aquest àmbit",
     "defaultFieldsTitle": "Camps per defecte",
     "field": "Camp",

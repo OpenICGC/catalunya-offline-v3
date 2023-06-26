@@ -138,6 +138,8 @@
     "total": "Total"
   },
   "schema": {
+    "addManually": "O añadirlos manualmente:",
+    "copyFromScope": "Puedes copiar los campos personalizados de otro ámbito:",
     "customFieldsTitle": "Campos personalizados para este ámbito",
     "defaultFieldsTitle": "Campos por defecto",
     "field": "Campo",
