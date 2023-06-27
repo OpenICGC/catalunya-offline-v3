@@ -3,7 +3,7 @@ import {FC, useCallback, useEffect} from 'react';
 import {v4 as uuid} from 'uuid';
 
 import {CatOfflineError, UserLayer} from '../../types/commonTypes';
-import {MAX_ALLOWED_IMPORT_FEATURES} from '../../config';
+import {MAX_ALLOWED_USER_LAYER_IMPORT_FEATURES} from '../../config';
 
 import useFilePicker, {FilePickerResult} from '../../hooks/useFilePicker';
 import {asDataUrl} from '../../utils/loaders/helpers';
@@ -49,10 +49,10 @@ const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
             });
           });
       if (data) {
-        if (data.features.length > MAX_ALLOWED_IMPORT_FEATURES) {
+        if (data.features.length > MAX_ALLOWED_USER_LAYER_IMPORT_FEATURES) {
           onError({
             code: 'errors.import.length',
-            params: {maxFeatures: MAX_ALLOWED_IMPORT_FEATURES}
+            params: {maxFeatures: MAX_ALLOWED_USER_LAYER_IMPORT_FEATURES}
           });
         } else {
           const numLayers = userLayersStore.list()?.length ?? 0;

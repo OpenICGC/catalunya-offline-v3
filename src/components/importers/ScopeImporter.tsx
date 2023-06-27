@@ -1,7 +1,7 @@
 import {FC, useCallback, useEffect} from 'react';
 
 import {CatOfflineError, UUID} from '../../types/commonTypes';
-import {MAX_ALLOWED_IMPORT_FEATURES} from '../../config';
+import {MAX_ALLOWED_SCOPE_IMPORT_FEATURES} from '../../config';
 
 import useFilePicker, {FilePickerResult} from '../../hooks/useFilePicker';
 import geoJSONScopeImporter from '../../utils/scopeImporters/geoJSONScopeImporter';
@@ -50,10 +50,10 @@ const ScopeImporter: FC<ScopeImporterProps> = ({
       if (importResult) {
         const {points, tracks, numberOfErrors} = importResult;
         const totalFeatures = points.length + tracks.length;
-        if (totalFeatures > MAX_ALLOWED_IMPORT_FEATURES) {
+        if (totalFeatures > MAX_ALLOWED_SCOPE_IMPORT_FEATURES) {
           onError({
             code: 'errors.import.length',
-            params: {maxFeatures: MAX_ALLOWED_IMPORT_FEATURES}
+            params: {maxFeatures: MAX_ALLOWED_SCOPE_IMPORT_FEATURES}
           });
         } else if (numberOfErrors) {
           onError({

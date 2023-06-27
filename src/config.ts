@@ -18,7 +18,9 @@ export const IS_IOS = PLATFORM === 'ios';
 
 export const PERSISTENCE_NAMESPACE = 'catoffline';
 
-export const MAX_ALLOWED_IMPORT_FEATURES = 100;
+export const MAX_ALLOWED_SCOPE_IMPORT_FEATURES = 100;
+
+export const MAX_ALLOWED_USER_LAYER_IMPORT_FEATURES = 500;
 
 export const FIT_BOUNDS_PADDING = 50;
 
@@ -31,6 +33,7 @@ export const MAP_PROPS = {
 };
 
 export const COLOR_PALETTES = [
+  // See all possible values: https://labs.geomatico.es/geocomponents/?path=/story/map-colorramplegend--gallery
   'BrewerPastel19',
   'BrewerSet39',
   'BrewerSet19',
