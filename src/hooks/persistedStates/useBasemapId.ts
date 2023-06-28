@@ -1,11 +1,11 @@
 import {singletonHook} from 'react-singleton-hook';
 import usePersistedState from '../usePersistedState';
-import {BASEMAPS} from '../../config';
+import {DEFAULT_BASEMAP_ID} from '../../config';
 
 type Type = string
 
 const key = 'state.basemapId';
-const defaultValue: Type = BASEMAPS[0].id;
+const defaultValue: Type = DEFAULT_BASEMAP_ID;
 
 export default singletonHook(
   [defaultValue, () => undefined, false],
