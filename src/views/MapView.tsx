@@ -18,7 +18,6 @@ import SettingsView from './SettingsView';
 import PointNavigationBottomSheet from '../components/map/PointNavigationBottomSheet';
 
 //UTILS
-import {MapRef} from 'react-map-gl';
 import {mbtiles} from '../utils/mbtiles';
 import {BASEMAPS, DEFAULT_MAX_ZOOM, FIT_BOUNDS_PADDING, MAP_PROPS, MIN_TRACKING_ZOOM} from '../config';
 import {useScopePoints, useScopes, useScopeTracks} from '../hooks/usePersistedCollections';
@@ -77,9 +76,9 @@ const MapView: FC<MapViewProps> = ({
   selectedTrackId,
   onTrackSelected
 }) => {
-  const mapRef = useRef<MapRef>(null);
   const isActive = useIsActive();
-  const {viewport, setViewport, fitBounds: viewportFitBounds} = useViewport();
+  const {viewport, setViewport, mapRef, fitBounds: viewportFitBounds} = useViewport();
+
   const {geolocation, error: geolocationError} = useGeolocation();
   const heading = useCompass();
   const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
@@ -126,9 +125,7 @@ const MapView: FC<MapViewProps> = ({
   const maxZoom = useMemo(() => BASEMAPS.find(({id}) => id === baseMapId)?.maxZoom ?? DEFAULT_MAX_ZOOM, [baseMapId]);
 
   const fitBounds = useCallback((bounds, extraBottom = 0) => {
-    const width = mapRef.current?.getContainer().offsetWidth;
-    const height = mapRef.current?.getContainer().offsetHeight;
-    width && height && viewportFitBounds(width, height, bounds, {
+    viewportFitBounds(bounds, {
       padding: {
         top: FIT_BOUNDS_PADDING + topMargin,
         bottom: FIT_BOUNDS_PADDING + bottomMargin + extraBottom,

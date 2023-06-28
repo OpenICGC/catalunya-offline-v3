@@ -20,6 +20,10 @@ const theme = createTheme({
   typography: {
     h2: {
       fontSize: '1.25rem'
+    },
+    caption: {
+      fontWeight: 600,
+      fontSize: '0.9rem'
     }
   },
   components: {

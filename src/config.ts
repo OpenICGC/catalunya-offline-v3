@@ -20,8 +20,6 @@ export const PERSISTENCE_NAMESPACE = 'catoffline';
 
 export const MAX_ALLOWED_SCOPE_IMPORT_FEATURES = 100;
 
-export const MAX_ALLOWED_USER_LAYER_IMPORT_FEATURES = 500;
-
 export const FIT_BOUNDS_PADDING = 50;
 
 export const DEFAULT_MAX_ZOOM = 17;

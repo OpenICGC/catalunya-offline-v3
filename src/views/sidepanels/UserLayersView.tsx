@@ -1,5 +1,6 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import turfBBOX from '@turf/bbox';
 
 //MUI
 import useTheme from '@mui/material/styles/useTheme';
@@ -15,6 +16,8 @@ import GeoJSON from 'geojson';
 import {v4 as uuid} from 'uuid';
 import UserLayerImporter from '../../components/importers/UserLayerImporter';
 import Notification from '../../components/notifications/Notification';
+import useViewport from '../../hooks/singleton/useViewport';
+
 
 type SampleLayersProperties = {
   n: string,
@@ -37,6 +40,8 @@ const emptySampleUserLayer = (name: string, color: HEXColor): UserLayer => ({
 const UserLayersView: FC = () => {
   const {t} = useTranslation();
   const theme = useTheme();
+
+  const {fitBounds} = useViewport();
 
   const userLayersStore = useUserLayers();
   const userLayers = userLayersStore.list();
@@ -75,6 +80,17 @@ const UserLayersView: FC = () => {
     setImportingLayer(false);
     setImportErrors(error);
   };
+
+  const handleFitBounds = useCallback((layerId: UUID) => {
+    const existing = userLayersStore.retrieve(layerId);
+    if (existing) {
+      const [xMin, yMin, xMax, yMax] = turfBBOX(existing.data);
+      fitBounds([xMin, yMin, xMax, yMax]);
+      if (!existing.isVisible) {
+        toggleLayerVisibility(layerId);
+      }
+    }
+  }, [userLayersStore]);
 
   const handleColorChange = useCallback((layerId: UUID, newColor: HEXColor) => {
     const existing = userLayersStore.retrieve(layerId);
@@ -115,6 +131,7 @@ const UserLayersView: FC = () => {
       <UserLayerPanel
         userLayers={userLayers}
         onAdd={onAdd}
+        onFitBounds={handleFitBounds}
         onColorChange={handleColorChange}
         onRename={handleRename}
         onToggleVisibility={toggleLayerVisibility}
