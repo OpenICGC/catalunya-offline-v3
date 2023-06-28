@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 //MUI-ICONS
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import FitBoundsIcon from '@mui/icons-material/ZoomOutMap';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
@@ -23,6 +24,7 @@ import {useTranslation} from 'react-i18next';
 export type UserLayerPanelProps = {
   userLayers: Array<UserLayer>,
   onAdd: () => void,
+  onFitBounds: (layerId: UUID) => void,
   onColorChange: (layerId: UUID, newColor: HEXColor) => void,
   onRename: (layerId: UUID, newName: string) => void,
   onToggleVisibility: (layerId: UUID) => void,
@@ -35,6 +37,7 @@ const boxSx = {width: '100%', height: 0};
 const UserLayerPanel: FC<UserLayerPanelProps> = ({
   userLayers,
   onAdd,
+  onFitBounds,
   onColorChange,
   onRename,
   onToggleVisibility,
@@ -45,6 +48,12 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
   const [deleteRequestId, setDeleteRequestId] = useState <UUID> ();
 
   const contextualMenu = useMemo(() => ([
+    {
+      id: 'zoom',
+      label: t('actions.fitBounds'),
+      icon: <FitBoundsIcon/>,
+      callbackProp: onFitBounds
+    },
     {
       id: 'edit',
       label: t('actions.edit'),
@@ -58,10 +67,10 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
     }
   ]), [onDelete, t, setDeleteRequestId]);
   
-  const handleContextualMenuClick = useCallback((scopeId: UUID, menuId: string) => {
+  const handleContextualMenuClick = useCallback((layerId: UUID, menuId: string) => {
     const menuEntry = contextualMenu.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
-      menuEntry.callbackProp(scopeId);
+      menuEntry.callbackProp(layerId);
     }
   }, [contextualMenu]);
 
