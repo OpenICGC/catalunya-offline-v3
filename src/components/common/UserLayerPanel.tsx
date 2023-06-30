@@ -20,6 +20,8 @@ import List from '../scope/List';
 import {HEXColor, UserLayer, UUID} from '../../types/commonTypes';
 import useIsLargeSize from '../../hooks/settings/useIsLargeSize';
 import {useTranslation} from 'react-i18next';
+import {MAX_USER_LAYER_STORAGE} from '../../config';
+import StorageProgress from './StorageProgress';
 
 export type UserLayerPanelProps = {
   userLayers: Array<UserLayer>,
@@ -89,7 +91,10 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
 
   const handleDeleteCancel = () => setDeleteRequestId(undefined);
 
+  const progress = useMemo(() => 100 * JSON.stringify(userLayers).length / MAX_USER_LAYER_STORAGE, [userLayers]);
+
   return <>
+    <StorageProgress progress={progress} />
     {<List
       isLargeSize={isLargeSize}
       items={userLayers}
