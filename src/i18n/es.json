@@ -87,6 +87,7 @@
     "import": {
       "format": "Formato no soportado",
       "length": "No se pueden importar más de {{maxFeatures}} elementos",
+      "noSpaceAvailable": "Fitxer massa gran, no hi ha espai disponible",
       "read": "Error leyendo el fichero",
       "someFeatures": "Se han procesado {{totalFeatures}} elementos de los cuales {{numberOfErrors}} han dado error al importar"
     },

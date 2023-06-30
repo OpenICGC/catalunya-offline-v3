@@ -41,8 +41,6 @@ const useViewport = (): useViewportType => {
   const [viewport, setViewport] = usePersistedState<ViewportType>('state.viewport', DEFAULT_VIEWPORT);
   const isActive = useIsActive();
 
-  console.log('useViewport current map ref', mapRef?.current);
-
   const updateViewport = useCallback((newViewport: Partial<ViewportType>) => {
     isActive && setViewport(prevViewport => ({...prevViewport, ...newViewport}));
   }, []);

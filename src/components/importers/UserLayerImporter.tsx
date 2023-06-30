@@ -25,11 +25,12 @@ const loaders: Record<suppportedMimeType, IGeodataLoader> = {
 };
 
 export type UserLayerImporter = {
+  availableSpace: number,
   onSuccess: () => void
   onError: (error: CatOfflineError) => void
 }
 
-const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
+const UserLayerImporter: FC<UserLayerImporter> = ({availableSpace, onSuccess, onError}) => {
   const pickedFile = useFilePicker(Object.keys(loaders) as Array<suppportedMimeType>, onError);
   const [colorPalette] = useColorPalette();
   const {hexColors: palette} = useColorRamp(colorPalette);
@@ -48,6 +49,12 @@ const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
             });
           });
       if (data) {
+        if (availableSpace < JSON.stringify(data).length) {
+          onError({
+            code: 'errors.import.noSpaceAvailable'
+          });
+          return;
+        }
         const numLayers = userLayersStore.list()?.length ?? 0;
         const userLayer: UserLayer = {
           id: uuid(),
@@ -62,7 +69,7 @@ const UserLayerImporter: FC<UserLayerImporter> = ({onSuccess, onError}) => {
     } else {
       onError({code: 'errors.import.format'});
     }
-  }, [onSuccess, onError, userLayersStore.list, userLayersStore.create]);
+  }, [availableSpace, onSuccess, onError, userLayersStore.list, userLayersStore.create]);
 
   useEffect(() => {
     if (pickedFile) {
