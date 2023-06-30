@@ -20,6 +20,8 @@ export const PERSISTENCE_NAMESPACE = 'catoffline';
 
 export const MAX_ALLOWED_SCOPE_IMPORT_FEATURES = 100;
 
+export const MAX_USER_LAYER_STORAGE = (5 * 1024 * 1024); // 5 MB - a localStorage value in Chrome browsers is limited to 5 MB
+
 export const FIT_BOUNDS_PADDING = 50;
 
 export const DEFAULT_MAX_ZOOM = 17;

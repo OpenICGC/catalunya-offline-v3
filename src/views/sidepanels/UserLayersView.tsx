@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import turfBBOX from '@turf/bbox';
 
@@ -17,6 +17,7 @@ import {v4 as uuid} from 'uuid';
 import UserLayerImporter from '../../components/importers/UserLayerImporter';
 import Notification from '../../components/notifications/Notification';
 import useViewport from '../../hooks/singleton/useViewport';
+import {MAX_USER_LAYER_STORAGE} from '../../config';
 
 
 type SampleLayersProperties = {
@@ -45,6 +46,8 @@ const UserLayersView: FC = () => {
 
   const userLayersStore = useUserLayers();
   const userLayers = userLayersStore.list();
+
+  const userLayersSize: number = useMemo(() => JSON.stringify(userLayers)?.length, [userLayers]);
 
   const [isImportingLayer, setImportingLayer] = useState<boolean>(false);
   const [importErrors, setImportErrors] = useState<CatOfflineError | undefined>(undefined);
@@ -140,6 +143,7 @@ const UserLayersView: FC = () => {
     }
     {isImportingLayer &&
       <UserLayerImporter
+        availableSpace={MAX_USER_LAYER_STORAGE - userLayersSize}
         onSuccess={handleImportSuccess}
         onError={handleImportError}
       />

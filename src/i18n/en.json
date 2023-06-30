@@ -87,6 +87,7 @@
     "import": {
       "format": "Unsupported file extension",
       "length": "Importing more than {{maxFeatures}} features is not allowed",
+      "noSpaceAvailable": "The file is too big, no space available",
       "read": "Error reading file",
       "someFeatures": "{{totalFeatures}} features have been processed for which {{numberOfErrors}} failed"
     },
