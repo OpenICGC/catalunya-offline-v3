@@ -31,14 +31,23 @@ const lineStyle = (id: UUID, color: HEXColor): LineLayer => ({
   }
 });
 
+const polygonOutlineStyle = (id: UUID, color: HEXColor): LineLayer => ({
+  id: `user-${id}-polygon-outline`,
+  filter: ['==', ['geometry-type'], 'Polygon'],
+  type: 'line',
+  paint: {
+    'line-color': color,
+    'line-width': 2
+  }
+});
+
 const polygonStyle = (id: UUID, color: HEXColor): FillLayer => ({
   id: `user-${id}-polygon`,
   filter: ['==', ['geometry-type'], 'Polygon'],
   type: 'fill',
   paint: {
     'fill-color': color,
-    'fill-opacity': 0.33,
-    'fill-outline-color': color
+    'fill-opacity': 0.33
   }
 });
 
@@ -176,6 +185,7 @@ const Overlays: FC<OverlaysProps> = ({isActive, trackList, scopeColor, geolocati
       <Source key={userLayer.id} id={userLayer.id} type='geojson' data={userLayer.data}>
         <Layer {...pointStyle(userLayer.id, userLayer.color)}/>
         <Layer {...lineStyle(userLayer.id, userLayer.color)}/>
+        <Layer {...polygonOutlineStyle(userLayer.id, userLayer.color)}/>
         <Layer {...polygonStyle(userLayer.id, userLayer.color)}/>
       </Source>),
   [userLayers]);
