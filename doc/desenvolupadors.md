@@ -357,8 +357,3 @@ Existeixen dos components, `ScopeImporter` i `UserLayerImporter` que, donats un 
 ### Exportadors
 
 Els exportadors converteixen els Scopes, ScopePoints i ScopeTracks en strings representant el contingut d'un fitxer GeoJSON, GPX o KML.
-
-
-### Gestor de descàrregues i mode offline
-
-TBD
