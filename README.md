@@ -128,10 +128,21 @@ To open a remote Javascript debugging console, open safari, development, and sel
 
 ## Building and deploying for production
 
+### Tagging a new version abd making a release
+
+* Note which is the current version, either in `package.json` or the 'about' dialog in the application.
+* Decide a new version number. As this is not a library with a public API, we don't need to follow SEMVER. But, in general:
+  * correcting bugs would increase the 3rd number (patch version),
+  * adding new relevant functionalities would increase the 2nd number (minor version), and
+  * a significant rewrite would increase tne 1st number (major version).
+* Use the command `npm version <version_number>`. This will tag the Web and propagate automatically the new version number to Android and iOS projects.
+* Push the changes to git.
+* Follow the next steps for Android Studio or Xcode.
+
+
 ### Android Studio
 
-Use the command `npm run build:android`, to build for production and open the project in
-Android Studio.
+Use the command `npm run build:android`, to build for production and open the project in Android Studio.
 
 
 ### Xcode
