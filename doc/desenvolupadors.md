@@ -361,4 +361,4 @@ Els exportadors converteixen els Scopes, ScopePoints i ScopeTracks en strings re
 
 ### Gestor de descàrregues i mode offline
 
-BUF!
+TBD
