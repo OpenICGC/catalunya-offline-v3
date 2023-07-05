@@ -11,6 +11,7 @@
     "build": "npm test && webpack --env prod",
     "build:android": "npm run build && capacitor sync && capacitor open android",
     "build:ios": "npm run build && capacitor sync && capacitor open ios",
+    "deploy": "npm run build && gh-pages -d dist -r git@github.com:geomatico/catalunya-offline-v2.git",
     "storybook": "start-storybook -s ./static -p 6006",
     "storybook:build": "build-storybook",
     "lint": "npm run lint:js && npm run lint:i18n",
