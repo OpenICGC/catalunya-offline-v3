@@ -102,7 +102,8 @@ export enum SCOPE_FEATURES_PANEL_TAB {
 
 export type ContextMapsResult = {
   nom: string,
-  coordenades: string
+  coordenades: string,
+  origen: string
 }
 
 export type SchemaFieldType = {
