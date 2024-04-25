@@ -382,6 +382,9 @@ const MapView: FC<MapViewProps> = ({
 
   const handleResultClick = useCallback((result: ContextMapsResult) => {
     const coords = result.coordenades.split(',');
+    if (result.origen === 'Nominatim') {
+      coords.reverse();
+    }
     setViewport({
       latitude: parseFloat(coords[1]),
       longitude: parseFloat(coords[0]),
