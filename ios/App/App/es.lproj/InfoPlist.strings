@@ -1,0 +1,5 @@
+NSCameraUsageDescription = "El acceso a la cámara se utiliza para adjuntar fotografías a tus puntos y trazas";
+NSLocationAlwaysAndWhenInUseUsageDescription = "Usamos tu ubicación mientras el dispositivo está bloqueado para grabar trazas";
+NSLocationWhenInUseUsageDescription = "Utilizamos tu ubicación para mostrarla en el mapa y para grabar trazas";
+NSPhotoLibraryAddUsageDescription = "El acceso a las fotografías se utiliza para adjuntarlas a tus puntos y trazas";
+NSPhotoLibraryUsageDescription = "Las fotografías se guardarán para adjuntarlas a tus puntos y trazas";

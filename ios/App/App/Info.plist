@@ -23,15 +23,15 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSCameraUsageDescription</key>
-    <string>We need to take photos</string>
+    <string>Access to camera is used to attach photos to your points and tracks</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>We need to track your location while your device is locked</string>
+    <string>We use your location while the device is locked for track recording</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need to track your location</string>
+    <string>We use your location to display it on the map and for track recording</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>We need to pick photos from library</string>
+    <string>Access to photos is used to attach them to your points and tracks</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>We need to write photos</string>
+    <string>Photos will be saved to attach them to your points and tracks</string>
     <key>UIBackgroundModes</key>
     <array>
       <string>location</string>
