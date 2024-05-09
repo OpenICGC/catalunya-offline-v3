@@ -1,5 +1,5 @@
 NCameraUsageDescription = "L'accés a la càmera s'utilitza per a adjuntar fotografies als vostres punts i traces";
 NSLocationAlwaysAndWhenInUseUsageDescription = "Utilitzem la vostra ubicació mentre el dispositiu està bloquejat per gravar traces";
-NSLocationWhenInUseUsageDescription = "Utilitzem la vostra ubicació per mostrar-la al mapa i per gravar traces";
+NSLocationWhenInUseUsageDescription = "El servei de localització ens permetrà mostrar la vostra posició en el mapa i, si ho decidiu, recollir i desar la traça de la vostra caminada per conservar-la o compartir-la o reviure-la.";
 NSPhotoLibraryAddUsageDescription = "L'accés a les fotografies s'utilitza per a adjuntar-les als vostres punts i traces";
 NSPhotoLibraryUsageDescription = "Les fotografies es desaran per a adjuntar-les als vostres punts i traces";

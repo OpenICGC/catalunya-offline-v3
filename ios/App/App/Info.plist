@@ -27,7 +27,7 @@
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>We use your location while the device is locked for track recording</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We use your location to display it on the map and for track recording</string>
+    <string>Location services will allow us to display your position on the map and, if you choose to, record and save the track of your hike for you to keep or share or relive it.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>Access to photos is used to attach them to your points and tracks</string>
     <key>NSPhotoLibraryUsageDescription</key>
