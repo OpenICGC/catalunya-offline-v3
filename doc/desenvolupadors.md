@@ -2,7 +2,7 @@
 
 En essència es tracta d'un desenvolupament frontend Javascript que s'encapsula i distrubueix com Apps natives gràcies a Capacitor. 
 
-El codi ressideix a: https://github.com/OpenICGC/catalunya-offline-v2
+El codi ressideix a: https://github.com/OpenICGC/catalunya-offline-v3
 
 Al README d'aquest repositori hi trobem com preparar l'entorn de treball i executar les tasques habituals. No les repetirem aquí.
 
