@@ -8,8 +8,19 @@
 <p><strong>Catalunya Offline</strong> és una aplicació mòbil que us permet explorar el territori català, marcar punts d'interès i enregistrar les vostres rutes i excursions utilitzant el GPS, fins i tot en el cas que no hi hagi cobertura de dades al vostre dispositiu mòbil.</p><p>L'aplicació també permet la descàrrega i la visualització de la cartografia topogràfica de l'ICGC, que presenta la informació estructurada i jerarquitzada per facilitar-ne la lectura. S'hi mostren les corbes de nivell i informació relativa als senders de muntanya.</p>
         </div>
 
+<div style="text-align: center;">
+  <img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/produccio/s3fs-public/styles/ezpublish_large/public/2024-05/catoffline_fig02.jpg?itok=Qw_a7U4-" width="149" height="300" alt="Captura de pantalla que mostra l’estil de lleure, amb la funcionalitat de localització de l’usuari damunt del mapa activada" title="Captura de pantalla que mostra l’estil de lleure, amb la funcionalitat de localització de l’usuari damunt del mapa activada"/>
+</div>
 
-<img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/produccio/s3fs-public/styles/ezpublish_large/public/2024-05/catoffline_fig02.jpg?itok=Qw_a7U4-" width="149" height="300" alt="Captura de pantalla que mostra l’estil de lleure, amb la funcionalitat de localització de l’usuari damunt del mapa activada" title="Captura de pantalla que mostra l’estil de lleure, amb la funcionalitat de localització de l’usuari damunt del mapa activada"/>
+<div style="text-align: center;">
+  <a href="https://www.icgc.cat/" target="_blank">
+    <img src="https://tilemaps.icgc.cat/cdn/logos/ICGC_color_norma.svg" alt="ICGC Logo" width="150">
+  </a>
+</div>
+
+<hr>
+
+
 
 ## Setup development environment
 
