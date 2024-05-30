@@ -1,6 +1,6 @@
 # Catalunya Offline
 
-[![Frontend tests](https://github.com/OpenICGC/catalunya-offline-v2/actions/workflows/test-frontend.yml/badge.svg)](https://github.com/OpenICGC/catalunya-offline-v2/actions/workflows/test-frontend.yml)
+[![Frontend tests](https://github.com/OpenICGC/catalunya-offline-v3/actions/workflows/test-frontend.yml/badge.svg)](https://github.com/OpenICGC/catalunya-offline-v3/actions/workflows/test-frontend.yml)
 
 ## Informació
 
