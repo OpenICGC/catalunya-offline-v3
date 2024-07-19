@@ -58,6 +58,8 @@ maplibregl.RasterDEMTileSource.prototype.serialize = maplibregl.RasterTileSource
 export type MapViewProps = {
   baseMapId: string,
   onManagerChanged: (newManager: Manager) => void,
+  locationStatus: LOCATION_STATUS,
+  onLocationStatusChanged: (newLocationStatus: LOCATION_STATUS) => void,
   selectedScopeId?: UUID,
   onScopeSelected: (scopeId: UUID) => void,
   selectedPointId?: UUID,
@@ -69,6 +71,8 @@ export type MapViewProps = {
 const MapView: FC<MapViewProps> = ({
   baseMapId,
   onManagerChanged,
+  locationStatus,
+  onLocationStatusChanged,
   selectedScopeId,
   onScopeSelected,
   selectedPointId,
@@ -81,7 +85,6 @@ const MapView: FC<MapViewProps> = ({
 
   const {geolocation, error: geolocationError} = useGeolocation();
   const heading = useCompass();
-  const [locationStatus, setLocationStatus] = useState(LOCATION_STATUS.DISABLED);
   const {t} = useTranslation();
   const pointNavigation = usePointNavigation();
   const trackNavigation = useTrackNavigation();
@@ -138,7 +141,7 @@ const MapView: FC<MapViewProps> = ({
   ////// Handle orientation & navigation state transitions
   const handleOrientationClick = useCallback(() => {
     if (locationStatus === LOCATION_STATUS.NAVIGATING) {
-      setLocationStatus(LOCATION_STATUS.TRACKING);
+      onLocationStatusChanged(LOCATION_STATUS.TRACKING);
     } else {
       mapRef.current?.easeTo({
         bearing: 0,
@@ -149,23 +152,23 @@ const MapView: FC<MapViewProps> = ({
 
   const handleLocationClick = useCallback(() => {
     if (locationStatus === LOCATION_STATUS.NOT_TRACKING) {
-      setLocationStatus(LOCATION_STATUS.TRACKING);
+      onLocationStatusChanged(LOCATION_STATUS.TRACKING);
     } else if (locationStatus === LOCATION_STATUS.TRACKING) {
-      setLocationStatus(LOCATION_STATUS.NAVIGATING);
+      onLocationStatusChanged(LOCATION_STATUS.NAVIGATING);
     } else if (locationStatus === LOCATION_STATUS.NAVIGATING) {
-      setLocationStatus(LOCATION_STATUS.TRACKING);
+      onLocationStatusChanged(LOCATION_STATUS.TRACKING);
     }
   }, [locationStatus]);
 
   const disableTracking = useCallback(() => {
     if (locationStatus === LOCATION_STATUS.TRACKING || locationStatus === LOCATION_STATUS.NAVIGATING) {
-      setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
+      onLocationStatusChanged(LOCATION_STATUS.NOT_TRACKING);
     }
   }, [locationStatus]);
 
   useEffect(() => {
     if (geolocationError) {
-      setLocationStatus(LOCATION_STATUS.DISABLED);
+      onLocationStatusChanged(LOCATION_STATUS.DISABLED);
     }
   }, [geolocationError]);
 
@@ -180,7 +183,7 @@ const MapView: FC<MapViewProps> = ({
           pitch: locationStatus === LOCATION_STATUS.NAVIGATING ? MAP_PROPS.maxPitch : 0
         });
       } else if (locationStatus === LOCATION_STATUS.DISABLED) {
-        setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
+        onLocationStatusChanged(LOCATION_STATUS.NOT_TRACKING);
       }
     }
   }, [locationStatus, geolocation.latitude, geolocation.longitude, viewport.zoom, setViewport, heading]);
@@ -371,7 +374,7 @@ const MapView: FC<MapViewProps> = ({
   const handleContextualMenu = useCallback((menuId: string) => {
     menuId === 'settings'
       ? setSettingsDialogOpen(true)
-      : menuId === 'about' 
+      : menuId === 'about'
         ? setAboutDialogOpen(true)
         : undefined;
   }, []);
@@ -390,7 +393,7 @@ const MapView: FC<MapViewProps> = ({
       longitude: parseFloat(coords[0]),
       zoom: 14
     });
-    setLocationStatus(LOCATION_STATUS.NOT_TRACKING);
+    onLocationStatusChanged(LOCATION_STATUS.NOT_TRACKING);
   }, [setViewport]);
 
   const handleTopChanged = useCallback((height: number) => {

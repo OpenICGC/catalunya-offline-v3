@@ -55,7 +55,7 @@ const Layout: FC<LayoutProps> = ({mainContent, sidePanelContent, isSidePanelOpen
     >
       {sidePanelContent || <></>}
     </SidePanel>
-    <Main widescreen={false.toString()} isleftdraweropen={(!!sidePanelContent && isSidePanelOpen).toString()}>
+    <Main>
       {mainContent}
     </Main>
   </>;

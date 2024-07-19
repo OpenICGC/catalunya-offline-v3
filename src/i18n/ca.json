@@ -172,6 +172,7 @@
     "scope": "Compartir Àmbit",
     "track": "Compartir Traça"
   },
+  "toForeground": "Recuperant l'estat...",
   "track": "Traça",
   "trackAlert": {
     "noTrack": "No hi ha dades d'alçada",

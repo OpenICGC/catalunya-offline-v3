@@ -172,6 +172,7 @@
     "scope": "Share Scope",
     "track": "Share Track"
   },
+  "toForeground": "Recovering state...",
   "track": "Track",
   "trackAlert": {
     "noTrack": "No height data",
