@@ -222,5 +222,5 @@ You can find a copy of the actual published sprites, glyphs, thumbnails and styl
 
 ## License
 
-Copyright (c) 2024 GeoStart (MIT License)
+Copyright (c) 2024 Institut Cartogràfic i Geològic de Catalunya (MIT License)
 See LICENSE file for more info.
