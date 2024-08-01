@@ -18,6 +18,9 @@ const config: CapacitorConfig = {
     contentInset: 'always', //https://forum.ionicframework.com/t/ios-notch-safe-area-inconsistent-behavior/203053/3
     scheme: 'Catalunya Offline'
   },
+  android: {
+    useLegacyBridge: true // Needed for backround-location plugin to keep working after 5 minutes
+  },
   plugins: {
     CapacitorSQLite: { // See https://github.com/capacitor-community/sqlite/issues/363
       androidIsEncryption: false,

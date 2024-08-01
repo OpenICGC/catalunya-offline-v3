@@ -174,10 +174,12 @@ const useGeolocation = (): useGeolocationType => {
       if (IS_WEB) {
         navigator.geolocation.clearWatch(Number(watcherId));
         setWatcherId(undefined);
+        setGeolocation(nullGeolocation());
         //console.debug('[Geolocation] Stopped Web watching', watcherId);
       } else {
         BackgroundGeolocation.removeWatcher({id: watcherId}).then(() => {
           setWatcherId(undefined);
+          setGeolocation(nullGeolocation());
           //console.debug('[Geolocation] Stopped Capacitor watching', watcherId);
         });
       }
