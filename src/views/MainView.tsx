@@ -20,6 +20,10 @@ import useDownloadStatus from '../hooks/singleton/useDownloadStatus';
 import DownloadRequest from '../components/notifications/DownloadRequest';
 import DownloadManager from './DownloadManager';
 import useBasemapId from '../hooks/persistedStates/useBasemapId';
+import useIsActive from '../hooks/singleton/useIsActive';
+import useGeolocation from '../hooks/singleton/useGeolocation';
+import {useTranslation} from 'react-i18next';
+import {LOCATION_STATUS} from '../components/buttons/FabButton';
 
 const stackSx = {
   height: '100%',
@@ -29,6 +33,11 @@ const stackSx = {
 };
 
 const MainView: FC = () => {
+  const {t} = useTranslation();
+
+  const isActive = useIsActive();
+  useGeolocation();
+
   const [isSidePanelOpen, setSidePanelOpen] = useState(false);
 
   const [baseMapId, setBaseMapId] = useBasemapId();
@@ -36,6 +45,7 @@ const MainView: FC = () => {
   const [scope, setScope] = useSelectedScopeId();
   const [point, setPoint] = useSelectedPointId();
   const [track, setTrack] = useSelectedTrackId();
+  const [locationStatus, setLocationStatus] = useState<LOCATION_STATUS>(LOCATION_STATUS.DISABLED);
 
   const [downloadRequested, setDownloadRequested] = useState<boolean>();
   const {isOfflineReady, pendingSize} = useDownloadStatus();
@@ -72,6 +82,14 @@ const MainView: FC = () => {
     trackNavigatingTo && setSidePanelOpen(false); // Closes panel when track navigation starts
   }, [trackNavigatingTo?.id]);
 
+  useEffect(() => {
+    if (isActive && isSidePanelOpen) {
+      // Closes & opens again so it forces the CSS 'appear' animation and side panel is displayed correctly
+      setSidePanelOpen(false);
+      setTimeout(() => setSidePanelOpen(true), 0);
+    }
+  }, [isActive]);
+
   const handleSelectPoint = useCallback((pointId: UUID) => {
     setTrack(undefined);
     setPoint(pointId);
@@ -83,7 +101,6 @@ const MainView: FC = () => {
     setTrack(trackId);
     handleManagerChanged('SCOPES');
   }, [setTrack, setPoint]);
-
 
   const sidePanelContent = useMemo(() => manager
     ? <Stack sx={stackSx}>
@@ -109,13 +126,15 @@ const MainView: FC = () => {
   const mainContent = useMemo(() => <MapView
     baseMapId={baseMapId}
     onManagerChanged={handleManagerChanged}
+    locationStatus={locationStatus}
+    onLocationStatusChanged={setLocationStatus}
     selectedScopeId={scope}
     onScopeSelected={setScope}
     selectedPointId={point}
     onPointSelected={handleSelectPoint}
     selectedTrackId={track}
     onTrackSelected={handleSelectTrack}
-  />, [baseMapId, handleManagerChanged, scope, setScope, point, handleSelectPoint, track, handleSelectTrack]);
+  />, [baseMapId, handleManagerChanged, locationStatus, setLocationStatus, scope, setScope, point, handleSelectPoint, track, handleSelectTrack]);
 
   return <>
     {downloadRequested === true && isOfflineReady === false &&
@@ -127,12 +146,16 @@ const MainView: FC = () => {
       onDownload={() => setDownloadRequested(true)}
       bytes={pendingSize}
     />}
-    <Layout
-      sidePanelContent={sidePanelContent}
-      mainContent={mainContent}
-      isSidePanelOpen={isSidePanelOpen}
-      onToggleSidePanel={toggleSidePanel}
-    />
+    {isActive ?
+      <Layout
+        sidePanelContent={sidePanelContent}
+        mainContent={mainContent}
+        isSidePanelOpen={isSidePanelOpen}
+        onToggleSidePanel={toggleSidePanel}
+      /> : <div>
+        {t('toForeground')}
+      </div>
+    }
   </>;
 };
 

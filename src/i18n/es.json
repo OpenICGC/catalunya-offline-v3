@@ -172,6 +172,7 @@
     "scope": "Compartir Ámbito",
     "track": "Compartir Ruta"
   },
+  "toForeground": "Recuperando estado...",
   "track": "Ruta",
   "trackAlert": {
     "noTrack": "No hay datos de altura",
