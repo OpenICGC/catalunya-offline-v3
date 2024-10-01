@@ -236,14 +236,18 @@ describe('kmlScopeImporter', () => {
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
     const computedPoint = computedData?.points && computedData.points.map(point => point);
 
-    computedPoint && computedPoint.map(point =>
-      expect(point.id).to.be.a('string') && expect(point.id).to.have.lengthOf(36) &&
+    if (computedPoint) {
+      computedPoint.map(point =>
+        expect(point.id).to.be.a('string') && expect(point.id).to.have.lengthOf(36) &&
         expect(point.properties.timestamp).to.be.a('number') && expect(Date.now()-point.properties.timestamp).to.be.below(20)
-    );
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+      );
+    }
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
 
   });
 
@@ -290,10 +294,12 @@ describe('kmlScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
 
   });
 
@@ -340,16 +346,20 @@ describe('kmlScopeImporter', () => {
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
     const computedPoint = computedData?.points && computedData.points.map(point => point);
 
-    computedPoint && computedPoint.map(point =>
-      expect(point.id).to.be.a('string') && expect(point.id).to.have.lengthOf(36) &&
+    if (computedPoint) {
+      computedPoint.map(point =>
+        expect(point.id).to.be.a('string') && expect(point.id).to.have.lengthOf(36) &&
         expect(point.properties.name).to.be.a('string') && expect(point.properties.name).to.include('Point') && expect(point.properties.name).to.have.lengthOf(42) &&
-            expect(point.properties.timestamp).to.be.a('number') && expect(Date.now()-point.properties.timestamp).to.be.below(20)
-    );
+        expect(point.properties.timestamp).to.be.a('number') && expect(Date.now()-point.properties.timestamp).to.be.below(20)
+      );
+    }
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
 
   });
 
@@ -396,10 +406,12 @@ describe('kmlScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
 
   });
 

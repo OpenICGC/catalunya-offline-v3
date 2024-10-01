@@ -85,7 +85,9 @@ const useGeolocation = (): useGeolocationType => {
 
   const [positionTimeout, setPositionTimeout] = useState<number>();
   useEffect( () => {
-    positionTimeout && clearTimeout(positionTimeout);
+    if (positionTimeout) {
+      clearTimeout(positionTimeout);
+    }
     setPositionTimeout(window.setTimeout(() => {
       setError({code: 'errors.geolocation.timeout'});
       setGeolocation(nullGeolocation());

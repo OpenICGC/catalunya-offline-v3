@@ -12,6 +12,7 @@ const config: CapacitorConfig = {
   bundledWebRuntime: false,
   server: {
     errorPath: 'unsupported.html',
+    androidScheme: 'http',
     ...remoteDebug
   },
   ios: {

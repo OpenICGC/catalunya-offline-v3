@@ -51,7 +51,7 @@ const expectedImportedTrackAndPointFromCatOffline = {
         type: 'Point',
         coordinates: [ 1.849113, 41.608731, 12 ]
       }
-    }    
+    }
   ],
   tracks: [
     {
@@ -220,11 +220,11 @@ const expectedMultiPolygon = {
   numberOfErrors: 0
 };
 describe('gpxScopeImporter', () => {
-    
+
   it('should import a Gpx Track and Point from CatOffline', async () => {
     //GIVEN
     const data = asDataUrl(unicodeToBase64(trackAndPointFromCatOffline), 'application/gpx+xml');
-    
+
     //WHEN
     const computedData = await gpxScopeImporter(data);
 
@@ -264,11 +264,12 @@ describe('gpxScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
-      
+      );
+    }
   });
 
   it('should import a Gpx Track from CatOffline', async () => {
@@ -302,10 +303,12 @@ describe('gpxScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
 
   });
 
@@ -339,10 +342,12 @@ describe('gpxScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
   });
 
   it('should import a Gpx Track from Wikiloc', async () => {
@@ -377,10 +382,12 @@ describe('gpxScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
   });
 
   it('should import a Gpx Track and Point from Wikiloc', async () => {
@@ -414,10 +421,12 @@ describe('gpxScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
   });
 
   it('should not import a string', async () => {
@@ -463,10 +472,12 @@ describe('gpxScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
-      expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+        expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
+      );
+    }
   });
 
   it('should not import a kml', async () => {
@@ -512,10 +523,12 @@ describe('gpxScopeImporter', () => {
     // THEN
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
+      );
+    }
 
   });
 

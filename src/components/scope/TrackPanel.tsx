@@ -122,7 +122,11 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   // HANDLERS
   const handleActionClick = useCallback((trackId: string, actionId: string) => {
-    actionId === 'rename' ? onEditing(true) : onGoTo(trackId);
+    if (actionId === 'rename') {
+      onEditing(true);
+    } else {
+      onGoTo(trackId);
+    }
   }, []);
 
   const handleColorChange = useCallback((trackId: UUID, color: HEXColor) =>
@@ -191,7 +195,9 @@ const TrackPanel: FC<TrackPanelProps> = ({
 
   const handleCancel = () => {
     discard();
-    uneditedTrack && onTrackChange(uneditedTrack);
+    if (uneditedTrack) {
+      onTrackChange(uneditedTrack);
+    }
     onEditing(false);
   };
 

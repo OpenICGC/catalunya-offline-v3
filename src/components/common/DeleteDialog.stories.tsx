@@ -1,7 +1,6 @@
-import React from 'react';
-import {Meta, Story} from '@storybook/react';
-
-import DeleteDialog, {DeleteDialogProps, FEATURE_DELETED} from './DeleteDialog';
+import DeleteDialog, {
+  FEATURE_DELETED,
+} from './DeleteDialog';
 
 export default {
   title: 'Common/DeleteDialog',
@@ -11,16 +10,15 @@ export default {
       options: {
         SCOPE: FEATURE_DELETED.SCOPE,
         TRACK: FEATURE_DELETED.TRACK,
-        POINT: FEATURE_DELETED.POINT
+        POINT: FEATURE_DELETED.POINT,
       },
       control: { type: 'inline-radio' },
     },
-  }
-} as Meta;
+  },
+};
 
-const Template: Story<DeleteDialogProps> = args => <DeleteDialog {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = {
-  featureDeleted: FEATURE_DELETED.SCOPE
+export const Default = {
+  args: {
+    featureDeleted: FEATURE_DELETED.SCOPE,
+  },
 };

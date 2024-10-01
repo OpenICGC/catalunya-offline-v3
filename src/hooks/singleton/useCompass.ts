@@ -21,7 +21,9 @@ const useCompass = (): useCompassType => {
       const listener = (event: DeviceOrientationEvent) => {
         if (isActive && event.alpha !== null) {
           const newHeading = Math.round(360 - event.alpha + screen.orientation.angle);
-          newHeading && setHeading(prevHeading => prevHeading === newHeading ? prevHeading : newHeading);
+          if (newHeading) {
+            setHeading(prevHeading => prevHeading === newHeading ? prevHeading : newHeading);
+          }
         }
       };
 

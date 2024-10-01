@@ -98,7 +98,9 @@ const MainPanel: FC<MainPanelProps> = ({
   const actionIcons = useMemo(() => ([{id: 'export', activeIcon: <ShareIcon/>}]), []);
 
   const handleDeleteAccept = () => {
-    deleteRequestId && onDelete(deleteRequestId);
+    if (deleteRequestId) {
+      onDelete(deleteRequestId);
+    }
     setDeleteRequestId(undefined);
   };
 

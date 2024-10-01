@@ -148,14 +148,14 @@ describe('geoJSONScopeImporter', () => {
     // THEN
     expect(computedData).to.deep.equal(expectedImportedFromCatOffline);
   });
-  
+
   it('should import a GeoJSON with empty properties', async () => {
     // GIVEN
     const data = asDataUrl(unicodeToBase64(withoutPropertiesAndUnsupportedGeometries), 'application/geo+json');
-    
+
     // WHEN
     const computedData = await geoJSONScopeImporter(data);
-      
+
     const partialComputedData = {
       points: computedData.points.map(point => (
         {
@@ -186,23 +186,27 @@ describe('geoJSONScopeImporter', () => {
 
     // THEN
     expect(partialComputedData).to.deep.equal(expectedImportedWithUnsupportedGeometries);
-    
+
     // THEN
     const computedPoint = computedData?.points && computedData.points.map(point => point);
     const computedTrack = computedData?.tracks && computedData.tracks.map(track => track);
-    
-    computedPoint && computedPoint.map(point =>
-      expect(point.id).to.be.a('string') && expect(point.id).to.have.lengthOf(36) &&
-        expect(point.properties.name).to.be.a('string') && expect(point.properties.name).to.include('Point') && expect(point.properties.name).to.have.lengthOf(42) &&
-            expect(point.properties.timestamp).to.be.a('number') && expect(Date.now()-point.properties.timestamp).to.be.below(20)
-    );
 
-    computedTrack && computedTrack.map(track =>
-      expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
+    if (computedPoint) {
+      computedPoint.map(point =>
+        expect(point.id).to.be.a('string') && expect(point.id).to.have.lengthOf(36) &&
+        expect(point.properties.name).to.be.a('string') && expect(point.properties.name).to.include('Point') && expect(point.properties.name).to.have.lengthOf(42) &&
+        expect(point.properties.timestamp).to.be.a('number') && expect(Date.now()-point.properties.timestamp).to.be.below(20)
+      );
+    }
+
+    if (computedTrack) {
+      computedTrack.map(track =>
+        expect(track.id).to.be.a('string') && expect(track.id).to.have.lengthOf(36) &&
         expect(track.properties.name).to.be.a('string') && expect(track.properties.name).to.include('Track') && expect(track.properties.name).to.have.lengthOf(42) &&
-            expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
-    );
-      
+        expect(track.properties.timestamp).to.be.a('number') && expect(Date.now()-track.properties.timestamp).to.be.below(20)
+      );
+    }
+
   });
-  
+
 });

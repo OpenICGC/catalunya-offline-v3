@@ -159,14 +159,14 @@ Per tal de poder documentar i testejar aquests components, s'hi creen stories a 
 
 ```typescript jsx
 import React from 'react';
-import {Meta, Story} from '@storybook/react';
+import {Story} from '@storybook/react';
 
 import Counter, {CounterProps} from './Counter';
 
 export default {
   title: 'Common/Counter',
   component: Counter
-} as Meta;
+};
 
 const Template: Story<CounterProps> = args => <Counter {...args}/>;
 

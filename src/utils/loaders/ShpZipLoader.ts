@@ -37,7 +37,9 @@ function joinProperties(geometries: Array<GeoJSON.Geometry | null>, properties: 
       // properties can be undefined if dbfResponse above was empty
       properties: (properties && properties[i]) || {}
     };
-    feature.geometry !== null && features.push(feature as GeoJSON.Feature);
+    if (feature.geometry !== null) {
+      features.push(feature as GeoJSON.Feature);
+    }
   }
 
   return features;

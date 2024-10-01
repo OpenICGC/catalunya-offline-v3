@@ -43,7 +43,7 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
   onColorChange,
   onRename,
   onToggleVisibility,
-  onDelete 
+  onDelete
 }) => {
   const {t} = useTranslation();
   const [isLargeSize] = useIsLargeSize();
@@ -68,7 +68,7 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
       callbackProp: setDeleteRequestId
     }
   ]), [onDelete, t, setDeleteRequestId]);
-  
+
   const handleContextualMenuClick = useCallback((layerId: UUID, menuId: string) => {
     const menuEntry = contextualMenu.find(({id}) => id === menuId);
     if (menuEntry?.callbackProp) {
@@ -85,7 +85,9 @@ const UserLayerPanel: FC<UserLayerPanelProps> = ({
   ];
 
   const handleDeleteAccept = () => {
-    deleteRequestId && onDelete(deleteRequestId);
+    if (deleteRequestId) {
+      onDelete(deleteRequestId);
+    }
     setDeleteRequestId(undefined);
   };
 

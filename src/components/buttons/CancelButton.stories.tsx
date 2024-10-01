@@ -1,7 +1,4 @@
-import React from 'react';
-import {Meta, Story} from '@storybook/react';
-
-import CancelButton, {CancelButtonProps} from './CancelButton';
+import CancelButton from './CancelButton';
 
 export default {
   title: 'Buttons/CancelButton',
@@ -11,13 +8,12 @@ export default {
       options: ['text', 'contained'],
       control: { type: 'inline-radio' },
     },
-  }
-} as Meta;
+  },
+};
 
-const Template: Story<CancelButtonProps> = args => <CancelButton {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = {
-  variant: 'text',
-  disabled: false
+export const Default = {
+  args: {
+    variant: 'text',
+    disabled: false,
+  },
 };

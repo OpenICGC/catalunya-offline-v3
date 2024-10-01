@@ -44,12 +44,16 @@ const useEditingPosition = (): useEditingPositionType => {
   };
 
   const accept = () => {
-    state.onAccept && state.onAccept();
+    if (state.onAccept) {
+      state.onAccept();
+    }
     setState({isEditing: false});
   };
 
   const cancel = () => {
-    state.onCancel && state.onCancel(state.initialPosition);
+    if (state.onCancel) {
+      state.onCancel(state.initialPosition);
+    }
     setState({isEditing: false});
   };
 

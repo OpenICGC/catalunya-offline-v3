@@ -97,31 +97,39 @@ const UserLayersView: FC = () => {
 
   const handleColorChange = useCallback((layerId: UUID, newColor: HEXColor) => {
     const existing = userLayersStore.retrieve(layerId);
-    existing && userLayersStore.update({
-      ...existing,
-      color: newColor
-    });
+    if (existing) {
+      userLayersStore.update({
+        ...existing,
+        color: newColor
+      });
+    }
   }, [userLayersStore]);
 
   const handleRename =  useCallback((layerId: UUID, newName: string) => {
     const existing = userLayersStore.retrieve(layerId);
-    existing && userLayersStore.update({
-      ...existing,
-      name: newName
-    });
+    if (existing) {
+      userLayersStore.update({
+        ...existing,
+        name: newName
+      });
+    }
   }, [userLayersStore]);
 
   const toggleLayerVisibility =  useCallback((layerId: UUID) => {
     const existing = userLayersStore.retrieve(layerId);
-    existing && userLayersStore.update({
-      ...existing,
-      isVisible: !existing.isVisible
-    });
+    if (existing) {
+      userLayersStore.update({
+        ...existing,
+        isVisible: !existing.isVisible
+      });
+    }
   }, [userLayersStore]);
 
   const handleDelete = useCallback((layerId: UUID) => {
     const existing = userLayersStore.retrieve(layerId);
-    existing && userLayersStore.delete(layerId);
+    if (existing) {
+      userLayersStore.delete(layerId);
+    }
   }, [userLayersStore]);
 
   return <>

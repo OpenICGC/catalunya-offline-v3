@@ -30,7 +30,6 @@ const useFilePicker = (
     const pickFiles = async () => {
       const result = await FilePicker.pickFiles({
         types: IS_IOS ? mimeTypes : undefined, // Filter by mime type in iOS only. Picks any file on Web or Android (filtering not reliable).
-        multiple: false,
         readData: !IS_WEB // Will use `result.data` on Android & iOS, and `result.blob` on Web
       }).catch(reason => {
         console.log('File Picker Error', reason);

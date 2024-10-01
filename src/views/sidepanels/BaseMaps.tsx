@@ -53,16 +53,18 @@ const BaseMaps: FC<BaseMapsProps> = ({
   }), [isLargeSize]);
 
   useEffect(() => {
-    isOfflineReady && getUri('').then(directory => {
-      setCoreStyles(
-        BASEMAPS.map(basemap => ({
-          ...basemap,
-          thumbnail: Capacitor.convertFileSrc(directory?.uri + '/' + downloadStatus.find(st => st.url === basemap.thumbnail)?.localPath)
-        }))
-      );
-    });
+    if (isOfflineReady) {
+      getUri('').then(directory => {
+        setCoreStyles(
+          BASEMAPS.map(basemap => ({
+            ...basemap,
+            thumbnail: Capacitor.convertFileSrc(directory?.uri + '/' + downloadStatus.find(st => st.url === basemap.thumbnail)?.localPath)
+          }))
+        );
+      });
+    }
   }, [isOfflineReady]);
-  
+
   return <>
     <Header
       startIcon={<MapIcon/>}
