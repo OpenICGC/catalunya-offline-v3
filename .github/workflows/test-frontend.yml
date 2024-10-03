@@ -23,7 +23,7 @@ jobs:
         cache-dependency-path: package-lock.json
 
     - name: Update npm
-      run: npm install -g npm@8.15.1
+      run: npm install -g npm@10.8.2
 
     - name: Install dependencies
       run: npm ci
