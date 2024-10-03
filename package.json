@@ -17,7 +17,7 @@
     "lint": "npm run lint:js && npm run lint:i18n",
     "lint:js": "eslint src",
     "lint:i18n": "eslint --fix --format node_modules/eslint-plugin-i18n-json/formatter.js src/i18n/*.json",
-    "prepare": "cd .. && husky install .husky",
+    "prepare": "husky",
     "capacitor:copy:before": "capacitor-sync-version"
   },
   "repository": {
