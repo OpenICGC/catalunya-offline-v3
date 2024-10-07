@@ -1,0 +1,128 @@
+PODS:
+  - Capacitor (6.1.2):
+    - CapacitorCordova
+  - CapacitorApp (6.0.1):
+    - Capacitor
+  - CapacitorCamera (6.0.2):
+    - Capacitor
+  - CapacitorCommunityBackgroundGeolocation (0.0.1):
+    - Capacitor
+  - CapacitorCommunityPhotoviewer (4.0.1):
+    - Capacitor
+    - ISVImageScrollView
+    - SDWebImage
+  - CapacitorCommunitySqlite (6.0.2):
+    - Capacitor
+    - SQLCipher
+    - ZIPFoundation
+  - CapacitorCordova (6.1.2)
+  - CapacitorFilesystem (6.0.1):
+    - Capacitor
+  - CapacitorNetwork (6.0.2):
+    - Capacitor
+  - CapacitorPreferences (6.0.2):
+    - Capacitor
+  - CapacitorShare (6.0.2):
+    - Capacitor
+  - CapacitorZip (1.0.4):
+    - Capacitor
+    - SSZipArchive
+  - CapawesomeCapacitorFilePicker (6.0.1):
+    - Capacitor
+  - CordovaPlugins (6.1.2):
+    - CapacitorCordova
+  - CordovaPluginsResources (0.0.105)
+  - ISVImageScrollView (0.3.0)
+  - SDWebImage (5.16.0):
+    - SDWebImage/Core (= 5.16.0)
+  - SDWebImage/Core (5.16.0)
+  - SQLCipher (4.5.4):
+    - SQLCipher/standard (= 4.5.4)
+  - SQLCipher/common (4.5.4)
+  - SQLCipher/standard (4.5.4):
+    - SQLCipher/common
+  - SSZipArchive (2.4.3)
+  - ZIPFoundation (0.9.16)
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
+  - "CapacitorCommunityBackgroundGeolocation (from `../../node_modules/@capacitor-community/background-geolocation`)"
+  - "CapacitorCommunityPhotoviewer (from `../../node_modules/@capacitor-community/photoviewer`)"
+  - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
+  - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
+  - "CapacitorNetwork (from `../../node_modules/@capacitor/network`)"
+  - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
+  - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
+  - CapacitorZip (from `../../node_modules/capacitor-zip`)
+  - "CapawesomeCapacitorFilePicker (from `../../node_modules/@capawesome/capacitor-file-picker`)"
+  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+  - CordovaPluginsResources (from `../capacitor-cordova-ios-plugins`)
+
+SPEC REPOS:
+  trunk:
+    - ISVImageScrollView
+    - SDWebImage
+    - SQLCipher
+    - SSZipArchive
+    - ZIPFoundation
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
+  CapacitorCamera:
+    :path: "../../node_modules/@capacitor/camera"
+  CapacitorCommunityBackgroundGeolocation:
+    :path: "../../node_modules/@capacitor-community/background-geolocation"
+  CapacitorCommunityPhotoviewer:
+    :path: "../../node_modules/@capacitor-community/photoviewer"
+  CapacitorCommunitySqlite:
+    :path: "../../node_modules/@capacitor-community/sqlite"
+  CapacitorCordova:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorFilesystem:
+    :path: "../../node_modules/@capacitor/filesystem"
+  CapacitorNetwork:
+    :path: "../../node_modules/@capacitor/network"
+  CapacitorPreferences:
+    :path: "../../node_modules/@capacitor/preferences"
+  CapacitorShare:
+    :path: "../../node_modules/@capacitor/share"
+  CapacitorZip:
+    :path: "../../node_modules/capacitor-zip"
+  CapawesomeCapacitorFilePicker:
+    :path: "../../node_modules/@capawesome/capacitor-file-picker"
+  CordovaPlugins:
+    :path: "../capacitor-cordova-ios-plugins"
+  CordovaPluginsResources:
+    :path: "../capacitor-cordova-ios-plugins"
+
+SPEC CHECKSUMS:
+  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
+  CapacitorApp: 0bc633b4eae40a1f32cd2834788fad3bc42da6a1
+  CapacitorCamera: ed022171dbf3853e68eec877b4d78995378af6b7
+  CapacitorCommunityBackgroundGeolocation: 6f26f4290377dbd1d6dec21e62cb66f008f61ec7
+  CapacitorCommunityPhotoviewer: 52033b07d6930a0c823691750133591ede08055e
+  CapacitorCommunitySqlite: 47dab3a2d9a9581a0fe7642cf9cffd34c5d5b358
+  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
+  CapacitorFilesystem: 37fb3aa5c945b4539ab11c74a5c57925a302bf24
+  CapacitorNetwork: 8796cf1f1104a00b289957b6150b7c60e1c2a8d3
+  CapacitorPreferences: e8284bf740cf8c6d3f25409af3c01df87dfeb5a1
+  CapacitorShare: 591ae4693d85686ceb590db8e8b44aa014ec6490
+  CapacitorZip: 71c016b63c47e462cc577fc9c25eef73b1b37c9b
+  CapawesomeCapacitorFilePicker: c80c30759ba48986ff34a2b51b23ac2babfd3774
+  CordovaPlugins: c24a2cc2e75f821c895a9d9f169ae5a570377fbf
+  CordovaPluginsResources: 1b3992e05cb6336d2850cd77dd5e3054f2f76f96
+  ISVImageScrollView: 2c89840496647af985bfc0e09b346b9aa733ecec
+  SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
+  SQLCipher: 905b145f65f349f26da9e60a19901ad24adcd381
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
+  ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
+
+PODFILE CHECKSUM: 8bcc31cb949e604320ddad913e4189a8986cd26e
+
+COCOAPODS: 1.12.1
