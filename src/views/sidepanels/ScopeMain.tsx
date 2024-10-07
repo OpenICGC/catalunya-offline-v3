@@ -55,23 +55,29 @@ const ScopeMain: FC<ScopeMainProps> = ({
 
   const scopeColorChange = (scopeId: UUID, newColor: HEXColor) => {
     const existing = scopeStore.retrieve(scopeId);
-    existing && scopeStore.update({
-      ...existing,
-      color: newColor
-    });
+    if (existing) {
+      scopeStore.update({
+        ...existing,
+        color: newColor
+      });
+    }
   };
 
   const scopeRename = (scopeId: UUID, newName: string) => {
     const existing = scopeStore.retrieve(scopeId);
-    existing && scopeStore.update({
-      ...existing,
-      name: newName
-    });
+    if (existing) {
+      scopeStore.update({
+        ...existing,
+        name: newName
+      });
+    }
   };
 
   const scopeDelete = (scopeId: UUID) => {
     const existing = scopeStore.retrieve(scopeId);
-    existing && scopeStore.delete(scopeId);
+    if (existing) {
+      scopeStore.delete(scopeId);
+    }
   };
 
   const share = (scopeId: UUID) => {
@@ -96,7 +102,9 @@ const ScopeMain: FC<ScopeMainProps> = ({
 
   const closeHandleExport = () => setSharingScopeId(undefined);
   const handleImportSuccess = () => {
-    importingScopeId && onScopeSelected(importingScopeId);
+    if (importingScopeId) {
+      onScopeSelected(importingScopeId);
+    }
     setImportingScopeId(undefined);
   };
   const handleImportError = (error: CatOfflineError) => {

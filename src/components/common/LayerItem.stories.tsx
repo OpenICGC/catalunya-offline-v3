@@ -1,20 +1,17 @@
 import React from 'react';
-import {Meta, Story} from '@storybook/react';
-
-import LayerItem, {LayerItemProps} from './LayerItem';
+import LayerItem from './LayerItem';
 import HouseIcon from '@mui/icons-material/House';
 
 export default {
   title: 'Common/LayerItem',
-  component: LayerItem
-} as Meta;
+  component: LayerItem,
+};
 
-const Template: Story<LayerItemProps> = args => <LayerItem {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = {
-  itemId: 666,
-  icon: <HouseIcon/>,
-  name: 'Refugios',
-  isVisible: true
+export const Default = {
+  args: {
+    itemId: 666,
+    icon: <HouseIcon />,
+    name: 'Refugios',
+    isVisible: true,
+  },
 };

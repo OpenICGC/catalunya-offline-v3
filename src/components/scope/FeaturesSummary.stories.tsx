@@ -1,21 +1,17 @@
-import React from 'react';
-import {Meta, Story} from '@storybook/react';
-
-import FeaturesSummary, {FeaturesSummaryProps} from './FeaturesSummary';
+import FeaturesSummary from './FeaturesSummary';
 
 export default {
   title: 'Scope/FeaturesSummary',
   component: FeaturesSummary,
   argTypes: {
-    colorContrastFrom: {control: 'color'}
-  }
-} as Meta;
+    colorContrastFrom: { control: 'color' },
+  },
+};
 
-const Template: Story<FeaturesSummaryProps> = args => <FeaturesSummary {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = {
-  numPoints: 17,
-  numTracks: 5,
-  colorContrastFrom: '#ffffff'
+export const Default = {
+  args: {
+    numPoints: 17,
+    numTracks: 5,
+    colorContrastFrom: '#ffffff',
+  },
 };

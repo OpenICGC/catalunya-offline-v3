@@ -1,15 +1,12 @@
-import React from 'react';
-import DownloadRequest, {DownloadRequestProps} from './DownloadRequest';
-import {Meta, Story} from '@storybook/react';
+import DownloadRequest from './DownloadRequest';
 
 export default {
   title: 'Notifications/DownloadRequest',
-  component: DownloadRequest
-} as Meta;
+  component: DownloadRequest,
+};
 
-const Template: Story<DownloadRequestProps> = args => <DownloadRequest {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = {
-  isOpen: true
+export const Default = {
+  args: {
+    isOpen: true,
+  },
 };

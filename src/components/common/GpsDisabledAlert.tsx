@@ -43,7 +43,12 @@ export type GpsDisabledAlertProps = {
   isGeolocationAvailable: boolean
 }
 
-const GpsDisabledAlert: FC<GpsDisabledAlertProps> = ({isNavigatingToTrack, isNavigatingToPoint, isRecordingTrack, isGeolocationAvailable}) => {
+const GpsDisabledAlert: FC<GpsDisabledAlertProps> = ({
+  isNavigatingToTrack,
+  isNavigatingToPoint,
+  isRecordingTrack,
+  isGeolocationAvailable
+}) => {
   const {t} = useTranslation();
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -52,15 +57,21 @@ const GpsDisabledAlert: FC<GpsDisabledAlertProps> = ({isNavigatingToTrack, isNav
   const hideDialog = useCallback(() => setDialogOpen(false), []);
 
   useEffect(() => {
-    isNavigatingToPoint && !isGeolocationAvailable && showDialog();
+    if (isNavigatingToPoint && !isGeolocationAvailable) {
+      showDialog();
+    }
   }, [isNavigatingToPoint]);
 
   useEffect(() => {
-    isNavigatingToTrack && !isGeolocationAvailable && showDialog();
+    if (isNavigatingToTrack && !isGeolocationAvailable) {
+      showDialog();
+    }
   }, [isNavigatingToTrack]);
 
   useEffect(() => {
-    isRecordingTrack && !isGeolocationAvailable && showDialog();
+    if( isRecordingTrack && !isGeolocationAvailable) {
+      showDialog();
+    }
   }, [isRecordingTrack]);
 
   return isDialogOpen ? <Dialog open={isDialogOpen} onClose={hideDialog} fullWidth PaperProps={paperProps}>

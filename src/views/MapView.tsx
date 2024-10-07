@@ -219,7 +219,9 @@ const MapView: FC<MapViewProps> = ({
       Math.max(bbox[2], position[0]), // xMax
       Math.max(bbox[3], position[1])  // yMax
     ]), [180, 90, -180, -90]);
-    bounds && fitBounds(bounds);
+    if (bounds) {
+      fitBounds(bounds);
+    }
     onTrackSelected(track.id);
   }, [fitBounds, onTrackSelected]);
 
@@ -276,7 +278,9 @@ const MapView: FC<MapViewProps> = ({
   }, [pointStore.create, pointList, t, onPointSelected]);
 
   useEffect(() => {
-    pointIntent && selectedScope && pointList && createNewPoint(pointIntent);
+    if (pointIntent && selectedScope && pointList) {
+      createNewPoint(pointIntent);
+    }
   }, [pointIntent, selectedScope, pointList, createNewPoint]);
 
   const handleScopeSelected = useCallback((scopeId: UUID) => {
@@ -347,7 +351,9 @@ const MapView: FC<MapViewProps> = ({
   }, [pointNavigation.isNavigating, trackNavigation.stop]);
 
   const handlePointNavigationShowDetails = useCallback(() => {
-    pointNavigation.target && onPointSelected(pointNavigation.target.id);
+    if (pointNavigation.target) {
+      onPointSelected(pointNavigation.target.id);
+    }
   }, [pointNavigation.target, onPointSelected]);
 
   const handleTrackNavigationFitBounds = useCallback((bottomMargin = 0) => {
@@ -365,18 +371,20 @@ const MapView: FC<MapViewProps> = ({
   }, [trackNavigation.isNavigating, pointNavigation.stop]);
 
   const handleTrackNavigationShowDetails = useCallback(() => {
-    trackNavigation.target && onTrackSelected(trackNavigation.target.id);
+    if (trackNavigation.target) {
+      onTrackSelected(trackNavigation.target.id);
+    }
   }, [trackNavigation.target, onTrackSelected]);
 
   const [isSettingsDialogOpen, setSettingsDialogOpen] = useState<boolean>(false);
   const [isAboutDialogOpen, setAboutDialogOpen] = useState<boolean>(false);
 
   const handleContextualMenu = useCallback((menuId: string) => {
-    menuId === 'settings'
-      ? setSettingsDialogOpen(true)
-      : menuId === 'about'
-        ? setAboutDialogOpen(true)
-        : undefined;
+    if (menuId === 'settings') {
+      setSettingsDialogOpen(true);
+    } else if (menuId === 'about') {
+      setAboutDialogOpen(true);
+    }
   }, []);
 
   const handleToggleContextualMenu = useCallback(() => {

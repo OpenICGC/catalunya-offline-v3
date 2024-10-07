@@ -20,10 +20,12 @@ const ScopeSchemaEditor: FC<ScopeSchemaEditorProps> = ({scopeId, onClose}) => {
   const scopes = scopeStore.list();
 
   const updateSchema = useCallback((newSchema: Schema) => {
-    scope && scopeStore.update({
-      ...scope,
-      schema: newSchema
-    });
+    if (scope) {
+      scopeStore.update({
+        ...scope,
+        schema: newSchema
+      });
+    }
   }, [scopeStore]);
 
   const handleAddField = () => {
@@ -37,9 +39,11 @@ const ScopeSchemaEditor: FC<ScopeSchemaEditorProps> = ({scopeId, onClose}) => {
   };
 
   const handleDelete = (fieldId: UUID) => {
-    schema && updateSchema(schema
-      .filter(field => field.id !== fieldId)
-    );
+    if (schema) {
+      updateSchema(schema
+        .filter(field => field.id !== fieldId)
+      );
+    }
   };
 
   const handleImportFieldsFromScope = (scopeId: UUID) => {
@@ -54,30 +58,36 @@ const ScopeSchemaEditor: FC<ScopeSchemaEditorProps> = ({scopeId, onClose}) => {
   }, [importingSchema]);
 
   const handleNameChange = (fieldId: UUID, name: string) => {
-    schema && updateSchema(schema
-      .map(field => field.id === fieldId ? ({
-        ...field,
-        name: name
-      }) : field)
-    );
+    if (schema) {
+      updateSchema(schema
+        .map(field => field.id === fieldId ? ({
+          ...field,
+          name: name
+        }) : field)
+      );
+    }
   };
 
   const handlePointToApplyChanges = (fieldId: UUID) => {
-    schema && updateSchema(schema
-      .map(field => field.id === fieldId ? ({
-        ...field,
-        appliesToPoints: !field.appliesToPoints
-      }) : field)
-    );
+    if (schema) {
+      updateSchema(schema
+        .map(field => field.id === fieldId ? ({
+          ...field,
+          appliesToPoints: !field.appliesToPoints
+        }) : field)
+      );
+    }
   };
 
   const handleTrackToApplyChange = (fieldId: UUID) => {
-    schema && updateSchema(schema
-      .map(field => field.id === fieldId ? ({
-        ...field,
-        appliesToTracks: !field.appliesToTracks
-      }) : field)
-    );
+    if (schema) {
+      updateSchema(schema
+        .map(field => field.id === fieldId ? ({
+          ...field,
+          appliesToTracks: !field.appliesToTracks
+        }) : field)
+      );
+    }
   };
 
   return scope && scopes ? <SchemaPanel

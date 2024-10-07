@@ -1,30 +1,26 @@
-import React from 'react';
-import {Meta, Story} from '@storybook/react';
-
-import PointNavigationBottomSheet, {PointNavigationBottomSheetProps} from './PointNavigationBottomSheet';
+import PointNavigationBottomSheet from './PointNavigationBottomSheet';
 
 export default {
   title: 'Map/PointNavigationBottomSheet',
   component: PointNavigationBottomSheet,
   argTypes: {
-    color: {control: 'color'},
+    color: { control: 'color' },
     bearing: {
       control: {
         type: 'range',
         min: 0,
         max: 359,
-        step: 0.1
-      }
-    }
-  }
-} as Meta;
+        step: 0.1,
+      },
+    },
+  },
+};
 
-const Template: Story<PointNavigationBottomSheetProps> = args => <PointNavigationBottomSheet {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = {
-  name: 'Point 01',
-  color: '#973572',
-  bearing: 73.5,
-  distance: 120
+export const Default = {
+  args: {
+    name: 'Point 01',
+    color: '#973572',
+    bearing: 73.5,
+    distance: 120,
+  },
 };

@@ -22,7 +22,7 @@ export const listOfflineDir = async (directory?:string) => {
       directory: Directory.Data
     });
     return files.files;
-  } catch (e) {
+  } catch {
     return [];
   }
 };
@@ -34,7 +34,7 @@ export const offlineDirExists = async (directory:string) => {
       directory: Directory.Data
     });
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };
@@ -57,14 +57,14 @@ export const dirExists = async (path:string, type: FolderType) => {
       path: destinationBaseFolder + '/' + path
     });
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };
 
 export const createDirectory = async (path: string, type: FolderType) => {
 
-  const directory = 
+  const directory =
     type === FolderType.Download ? Directory.Data :
       type === FolderType.Export ? Directory.Cache :
         undefined;
@@ -120,17 +120,17 @@ export const getUri = async (path: string, type: FolderType = FolderType.Downloa
     type === FolderType.Download ? Directory.Data :
       type === FolderType.Export ? Directory.Cache :
         undefined;
-  
+
   const destinationBaseFolder =
     type === FolderType.Download ? OFFLINE_DATADIR_NAME :
       type === FolderType.Export ? EXPORT_DIR_NAME :
         undefined;
-  
+
   if (directory && destinationBaseFolder) {
     return await Filesystem.getUri({
       directory: directory,
       path: destinationBaseFolder + '/' + path,
-    });  
+    });
   }
 };
 
@@ -213,7 +213,7 @@ export const deleteFile = async (path:string) => {
       path
     });
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };

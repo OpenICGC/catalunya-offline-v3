@@ -96,7 +96,7 @@ const List: FC<ListProps> = ({
     padding: '0px',
     marginBottom: isLargeSize ? '72px' : '64px',
   }), [isLargeSize]);
-    
+
   const {t} = useTranslation();
   const [searchText, setSearchText] = useState('');
   const [getEditingId, setEditingId] = useState<UUID | undefined>();
@@ -108,9 +108,11 @@ const List: FC<ListProps> = ({
   , [searchText, items]);
 
   const handleContextualMenuClick = useCallback((itemId: UUID, actionId: string) => {
-    actionId === 'edit' ?
-      setEditingId(itemId) :
+    if (actionId === 'edit') {
+      setEditingId(itemId);
+    } else {
       onContextualMenuClick(itemId, actionId);
+    }
   }, [onContextualMenuClick]);
 
   const handleStopEditing = useCallback(() => setEditingId(undefined), []);

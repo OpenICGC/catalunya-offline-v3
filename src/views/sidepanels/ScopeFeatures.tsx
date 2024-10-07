@@ -100,40 +100,48 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
 
   const pointColorChange = useCallback((pointId: UUID, newColor: HEXColor) => {
     const existing = pointStore.retrieve(pointId);
-    existing && pointStore.update({
-      ...existing,
-      properties: {
-        ...existing.properties,
-        color: newColor
-      }
-    });
+    if (existing) {
+      pointStore.update({
+        ...existing,
+        properties: {
+          ...existing.properties,
+          color: newColor
+        }
+      });
+    }
   }, [pointStore]);
 
   const pointRename = useCallback((pointId: UUID, newName: string) => {
     const existing = pointStore.retrieve(pointId);
-    existing && pointStore.update({
-      ...existing,
-      properties: {
-        ...existing.properties,
-        name: newName
-      }
-    });
+    if (existing) {
+      pointStore.update({
+        ...existing,
+        properties: {
+          ...existing.properties,
+          name: newName
+        }
+      });
+    }
   }, [pointStore]);
 
   const pointToggleVisibility = useCallback((pointId: UUID) => {
     const existing = pointStore.retrieve(pointId);
-    existing && pointStore.update({
-      ...existing,
-      properties: {
-        ...existing.properties,
-        isVisible: !existing.properties.isVisible
-      }
-    });
+    if (existing) {
+      pointStore.update({
+        ...existing,
+        properties: {
+          ...existing.properties,
+          isVisible: !existing.properties.isVisible
+        }
+      });
+    }
   }, [pointStore]);
 
   const pointDelete = useCallback((pointId: UUID) => {
     const existing = pointStore.retrieve(pointId);
-    existing && pointStore.delete(pointId);
+    if (existing) {
+      pointStore.delete(pointId);
+    }
   }, [pointStore]);
 
   const pointGoTo = useCallback((pointId: UUID) => {
@@ -167,40 +175,48 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
 
   const trackColorChange = useCallback((trackId: UUID, newColor: HEXColor) => {
     const existing = trackStore.retrieve(trackId);
-    existing && trackStore.update({
-      ...existing,
-      properties: {
-        ...existing.properties,
-        color: newColor
-      }
-    });
+    if (existing) {
+      trackStore.update({
+        ...existing,
+        properties: {
+          ...existing.properties,
+          color: newColor
+        }
+      });
+    }
   }, [trackStore]);
 
   const trackRename = useCallback((trackId: UUID, newName: string) => {
     const existing = trackStore.retrieve(trackId);
-    existing && trackStore.update({
-      ...existing,
-      properties: {
-        ...existing.properties,
-        name: newName
-      }
-    });
+    if (existing) {
+      trackStore.update({
+        ...existing,
+        properties: {
+          ...existing.properties,
+          name: newName
+        }
+      });
+    }
   }, [trackStore]);
 
   const trackToggleVisibility = useCallback((trackId: UUID) => {
     const existing = trackStore.retrieve(trackId);
-    existing && trackStore.update({
-      ...existing,
-      properties: {
-        ...existing.properties,
-        isVisible: !existing.properties.isVisible
-      }
-    });
+    if (existing) {
+      trackStore.update({
+        ...existing,
+        properties: {
+          ...existing.properties,
+          isVisible: !existing.properties.isVisible
+        }
+      });
+    }
   }, [trackStore]);
 
   const trackDelete = useCallback((trackId: UUID) => {
     const existing = trackStore.retrieve(trackId);
-    existing && trackStore.delete(trackId);
+    if (existing) {
+      trackStore.delete(trackId);
+    }
   }, [trackStore]);
 
   const trackGoTo = useCallback((trackId: UUID) => {

@@ -89,7 +89,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   const {t} = useTranslation();
   const [isLargeSize] = useIsLargeSize();
   const [deleteRequestId, setDeleteRequestId] = useState <UUID> ();
-  
+
   const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number) => setTabValue(value);
 
   const handleActionPointClick = (pointId: UUID) => {
@@ -113,7 +113,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       menuEntry.callbackProp(itemId);
     }
   };
-  
+
   const contextualMenu = {
     point : [
       {
@@ -126,7 +126,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
         id: 'edit',
         label: t('actions.edit'),
         icon: <EditIcon/>
-      },        
+      },
       {
         id: 'delete',
         label: t('actions.delete'),
@@ -167,7 +167,7 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
       }
     ]
   };
-  
+
   const tabsSx = {
     color: (theme: Theme) => theme.palette.getContrastText(scope.color),
     bgcolor: scope.color,
@@ -197,17 +197,21 @@ const FeaturesPanel: FC<FeaturesPanelProps> = ({
   })), [scopeTracks, scope.color]);
 
   const handleDeletePointAccept = () => {
-    deleteRequestId && onDeletePoint(deleteRequestId);
+    if (deleteRequestId) {
+      onDeletePoint(deleteRequestId);
+    }
     setDeleteRequestId(undefined);
   };
-  
+
   const handleDeleteTrackAccept = () => {
-    deleteRequestId && onDeleteTrack(deleteRequestId);
+    if (deleteRequestId) {
+      onDeleteTrack(deleteRequestId);
+    }
     setDeleteRequestId(undefined);
   };
 
   const handleDeleteCancel = () => setDeleteRequestId(undefined);
-  
+
   return <>
     <Header
       startIcon={<ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}

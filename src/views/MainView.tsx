@@ -71,15 +71,21 @@ const MainView: FC = () => {
   }, [isEditingPosition]);
 
   useEffect(() => {
-    isRecordingTrack && setSidePanelOpen(false); // Closes panel when recording starts
+    if (isRecordingTrack) {
+      setSidePanelOpen(false);
+    } // Closes panel when recording starts
   }, [isRecordingTrack]);
 
   useEffect(() => {
-    pointNavigatingTo && setSidePanelOpen(false); // Closes panel when point navigation starts
+    if (pointNavigatingTo) {
+      setSidePanelOpen(false);
+    } // Closes panel when point navigation starts
   }, [pointNavigatingTo?.id]);
 
   useEffect(() => {
-    trackNavigatingTo && setSidePanelOpen(false); // Closes panel when track navigation starts
+    if (trackNavigatingTo) {
+      setSidePanelOpen(false);
+    } // Closes panel when track navigation starts
   }, [trackNavigatingTo?.id]);
 
   useEffect(() => {
@@ -146,16 +152,14 @@ const MainView: FC = () => {
       onDownload={() => setDownloadRequested(true)}
       bytes={pendingSize}
     />}
-    {isActive ?
-      <Layout
-        sidePanelContent={sidePanelContent}
-        mainContent={mainContent}
-        isSidePanelOpen={isSidePanelOpen}
-        onToggleSidePanel={toggleSidePanel}
-      /> : <div>
+    <Layout
+      sidePanelContent={sidePanelContent}
+      mainContent={isActive ? mainContent : <div>
         {t('toForeground')}
-      </div>
-    }
+      </div>}
+      isSidePanelOpen={isSidePanelOpen}
+      onToggleSidePanel={toggleSidePanel}
+    />
   </>;
 };
 

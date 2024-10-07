@@ -7,7 +7,11 @@ const localPersistence: persistence = ({
     return Promise.resolve(item ? JSON.parse(item) : undefined);
   },
   save: <T>(key: string, value: T) => {
-    value === undefined ? localStorage.removeItem(PERSISTENCE_NAMESPACE + '.'+ key) : localStorage.setItem(PERSISTENCE_NAMESPACE + '.'+ key, JSON.stringify(value));
+    if (value === undefined) {
+      localStorage.removeItem(PERSISTENCE_NAMESPACE + '.'+ key);
+    } else {
+      localStorage.setItem(PERSISTENCE_NAMESPACE + '.'+ key, JSON.stringify(value));
+    }
     return Promise.resolve();
   }
 });

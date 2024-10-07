@@ -27,9 +27,11 @@ const usePersistedCollection = <ItemType extends CollectionItem>(collectionId: s
     list: () => items,
     create: created => {
       if (items === undefined) throw new Error('Data not loaded. Cannot create items. Please check item list is not undefined before calling create.');
-      Array.isArray(created) ?
-        setItems(prevData => prevData ? [...prevData, ...created] : created) :
+      if (Array.isArray(created)) {
+        setItems(prevData => prevData ? [...prevData, ...created] : created);
+      } else {
         setItems(prevData => prevData ? [...prevData, created] : [created]);
+      }
     },
     retrieve: (id: UUID) => items?.find(item => item.id === id),
     update: updated => {
@@ -56,9 +58,11 @@ export const useScopes = (): persistedCollectionInterface<Scope> => {
     list: () => items,
     create: created => {
       if (items === undefined) throw new Error('Data not loaded. Cannot create items. Please check item list is not undefined before calling create.');
-      Array.isArray(created) ?
-        setItems(prevData => prevData ? [...prevData, ...created ] : created) :
-        setItems(prevData => prevData ? [...prevData, created ] : [created]);
+      if (Array.isArray(created)) {
+        setItems(prevData => prevData ? [...prevData, ...created] : created);
+      } else {
+        setItems(prevData => prevData ? [...prevData, created] : [created]);
+      }
     },
     retrieve: (id: UUID) => items?.find(item => item.id === id),
     update: updated => {

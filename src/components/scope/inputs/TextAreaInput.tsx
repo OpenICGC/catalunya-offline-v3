@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import {SxProps} from '@mui/system/styleFunctionSx/styleFunctionSx';
 import Stack from '@mui/material/Stack';
 import styled from '@mui/material/styles/styled';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 import {useTranslation} from 'react-i18next';
 
 const classes = {
@@ -19,7 +19,7 @@ export interface TextAreaInputProps {
 }
 
 const TextAreaInput: FC<TextAreaInputProps> = ({
-  isEditing,  
+  isEditing,
   text,
   onChange,
   sx
@@ -42,7 +42,7 @@ const TextAreaInput: FC<TextAreaInputProps> = ({
       outline: isEditing ? '2px solid orange' : 'none',
     }
   }), [isEditing]);
-    
+
   return <Stack className={classes.root} sx={sx}>
     <Typography className={classes.title} variant='caption'>{t('properties.description')}</Typography>
     <TextAreaEditable

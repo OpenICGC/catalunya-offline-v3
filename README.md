@@ -31,7 +31,7 @@
 
 Some relevant dependencies are:
 
- * Capacitor 4
+ * Capacitor 6 (node 18+)
  * React 17
  * MUI 5
  * MapLibre GL JS 2

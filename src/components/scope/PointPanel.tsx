@@ -154,9 +154,13 @@ const PointPanel: FC<PointPanelProps> = ({
 
   // HANDLERS
   const handleActionClick = useCallback((pointId: string, actionId: string) => {
-    actionId === 'rename' ? onEditing(true) : onGoTo(pointId);
+    if (actionId === 'rename') {
+      onEditing(true);
+    } else {
+      onGoTo(pointId);
+    }
   }, []);
-  
+
   const handleColorChange = useCallback((pointId: UUID, color: HEXColor) =>
     onPointChange({
       ...point,
@@ -195,9 +199,13 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const handleCoordinatesChange = useCallback((value: string, coordIndex: number) => {
     const newCoords = [...point.geometry.coordinates];
-    (value === '' || value === '-') ?
-      coordIndex === 2 ? newCoords.pop() : 0
-      : newCoords[coordIndex] = parseFloat(value);
+    if (value === '' || value === '-') {
+      if (coordIndex === 2) {
+        newCoords.pop();
+      }
+    } else {
+      newCoords[coordIndex] = parseFloat(value);
+    }
 
     onPointChange({
       ...point,
@@ -252,7 +260,9 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const handleCancel = () => {
     discard();
-    uneditedPoint && onPointChange(uneditedPoint);
+    if (uneditedPoint) {
+      onPointChange(uneditedPoint);
+    }
     stopEditing();
   };
 
@@ -276,7 +286,7 @@ const PointPanel: FC<PointPanelProps> = ({
 
   const pointSchema = useMemo(() => scope.schema?.filter(
     field => field.appliesToPoints), [scope]);
-  
+
   return <>
     <Header
       startIcon={isEditing ? <></> : <ArrowBackIcon sx={{transform: 'rotate(180deg)'}}/>}

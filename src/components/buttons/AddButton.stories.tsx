@@ -1,6 +1,5 @@
 import React from 'react';
-import AddButton, {AddButtonProps} from './AddButton';
-import {Meta, Story} from '@storybook/react';
+import AddButton from './AddButton';
 
 //MUI-ICONS
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
@@ -11,24 +10,24 @@ import AddTrack from '../icons/AddTrack';
 export default {
   title: 'Buttons/AddButton',
   component: AddButton,
-} as Meta;
-
-const Template: Story<AddButtonProps> = args => <AddButton {...args}/>;
-
-export const Scope = Template.bind({});
-Scope.args = {
-  children: <CreateNewFolderIcon/>
 };
 
-export const Point = Template.bind({});
-Point.args = {
-  ...Scope.args,
-  children: <AddLocationAltIcon/>
+export const Scope = {
+  args: {
+    children: <CreateNewFolderIcon />,
+  },
 };
 
-export const Track = Template.bind({});
-Track.args = {
-  ...Scope.args,
-  children: <AddTrack/>
+export const Point = {
+  args: {
+    ...Scope.args,
+    children: <AddLocationAltIcon />,
+  },
 };
 
+export const Track = {
+  args: {
+    ...Scope.args,
+    children: <AddTrack />,
+  },
+};

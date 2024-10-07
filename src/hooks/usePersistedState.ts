@@ -35,7 +35,9 @@ const usePersistedState = <T> (key: string, defaultValue: T): usePersistedStateR
     setLoaded(false);
     setValue(defaultValue);
     load<T>(key).then(value => {
-      value !== undefined && setValue(value);
+      if (value !== undefined) {
+        setValue(value);
+      }
       setLoaded(true);
     });
   }, [key]);

@@ -42,7 +42,9 @@ const useViewport = (): useViewportType => {
   const isActive = useIsActive();
 
   const updateViewport = useCallback((newViewport: Partial<ViewportType>) => {
-    isActive && setViewport(prevViewport => ({...prevViewport, ...newViewport}));
+    if (isActive) {
+      setViewport(prevViewport => ({...prevViewport, ...newViewport}));
+    }
   }, []);
 
   const fitBounds = useCallback(

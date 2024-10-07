@@ -7,7 +7,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    namespace 'cat.icgc.catofflinev3'
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "cat.icgc.catofflinev3"
         minSdkVersion rootProject.ext.minSdkVersion
