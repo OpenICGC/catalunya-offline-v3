@@ -51,7 +51,7 @@
     "@mui/material": "5.10.14",
     "@mui/styles": "5.10.14",
     "@mui/x-date-pickers": "5.0.9",
-    "@sentry/react": "^8.32.0",
+    "@sentry/react": "^8.55.0",
     "@sentry/webpack-plugin": "^2.22.4",
     "@storybook/addon-actions": "^8.3.4",
     "@storybook/addon-essentials": "^8.3.4",
