@@ -31,6 +31,9 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 repositories {

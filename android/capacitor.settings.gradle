@@ -32,5 +32,5 @@ project(':capacitor-share').projectDir = new File('../node_modules/@capacitor/sh
 include ':capawesome-capacitor-file-picker'
 project(':capawesome-capacitor-file-picker').projectDir = new File('../node_modules/@capawesome/capacitor-file-picker/android')
 
-include ':capacitor-zip'
-project(':capacitor-zip').projectDir = new File('../node_modules/capacitor-zip/android/capacitor-zip')
+include ':capa-zip'
+project(':capa-zip').projectDir = new File('../node_modules/capa-zip/android')

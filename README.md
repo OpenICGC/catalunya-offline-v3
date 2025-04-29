@@ -4,9 +4,9 @@
 
 ## Informació
 
-</div>
-<p><strong>Catalunya Offline</strong> és una aplicació mòbil que us permet explorar el territori català, marcar punts d'interès i enregistrar les vostres rutes i excursions utilitzant el GPS, fins i tot en el cas que no hi hagi cobertura de dades al vostre dispositiu mòbil.</p><p>L'aplicació també permet la descàrrega i la visualització de la cartografia topogràfica de l'ICGC, que presenta la informació estructurada i jerarquitzada per facilitar-ne la lectura. S'hi mostren les corbes de nivell i informació relativa als senders de muntanya.</p>
-        </div>
+<p><strong>Catalunya Offline</strong> és una aplicació mòbil que us permet explorar el territori català, marcar punts d'interès i enregistrar les vostres rutes i excursions utilitzant el GPS, fins i tot en el cas que no hi hagi cobertura de dades al vostre dispositiu mòbil.</p>
+
+<p>L'aplicació també permet la descàrrega i la visualització de la cartografia topogràfica de l'ICGC, que presenta la informació estructurada i jerarquitzada per facilitar-ne la lectura. S'hi mostren les corbes de nivell i informació relativa als senders de muntanya.</p>
 
 <div style="text-align: center;">
   <img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/produccio/s3fs-public/styles/ezpublish_large/public/2024-05/catoffline_fig02.jpg?itok=Qw_a7U4-" width="149" height="300" alt="Captura de pantalla que mostra l’estil de lleure, amb la funcionalitat de localització de l’usuari damunt del mapa activada" title="Captura de pantalla que mostra l’estil de lleure, amb la funcionalitat de localització de l’usuari damunt del mapa activada"/>
@@ -20,13 +20,11 @@
 
 <hr>
 
-
-
 ## Setup development environment
 
 ### Javascript
 
-1. Install `nodejs` and `npm` (tested with node 16 and npm 8 versions).
+1. Install nodejs and npm (tested with node 16 and npm 8 versions).
 2. Install javascript dependencies with `npm i`.
 
 Some relevant dependencies are:
@@ -41,56 +39,89 @@ Some relevant dependencies are:
 
 * Install OpenJDK 11: `sudo apt install openjdk-11-jdk-headless`
 * Follow the "Environment Setup > Android Requirements" section from Capacitor documentation:
-   https://capacitorjs.com/docs/getting-started/environment-setup#android-requirements
-  * Install Android-Studio.
-  * Start Android-Studio and install API 24, which corresponds to Android 7.0 Nougat, the lowest version to be compatible with.
-* Install a virtual device (emulator) with a Nougat (API 24) image to test against following Android Studio documentation:
-   https://developer.android.com/studio/run/managing-avds
-* Add the following env vars to `~/.profile`:
+   [Capacitor Android Requirements](https://capacitorjs.com/docs/getting-started/environment-setup#android-requirements)
+  * Install Android Studio.
+  * Start Android Studio and install API 24 (Android 7.0 Nougat), which is the minimum version supported.
+* Install a virtual device (emulator) with a Nougat (API 24) image to test against:
+   [Managing AVDs - Android Docs](https://developer.android.com/studio/run/managing-avds)
+* Add the following environment variables to `~/.profile`:
 
-  ```
-  export CAPACITOR_ANDROID_STUDIO_PATH=$HOME/.local/share/JetBrains/Toolbox/scripts/studio # ...or wherever android studio was installed
-  export ANDROID_SDK_ROOT=$HOME/Android/Sdk
-  export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
-  ```
+```bash
+export CAPACITOR_ANDROID_STUDIO_PATH=$HOME/.local/share/JetBrains/Toolbox/scripts/studio # Or wherever Android Studio is installed
+export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+```
+
+#### Android Gradle Configuration (important!)
+
+Ensure the file `android/build.gradle` contains the following configuration:
+
+```groovy
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = '17'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+```
+
+If you're rebuilding or redeploying the app, follow this workflow:
+
+```bash
+npm run build # Creates the dist folder
+npm start
+./android/gradlew --stop   # Only if gradle was running before
+npm run start:android
+```
+
+This ensures that web assets are built and loaded into an Android emulator or device with live reloading enabled.
 
 ### iOS
 
 * Install Xcode
 * Install **Xcode Command Line Tools**: `xcode-select --install`
-* Install Homebrew: `$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-  * In my case I needed to install `cocoapods`: `brew install cocoapods`
-
+* Install Homebrew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+  * In some cases you may need to install cocoapods: `brew install cocoapods`
 
 ## Configure sentry
 
-Sentry will keep track of errors occurring in real devices so we can be aware and eventuallu fix them.
-In order to have sentry up and running, please configure propperly adding the required information to the `.env` file:
+Sentry will track errors occurring in real devices. To enable it, add the required information in `.env`:
 
-```dotenv
+```
 SENTRY_DSN=
 SENTRY_AUTH_TOKEN=
 ```
 
-
 ## Inspect offline assets
 
-The ADB command to explore the App filesystem in Android is:
+The ADB command to explore the app filesystem in Android is:
 
 ```bash
 adb shell run-as cat.icgc.catofflinev3 ls -lha /data/user/0/cat.icgc.catofflinev3/files/offlineData
 ```
 
-## Run in develompment mode
+## Run in development mode
 
 ### Web
 
-* Storybook (dev): `npm run storybook`.
-* Web version (dev): `npm start`.
+* Storybook (dev): `npm run storybook`
+* Web version (dev): `npm start`
 
 ### Android
 
-Note: To be able to run on a real device,
+Note: To run on a real device,
 [enable USB Debugging Mode](https://developer.android.com/studio/debug/dev-options) and use a cable.
 
 #### Debugging the web code
@@ -101,87 +132,84 @@ To run in "auto-reload" mode, first run:
 npm start
 ```
 
-And, once the web is loaded in your browser:
+And then:
 
 ```bash
 npm run start:android
 ```
 
-to load it into a device or emulator. Web contents will be served remotely from the 
-laptop and auto-reloaded as in the web version.
+Web contents will be served remotely from your laptop and auto-reloaded as in the browser.
 
-To open a remote Javascript debugging console, go to `chrome://inspect#devices` in
-your laptop's Chrome browser.
+Open Chrome's remote debugging console at: `chrome://inspect#devices`
 
 #### Debugging the native parts
 
-If something wrong happens at native level (not javascript), use logcat to inspect device's logs: 
+For native issues, use logcat to inspect logs:
 
-* Logs can be seen via `adb logcat`.
-* If more than one device attached, specify via `-s` option. The attached devices can be listed with `adb devices`.
-* Logs can be very verbose, but logcat can filter them at warning `*:W` or error `*:E` level.
+```bash
+adb logcat *:E  # Show only error messages
+```
 
-A complete logcat command could be: `adb -s emulator-5554 logcat *:E` (show the error messages for a specific emulator).
-
+Use `-s` to specify a specific device from `adb devices`.
 
 ### iOS
 
 #### Debugging the web code
 
-To run in "auto-reload" mode, first run:
+To run in "auto-reload" mode:
 
 ```bash
 npm start
-```
-
-And, once the web is loaded in your browser:
-
-```bash
 npm run start:ios
 ```
 
-to load it into a device or emulator. Web contents will be served remotely from the 
-laptop and auto-reloaded as in the web version.
-
-To open a remote Javascript debugging console, open safari, development, and select your iphone.
-
+To open a remote JavaScript debugging console, use Safari → Develop → select your iPhone.
 
 ## Building and deploying for production
 
-### Tagging a new version abd making a release
+### Tagging a new version and making a release
 
-* Note which is the current version, either in `package.json` or the 'about' dialog in the application.
-* Decide a new version number. As this is not a library with a public API, we don't need to follow SEMVER. But, in general:
-  * correcting bugs would increase the 3rd number (patch version),
-  * adding new relevant functionalities would increase the 2nd number (minor version), and
-  * a significant rewrite would increase tne 1st number (major version).
-* Use the command `npm version <version_number>`. This will tag the Web and propagate automatically the new version number to Android and iOS projects.
-* Push the changes to git.
-* Follow the next steps for Android Studio or Xcode.
-
+* Check current version in `package.json` or app's "About" dialog.
+* Decide new version number:
+  * Patch: bug fixes
+  * Minor: new features
+  * Major: major rewrites
+* Use `npm version <version_number>` — propagates version to Android and iOS projects.
+* Push changes to git.
+* Follow steps below for Android Studio or Xcode.
 
 ### Android Studio
 
-Use the command `npm run build:android`, to build for production and open the project in Android Studio.
+Use the command:
 
+```bash
+npm run build:android
+```
+
+Then open the project in Android Studio.
 
 ### Xcode
 
-* Use the command `npm run build:ios`, to open the project in Xcode.
+* Use the command:
+
+```bash
+npm run build:ios
+```
+
+Then open the project in Xcode.
 * In Xcode:
   * Product > Archive
-  * In the Archives panel press `Distribute app` button:
-    * It'll validate the builded app and push to app store, without publising it.
-
+  * In Archives panel, click Distribute App:
+    * Validates and uploads to App Store without publishing.
 
 ## Multilanguage
 
-We use **i18next** framework to localize our components:
+We use **i18next** framework:
 
 - Web: [https://www.i18next.com/](https://www.i18next.com/)
 - React integration: [https://react.i18next.com/](https://react.i18next.com/)
 
-Usage example on functional component:
+Usage example:
 
 ```jsx
 import { useTranslation } from 'react-i18next';
@@ -192,35 +220,32 @@ const FunctionalComponent = () => {
 }
 ```
 
-The applied language will be determined by:
+Language detection order:
 
-1. The `lang` query string. For instance, use [http://localhost:8080/?lang=es](http://localhost:8080/?lang=es).
-2. The browser language preferences.
-3. If detection fails, will default to `es`.
+1. `lang` query string like `http://localhost:8080/?lang=es`
+2. Browser language preferences
+3. Default fallback is `es`
 
-There are other detection strategies available, see
-[https://github.com/i18next/i18next-browser-languageDetector](https://github.com/i18next/i18next-browser-languageDetector).
-
+See [i18next-browser-languageDetector](https://github.com/i18next/i18next-browser-languageDetector) for more strategies.
 
 ## Preparing datasets and styles
 
-The base URL for accessing resources is defined in `src/config.ts`, in the `BASE_URL` const.
+The base URL for resources is defined in `src/config.ts`, via `BASE_URL`.
 
-The application expects to find the following resources in `BASE_URL`:
+Offline resources expected:
 
-* Two mbtiles files for offline usage named:
-  * `openmaptiles.mbtiles` base cartography (vector tiles following OpenMapTiles schema), and
-  * `terrain.mbtiles` in terrain-rgb format.
-* A `glyphs.zip` file that will be used offline. Glyphs are shared across all styles, make sure to include all used typographies here.
-* For each map style ('estandard' and 'lleure' at the time of writing):
-  * The map style definition file (for instance, `estandard.json` or `lleure.json`). This will be used verbatim in online mode, so make sure URLs for sources, sprites and glyphs point to publicly available services. In offline mode, these URLS will be rewritten to point to the locally downloaded versions. Please keep the source id's untouched.
-  * The thumbnail to be displayed in style switcher (for example, `thumbnail-estandard.png'). It is expected to be in `png` format.
-  * A zip file containing the sprites for the style (for example, `sprites-estandard.zip`).
+* Two mbtiles files:
+  * `openmaptiles.mbtiles` (vector tiles, OpenMapTiles schema)
+  * `terrain.mbtiles` (terrain-rgb format)
+* `glyphs.zip` (contains all used fonts)
+* For each map style ('standard' and 'lleure'):
+  * Style definition JSON (`estandard.json`, `lleure.json`)
+  * Thumbnail image (`thumbnail-estandard.png`)
+  * Sprites ZIP archive (`sprites-estandard.zip`)
 
-You can find a copy of the actual published sprites, glyphs, thumbnails and styles (that is, all resources except for mbtiles, for weight reasons) in the `resources/example-styles/official/` folder. We highly recommend to keep these sample resources in sync with the ones published in production, as backup and for reference.
-
+You can find published examples in `resources/example-styles/official/`. Keep these in sync with production versions for backup and easy reference.
 
 ## License
 
-Copyright (c) 2024 Institut Cartogràfic i Geològic de Catalunya (MIT License)
+Copyright (c) 2024 Institut Cartogràfic i Geològic de Catalunya (MIT License)  
 See LICENSE file for more info.

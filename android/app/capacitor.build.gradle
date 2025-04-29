@@ -19,7 +19,7 @@ dependencies {
     implementation project(':capacitor-preferences')
     implementation project(':capacitor-share')
     implementation project(':capawesome-capacitor-file-picker')
-    implementation project(':capacitor-zip')
+    implementation project(':capa-zip')
     implementation "androidx.webkit:webkit:1.4.0"
 }
 

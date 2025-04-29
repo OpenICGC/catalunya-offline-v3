@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run lint && karma start karma.config.js",
     "start": "webpack serve --env dev --host=0.0.0.0",
-    "start:android": "LIVE_RELOAD_IP=`ip route get 1 | awk '{print $(NF-2);exit}'` capacitor run android",
+    "start:android": "node start.js",
     "start:ios": "LIVE_RELOAD_IP=`ipconfig getifaddr en1` capacitor run ios",
     "build": "npm test && webpack --env prod",
     "build:android": "npm run build && capacitor sync && capacitor open android",
@@ -19,6 +19,7 @@
     "lint:i18n": "eslint --fix --format node_modules/eslint-plugin-i18n-json/formatter.js src/i18n/*.json",
     "prepare": "husky",
     "capacitor:copy:before": "capacitor-sync-version"
+
   },
   "repository": {
     "type": "git",
@@ -148,7 +149,7 @@
     "@capacitor/share": "^6.0.2",
     "@capawesome/capacitor-file-picker": "^6.0.1",
     "babel-plugin-typescript-to-proptypes": "^2.1.0",
-    "capacitor-zip": "github:GeotrekCE/capacitor-zip#22ff0caf98d1818228dd862bde8e6e32c8fbedbc",
+    "capa-zip": "^7.0.3",
     "compare-versions": "^6.1.1",
     "cordova-plugin-device-orientation": "^3.0.0",
     "cordova-plugin-file": "^8.1.0",
