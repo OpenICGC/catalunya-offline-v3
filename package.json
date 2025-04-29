@@ -1,6 +1,6 @@
 {
   "name": "catalunya-offline",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Catalunya Offline",
   "main": "./dist/main.js",
   "scripts": {
@@ -19,7 +19,6 @@
     "lint:i18n": "eslint --fix --format node_modules/eslint-plugin-i18n-json/formatter.js src/i18n/*.json",
     "prepare": "husky",
     "capacitor:copy:before": "capacitor-sync-version"
-
   },
   "repository": {
     "type": "git",
