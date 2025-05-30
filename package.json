@@ -113,7 +113,7 @@
     "react-i18next": "^15.0.2",
     "react-singleton-hook": "^3.4.0",
     "react-vega": "^7.6.0",
-    "storybook": "^8.3.4",
+    "storybook": "^8.6.11",
     "style-loader": "^4.0.0",
     "throttle-debounce": "^5.0.2",
     "ts-loader": "^9.5.1",
