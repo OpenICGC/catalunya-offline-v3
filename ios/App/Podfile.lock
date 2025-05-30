@@ -102,21 +102,21 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
-  CapacitorApp: 0bc633b4eae40a1f32cd2834788fad3bc42da6a1
-  CapacitorCamera: ed022171dbf3853e68eec877b4d78995378af6b7
-  CapacitorCommunityBackgroundGeolocation: 6f26f4290377dbd1d6dec21e62cb66f008f61ec7
-  CapacitorCommunityPhotoviewer: 52033b07d6930a0c823691750133591ede08055e
-  CapacitorCommunitySqlite: 47dab3a2d9a9581a0fe7642cf9cffd34c5d5b358
+  Capacitor: 69c7f687aabb8d85e543497411e40638b5cc08c0
+  CapacitorApp: f51c08c64df914fc934239fd1b3fc809d62a02f6
+  CapacitorCamera: 65a0d1235114a6a5042e664d6da8d213927f7aa0
+  CapacitorCommunityBackgroundGeolocation: 834a8f8eca8ebada8debffe1236e5674b831cead
+  CapacitorCommunityPhotoviewer: e1fef2e205917270916f82e782b0d016976d1d5d
+  CapacitorCommunitySqlite: 0299d20f4b00c2e6aa485a1d8932656753937b9b
   CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
-  CapacitorFilesystem: 37fb3aa5c945b4539ab11c74a5c57925a302bf24
-  CapacitorNetwork: 8796cf1f1104a00b289957b6150b7c60e1c2a8d3
-  CapacitorPreferences: e8284bf740cf8c6d3f25409af3c01df87dfeb5a1
-  CapacitorShare: 591ae4693d85686ceb590db8e8b44aa014ec6490
-  CapacitorZip: 71c016b63c47e462cc577fc9c25eef73b1b37c9b
-  CapawesomeCapacitorFilePicker: c80c30759ba48986ff34a2b51b23ac2babfd3774
-  CordovaPlugins: c24a2cc2e75f821c895a9d9f169ae5a570377fbf
-  CordovaPluginsResources: 1b3992e05cb6336d2850cd77dd5e3054f2f76f96
+  CapacitorFilesystem: 30941c0fea0773fcaedab18e262b339f5b9c06bc
+  CapacitorNetwork: 24fe1068ded5d6dae1e4af7787d4abd3c6f3adc6
+  CapacitorPreferences: 997d375b1962f98511e8b3d27a24d90cb8ca87fe
+  CapacitorShare: 5d49f1b220e991372b4d5d34be9a6080a042bae4
+  CapacitorZip: 7eb26d6865f6659b688e7bc4d5c7e03f6bc27abc
+  CapawesomeCapacitorFilePicker: 48f0d18d047aa12b951abaa888e23d17d421e9ed
+  CordovaPlugins: a21196b5c30b8e8a29adb31294db54fffb840412
+  CordovaPluginsResources: 0c211f770ed91763a179ebcd9b9346e120b70662
   ISVImageScrollView: 2c89840496647af985bfc0e09b346b9aa733ecec
   SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
   SQLCipher: 905b145f65f349f26da9e60a19901ad24adcd381
@@ -125,4 +125,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8bcc31cb949e604320ddad913e4189a8986cd26e
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.16.2

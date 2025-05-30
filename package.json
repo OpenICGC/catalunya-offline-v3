@@ -1,6 +1,6 @@
 {
   "name": "catalunya-offline",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Catalunya Offline",
   "main": "./dist/main.js",
   "scripts": {
@@ -155,6 +155,7 @@
     "cordova-plugin-file-transfer": "^2.0.0",
     "cordova-plugin-zip": "^3.1.0",
     "jeep-sqlite": "^2.8.0",
+    "jszip": "^3.10.1",
     "pako": "^2.1.0",
     "sharp": "^0.33.5"
   }
