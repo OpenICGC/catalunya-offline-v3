@@ -253,8 +253,7 @@ export const generateZip = async (source: string, path: string, fromType: Folder
     await Filesystem.writeFile({
       path: safeJoin(EXPORT_DIR_NAME, path),
       data: zipped,
-      directory: toDirectory,
-      encoding: Encoding.UTF8
+      directory: toDirectory
     });
  
     const finalPath = await getUri(path, toType);
