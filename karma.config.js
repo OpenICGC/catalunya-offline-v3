@@ -79,7 +79,18 @@ module.exports = (config) => {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['ChromeHeadless'],
+   // browsers: ['ChromeHeadless'], // Deshabilita o elimina aquesta línia
+ 
+    // Afegeix el customLauncher aquí:
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
+    // Utilitza el customLauncher en lloc del navegador directe:
+    browsers: ['ChromeHeadlessNoSandbox'],
+ 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
