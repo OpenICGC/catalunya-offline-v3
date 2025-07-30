@@ -127,7 +127,9 @@ const PointPanel: FC<PointPanelProps> = ({
   const {t} = useTranslation();
   const {viewport, setViewport} = useViewport();
   const [uneditedPoint, setUneditedPoint] = useState<ScopePoint>();
-  const {images, create, remove, save, discard} = useImages(point.properties.images);
+  //const {images, create, remove, save, discard} = useImages(point.properties.images);
+  //console.log('PointPanel imagesxx:', point.id, point.properties.images);
+  const {images, create, remove, save, discard} = useImages(point.properties.images, point.id);
   const editingPosition = useEditingPosition();
   const [acceptPoint, setAcceptPoint] = useState(false);
 

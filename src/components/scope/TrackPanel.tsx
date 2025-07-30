@@ -91,8 +91,9 @@ const TrackPanel: FC<TrackPanelProps> = ({
 }) => {
   const {t} = useTranslation();
   const [uneditedTrack, setUneditedTrack] = useState<ScopeTrack>();
-  const {images, create, remove, save, discard} = useImages(track.properties.images);
-
+  //const {images, create, remove, save, discard} = useImages(track.properties.images);
+  //console.log('TrackPanel imagesxx:', track.properties.images, track.id);
+  const {images, create, remove, save, discard} = useImages(track.properties.images, track.id);
   const accums = useMemo(() => getAccumulatedProfileProperties(track.geometry?.coordinates), [track]);
   const distance: string | undefined = accums ? getSignificantDistanceUnits(accums.distance) : undefined;
   const ascent: string | undefined = accums ? getSignificantDistanceUnits(accums.ascent) : undefined;

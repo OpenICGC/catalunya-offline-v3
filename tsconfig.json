@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    "module": "es2022",
+    "module": "es2020",
     "jsx": "react",
+    "lib": ["es2020", "DOM"],
     "allowJs": true,
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "target": "es2022",
+    "target": "es2020",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
