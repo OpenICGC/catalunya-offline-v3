@@ -11,62 +11,93 @@ type ImagesState = {
 
 interface ImagesInterface {
   images: Array<ImagePath>;
-  create: () => void;
+  create: () => Promise<void>;
   remove: (image: ImagePath) => void;
-  discard: () => void;
-  save: () => void;
+  discard: () => Promise<void>;
+  save: () => Promise<void>;
 }
 
-const useImages = (images: Array<ImagePath>): ImagesInterface => {
+const useImages = (images: Array<ImagePath>, pointId: string): ImagesInterface => {
   
-  const [state, setState] = useState<ImagesState>({initial: images, created: [], deleted: []});
-
+  const [state, setState] = useState<ImagesState>(() => ({
+    initial: [...images], // Crear una copia para evitar mutaciones
+    created: [], 
+    deleted: []
+  }));
 
   const currentImages = useMemo(() => [
     ...state.initial,
     ...state.created
   ].filter(image => !state.deleted.includes(image)), [state]);
   
-  const create = async () => {
-    const path = await takePhoto(i18n.language);
-    if (path) {
-      setState({
-        ...state,
-        created: [
-          ...state.created,
-          path
-        ]
-      });
+  const create = async (): Promise<void> => {
+    try {
+      
+      const path = await takePhoto(i18n.language, pointId);
+      
+      if (path) {
+   
+        setState(prevState => ({
+          ...prevState,
+          created: [
+            ...prevState.created,
+            path
+          ]
+        }));
+      }
+    } catch (error) {
+      console.error(`[${pointId}] Error taking photo:`, error);
     }
   };
   
   const remove = (image: ImagePath) => {
-    setState({
-      ...state,
+ 
+    setState(prevState => ({
+      ...prevState,
       deleted: [
-        ...state.deleted,
+        ...prevState.deleted,
         image
       ]
-    });
+    }));
   };
   
-  const _deleteImages = async (images: Array<ImagePath>) => {
-    for (const image of images) {
-      await deletePhoto(image);
+  const _deleteImages = async (images: Array<ImagePath>): Promise<void> => {
+    try {
+      for (const image of images) {
+        await deletePhoto(image);
+      }
+    } catch (error) {
+      console.error(`[${pointId}] Error deleting images:`, error);
     }
   };
   
-  const discard = () => _deleteImages(state.created).then(() => setState({
-    ...state, 
-    created: [], 
-    deleted: []}));
+  const discard = async (): Promise<void> => {
+    try {
+      
+      await _deleteImages(state.created);
+      setState(prevState => ({
+        ...prevState, 
+        created: [], 
+        deleted: []
+      }));
+    } catch (error) {
+      console.error(`[${pointId}] Error discarding images:`, error);
+    }
+  };
   
-  const save = () => _deleteImages(state.deleted).then(() => setState({
-    initial: currentImages,
-    created: [],
-    deleted: []
-  }));
-  
+  const save = async (): Promise<void> => {
+    try {
+      
+      await _deleteImages(state.deleted);
+      setState({
+        initial: [...currentImages], // Crear una copia
+        created: [],
+        deleted: []
+      });
+    } catch (error) {
+      console.error(`[${pointId}] Error saving images:`, error);
+    }
+  };
   
   return {
     images: currentImages,

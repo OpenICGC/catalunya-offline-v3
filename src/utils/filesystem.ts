@@ -1,8 +1,10 @@
 import {Directory, Encoding, Filesystem} from '@capacitor/filesystem';
-import {EXPORT_DIR_NAME, OFFLINE_DATADIR_NAME} from '../config';
+import { Capacitor } from '@capacitor/core';
+import {EXPORT_DIR_NAME, OFFLINE_DATADIR_NAME, PLATFORM} from '../config';
 import {BaseMap} from '../types/commonTypes';
 import {Zip} from '@awesome-cordova-plugins/zip';
 import JSZip from 'jszip';
+import {ZipPlugin} from 'capacitor-zip';
  
 export type {
   Directory,
@@ -134,6 +136,24 @@ export const getUri = async (path: string, type: FolderType = FolderType.Downloa
     });
   }
 };
+export const getUriAndroid = async (path: string, type: FolderType = FolderType.Download) => {
+  const directory =
+    type === FolderType.Download ? Directory.Data :
+      type === FolderType.Export ? Directory.Cache :
+        undefined;
+ 
+  const destinationBaseFolder =
+    type === FolderType.Download ? OFFLINE_DATADIR_NAME :
+      type === FolderType.Export ? EXPORT_DIR_NAME :
+        undefined;
+ 
+  if (directory && destinationBaseFolder) {
+    return await Filesystem.getUri({
+      directory: directory,
+      path: destinationBaseFolder + '/' + path,
+    });
+  }
+};
  
 export const readFile = async (uri: string) => {
   return await Filesystem.readFile({
@@ -149,22 +169,96 @@ export const renameFile = async (from: string, to: string) => {
 };
  
 export const writeFile = async (content: string, path: string, encoding: Encoding = Encoding.UTF8) => {
-  return await Filesystem.writeFile({
-    path: path,
-    data: content,
-    directory: Directory.Cache,
-    encoding: encoding
-  });
+  if (PLATFORM === 'ios') {
+    return await Filesystem.writeFile({
+      path: path,
+      data: content,
+      directory: Directory.Cache,
+      encoding: encoding
+    });
+  } else {
+    return await Filesystem.writeFile({
+      path: path,
+      data: content,
+      directory: Directory.Cache,
+      encoding: encoding,
+      recursive: true
+    });
+  }
 };
  
-export const copyFilesToDir = async (files: string[], dir: string) => {
+/*export const copyFilesToDir = async (files: string[], dir: string) => {
   return Promise.all(
     files.map(async file => {
       const filename = file.split('/').pop();
       await Filesystem.copy({from: file, to: safeJoin(dir, filename || ''), toDirectory: Directory.Cache});
     })
   );
+};*/
+export const copyFilesToDir = async (files: string[], dir: string) => {
+  const platform = Capacitor.getPlatform();
+  console.log('Platform detected:', platform);
+
+  return Promise.all(
+    files.map(async file => {
+      console.log('Processing file:', file);
+      const filename = file.split('/').pop();
+      console.log('Extracted filename:', filename);
+      if (!filename) {
+        console.error('No filename found for file:', file);
+        return;
+      }
+
+      if (platform === 'ios') {
+        console.log('[iOS] Copying file from:', file, 'to:', safeJoin(dir, filename));
+        try {
+          const result = await Filesystem.copy({
+            from: file,
+            to: safeJoin(dir, filename),
+            directory: Directory.Cache
+          });
+          console.log('[iOS] Copy success:', result);
+          return result;
+        } catch (e) {
+          console.error('[iOS] Copy failed:', e);
+        }
+      } else if (platform === 'android') {
+        let relativePath: string = file;
+        console.log('[Android] Original file path:', file);
+
+        if (file.startsWith('http://localhost/_capacitor_file_')) {
+          const match = file.match(/\/files\/(.+)$/);
+          relativePath = match ? match[1] : '';
+          console.log('[Android] Extracted relativePath:', relativePath);
+        }
+
+        if (!relativePath) {
+          console.error('[Android] Invalid relativePath for file:', file);
+          return;
+        }
+
+        console.log('[Android] Copying file from:', relativePath, 'directory:', Directory.Data, 'to:', safeJoin(dir, filename));
+        try {
+          const result = await Filesystem.copy({
+            from: relativePath,
+            directory: Directory.Data,
+            to: safeJoin(dir, filename),
+            toDirectory: Directory.Cache
+          });
+          console.log('[Android] Copy success:', result);
+          return result;
+        } catch (e) {
+          console.error('[Android] Copy failed:', e);
+        }
+      } else {
+        console.warn('Platform not supported for copyFilesToDir:', platform);
+        return;
+      }
+    })
+  );
 };
+
+
  
 export const getLastVersionOfBasemap = async (basemap: BaseMap) => {
   const files = await listOfflineDir(basemap.id);
@@ -217,8 +311,85 @@ export const deleteFile = async (path:string) => {
     return false;
   }
 };
+export const generateZip = async (
+  source: string,
+  path: string,
+  fromType: FolderType,
+  toType: FolderType
+) => {
+  const platform = Capacitor.getPlatform(); // 'ios' | 'android' | 'web'
+
  
-export const generateZip = async (source: string, path: string, fromType: FolderType, toType: FolderType) => {
+
+  
+
+  try {
+    if (platform === 'ios') {
+      const fromDirectory = await getUri(source, fromType);
+      const toDirectory = toType === FolderType.Export ? Directory.Cache : Directory.Data;
+      
+      
+      if (!fromDirectory?.uri) {
+        console.error('Invalid source URI');
+        return undefined;
+      }
+
+      // iOS: usar JSZip per fer zip manualment
+      const files = await Filesystem.readdir({
+        path: fromDirectory.uri.replace('file://', ''),
+        directory: undefined
+      });
+
+      const zip = new JSZip();
+
+      for (const file of files.files) {
+        if (file.type !== 'file') continue;
+
+        const filePath = safeJoin(EXPORT_DIR_NAME, source, file.name);
+        const fileContent = await Filesystem.readFile({
+          path: filePath,
+          directory: Directory.Cache
+        });
+
+        zip.file(file.name, fileContent.data, { base64: true });
+      }
+
+      const zipped = await zip.generateAsync({ type: 'base64' });
+
+      await Filesystem.writeFile({
+        path: safeJoin(EXPORT_DIR_NAME, path),
+        data: zipped,
+        directory: toDirectory
+      });
+
+      const finalPath = await getUri(path, toType);
+      return finalPath?.uri;
+
+    } else if (platform === 'android') {
+      const fromDirectory = await getUriAndroid(source, fromType);
+      const destinationFile = await getUriAndroid(path, toType);
+
+      console.log('android** zip', fromDirectory, destinationFile);
+      // Android: usar ZipPlugin natiu
+      if (destinationFile && fromDirectory) {
+        await ZipPlugin.zip({
+          source: fromDirectory.uri,
+          destination: destinationFile.uri,
+          password: '' // Android necessita string buida si no hi ha password
+        });
+
+        return destinationFile.uri;
+      }
+    } else {
+      console.warn('Unsupported platform android**:', platform);
+      return undefined;
+    }
+  } catch (err) {
+    console.error('Error zipping files: android**', err);
+    return undefined;
+  }
+};
+/*export const generateZip = async (source: string, path: string, fromType: FolderType, toType: FolderType) => {
   
   const fromDirectory = await getUri(source, fromType);
   const toDirectory = toType === FolderType.Export ? Directory.Cache : Directory.Data;
@@ -262,7 +433,7 @@ export const generateZip = async (source: string, path: string, fromType: Folder
     console.error('Error zipping files:', err);
     return undefined;
   }
-};
+};*/
  
 export const onlineFileSize = async (url: string) => {
   const response = await fetch(url, {

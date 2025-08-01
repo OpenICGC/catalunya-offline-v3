@@ -1,6 +1,6 @@
 {
   "name": "catalunya-offline",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "Catalunya Offline",
   "main": "./dist/main.js",
   "scripts": {
@@ -134,7 +134,6 @@
     "@awesome-cordova-plugins/zip": "^6.9.0",
     "@capacitor-community/background-geolocation": "^1.2.19",
     "@capacitor-community/network-react": "^0.1.0",
-    "@capacitor-community/photoviewer": "^4.0.1",
     "@capacitor-community/sqlite": "^6.0.2",
     "@capacitor/android": "^6.1.2",
     "@capacitor/app": "^6.0.1",
@@ -157,6 +156,7 @@
     "jeep-sqlite": "^2.8.0",
     "jszip": "^3.10.1",
     "pako": "^2.1.0",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "swiper": "^11.2.10"
   }
 }

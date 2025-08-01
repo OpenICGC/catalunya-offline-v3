@@ -7,10 +7,6 @@ PODS:
     - Capacitor
   - CapacitorCommunityBackgroundGeolocation (0.0.1):
     - Capacitor
-  - CapacitorCommunityPhotoviewer (4.0.1):
-    - Capacitor
-    - ISVImageScrollView
-    - SDWebImage
   - CapacitorCommunitySqlite (6.0.2):
     - Capacitor
     - SQLCipher
@@ -32,10 +28,6 @@ PODS:
   - CordovaPlugins (6.1.2):
     - CapacitorCordova
   - CordovaPluginsResources (0.0.105)
-  - ISVImageScrollView (0.3.0)
-  - SDWebImage (5.16.0):
-    - SDWebImage/Core (= 5.16.0)
-  - SDWebImage/Core (5.16.0)
   - SQLCipher (4.5.4):
     - SQLCipher/standard (= 4.5.4)
   - SQLCipher/common (4.5.4)
@@ -49,7 +41,6 @@ DEPENDENCIES:
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorCommunityBackgroundGeolocation (from `../../node_modules/@capacitor-community/background-geolocation`)"
-  - "CapacitorCommunityPhotoviewer (from `../../node_modules/@capacitor-community/photoviewer`)"
   - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
@@ -63,8 +54,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - ISVImageScrollView
-    - SDWebImage
     - SQLCipher
     - SSZipArchive
     - ZIPFoundation
@@ -78,8 +67,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/camera"
   CapacitorCommunityBackgroundGeolocation:
     :path: "../../node_modules/@capacitor-community/background-geolocation"
-  CapacitorCommunityPhotoviewer:
-    :path: "../../node_modules/@capacitor-community/photoviewer"
   CapacitorCommunitySqlite:
     :path: "../../node_modules/@capacitor-community/sqlite"
   CapacitorCordova:
@@ -106,7 +93,6 @@ SPEC CHECKSUMS:
   CapacitorApp: f51c08c64df914fc934239fd1b3fc809d62a02f6
   CapacitorCamera: 65a0d1235114a6a5042e664d6da8d213927f7aa0
   CapacitorCommunityBackgroundGeolocation: 834a8f8eca8ebada8debffe1236e5674b831cead
-  CapacitorCommunityPhotoviewer: e1fef2e205917270916f82e782b0d016976d1d5d
   CapacitorCommunitySqlite: 0299d20f4b00c2e6aa485a1d8932656753937b9b
   CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
   CapacitorFilesystem: 30941c0fea0773fcaedab18e262b339f5b9c06bc
@@ -117,12 +103,10 @@ SPEC CHECKSUMS:
   CapawesomeCapacitorFilePicker: 48f0d18d047aa12b951abaa888e23d17d421e9ed
   CordovaPlugins: a21196b5c30b8e8a29adb31294db54fffb840412
   CordovaPluginsResources: 0c211f770ed91763a179ebcd9b9346e120b70662
-  ISVImageScrollView: 2c89840496647af985bfc0e09b346b9aa733ecec
-  SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
   SQLCipher: 905b145f65f349f26da9e60a19901ad24adcd381
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
 
-PODFILE CHECKSUM: 8bcc31cb949e604320ddad913e4189a8986cd26e
+PODFILE CHECKSUM: eb2564a163225807774b1a9afb2d68410a4208cc
 
 COCOAPODS: 1.16.2
