@@ -9,7 +9,6 @@ const config: CapacitorConfig = {
   appId: 'cat.icgc.catofflinev3',
   appName: 'Catalunya Offline',
   webDir: 'dist',
-  bundledWebRuntime: false,
   server: {
     errorPath: 'unsupported.html',
     androidScheme: 'http',
@@ -20,7 +19,8 @@ const config: CapacitorConfig = {
     scheme: 'Catalunya Offline'
   },
   android: {
-    useLegacyBridge: true // Needed for backround-location plugin to keep working after 5 minutes
+    useLegacyBridge: true, // Needed for backround-location plugin to keep working after 5 minutes
+    adjustMarginsForEdgeToEdge: 'force'
   },
   plugins: {
     CapacitorSQLite: { // See https://github.com/capacitor-community/sqlite/issues/363
