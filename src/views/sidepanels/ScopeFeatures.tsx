@@ -240,6 +240,7 @@ const ScopeFeatures: FC<ScopeFeaturesProps> = ({
   />;
 
   if (selectedPoint) return <ScopePoint
+    key={`${scopeId}-${selectedPoint}`}
     scopeId={scopeId}
     pointId={selectedPoint}
     isEditing={isPointEditing}
