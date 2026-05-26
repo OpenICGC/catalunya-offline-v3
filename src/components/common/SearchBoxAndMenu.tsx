@@ -24,7 +24,7 @@ import useTheme from '@mui/material/styles/useTheme';
 import {useStatus} from '@capacitor-community/network-react';
 import {ContextMapsResult} from '../../types/commonTypes';
 
-const BASE_URL = 'https://www.instamaps.cat/geocat/aplications/map/search.action';
+const BASE_URL = 'https://eines.icgc.cat/geocodificador/autocompletar?text=';
 
 //STYLES
 const contextualMenuSx = (isHeaderVisible: boolean) => ({
@@ -106,11 +106,15 @@ const SearchBoxAndMenu: FC<SearchBoxAndMenuProps> = ({
   const handleSearchClick = useCallback(() => {
     if (hasConnectivity) {
       setConnectivityError(false);
-      const url = `${BASE_URL}?searchInput=${text}`;
+      const url = `${BASE_URL}${encodeURIComponent(text)}`;
       fetch(url)
         .then(res => res.json())
-        .then(res => JSON.parse(res.resposta))
-        .then(res => setResults(res.resultats));
+        .then(res => res.features.map((f: {geometry: {coordinates: [number, number]}, properties: {etiqueta: string}}) => ({
+          nom: f.properties.etiqueta,
+          coordenades: `${f.geometry.coordinates[0]},${f.geometry.coordinates[1]}`,
+          origen: 'ICGC'
+        })))
+        .then(res => setResults(res));
     } else setConnectivityError(true);
   }, [hasConnectivity, text]);
 

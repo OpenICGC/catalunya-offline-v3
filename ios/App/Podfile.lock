@@ -1,33 +1,35 @@
 PODS:
-  - Capacitor (6.1.2):
+  - Capacitor (7.4.4):
     - CapacitorCordova
-  - CapacitorApp (6.0.1):
+  - CapacitorApp (7.1.1):
     - Capacitor
-  - CapacitorCamera (6.0.2):
+  - CapacitorCamera (7.0.3):
     - Capacitor
-  - CapacitorCommunityBackgroundGeolocation (0.0.1):
+  - CapacitorCommunityBackgroundGeolocation (1.2.26):
     - Capacitor
-  - CapacitorCommunitySqlite (6.0.2):
+  - CapacitorCommunitySqlite (7.0.2):
     - Capacitor
     - SQLCipher
     - ZIPFoundation
-  - CapacitorCordova (6.1.2)
-  - CapacitorFilesystem (6.0.1):
+  - CapacitorCordova (7.4.4)
+  - CapacitorFilesystem (7.1.5):
     - Capacitor
-  - CapacitorNetwork (6.0.2):
+    - IONFilesystemLib (~> 1.0.1)
+  - CapacitorNetwork (7.0.3):
     - Capacitor
-  - CapacitorPreferences (6.0.2):
+  - CapacitorPreferences (7.0.3):
     - Capacitor
-  - CapacitorShare (6.0.2):
+  - CapacitorShare (7.0.3):
     - Capacitor
   - CapacitorZip (1.0.4):
     - Capacitor
     - SSZipArchive
-  - CapawesomeCapacitorFilePicker (6.0.1):
+  - CapawesomeCapacitorFilePicker (7.2.0):
     - Capacitor
-  - CordovaPlugins (6.1.2):
+  - CordovaPlugins (7.4.4):
     - CapacitorCordova
   - CordovaPluginsResources (0.0.105)
+  - IONFilesystemLib (1.0.1)
   - SQLCipher (4.5.4):
     - SQLCipher/standard (= 4.5.4)
   - SQLCipher/common (4.5.4)
@@ -54,6 +56,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - IONFilesystemLib
     - SQLCipher
     - SSZipArchive
     - ZIPFoundation
@@ -89,24 +92,25 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 69c7f687aabb8d85e543497411e40638b5cc08c0
-  CapacitorApp: f51c08c64df914fc934239fd1b3fc809d62a02f6
-  CapacitorCamera: 65a0d1235114a6a5042e664d6da8d213927f7aa0
-  CapacitorCommunityBackgroundGeolocation: 834a8f8eca8ebada8debffe1236e5674b831cead
-  CapacitorCommunitySqlite: 0299d20f4b00c2e6aa485a1d8932656753937b9b
-  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
-  CapacitorFilesystem: 30941c0fea0773fcaedab18e262b339f5b9c06bc
-  CapacitorNetwork: 24fe1068ded5d6dae1e4af7787d4abd3c6f3adc6
-  CapacitorPreferences: 997d375b1962f98511e8b3d27a24d90cb8ca87fe
-  CapacitorShare: 5d49f1b220e991372b4d5d34be9a6080a042bae4
-  CapacitorZip: 7eb26d6865f6659b688e7bc4d5c7e03f6bc27abc
-  CapawesomeCapacitorFilePicker: 48f0d18d047aa12b951abaa888e23d17d421e9ed
-  CordovaPlugins: a21196b5c30b8e8a29adb31294db54fffb840412
-  CordovaPluginsResources: 0c211f770ed91763a179ebcd9b9346e120b70662
+  Capacitor: 358dd1c3fdd71d969547b17e159fd8a7736cb45f
+  CapacitorApp: 63b237168fc869e758481dba283315a85743ee78
+  CapacitorCamera: 6746827d82376f31cea9224945c0458c9fd0b0b2
+  CapacitorCommunityBackgroundGeolocation: 750523ec6dd1cc94cf4e2bf7787605106753f73c
+  CapacitorCommunitySqlite: a57c58e1c37f4bc250ef01e66b0055cb6ddd775e
+  CapacitorCordova: bf648a636f3c153f652d312ae145fb508b6ffced
+  CapacitorFilesystem: 609d5cceca1ed93d7f25839dbfdfd224bfe78209
+  CapacitorNetwork: 1a22460c6f900686f12ffa52f3074ee313821b08
+  CapacitorPreferences: 913eef88272c13eb6445b21e51fe8ef6635412cc
+  CapacitorShare: a4f4f86eabd4b3ff52ba6a11b754713c6926a8d1
+  CapacitorZip: 508e7595bc87745e55c4ef996df67062fe370762
+  CapawesomeCapacitorFilePicker: 0f4a913a00e39dd77213449f0d917e92f35a5ca9
+  CordovaPlugins: dc97b4c1130d8b26f8122787256f9168a1860296
+  CordovaPluginsResources: da93847212bf7b16ba770e4d6c3e7dba820174c7
+  IONFilesystemLib: 89258b8e3e85465da93127d25d7ce37f977e8a6f
   SQLCipher: 905b145f65f349f26da9e60a19901ad24adcd381
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
 
-PODFILE CHECKSUM: eb2564a163225807774b1a9afb2d68410a4208cc
+PODFILE CHECKSUM: 9990ee0c91f11a0bf5878b878ecdca0081a73305
 
 COCOAPODS: 1.16.2

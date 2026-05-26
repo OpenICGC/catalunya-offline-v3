@@ -17,6 +17,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <data android:mimeType="application/gpx+xml" />
+                <data android:scheme="file"  android:pathPattern=".*\\.gpx"/>
+                <data android:scheme="content" />
             </intent-filter>
         </activity>
 
